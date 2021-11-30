@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "axios": "^0.21.1",
+    "clipboard": "^2.0.8",
+    "crypto-js": "^4.1.1",
+    "image-tools": "^1.4.0",
+    "jweixin-module": "^1.6.0",
+    "mini-html-parser2": "^0.3.0",
+    "swiper": "^5.4.5",
+    "vue-awesome-swiper": "^4.1.1"
+  }
+}
