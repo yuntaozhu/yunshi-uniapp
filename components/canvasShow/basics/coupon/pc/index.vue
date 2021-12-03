@@ -21,7 +21,7 @@
           </div>
           <!--            <div class="itemInfo" v-else>-->
           <!--              <div class="amount">-->
-          <!--                <b>￥</b><span>{{item.reduceMoney}}<i>满减卷</i></span>-->
+          <!--                <b>￥</b><span>{{item.reduceMoney}}<i>满减券</i></span>-->
           <!--              </div>-->
           <!--              <div class="couponInfo">-->
           <!--                <p>{{item.content}}</p>-->
