@@ -114,6 +114,11 @@
 				"style": {
 					"navigationBarTitleText": "商品列表"
 				}
+			},{
+				"path": "goodsModule/canvasGoods",
+				"style": {
+					"navigationBarTitleText": "商品列表"
+				}
 			}, {
 				"path": "goodsModule/couponShopList",
 				"style": {
@@ -323,7 +328,10 @@
 			}, {
 				"path": "distributionModule/promotion",
 				"style": {
-					"navigationBarTitleText": "推广店铺"
+					"navigationBarTitleText": "推广店铺",
+					"navigationBarBackgroundColor": "#333333",
+					"backgroundColor": "#333333",
+					"navigationBarTextStyle": "white"
 				}
 			},
 			{

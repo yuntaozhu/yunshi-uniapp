@@ -2,7 +2,7 @@
 	<view class="container">
 		<!-- 店铺首页 -->
 		<view class="content" v-if="id !== ''">
-			<view class="shop-top" :style="{'margin-top':(isIphone==true? 100:0)+'rpx'}">
+			<view class="shop-top">
 				<image src="../../static/images/back_img04.png" class="back" @click="back"></image>
         <view class="search-btn" @click="searchPro">
           <image class="search-icon" src="@/static/images/searchImg1.png" mode="widthFix"></image>
@@ -477,6 +477,11 @@ page {
     width: 100%;
     padding-top: 20rpx;
 	}
+  // #ifdef APP-PLUS
+  .shop-top {
+    padding-top: 80rpx;
+  }
+  // #endif
 .stopInfo {
   padding: 20rpx;
   background: #F8F8F8;

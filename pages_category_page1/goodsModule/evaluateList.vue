@@ -25,7 +25,7 @@
 						<image @click="previewImg(index,cindex)" class="img-item" :src="commentItemImg"></image>
 					</view>
 				</view>
-        <view class="addEvaluate">
+        <view class="addEvaluate" v-if="item.addComment !== ''">
           <view class="fs26 font-color-C5AA7B">用户追加评价</view>
           <view class="addEvaluateText">{{item.addComment}}</view>
           <view class="item-image-box" v-if="item.addImages">
@@ -61,6 +61,7 @@
 		},
 		onLoad(list) {
 			this.commentList = JSON.parse(list.commentList)
+      console.log(this.commentList, '1111')
 			this.commentListLength = this.commentList.length
 		},
 		methods: {
