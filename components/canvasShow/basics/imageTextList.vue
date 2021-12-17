@@ -59,6 +59,7 @@
       .li{
         flex: 0 0 50%;
         padding: 15upx 0 0 15upx;
+        box-sizing: border-box;
         .item{
           .itemImgBox {
             height: auto;

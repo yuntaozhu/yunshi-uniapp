@@ -2040,7 +2040,14 @@
 						background: #C5AA7B;
 						border-radius: 50%;
 						opacity: 1;
+            z-index: 999;
 					}
+          // #ifdef APP-PLUS
+          .cartAllNum{
+            right: -6rpx;
+            top: -6rpx;
+          }
+          // #endif
 					/* #ifdef H5 */
 					.cartAllNum{
 						right: -10rpx;

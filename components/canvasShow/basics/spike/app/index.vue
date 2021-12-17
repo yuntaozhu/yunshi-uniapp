@@ -52,7 +52,7 @@ export default {
   background: #F8F8F8;
   padding: 20upx;
   &-card{
-    height: 498upx;
+    height: 430upx;
     background: #FFFFFF;
     border-radius: 20upx;
     &-top{
@@ -111,7 +111,7 @@ export default {
       }
       &-img{
         width: 162upx;
-        height: 196upx;
+        height: 162upx;
         margin-right: 10upx;
         float: left;
         img {

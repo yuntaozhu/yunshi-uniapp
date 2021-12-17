@@ -68,7 +68,7 @@
 		methods: {
 			// 注册账号
 			getRegister() {
-				let phoneCodeVerification = /^[1][3,4,5,7,8][0-9]{9}$/;
+				let phoneCodeVerification = /^1(3\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\d|9[0-35-9])\d{8}$/;
 				if (this.phone == '') {
 					uni.showToast({
 						title: '请输入手机号！',
@@ -117,7 +117,7 @@
 			},
 			// 获取验证码
 			getVerify() {
-				let phoneCodeVerification = /^[1][3-9][0-9]{9}$/;
+				let phoneCodeVerification = /^1(3\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\d|9[0-35-9])\d{8}$/;
 				if (this.phone == '') {
 					uni.showToast({
 						title: '请输入手机号！',
@@ -166,7 +166,7 @@
 						icon: 'none'
 					})
 					return false;
-				} else if (!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone))) {
+				} else if (!(/^1(3\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\d|9[0-35-9])\d{8}$/.test(this.phone))) {
 					uni.showToast({
 						title: '输入的手机号错误',
 						icon: 'none'

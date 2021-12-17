@@ -88,7 +88,10 @@
       <view class="discount-item" @click="showDiscount">
         <view class="discount-label">平台优惠</view>
         <view class="discount-info-box flex-items">
-          <view class="discount-info2" v-if="promotionInfoDTO.couponId">-￥{{reduceMoney}}</view>
+          <view class="discount-info2" v-if="promotionInfoDTO.couponId">
+            <text v-if="promotionInfoDTO.couponType === 2">{{ reduceMoney }}折</text>
+            <text v-else> -￥{{reduceMoney}}</text>
+          </view>
           <view class="discount-info1" v-else-if="couponsList.length<1">无</view>
           <view class="discount-info1" v-else>不使用</view>
           <image class="discount-img" src="../../static/images/arrowRight.png"></image>
@@ -142,7 +145,7 @@
       <view class="flex-items flex-sp-between">
         <text class="num-box">共{{totalCount}}件</text>
         <view>
-          <text class="total">合计：</text><text v-if="(totalprice - reduceMoney)>0" class="price">¥{{ (totalprice - reduceMoney).toFixed(2) }}</text><text v-else class="price">¥0.00</text>
+          <text class="total">合计：</text><text v-if="totalprice>0" class="price">¥{{ totalprice.toFixed(2) }}</text><text v-else class="price">¥0.00</text>
         </view>
       </view>
       <!-- active 当有地址时按钮加上active选中的样式-->
@@ -163,7 +166,8 @@
               <view v-if="usableListLength">
                 <view class="label-lingqu">可用优惠券列表</view>
                 <view class="coupon-item" v-for="(usableItem, index) in settlement.coupons" :key="index" @click="couponItemTap(index,usableItem)">
-                  <view class="money-box">￥{{usableItem.reduceMoney}}</view>
+                  <view class="money-box" v-if="usableItem.couponType == 1">￥{{usableItem.reduceMoney}}</view>
+                  <view class="money-box" v-else>{{usableItem.reduceMoney}}折券</view>
                   <view class="info-box">
                     <view class="info">满{{usableItem.fullMoney}}元可用</view>
                     <view class="date" style="font-size:22upx;  margin-top: 20upx;">{{getDate(usableItem.startTime)}}至{{getDate(usableItem.endTime)}}</view>
@@ -305,7 +309,8 @@ export default {
       showWechatPayType: false,
       showAlipayPayType: false,
       showHuabeiPayType: false,
-      orderId: null
+      orderId: null,
+      couponType: 0
     }
   },
   onLoad(options) {
@@ -424,11 +429,12 @@ export default {
                   if (this.settlement.shops[s].skus[k].productId == this.settlement.shops[s].shopCoupons[0].ids[i]) {
                     skustotal = this.settlement.shops[s].skus[k].total * (this.settlement.shops[s].shopCoupons[0].reduceMoney /
                         10)
+                    console.log(skustotal, 'skustotal')
                     this.settlement.shops[s].skus[k].skuTotalNum = skustotal
                   }
                 }
                 shoptotal += this.settlement.shops[s].skus[k].skuTotalNum
-                this.settlement.shops[s].totalNum = this.settlement.shops[s].total - shoptotal.toFixed(2)
+                this.settlement.shops[s].totalNum = shoptotal.toFixed(2)
               }
               // this.settlement.shops[s].total = shoptotal.toFixed(2)
               this.selectShopCoupon.push(this.settlement.shops[s].shopCoupons[0])
@@ -469,6 +475,16 @@ export default {
     },
     // 平台优惠券选择
     couponItemTap(index, usableItem) {
+      console.log(this.selectShopCoupon[0], 'testpintai')
+      if (this.selectShopCoupon.length) {
+        if (this.selectShopCoupon[0].ifAdd === 0) {
+          uni.showToast({
+            title: '不可与商家券券叠加使用！',
+            icon: 'none'
+          })
+          return false
+        }
+      }
       if (this.couponCheckedindex === index) {
         let promotionInfoDTO = {}
         if (usableItem.couponId) {
@@ -480,7 +496,7 @@ export default {
         this.couponCheckedindex = null
         this.couponCheckedType = false
         this.isShowDiscount = false
-        this.getTotal()
+        this.getTotal(usableItem)
       } else {
         //console.log(usableItem.reduceMoney, 'item')
         let moneySum = 0
@@ -488,7 +504,7 @@ export default {
         for (let i = 0; i < shopslen; i++) {
           moneySum += this.settlement.shops[i].total
         }
-        if (usableItem.reduceMoney >= moneySum) {
+        if (usableItem.reduceMoney >= moneySum && usableItem.couponType !== 2) {
           uni.showToast({
             title: '不可使用大于等于合计金额的优惠劵！',
             icon: 'none'
@@ -499,13 +515,15 @@ export default {
         if (usableItem.couponId) {
           promotionInfoDTO['couponId'] = usableItem.couponId
           promotionInfoDTO['ifAdd'] = usableItem.ifAdd
+          promotionInfoDTO['couponType'] = usableItem.couponType
         }
         this.promotionInfoDTO = promotionInfoDTO
         this.reduceMoney = usableItem.reduceMoney
+        // this.couponType = usableItem.couponType
         this.couponCheckedindex = index
         this.couponCheckedType = true
         this.isShowDiscount = false
-        this.getTotal()
+        this.getTotal(usableItem)
       }
     },
     // 店铺优惠券选择
@@ -528,7 +546,7 @@ export default {
         this.shopCouponCheckedType = false
         this.isShopCoupons = false
         this.settlement.shops[this.shopIndex].currentCoupon.shopCouponId = 0
-        this.getTotal()
+        this.getTotal(sItem)
         if (this.selectShopCoupon[i].id === sItem.id) {
           //console.log(666)
           this.selectCouponIdList.splice(i, 1)
@@ -614,11 +632,11 @@ export default {
               console.log(this.settlement.shops[this.shopIndex].skuTotalNum, 'shoptotal22')
             }
           }
-          this.getTotal()
+          this.getTotal(sItem)
         }
       }
     },
-    getTotal() {
+    getTotal(item) {
       this.totalprice = 0
       this.totalCount = 0
       let allNum = 0
@@ -628,13 +646,15 @@ export default {
         allNum += this.settlement.shops[i].totalNum
         this.totalCount += this.settlement.shops[i].number
       }
-      if (this.totalprice - this.reduceMoney > 0) {
+      if (item.couponType === 1 && this.totalprice - this.reduceMoney > 0) {
         this.discountPrice = allNum - this.totalprice + this.reduceMoney
+      } else if (item.couponType === 2 && this.reduceMoney > 0) {
+        this.discountPrice = allNum - this.totalprice * (this.reduceMoney / 10)
+        console.log(this.discountPrice, allNum, this.totalprice, this.reduceMoney)
+        this.totalprice = allNum - this.discountPrice
       } else {
         this.discountPrice = allNum
       }
-      this.discountPrice = this.discountPrice.toFixed(2)
-      this.discountPrice = parseFloat(this.discountPrice)
       this.recalcHuabei()
       // console.log(this.totalprice - this.reduceMoney, 'dis')
     },
@@ -1100,7 +1120,7 @@ export default {
       // #ifdef MP-ALIPAY
       this.showAlipayPayType = true
       this.showHuabeiPayType = true
-	  this.paymentMode = 2
+	    this.paymentMode = 2
       // #endif
     }
   },

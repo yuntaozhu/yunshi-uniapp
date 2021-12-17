@@ -1,7 +1,12 @@
 <template>
   <div class="hom-pro-list">
     <div class="title">
+      <!-- #ifdef MP-WEIXIN -->
       <img class="title-img" src="../../../static/images/discount/img-title.png" alt="限时折扣" mode="widthFix"/>
+      <!-- #endif -->
+      <!-- #ifdef H5 || APP-PLUS -->
+      <image class="title-img" src="../../../static/images/discount/img-title.png" alt="限时折扣" mode="widthFix"/>
+      <!-- #endif -->
     </div>
     <div v-if="componentContent.arrangeType == '横向滑动' && productData.products.length > 2" class="product-list">
       <swiper ref="mySwiper" class="swiper product-list-box" :indicator-dots="true" :autoplay="true" :display-multiple-items="2">
@@ -14,7 +19,12 @@
             <label class="product-name">{{item.productName}}</label>
             <div>
               <div class="flag">
-                <img src="../../../static/images/discount/flag-discount2.png" alt="限时折扣" mode="widthFix"/>
+                <!-- #ifdef MP-WEIXIN -->
+                <img class="icon" src="../../../static/images/discount/flag-discount2.png" alt="限时折扣" mode="widthFix"/>
+                <!-- #endif -->
+                <!-- #ifdef H5 || APP-PLUS -->
+                <image class="icon" src="../../../static/images/discount/flag-discount2.png" alt="限时折扣" mode="widthFix"/>
+                <!-- #endif -->
               </div>
               <label class="buy-count">剩余{{item.stockNumber}}件</label>
             </div>
@@ -43,7 +53,12 @@
             <label class="product-name">{{item.productName}}</label>
             <div>
               <div class="flag">
-                <img src="../../../static/images/discount/flag-discount2.png" alt="限时折扣" mode="widthFix"/>
+                <!-- #ifdef MP-WEIXIN -->
+                <img class="icon" src="../../../static/images/discount/flag-discount2.png" alt="限时折扣" mode="widthFix"/>
+                <!-- #endif -->
+                <!-- #ifdef H5 || APP-PLUS -->
+                <image class="icon" src="../../../static/images/discount/flag-discount2.png" alt="限时折扣" mode="widthFix"/>
+                <!-- #endif -->
               </div>
               <label class="buy-count">剩余{{item.stockNumber}}件</label>
             </div>
@@ -179,8 +194,10 @@ export default {
       .flag{
         float: left;
         margin-right: 20upx;
-        img{
-          width: 100upx;
+        .icon{
+          width: 100rpx;
+          height: 40rpx;
+          display: block;
         }
       }
       .buy-count{

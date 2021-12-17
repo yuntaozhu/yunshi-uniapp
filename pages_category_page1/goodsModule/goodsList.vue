@@ -78,7 +78,7 @@
               <image class="iconImg" v-if="item.activityType == 4" src="../../static/images/spikeIcon.png"></image>
               <image class="iconImg" v-if="item.activityType == 3" src="../../static/images/discountListIcon.png"></image>
               <image class="iconImg" v-if="item.activityType == 5" src="../../static/images/discountListIcon.png"></image>
-              <image class="iconImg" v-if="item.activityType == 8" src="../../static/images/memberCenterIcon.png"></image>
+              <image class="iconImg" v-if="item.activityType == 9" src="../../static/images/memberCenterIcon.png"></image>
 							<view class="font-color-C83732 flex-row-plus">
 								<b>￥</b>
 								<label class="fs28">{{item.price}}</label>

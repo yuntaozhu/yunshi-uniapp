@@ -70,7 +70,7 @@
 				      <p>{{item.productName}}</p>
 				      <view class="number" v-if="item.users != null">
                 <view class="numText">{{item.users}}人付款</view>
-                <view class="numText" v-if="item.total !=0">限量{{item.total}}件</view>
+<!--                <view class="numText" v-if="item.total !=0">限量{{item.total}}件</view>-->
               </view>
 					  <view class="flex-row-plus flex-item mar-top-30">
               <image class="iconImg" v-if="item.activityType == 1" src="../../static/images/groupBuyIcon.png"></image>
@@ -146,22 +146,22 @@
 			}
 		},
 		methods: {
-      // sortTap(index){
-      //   this.page = 1
-      //   this.list = []
-      //   if(index == 1){
-      //     this.type = 1
-      //     this.volume = 1
-      //     this.sortIndex = index
-      //   }else if(index == 2){
-      //     this.type = this.type != 1 ? 1:2
-      //     this.sortIndex = index
-      //   }else if(index == 3){
-      //     this.volume = this.volume != 1 ? 1:2
-      //     this.sortIndex = index
-      //   }
-      //   this.searchList()
-      // },
+      sortTap(index){
+        this.page = 1
+        this.list = []
+        if(index == 1){
+          this.type = 1
+          this.volume = 1
+          this.sortIndex = index
+        }else if(index == 2){
+          this.type = this.type != 1 ? 1:2
+          this.sortIndex = index
+        }else if(index == 3){
+          this.volume = this.volume != 1 ? 1:2
+          this.sortIndex = index
+        }
+        this.searchList()
+      },
 			// searchTextDel(){
 			// 	this.keyWord = ''
 			// },

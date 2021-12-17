@@ -59,6 +59,11 @@ export const commonMixin = {
           }
           this.sendReq(params, (res) => {
             _.productData.products = res.data
+            if (_.productData.products.length > 2) {
+              _.productData.show = true
+            } else {
+              _.productData.show = false
+            }
           })
         } else if(_.typeId === 3) {
           if(_.componentContent.shopGroupWorkId){

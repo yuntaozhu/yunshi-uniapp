@@ -1,7 +1,7 @@
 <template>
   <div class="banner" :class="'terminal' + terminal">
-    <swiper class="swiper" :indicator-dots="true" :autoplay="true" :style="{'height':componentContent.height + 'rpx'}">
-      <swiper-item class="banner-item" v-for="(item,index) in bannerList" :key="index" :style="{backgroundImage: 'url('+ item.bannerUrl +')','height':componentContent.height + 'rpx'}">
+    <swiper class="swiper" :indicator-dots="true" :autoplay="true" :style="{'height':bannerHeight + 'rpx'}">
+      <swiper-item class="banner-item" v-for="(item,index) in bannerList" :key="index" :style="{backgroundImage: 'url('+ item.bannerUrl +')','height':bannerHeight + 'rpx'}">
         <div class="a-link" @click="jumpLink(item.linkObj)"><img class="img" :src="item.bannerUrl" v-show="item.bannerUrl" mode="widthFix"></div>
       </swiper-item>
     </swiper>
@@ -18,6 +18,7 @@
     mixins: [funMixin],
     data () {
       return {
+        bannerHeight: 0
         // swiperOption: {
         //   autoplay: false, // 可选选项，自动滑动
         //   loop: true,
@@ -44,6 +45,10 @@
     //   swiper: directive
     // },
     mounted() {
+      this.bannerHeight = this.componentContent.height
+      // #ifdef APP-PLUS
+      this.bannerHeight = this.bannerHeight / 2
+      // #endif
       this.$forceUpdate() // 刷新轮播图
     },
     computed: {

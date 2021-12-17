@@ -10,12 +10,22 @@
             <div class="product-swiper-info">
               <label class="product-name">{{item.productName}}</label>
               <div class="price-warp">
-                <image class="iconImg" v-if="item.activityType == 1" src="../../../static/images/groupBuyIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 2" src="../../../static/images/spikeIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 4" src="../../../static/images/spikeIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 3" src="../../../static/images/discountListIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 5" src="../../../static/images/discountListIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 8" src="../../../static/images/memberCenterIcon.png"></image>
+                <!-- #ifdef MP-WEIXIN -->
+                <img class="iconImg" v-if="item.activityType == 1" src="../../../static/images/groupBuyIcon.png">
+                <img class="iconImg" v-if="item.activityType == 2" src="../../../static/images/spikeIcon.png">
+                <img class="iconImg" v-if="item.activityType == 4" src="../../../static/images/spikeIcon.png">
+                <img class="iconImg" v-if="item.activityType == 3" src="../../../static/images/discountListIcon.png">
+                <img class="iconImg" v-if="item.activityType == 5" src="../../../static/images/discountListIcon.png">
+                <img class="iconImg" v-if="item.activityType == 8" src="../../../static/images/memberCenterIcon.png">
+                <!-- #endif -->
+                <!-- #ifdef H5 || APP-PLUS -->
+                <image class="iconImg" v-if="item.activityType == 1" src="../../../static/images/groupBuyIcon.png">
+                <image class="iconImg" v-if="item.activityType == 2" src="../../../static/images/spikeIcon.png">
+                <image class="iconImg" v-if="item.activityType == 4" src="../../../static/images/spikeIcon.png">
+                <image class="iconImg" v-if="item.activityType == 3" src="../../../static/images/discountListIcon.png">
+                <image class="iconImg" v-if="item.activityType == 5" src="../../../static/images/discountListIcon.png">
+                <image class="iconImg" v-if="item.activityType == 8" src="../../../static/images/memberCenterIcon.png">
+                <!-- #endif -->
                 <div class="price">
                   ¥ {{item.price}}
                 </div>

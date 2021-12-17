@@ -5,7 +5,12 @@
 				<view class="rect" @tap.stop>
 					<!-- 关闭按钮 -->
 					<view class="guanbiView">
-						<img @click="showcos" src="@../../static/img/guanbi.png" class="guanbi" style="width:30px;height:30px;" mode="widthFix"></img>
+            <!-- #ifdef MP-WEIXIN -->
+            <img @click="showcos" src="@../../static/img/guanbi.png" class="guanbi" style="width:30px;height:30px;" mode="widthFix"></img>
+            <!-- #endif -->
+            <!-- #ifdef H5 || APP-PLUS -->
+            <image @click="showcos" src="@../../static/img/guanbi.png" class="guanbi" style="width:30px;height:30px;" mode="widthFix"></image>
+            <!-- #endif -->
 					</view>
 					<!-- 内容 -->
 					<view class="imgBox">

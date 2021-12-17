@@ -153,6 +153,9 @@ export const tool = {
     },
     // 跳转到公告详情
     jumpNoticeDetail(item){
+      uni.navigateTo({
+        url: '/pages_category_page2/userModule/messageDetail?noticeId=' + item.noticeId
+      })
     },
     // 领取优惠券
     // receiveCoupon(item) {

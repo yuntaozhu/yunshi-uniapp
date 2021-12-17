@@ -140,7 +140,7 @@
 
 <style lang="scss">
   .warp{
-    width: 710px;
+    width: 710upx;
     margin: 0 auto;
     max-width: 100%;
     &.terminal4{
