@@ -2,8 +2,14 @@
   <div class="coupon">
     <div class="coupon-list">
       <div class="coupon-item" v-for="(item,index) in couponsData" :key="index" :class="item.state && item.state !== 3 && 'isReceive'">
+        <!-- #ifdef MP-WEIXIN -->
         <img class="coupon-item-bg" src="../../../static/images/coupon/bg-coupon.png" v-if="item.state && item.state === 3" mode="widthFix">
         <img class="coupon-item-bg" src="../../../static/images/coupon/bg-coupon2.png" v-else mode="widthFix">
+        <!-- #endif -->
+        <!-- #ifdef H5 || APP-PLUS -->
+        <image class="coupon-item-bg" src="../../../static/images/coupon/bg-coupon.png" v-if="item.state && item.state === 3" mode="widthFix">
+        <image class="coupon-item-bg" src="../../../static/images/coupon/bg-coupon2.png" v-else mode="widthFix">
+        <!-- #endif -->
         <div class="coupon-item-cont">
         <div class="coupon-item-content">
           <div class="coupon-item-price">
@@ -12,7 +18,7 @@
             <div class="b" v-else>{{item.reduceMoney}}</div>
             <div class="b" v-if="item.couponType == 2">折券</div>
           </div>
-          <div class="coupon-item-date">{{item.startTime.split(' ')[0]}} - {{item.endTime.split(' ')[0]}}</div>
+          <div class="coupon-item-date">{{item.activityStartTime.split(' ')[0].replace(/-/g, '.')}}-{{item.activityEndTime.split(' ')[0].replace(/-/g, '.')}}</div>
           <div class="coupon-item-text">{{item.content}}</div>
         </div>
         <button v-if="item.state === 0" class="coupon-item-btn">已领取</button>

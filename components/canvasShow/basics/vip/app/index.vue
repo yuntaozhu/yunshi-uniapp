@@ -2,7 +2,12 @@
   <div class="vip">
     <div class="vip-card">
       <div class="vip-title">
+        <!-- #ifdef MP-WEIXIN -->
+        <img class="title-img" src="../../../static/images/vip/img-title.png" alt="会员专区" mode="widthFix"/>
+        <!-- #endif -->
+        <!-- #ifdef H5 || APP-PLUS -->
         <image class="title-img" src="../../../static/images/vip/img-title.png" alt="会员专区" mode="widthFix"/>
+        <!-- #endif -->
         <a v-show="componentContent.showMore" class="btn-more a-link" @click="jumpVip">更多<i class="iconfont icon-arrow-right"></i></a>
       </div>
       <div>
@@ -24,7 +29,12 @@
               </div>
               <div class="price-warp">
                 <div class="flag">
-                  <image src="../../../static/images/vip/flag-vip.png" alt="会员价" class="flagImg"/>
+                  <!-- #ifdef MP-WEIXIN -->
+                  <img src="../../../static/images/vip/flag-vip.png" alt="会员价" class="flagImg"/>
+                  <!-- #endif -->
+                  <!-- #ifdef H5 || APP-PLUS -->
+                  <image class="flagImg" src="../../../static/images/vip/flag-vip.png" alt="会员专区" mode="widthFix"/>
+                  <!-- #endif -->
                 </div>
                 <div class="price">
                   ¥ {{item.price}}
@@ -44,7 +54,7 @@
           <div class="vip-item-warp" v-for="(itemJ,indexJ) in listTemp" :key="indexJ">
             <div class="vip-item"  v-for="(item,index) in itemJ" :key="index" @click="jumpProductDetail(item)">
               <div class="vip-item-img">
-                <image v-show="item.image" class="img" :src="item.image">
+                <img v-show="item.image" class="img" :src="item.image">
               </div>
               <div class="vip-item-info">
                 <h3 class="name">
@@ -58,7 +68,12 @@
                 </div>
                 <div class="price-warp">
                   <div class="flag">
-                    <image src="../../../static/images/vip/flag-vip.png" alt="会员价" class="flagImg"/>
+                    <!-- #ifdef MP-WEIXIN -->
+                    <img src="../../../static/images/vip/flag-vip.png" alt="会员价" class="flagImg"/>
+                    <!-- #endif -->
+                    <!-- #ifdef H5 || APP-PLUS -->
+                    <image class="flagImg" src="../../../static/images/vip/flag-vip.png" alt="会员专区" mode="widthFix"/>
+                    <!-- #endif -->
                   </div>
                   <div class="price">
                     ¥ {{item.price}}
@@ -171,7 +186,7 @@ export default {
       position: relative;
       .name{
         font-size: 28upx;
-        height: 80rpx;
+        height: 75rpx;
         line-height: 40upx;
         color: #333333;
         padding: 30upx 0 10upx;
@@ -179,8 +194,13 @@ export default {
         text-overflow:ellipsis;
         display:-webkit-box;
         -webkit-box-orient:vertical;
-        -webkit-line-clamp:2;
+        -webkit-line-clamp:1;
       }
+      // #ifdef H5 || APP-PLUS
+      .name{
+        height: 40rpx;
+      }
+      // #endif
       .stock{
         color: #C5AA7B;
         font-size: 20upx;

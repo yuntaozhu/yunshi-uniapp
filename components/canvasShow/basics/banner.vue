@@ -1,68 +1,67 @@
 <template>
   <div class="banner" :class="'terminal' + terminal">
-    <swiper class="swiper" :indicator-dots="true" :autoplay="true" :style="{'height':componentContent.height + 'rpx'}">
-      <swiper-item class="banner-item" v-for="(item,index) in bannerList" :key="index" :style="{backgroundImage: 'url('+ item.bannerUrl +')','height':componentContent.height + 'rpx'}">
-        <div class="a-link" @click="jumpLink(item.linkObj)"><img class="img" :src="item.bannerUrl" v-show="item.bannerUrl" mode="widthFix"></div>
+    <swiper class="swiper" :indicator-dots="false" :autoplay="true" :style="{'height':bannerHeight + 'rpx'}" @change="swiperChange">
+      <swiper-item class="banner-item" v-for="(item,index) in bannerList" :key="index" :style="{backgroundImage: 'url('+ item.bannerUrl +')','height':bannerHeight + 'rpx'}"  @click="jumpLink(item.linkObj)">
+        <!--        <div class="a-link" @click="jumpLink(item.linkObj)"><img class="img" :src="item.bannerUrl" v-show="item.bannerUrl" mode="widthFix"></div>-->
       </swiper-item>
     </swiper>
-    <div class="swiper-pagination" slot="pagination"></div>
+    <view class="swiper-dots" v-if="bannerList && bannerList.length > 1">
+      <text class="dot" :class="index === swiperCurrent  && 'dot-active'" v-for="(dot, index) in bannerList.length"
+            :key="index"></text>
+    </view>
   </div>
 </template>
 
 <script>
-// import { directive, Swiper, SwiperSlide } from 'vue-awesome-swiper'
-// import 'swiper/css/swiper.css'
-  import {funMixin} from '../config/mixin'
-  export default {
-    name: 'cereBanner',
-    mixins: [funMixin],
-    data () {
-      return {
-        // swiperOption: {
-        //   autoplay: false, // 可选选项，自动滑动
-        //   loop: true,
-        //   pagination: {
-        //     el: '.swiper-pagination'
-        //   }
-        // }
-      }
+import {funMixin} from '../config/mixin'
+export default {
+  name: 'cereBanner',
+  mixins: [funMixin],
+  data () {
+    return {
+      bannerHeight: 0,
+      swiperCurrent: 0
+    }
+  },
+  props: {
+    terminal: {
+      type: Number,
+      default: 4
     },
-    props: {
-      terminal: {
-        type: Number,
-        default: 4
-      },
-      componentContent: {
-        type: Object
-      }
-    },
-    // components: {
-    //   Swiper,
-    //   SwiperSlide
-    // },
-    // directives: {
-    //   swiper: directive
-    // },
-    mounted() {
-      this.$forceUpdate() // 刷新轮播图
-    },
-    computed: {
-      bannerList: function () {
-        console.log(this.componentContent)
-        return this.componentContent.bannerData.filter(function (item) {
-          return item.bannerUrl
-        })
-      }
+    componentContent: {
+      type: Object
+    }
+  },
+  mounted() {
+    this.bannerHeight = this.componentContent.height
+    this.$forceUpdate() // 刷新轮播图
+  },
+  computed: {
+    bannerList: function () {
+      console.log(this.componentContent)
+      return this.componentContent.bannerData.filter(function (item) {
+        return item.bannerUrl
+      })
+    }
+  },
+  methods:{
+    swiperChange(e) {
+      this.swiperCurrent = e.detail.current;
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
 .banner{
-  .banner-item {
+  position: relative;
+  .banner-item{
     width: 100%;
-    img {
-      width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: auto 100%;
+    img{
+      display: none;
     }
   }
   &.terminal4{
@@ -81,49 +80,28 @@
       }
     }
   }
-  ::v-deep .uni-swiper-dots{
-      display: flex;
-      justify-content: center;
-      bottom: 20upx;
-      width: 100%;
-     .uni-swiper-dot{
-        width: 30upx;
-        height: 4upx;
-        background: #fff;
-        opacity: 0.5;
-        border-radius: 2upx;
-        margin: 0 7.5upx;
-       .uni-swiper-dot-active{
-          opacity: 1;
-          width: 58upx;
-        }
-      }
+
+  .swiper-dots {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20upx;
+    z-index: 200;
+    .dot {
+      width: 12upx;
+      height: 12upx;
+      background: #FFFFFF;
+      border-radius: 6upx;
+      opacity: 0.2;
+      margin: 0 10upx;
+    }
+
+    .dot-active {
+      opacity: 1;
+      width: 24upx;
+    }
   }
 
-  /* wx-swiper-dots wx-swiper-dots-horizontal */
-  wx-swiper .wx-swiper-dot-active{
-    width: 40rpx;
-    border-radius: 10rpx;
-    background: #eb544d;
-  }
-
-  //.swiper-pagination{
-  //  display: flex;
-  //  justify-content: center;
-  //  bottom: 20upx;
-  //  width: 100%;
-  //  ::v-deep .swiper-pagination-bullet{
-  //    width: 30upx;
-  //    height: 4upx;
-  //    background: #fff;
-  //    opacity: 0.5;
-  //    border-radius: 2upx;
-  //    margin: 0 7.5upx;
-  //  }
-  //  ::v-deep .swiper-pagination-bullet-active{
-  //    opacity: 1;
-  //    width: 58upx;
-  //  }
-  //}
 }
 </style>

@@ -3,7 +3,12 @@
     <div class="spike-card" v-if="productData.products && productData.products.length>0">
       <div class="spike-card-top">
         <h2 class="spike-card-top-title">
+          <!-- #ifdef MP-WEIXIN -->
           <img class="title-img" src="../../../static/images/spike/img-title.png" alt="秒杀专区" mode="widthFix"/>
+          <!-- #endif -->
+          <!-- #ifdef H5 || APP-PLUS -->
+          <image class="title-img" src="../../../static/images/spike/img-title.png" alt="秒杀专区" mode="widthFix"/>
+          <!-- #endif -->
         </h2>
         <div class="spike-card-top-time" v-if="state===2">
           活动已结束
@@ -52,7 +57,7 @@ export default {
   background: #F8F8F8;
   padding: 20upx;
   &-card{
-    height: 498upx;
+    height: 430upx;
     background: #FFFFFF;
     border-radius: 20upx;
     &-top{
@@ -111,7 +116,7 @@ export default {
       }
       &-img{
         width: 162upx;
-        height: 196upx;
+        height: 162upx;
         margin-right: 10upx;
         float: left;
         img {

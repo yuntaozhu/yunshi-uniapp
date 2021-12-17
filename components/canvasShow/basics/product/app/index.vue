@@ -1,7 +1,12 @@
 <template>
   <div class="hom-pro-list">
     <div class="title">
+      <!-- #ifdef MP-WEIXIN -->
       <img class="title-img" src="../../../static/images/product/img-title.png" alt="商品推荐" mode="widthFix"/>
+      <!-- #endif -->
+      <!-- #ifdef H5 || APP-PLUS -->
+      <image class="title-img" src="../../../static/images/product/img-title.png" alt="商品推荐" mode="widthFix"/>
+      <!-- #endif -->
     </div>
     <div v-if="componentContent.arrangeType == '横向滑动' && productData.length > 2" class="product-list">
       <swiper ref="mySwiper" class="swiper product-list-box" :indicator-dots="true" :autoplay="true" :display-multiple-items="2">
@@ -22,12 +27,22 @@
                 <label class="buy-count">{{item.users?item.users: 0}}人付款</label>
               </div>
               <div class="price-warp">
-                <image class="iconImg" v-if="item.activityType == 1" src="../../../static/images/groupBuyIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 2" src="../../../static/images/spikeIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 4" src="../../../static/images/spikeIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 3" src="../../../static/images/discountListIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 5" src="../../../static/images/discountListIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 8" src="../../../static/images/memberCenterIcon.png"></image>
+                <!-- #ifdef MP-WEIXIN -->
+                <img class="iconImg" v-if="item.activityType == 1" src="../../../static/images/groupBuyIcon.png">
+                <img class="iconImg" v-if="item.activityType == 2" src="../../../static/images/spikeIcon.png">
+                <img class="iconImg" v-if="item.activityType == 4" src="../../../static/images/spikeIcon.png">
+                <img class="iconImg" v-if="item.activityType == 3" src="../../../static/images/discountListIcon.png">
+                <img class="iconImg" v-if="item.activityType == 5" src="../../../static/images/discountListIcon.png">
+                <img class="iconImg" v-if="item.activityType == 8" src="../../../static/images/memberCenterIcon.png">
+                <!-- #endif -->
+                <!-- #ifdef H5 || APP-PLUS -->
+                <image class="iconImg" v-if="item.activityType == 1" src="../../../static/images/groupBuyIcon.png">
+                <image class="iconImg" v-if="item.activityType == 2" src="../../../static/images/spikeIcon.png">
+                <image class="iconImg" v-if="item.activityType == 4" src="../../../static/images/spikeIcon.png">
+                <image class="iconImg" v-if="item.activityType == 3" src="../../../static/images/discountListIcon.png">
+                <image class="iconImg" v-if="item.activityType == 5" src="../../../static/images/discountListIcon.png">
+                <image class="iconImg" v-if="item.activityType == 8" src="../../../static/images/memberCenterIcon.png">
+                <!-- #endif -->
                 <div class="price">
                   ¥ {{item.price}}
                 </div>
@@ -60,12 +75,22 @@
                 <label class="buy-count">{{item.users?item.users: 0}}人付款</label>
               </div>
               <div class="price-warp">
-                <image class="iconImg" v-if="item.activityType == 1" src="../../../static/images/groupBuyIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 2" src="../../../static/images/spikeIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 4" src="../../../static/images/spikeIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 3" src="../../../static/images/discountListIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 5" src="../../../static/images/discountListIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 8" src="../../../static/images/memberCenterIcon.png"></image>
+                <!-- #ifdef MP-WEIXIN -->
+                <img class="iconImg" v-if="item.activityType == 1" src="../../../static/images/groupBuyIcon.png">
+                <img class="iconImg" v-if="item.activityType == 2" src="../../../static/images/spikeIcon.png">
+                <img class="iconImg" v-if="item.activityType == 4" src="../../../static/images/spikeIcon.png">
+                <img class="iconImg" v-if="item.activityType == 3" src="../../../static/images/discountListIcon.png">
+                <img class="iconImg" v-if="item.activityType == 5" src="../../../static/images/discountListIcon.png">
+                <img class="iconImg" v-if="item.activityType == 8" src="../../../static/images/memberCenterIcon.png">
+                <!-- #endif -->
+                <!-- #ifdef H5 || APP-PLUS -->
+                <image class="iconImg" v-if="item.activityType == 1" src="../../../static/images/groupBuyIcon.png">
+                <image class="iconImg" v-if="item.activityType == 2" src="../../../static/images/spikeIcon.png">
+                <image class="iconImg" v-if="item.activityType == 4" src="../../../static/images/spikeIcon.png">
+                <image class="iconImg" v-if="item.activityType == 3" src="../../../static/images/discountListIcon.png">
+                <image class="iconImg" v-if="item.activityType == 5" src="../../../static/images/discountListIcon.png">
+                <image class="iconImg" v-if="item.activityType == 8" src="../../../static/images/memberCenterIcon.png">
+                <!-- #endif -->
                 <div class="price">
                   ¥ {{item.price}}
                 </div>

@@ -3,7 +3,12 @@
     <div class="group-warp">
       <div class="title">
         <label>
+          <!-- #ifdef MP-WEIXIN -->
           <img class="title-img" src="../../../static/images/price/img-title.png" alt="组合优惠" mode="widthFix"/>
+          <!-- #endif -->
+          <!-- #ifdef H5 || APP-PLUS -->
+          <image class="title-img" src="../../../static/images/price/img-title.png" alt="组合优惠" mode="widthFix"/>
+          <!-- #endif -->
         </label>
         <div class="price-text">
           <swiper class="swiper" :autoplay="true" :vertical="true">

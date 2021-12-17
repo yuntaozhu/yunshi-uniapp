@@ -3,31 +3,38 @@
     <div class="group-warp">
       <div class="title">
         <label>
+          <!-- #ifdef MP-WEIXIN -->
           <img class="title-img" src="../../../static/images/group/img-title.png" alt="拼团专区" mode="widthFix"/>
-        </label>
-        <a v-show="componentContent.showMore" class="btn-all a-link" @click="jumpGroupWorks(productData)">更多<i class="iconfont icon-arrow-right"></i></a>
-      </div>
-      <div>
-      <swiper class="swiper pro-box" :indicator-dots="true" :autoplay="true" :display-multiple-items="3">
-        <swiper-item class="swiper-slide pro-item-warp" v-for="(item,index) in productData.products" :key="index" @click="jumpProductDetail(item)">
-         <div class="pro-item-inner">
-           <div class="pro-item">
-             <div class="pro-item-img">
-               <img v-show="item.image" class="img" :src="item.image">
-             </div>
-             <div class="pro-item-info">
-               <label class="name">{{item.productName}}</label>
-               <div class="price">
-                 <label class="unit">¥ </label>
-                 <label class="val"> {{item.price}}</label>
-               </div>
-               <label class="buyCount">{{item.workUsers?item.workUsers:0}}人已拼</label>
-             </div>
-           </div>
-         </div>
-        </swiper-item>
-      </swiper>
-<!--      <div class="pagination group-pagination"></div>-->
+          <!-- #endif -->
+          <!-- #ifdef H5 || APP-PLUS -->
+          <image class="title-img" src="../../../static/images/group/img-title.png" alt="拼团专区" mode="widthFix"/>
+          <!-- #endif -->
+         </label>
+         <a v-show="componentContent.showMore" class="btn-all a-link" @click="jumpGroupWorks(productData)">更多<i class="iconfont icon-arrow-right"></i></a>
+       </div>
+       <div>
+       <swiper class="swiper pro-box" :indicator-dots="productData.show" :autoplay="true" :display-multiple-items="3">
+         <swiper-item class="swiper-slide pro-item-warp" v-for="(item,index) in productData.products" :key="index" @click="jumpProductDetail(item)">
+          <div class="pro-item-inner">
+            <div class="pro-item">
+              <div class="pro-item-img">
+                <img v-show="item.image" class="img" :src="item.image">
+              </div>
+              <div class="pro-item-info">
+                <label class="name">{{item.productName}}</label>
+                <div class="price">
+                  <label class="unit">¥ </label>
+                  <label class="val"> {{item.price}}</label>
+                </div>
+                <label class="buyCount">{{item.workUsers?item.workUsers:0}}人已拼</label>
+              </div>
+            </div>
+          </div>
+         </swiper-item>
+         <swiper-item v-if="productData.products.length" class="swiper-slide pro-item-warp" v-for="item in (3 - productData.products.length)">
+         </swiper-item>
+       </swiper>
+ <!--      <div class="pagination group-pagination"></div>-->
       </div>
     </div>
   </div>
@@ -53,6 +60,8 @@ export default {
       //   }
       // }
     }
+  },
+  mounted() {
   }
 }
 </script>
