@@ -14,7 +14,7 @@
 			<view class="item-btn" @click="memberAccountWithdraw">
 				<image class="item-btn-icon" src="../../static/images/withdraw.png" mode="widthFix"></image>
 				<view class="item-btn-text">提现</view>
-				<image class="item-btn-right" src="../../static/img/user/arrow.png" mode="widthFix"></image>
+				<image class="item-btn-right" src="../../static/images/greyArrow.png" mode="widthFix"></image>
 			</view>
 		</view>
 	</view>
@@ -136,8 +136,8 @@ page {
 			color:rgba(102,102,102,1);
 		}
 		.item-btn-right{
-			width: 24upx;
-			height: 24upx;
+			width: 60upx;
+			height: 60upx;
 		}
 
 	}

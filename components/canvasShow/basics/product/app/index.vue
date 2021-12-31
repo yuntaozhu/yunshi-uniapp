@@ -9,15 +9,15 @@
       <!-- #endif -->
     </div>
     <div v-if="componentContent.arrangeType == '横向滑动' && productData.length > 2" class="product-list">
-      <swiper ref="mySwiper" class="swiper product-list-box" :indicator-dots="true" :autoplay="true" :display-multiple-items="2">
-        <swiper-item class="product-list-item-warp" v-for="(item,index) in productData.slice(0, 10)" :key="index" @click="jumpProductDetail(item)">
+      <swiper ref="mySwiper" class="swiper product-list-box" :indicator-dots="false" :autoplay="true" :display-multiple-items="2" @change="swiperChange">
+        <swiper-item class="product-list-item-warp" v-for="(item,index) in productData" :key="index" @click="jumpProductDetail(item)">
           <div class="product-list-item">
             <div class="product-list-img">
               <img v-show="item.image" class="img" :src="item.image">
             </div>
             <div class="product-list-info">
               <label class="product-name">{{item.productName}}</label>
-              <div>
+              <div class="flex">
                 <div class="shop-box" v-if="typeId == 1" @click.stop="jumpStore(item)">
                   <label class="shop-name">{{item.shopName}}</label>
                   <div class="shop-logo">
@@ -54,7 +54,10 @@
           </div>
         </swiper-item>
       </swiper>
-<!--      <div class="pagination product-pagination" slot="pagination"></div>-->
+      <view class="swiper-dots" v-if="productData && productData.length > 2">
+        <text class="dot" :class="index - swiperCurrent <= 1 && index - swiperCurrent >=0  && 'dot-active'" v-for="(dot, index) in productData.length"
+              :key="index"></text>
+      </view>
     </div>
     <div v-else class="product-list">
       <div class="product-list-box" >
@@ -65,7 +68,7 @@
             </div>
             <div class="product-list-info">
               <label class="product-name">{{item.productName}}</label>
-              <div>
+              <div class="flex">
                 <div class="shop-box" v-if="typeId == 1" @click.stop="jumpStore(item)">
                   <label class="shop-name">{{item.shopName}}</label>
                   <div class="shop-logo">
@@ -113,20 +116,12 @@ export default {
   mixins: [commonMixin],
   data () {
     return {
-      // swiperOption: {
-      //   slidesPerView: 2,
-      //   spaceBetween: 0,
-      //   autoplay: false, // 可选选项，自动滑动
-      //   loop: true,
-      //   pagination: {
-      //     el: '.product-pagination',
-      //     clickable: true
-      //   },
-      //   navigation: {
-      //     nextEl: '.swiper-button-next',
-      //     prevEl: '.swiper-button-prev'
-      //   }
-      // }
+      swiperCurrent: 0,
+    }
+  },
+  methods:{
+    swiperChange(e) {
+      this.swiperCurrent = e.detail.current;
     }
   }
 }
@@ -193,11 +188,16 @@ export default {
         margin-bottom: 18upx;
         line-height: 40upx;
       }
+      .flex{
+        display: flex;
+        align-items: center;
+      }
       .shop-box{
         background-color: #333333;
         border-radius: 0upx 20upx 20upx 0upx;
         line-height: 40upx;
-        display: inline-block;
+        display: flex;
+        align-items: center;
         height: 40upx;
         margin-right: 10upx;
         .shop-name{
@@ -220,11 +220,9 @@ export default {
       .buy-count{
         color: #C5AA7B;
         font-size: 20upx;
-        margin-bottom: 16upx;
         border: 2upx solid #E4E5E6;
         line-height: 40upx;
         padding: 0 5upx;
-        display: inline-block;
       }
       .price-warp{
         display: flex;
@@ -252,22 +250,43 @@ export default {
     //}
   }
 }
-::v-deep .uni-swiper-dots{
+//::v-deep .uni-swiper-dots{
+//  display: flex;
+//  justify-content: center;
+//  padding: 10upx 0;
+//  .uni-swiper-dot{
+//    width: 10upx;
+//    height: 10upx;
+//    background: #333333;
+//    opacity: 0.3;
+//    border-radius: 5upx;
+//    margin: 0 5upx;
+//    &-active{
+//      width: 20upx;
+//      height: 10upx;
+//      opacity: 1;
+//    }
+//  }
+//}
+.swiper-dots {
   display: flex;
-  justify-content: center;
-  padding: 10upx 0;
-  .uni-swiper-dot{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 15rpx;
+  z-index: 66;
+  .dot {
     width: 10upx;
     height: 10upx;
     background: #333333;
     opacity: 0.3;
     border-radius: 5upx;
-    margin: 0 5upx;
-    &-active{
-      width: 20upx;
-      height: 10upx;
-      opacity: 1;
-    }
+    margin: 0 10upx;
+  }
+
+  .dot-active {
+    width: 20upx;
+    opacity: 1;
   }
 }
 //.pagination{
@@ -298,7 +317,8 @@ export default {
   font-size: 24upx;
   background-color: transparent;
   margin: 20upx auto 0;
-  display: block;
+  display: flex;
+  align-items: center;
 }
 
 </style>

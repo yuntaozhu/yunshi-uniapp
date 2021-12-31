@@ -162,6 +162,7 @@
 		methods: {
 			getZSalesOrderData() {
 				uni.showLoading({
+          mask: true,
 					title: '加载中...'
 				})
 				NET.request(API.FindSalesOrderPage, {
@@ -185,6 +186,7 @@
 			},
 			getJSalesOrderData() {
 				uni.showLoading({
+          mask: true,
 					title: '加载中...'
 				})
 				NET.request(API.FindSalesOrderPage, {

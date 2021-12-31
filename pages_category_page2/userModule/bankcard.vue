@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<view v-if="bankcardListlength>0" class="bankcardList">
+		<view class="bankcardList">
 			<view class="addBankcard-content flex-row-plus" v-for="(item, index) in bankcardList" :key="index">
 				<view class="bankcard-detail" @click="itemTap(item.bankId)">
 					<view class="banktype">
@@ -15,7 +15,7 @@
 				</view>
 			</view>
 		</view>
-		<view v-else class="emptyBankcard-box">
+		<view v-if="ifEmpty" class="emptyBankcard-box">
 			<image class="emptyBankcard" src="../../static/img/bgnull.png"></image>
 			<label>你还没有添加银行卡哦～</label>
 		</view>
@@ -40,6 +40,7 @@
 				page:1,//当前页
 				pageSize:20,//每页记录数
 				loadingType:0,
+        ifEmpty: false
 			}
 		},
 		onLoad(options) {
@@ -67,16 +68,24 @@
 				})
 			},
 			getBankcardData(){
+        uni.showLoading({
+          mask: true,
+          title: '加载中...',
+        })
 				NET.request(API.QueryBankcardList,{
 					page: this.page,
 					pageSize:this.pageSize,
 				},'GET').then(res => {
+          uni.hideLoading()
 					if(res.data.list.length == 0){
 						this.loadingType = 1
 						this.page = this.page
 					}
 					this.bankcardList = this.bankcardList.concat(res.data.list)
 					this.bankcardListlength = res.data.total
+          if (this.bankcardList.length === 0) {
+            this.ifEmpty = true
+          }
 				}).catch(res => {
 
 				})
@@ -111,6 +120,7 @@
 			display: block;
 			padding-bottom: 85px;
       padding-top: 50rpx;
+      min-height: 300rpx;
 		}
 		.emptyBankcard-box{
 			display: flex;

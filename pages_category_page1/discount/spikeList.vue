@@ -1,8 +1,5 @@
 <template>
   <view class="spikeListBox">
-<!--	<view class="countdown" v-if="shopShowType == false">-->
-<!--	   距结束<view class="endDate"><span>{{hou}}</span><i>:</i><span>{{min}}</span><i>:</i><span>{{sec}}</span></view>-->
-<!--	 </view>-->
     <view class="spikeBg">
       <image src="../../static/images/spikelLogo.png"></image>
     </view>
@@ -30,8 +27,8 @@
           <view class="number">限量件 {{item.total}} / 剩余{{item.total - item.saleNumber}}件</view>
           <view class="originalPrice">原价: ¥{{item.originalPrice}}</view>
           <view class="price">
-            <view class="currentPrice flex-row-plus flex-items-plus font-color-FF7800">
-				<view class="iconBox">
+            <view class="currentPrice flex-items font-color-FF7800">
+				<view class="iconBox flex-items">
           <image src="../../static/images/spikeIcon.png"></image>
         </view>
 				<view class="flex-row-plus flex-items priceInfo">
@@ -41,19 +38,19 @@
 			</view>
             <view class="snapUpBtn" v-if="currentTime > timestamp" @click="gogoodsDetails(item.shopId,item.productId,item.skuId)">
               <view class="btnText">去抢购</view>
-              <view style="width: 82%;margin: 0 auto">
+              <view class="progressBox">
                 <progress activeColor="#FFFFFF" :percent="getPercent(item.saleNumber, item.total)" active stroke-width="5" />
               </view>
             </view>
             <view class="snapUpBtn" :class="{btnStyle1: currentTime < timestamp}" v-if="currentTime < timestamp">
               <view class="btnText">即将开始</view>
-              <view style="width: 82%;margin: 0 auto">
+              <view class="progressBox">
                 <progress activeColor="#FFFFFF" :percent="getPercent(item.saleNumber, item.total)" active stroke-width="5" />
               </view>
             </view>
             <view class="snapUpBtn" :class="{btnStyle2: currentTime > endTime}" v-if="currentTime > endTime">
               <view class="btnText">已结束</view>
-              <view style="width: 82%;margin: 0 auto">
+              <view class="progressBox">
                 <progress activeColor="#FFFFFF" :percent="getPercent(item.saleNumber, item.total)" active stroke-width="5" />
               </view>
             </view>
@@ -114,13 +111,7 @@ export default {
 			this.shopSeckillId = 0
 		}
     this.getQuerySession()
-    // this.queryProductListBySession()
 	},
-	// onUnload() {
-	// 	if(this.timeOut){
-	// 	    clearTimeout(this.timeOut)
-	// 	}
-	// },
   tabChange(key, value) {
     this.activeTab = key
     this.changeType = value
@@ -128,7 +119,6 @@ export default {
     if (key !== 'index') {
       this.classifyId = key === 'All' ? '' : key
       this.list = []
-      // this.getBillList()
     }
   },
 	onReachBottom(){
@@ -175,12 +165,13 @@ export default {
         arr.forEach(item => {
           let obj = {}
           obj["time"] = item
-          let date = new Date(this.getCaption(item, 0))
-          let endDate = new Date(this.getCaption(item, 1))
+          let date = new Date(this.getCaption(item, 0).replace(/-/g, '/'))
+          let endDate = new Date(this.getCaption(item, 1).replace(/-/g, '/'))
           console.log(date, 'date121212121')
           obj["timestamp"] = date.getTime()
           obj["endTime"] = endDate.getTime()
           obj["startTime"] = item.substring(5, 16)
+          console.log(obj)
           this.querySessionData.push(obj)
         })
         console.log(this.querySessionData, 'data')
@@ -190,7 +181,7 @@ export default {
         this.getSpikeLike()
       }).catch(res => {
         uni.showToast({
-          title:'失败',
+          title:'失败1111',
           icon:"none"
         })
       })
@@ -209,16 +200,6 @@ export default {
 				url:'../goodsModule/goodsDetails?shopId='+shopId + '&productId='+productId +'&skuId='+skuId
 			})
 		},
-		// progressNum(total, limitNumber){
-		// 	let progress = 0
-		// 	if(limitNumber>0){
-		// 		progress = parseInt(users) / parseInt(limitNumber)
-		// 		progress = progress.toFixed(2)
-		// 	}else{
-		// 		progress = 0
-		// 	}
-		// 	return progress
-		// },
     getPercent(num, total){
       num = parseFloat(num);
       total = parseFloat(total);
@@ -229,6 +210,7 @@ export default {
     },
 		getSpikeLike(){
       uni.showLoading({
+        mask: true,
         title: 'Loading...',
       })
 			let param = ''
@@ -257,67 +239,7 @@ export default {
 					icon:"none"
 				})
 			})
-		},
-		// //时分秒换算
-		// dateformat(micro_second) {
-		// 	// 总秒数
-		// 	let second = Math.floor(micro_second / 1000);
-		// 	// 天数
-		// 	let day = Math.floor(second / 3600 / 24);
-		// 	// 小时
-		// 	let hr = Math.floor(second / 3600 % 24);
-		// 	// 分钟
-		// 	let min = Math.floor(second / 60 % 60);
-		// 	// 秒
-		// 	let sec = Math.floor(second % 60);
-		// 	this.hou = hr+day*24
-		// 	this.min = min
-		// 	this.sec = sec
-		// },
-		// countDown(){
-		//     let timeOut = setTimeout(() => {
-		//       let hou = parseInt(this.hou);
-		//       let min = parseInt(this.min);
-		//       let sec = parseInt(this.sec);
-    //
-		//       let netxSec = sec - 1;
-		//       let netxMin = min
-		//       let netxHou = hou;
-		// 		console.log(netxSec,netxMin,netxHou)
-		//       if (netxHou == 0 && netxMin == 0 && netxSec == -1) {
-		//         clearTimeout(timeOut)
-		// 		uni.switchTab({
-		// 			url:'../../pages/tabbar/index/index'
-		// 		})
-		// 		uni.showToast({
-		// 			title:"活动结束",
-		// 			duration:2000,
-		// 			icon:'none'
-		// 		})
-		//       } else {
-		//         if (netxSec == -1) {
-		//           netxSec = 59
-		//           netxMin = netxMin - 1;
-		//         }
-		//         if (netxMin == -1) {
-		//           netxMin = 59
-		//           netxHou = netxHou - 1
-		//         }
-		//         // if (netxHou == -1) {
-		//         //   netxHou = 23
-		//         // }
-    //
-		//         this.hou = this.timeFormat(netxHou),
-		//         this.min = this.timeFormat(netxMin),
-		//         this.sec = this.timeFormat(netxSec),
-		//         this.timeOut = timeOut
-		//         this.countDown();
-		//       }
-		//     }, 1000)
-		// },
-		// timeFormat(param) { //小于10的格式化函数
-		//     return param < 10 ? '0' + param : param;
-		// },
+		}
 	}
 }
 </script>
@@ -413,7 +335,8 @@ page {
           p {
             font-size: 26upx;
             color: #333333;
-            line-height: 40upx;
+            line-height: 35upx;
+            height: 70rpx;
             margin-bottom: 20upx;
             text-overflow: -o-ellipsis-lastline;
             overflow: hidden;
@@ -455,6 +378,12 @@ page {
               box-shadow: 0rpx 6rpx 12rpx rgba(233, 0, 0, 0.3);
               opacity: 1;
               border-radius: 10rpx;
+              .progressBox {
+                width: 82%;
+                margin: 0 auto;
+                border-radius: 10rpx;
+                overflow: hidden
+              }
               .btnText {
                 color: #FFFFFF;
                 font-weight: 400;

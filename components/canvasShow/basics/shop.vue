@@ -1,6 +1,6 @@
 <template>
   <div class="shop"  :class="'terminal' + terminal">
-    <swiper class="swiper" :indicator-dots="true" :autoplay="true">
+    <swiper class="swiper" :indicator-dots="false" :autoplay="true" @change="swiperChange">
       <swiper-item class="shop-item" v-for="(item,index) in imgList" :key="index">
         <div class="shop-item-warp">
           <img class="img" :src="item.img" mode="widthFix">
@@ -10,7 +10,10 @@
         </div>
       </swiper-item>
     </swiper>
-<!--    <div class="pagination shop-pagination"></div>-->
+    <view class="swiper-dots" v-if="imgList && imgList.length">
+      <text class="dot" :class="index === swiperCurrent  && 'dot-active'" v-for="(dot, index) in imgList.length"
+            :key="index"></text>
+    </view>
   </div>
 </template>
 
@@ -23,13 +26,12 @@ export default {
   mixins: [funMixin],
   data () {
     return {
-      // swiperOption: {
-      //   autoplay: false, // 可选选项，自动滑动
-      //   loop: true,
-      //   pagination: {
-      //     el: '.shop-pagination'
-      //   }
-      // }
+      swiperCurrent: 0,
+    }
+  },
+  methods:{
+    swiperChange(e) {
+      this.swiperCurrent = e.detail.current;
     }
   },
   props: {
@@ -63,7 +65,7 @@ export default {
 .shop{
   position: relative;
   .swiper{
-    height: 480upx;
+    height: 460upx;
   }
   &-item{
     &-warp{
@@ -71,6 +73,7 @@ export default {
       padding: 0 20upx;
       .img{
         width: 100%;
+        height: 420upx;
       }
       .a-link{
         width: 220upx;
@@ -111,22 +114,43 @@ export default {
   //    border-radius: 8upx;
   //  }
   //}
-  ::v-deep .uni-swiper-dots{
+  //::v-deep .uni-swiper-dots{
+  //  display: flex;
+  //  justify-content: center;
+  //  padding: 0upx 0;
+  //  .uni-swiper-dot{
+  //    width: 10upx;
+  //    height: 10upx;
+  //    background: #333333;
+  //    opacity: 0.3;
+  //    border-radius: 5upx;
+  //    margin: 0 5upx;
+  //    &-active{
+  //      width: 20upx;
+  //      height: 10upx;
+  //      opacity: 1;
+  //    }
+  //  }
+  //}
+  .swiper-dots {
     display: flex;
-    justify-content: center;
-    padding: 0upx 0;
-    .uni-swiper-dot{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 15rpx;
+    z-index: 66;
+    .dot {
       width: 10upx;
       height: 10upx;
       background: #333333;
       opacity: 0.3;
       border-radius: 5upx;
-      margin: 0 5upx;
-      &-active{
-        width: 20upx;
-        height: 10upx;
-        opacity: 1;
-      }
+      margin: 0 10upx;
+    }
+
+    .dot-active {
+      width: 20upx;
+      opacity: 1;
     }
   }
 }

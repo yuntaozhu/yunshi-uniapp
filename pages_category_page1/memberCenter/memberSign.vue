@@ -106,7 +106,7 @@
 			}else{
 				this.page = this.page+1
 				this.getSelectSigninHistory()
-			}		
+			}
 		},
 		methods: {
 			getSelectSigninRecordList() {
@@ -114,6 +114,7 @@
 				this.signDate = 0
 				// 获取签到
 				uni.showLoading({
+          mask: true,
 					title: '加载中...',
 				})
 				NET.request(API.selectSigninRecordList, {}, 'GET').then(res => {
@@ -133,6 +134,7 @@
 					pageSize: this.pageSize,
 				}
 				uni.showLoading({
+          mask: true,
 					title: '加载中...',
 				})
 				NET.request(API.selectSigninHistory, param, 'GET').then(res => {
@@ -151,6 +153,7 @@
 			signInFn() {
 				if (this.upDate !== this.currentData) {
 					uni.showLoading({
+            mask: true,
 						title: '请稍等...',
 					})
 					NET.request(API.signIn, {}, 'POST').then(res => {

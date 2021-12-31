@@ -235,9 +235,11 @@ export default {
           uni.showToast({
             title: '提交成功'
           })
-          uni.navigateTo({
-            url: 'afterSale'
-          })
+          setTimeout(() => {
+            uni.navigateTo({
+              url: '../../pages_category_page2/orderModule/afterSale'
+            })
+          }, 2000)
         }).catch(res => {
           uni.showToast({
             title: '商品已在售后，请勿重新操作！',

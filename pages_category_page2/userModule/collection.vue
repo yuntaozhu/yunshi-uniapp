@@ -1,9 +1,16 @@
 <template>
 	<view class="collection-box">
 		<view class="tabsbox">
-			<u-tabs :list="collectionTypeList" bar-width="60" :bold="false" active-color="#C5AA7B"
-				inactive-color="#999999" :is-scroll="false" :current="collectionTypeFlag"
-				@change="collectionTypeActive"></u-tabs>
+			<u-tabs
+				:list="collectionTypeList"
+				bar-width="60"
+				:bold="false"
+				active-color="#333333"
+				inactive-color="#CCCCCC"
+				:is-scroll="false"
+				:current="collectionTypeFlag"
+				@change="collectionTypeActive"
+			></u-tabs>
 		</view>
 		<view v-if="collectionTypeFlag == 0">
 			<view v-if="productCollect.length>0">
@@ -15,35 +22,45 @@
 					</view>
 				</view>
 				<view class="swipe-box">
-					<u-swipe-action :show="item.show" :index="index" v-for="(item, index) in productCollect"
-						:key="item.collectId" @click="productClick" @open="productOpen" :options="options">
-						<view class="flex-item" @click.stop="toGoodsDetails(item.productId,item.shopId,item.skuId)">
-							<view class="item u-border-bottom wid flex-row-plus flex-display">
-								<view class="flex-items" v-show="allCheckShow">
-									<image mode="aspectFill" v-if="item.selected == 1"
-										@click.stop="productItemSel(index,0)" src="../../static/images/selectActive.png"
-										class="cart-select-img"></image>
-									<image mode="aspectFill" v-else @click.stop="productItemSel(index,1)"
-										src="../../static/images/selectEmpty.png" class="cart-select-img"></image>
-								</view>
-								<image class="product-img" mode="aspectFill" :src="item.image" />
-								<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
-								<view class="title-wrap mar-left-20 priceBox">
-									<text class="title u-line-2">{{ item.productName }}</text>
-									<view class="flex-column-plus font-color-C5AA7B flex-row">
-                    <image class="iconImg" v-if="item.activityType == 1" src="../../static/images/groupBuyIcon.png"></image>
-                    <image class="iconImg" v-if="item.activityType == 2" src="../../static/images/spikeIcon.png"></image>
-                    <image class="iconImg" v-if="item.activityType == 3" src="../../static/images/discountListIcon.png"></image>
-                    <image class="iconImg" v-if="item.activityType == 4" src="../../static/images/spikeIcon.png"></image>
-                    <image class="iconImg" v-if="item.activityType == 5" src="../../static/images/discountListIcon.png"></image>
-										<text class="fs22">¥</text>
-										<text class="fs24 mar-right-10">{{item.price}}</text>
-                    <text class="font-color-999 discountsPriceLine fs24">¥{{item.originalPrice}}</text>
-									</view>
-								</view>
-							</view>
-						</view>
-					</u-swipe-action>
+          <view class="actionBox"
+						v-for="(item, index) in productCollect"
+						:key="item.collectId"
+						:index="index"
+					>
+            <u-swipe-action
+							ref="actionSwipe"
+							:show="item.show"
+							@open="productOpen(index)"
+							@click.stop="productActionClick"
+							:options="options"
+						>
+						<!-- :disabled="allCheckShow" -->
+              <view class="flex-item" @click.stop="toGoodsDetails(item.productId,item.shopId,item.skuId)">
+                <view class="item wid flex-row-plus flex-display">
+                  <view class="flex-items selctBtn" v-show="allCheckShow">
+                    <image mode="aspectFill" v-if="item.selected == 1"
+                           @click.stop="productItemSel(index,0)" src="../../static/images/selectActive.png"
+                           class="cart-select-img"></image>
+                    <image mode="aspectFill" v-else @click.stop="productItemSel(index,1)"
+                           src="../../static/images/selectEmpty.png" class="cart-select-img"></image>
+                  </view>
+                  <view class="infoCent flex-items">
+                    <image class="product-img" mode="aspectFill" :src="item.image" />
+                    <!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
+                    <view class="title-wrap mar-left-20 priceBox">
+                      <text class="title u-line-2 fs28 font-color-333">{{ item.productName }}</text>
+                      <view class="flex-items">
+												<image v-if="item.activityType" class="iconImg mar-right-10" :src="imgs[item.activityType]"></image>
+                        <text class="fs40 font-color-C83732">¥</text>
+                        <text class="fs40 font-color-C83732 mar-right-20">{{item.price}}</text>
+                        <text class="font-color-CCC discountsPriceLine fs24">¥{{item.originalPrice}}</text>
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </u-swipe-action>
+          </view>
 				</view>
 				<view v-if="allCheckShow" class="pad-bot-140"></view>
 				<view v-show="allCheckShow" class="allcheck-box flex-row-plus flex-sp-between flex-items">
@@ -73,37 +90,50 @@
 					<text class="mar-left-10">编辑</text>
 				</view>
 				<view class="swipe-box swipeBox">
-					<u-swipe-action :show="item.show" :index="index" v-for="(item, index) in storeCollect"
-						:key="item.collectId" @click="storeClick" @open="storeOpen" :options="options">
-						<view class="item flex-items">
-							<view class="flex-row-plus flex-sp-between flex-items-plus wid">
-								<view class="flex-items-plus flex-row pad-topbot-10">
-									<view v-show="allCheckShow">
-										<image mode="aspectFill" v-if="item.selected == 1"
-											@click.stop="storeItemSel(index,0)"
-											src="../../static/images/selectActive.png" class="cart-select-img"></image>
-										<image mode="aspectFill" v-else @click.stop="storeItemSel(index,1)"
-											src="../../static/images/selectEmpty.png" class="cart-select-img"></image>
-									</view>
-									<image class="head-img" mode="aspectFill" :src="item.shopLogo" />
-									<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
-									<view class="title-wrap mar-left-20">
-										<text class="title u-line-2">{{ item.shopName }}</text>
-										<text class="font-color-999 fs24">{{item.person}}人关注</text>
-									</view>
-								</view>
-								<view class="toStore flex-items-plus fs24" @click="toStoreClick(item.shopId)">
-									进入店铺
-									<image src="../../static/images/arrowR.png"></image>
-								</view>
-							</view>
-						</view>
-            <view class="shopImgBox">
-              <view class="itemImgBox" v-for="(sItem, sIndex) of item.productList" :key="sIndex" @click.stop="goodsDateils(sItem.shopId,sItem.productId,sItem.skuId)">
-                <image :src="sItem.image"></image>
+          <view
+						class="shopBox"
+						v-for="(item, index) in storeCollect"
+						:key="item.collectId"
+						:index="index"
+					>
+            <u-swipe-action
+							:show="item.show"
+							:options="options"
+							@click.stop="storeActionClick(index)"
+							@open="storeOpen(index)"
+						>
+              <view class="item wid flex-row-plus flex-display">
+                <view v-show="allCheckShow" class="selctBtn flex-items">
+                  <image mode="aspectFill" v-if="item.selected == 1"
+                         @click.stop="storeItemSel(index,0)"
+                         src="../../static/images/selectActive.png" class="cart-select-img"></image>
+                  <image mode="aspectFill" v-else @click.stop="storeItemSel(index,1)"
+                         src="../../static/images/selectEmpty.png" class="cart-select-img"></image>
+                </view>
+                <view class="infoCent">
+                  <view class="flex-row-plus flex-sp-between flex-items-plus wid">
+                    <view class="flex-items-plus flex-row pad-topbot-10">
+                      <image class="head-img" mode="aspectFill" :src="item.shopLogo" />
+                      <!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
+                      <view class="title-wrap mar-left-20">
+                        <text class="title u-line-2 shopName">{{ item.shopName }}</text>
+                        <text class="font-color-CCC fs24">{{item.person}}人关注</text>
+                      </view>
+                    </view>
+                    <view class="toStore flex-items-plus fs24" @click="toStoreClick(item.shopId)">
+                      进入店铺
+                      <image src="../../static/images/arrowR.png"></image>
+                    </view>
+                  </view>
+                  <view class="shopImgBox">
+                    <view class="itemImgBox" v-for="(sItem, sIndex) of item.productList" :key="sIndex" @click.stop="goodsDateils(sItem.shopId,sItem.productId,sItem.skuId)">
+                      <image :src="sItem.image"></image>
+                    </view>
+                  </view>
+                </view>
               </view>
-            </view>
-					</u-swipe-action>
+            </u-swipe-action>
+          </view>
 				</view>
 				<view v-show="allCheckShow" class="allcheck-box flex-row-plus flex-sp-between flex-items">
 					<view class="left">
@@ -132,10 +162,10 @@
 					温馨提示
 				</view>
 				<view v-if="paoductDelSubmit" class="mar-top-40 text-align">
-					是否删除该收藏商品？
+					是否删除该商品？
 				</view>
 				<view v-if="shopDelSubmit" class="mar-top-40 text-align">
-					是否删除该收藏店铺？
+					是否删除该店铺？
 				</view>
 				<view class="flex-display flex-sp-between">
 					<view class="btn submit" v-if="paoductDelSubmit" @click="paoductDel">确定</view>
@@ -159,6 +189,13 @@
 		},
 		data() {
 			return {
+				imgs: [
+					'../../static/images/groupBuyIcon.png',
+					'../../static/images/spikeIcon.png',
+					'../../static/images/discountListIcon.png',
+					'../../static/images/spikeIcon.png',
+					'../../static/images/discountListIcon.png',
+				],
 				collectionTypeList: [{
 					name: '商品'
 				}, {
@@ -197,7 +234,6 @@
 		},
 		onLoad() {
 			this.getProductCollect()
-			this.getStoreCollect()
 		},
 		onReachBottom() {
 			if (this.collectionTypeFlag == 0) {
@@ -328,15 +364,6 @@
 					this.getStoreCollect()
 				}
 			},
-			productClick(index, index1) {
-				if (index1 == 0) {
-          this.cardModal = true
-          this.paoductDelSubmit = true
-					this.ids = this.productCollect[index].collectId
-          this.currentIndex = index
-          this.currentType = 1
-				}
-			},
 			storeClick(index, index1) {
 				if (index1 == 0) {
           this.cardModal = true
@@ -354,6 +381,16 @@
 				this.productCollect.map((val, idx) => {
 					if (index != idx) this.productCollect[idx].show = false;
 				})
+				// 商品删除参数
+				this.ids = this.productCollect[index].collectId
+				this.currentIndex = index
+				this.currentType = 1
+			},
+			// 打开删除层
+			productActionClick() {
+				this.cardModal = true
+				this.paoductDelSubmit = true
+				this.shopDelSubmit = false
 			},
 			storeOpen(index) {
 				// 先将正在被操作的swipeAction标记为打开状态，否则由于props的特性限制，
@@ -362,6 +399,17 @@
 				this.storeCollect.map((val, idx) => {
 					if (index != idx) this.storeCollect[idx].show = false;
 				})
+
+				// 店铺删除参数
+				this.ids = this.storeCollect[index].collectId
+				this.currentIndex = index
+				this.currentType = 2
+			},
+			// 打开删除层
+			storeActionClick() {
+				this.cardModal = true
+				this.paoductDelSubmit = false
+				this.shopDelSubmit = true
 			},
 			//商品选中
 			productItemSel(index, number) {
@@ -414,11 +462,16 @@
 			},
 			//收藏商品查询
 			getProductCollect() {
+        uni.showLoading({
+          mask: true,
+          title: '加载中...'
+        })
 				NET.request(API.getProductCollect, {
 						page: this.productPage,
 						pageSize: this.productPageSize
 					},
 					'GET').then(res => {
+          uni.hideLoading()
 					if (res.data.list.length == 0) {
 						this.proCollectShow = true
 						this.proloadingType = 1
@@ -440,11 +493,16 @@
 			},
 			//收藏店铺查询
 			getStoreCollect() {
+        uni.showLoading({
+          mask: true,
+          title: '加载中...'
+        })
 				NET.request(API.getStoreCollect, {
 						page: this.storePage,
 						pageSize: this.storePageSize
 					},
 					'GET').then(res => {
+          uni.hideLoading()
 					if (res.data.list.length == 0) {
 						this.storeCollectShow = true
 						this.storeloadingType = 1
@@ -490,18 +548,14 @@
       //商品详情
       goodsDateils(shopId,productId,skuId){
         uni.navigateTo({
-          url: '../../pages_category_page1/goodsModule/goodsDetails?shopId='+shopId + '&productId='+productId +'&skuId='+skuId
+          url: '/pages_category_page1/goodsModule/goodsDetails?shopId='+shopId + '&productId='+productId +'&skuId='+skuId
         })
       }
 		}
 	}
 </script>
 
-<style lang="scss">
-	page {
-		background-color: #F7F7F7;
-	}
-
+<style lang="scss" scoped>
 	.collection-box {
 		.empty-box {
 			display: flex;
@@ -552,16 +606,28 @@
 		}
 
 		.swipe-box {
+      padding: 0 20rpx;
+      .actionBox {
+        margin-bottom: 20rpx;
+      }
 			.item {
 				display: flex;
-				padding: 20rpx;
+        .infoCent {
+          padding: 20rpx;
+        }
+        .selctBtn {
+          background: #F7F7F7;
+        }
 			}
       .shopImgBox {
         display: flex;
         justify-content: end;
-        margin-right: 50rpx;
+        margin-left: 90rpx;
+        padding-bottom: 20rpx;
+        margin-top: 20rpx;
         .itemImgBox {
-          margin-left: 20rpx;
+          margin-right: 15rpx;
+          margin-left: 5rpx;
           image {
             width: 120rpx;
             height: 120rpx;
@@ -570,10 +636,9 @@
         }
       }
 			.product-img {
-				width: 180rpx;
-				flex: 0 0 180rpx;
-				height: 180rpx;
-				border-radius: 12rpx;
+				width: 220rpx;
+				flex: 0 0 220rpx;
+				height: 220rpx;
 			}
 
 			.head-img {
@@ -587,9 +652,16 @@
 				text-align: left;
 				font-size: 28rpx;
 				color: $u-content-color;
-        height: 138rpx;
+        height: 165rpx;
+        padding-right: 20rpx;
 			}
-
+      .shopName {
+        height: auto;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 340rpx;
+      }
 			.cart-select-img {
 				width: 40upx;
 				height: 40upx;
@@ -600,17 +672,18 @@
 			.toStore {
 				color: #FFEBC4;
 				padding: 0rpx 20rpx;
-				border-radius: 5rpx;
 				height: 52rpx;
 				background: #333333;
-				margin-right: 30rpx;
-
+				margin-right: 15rpx;
 				image {
 					width: 10rpx;
 					height: 18rpx;
 					margin-left: 10rpx;
 				}
 			}
+      .shopBox {
+        margin-bottom: 20rpx;
+      }
 		}
 
 		.allcheck-box {
@@ -673,11 +746,9 @@
 			position: absolute;
 			bottom: -50px;
 			left: 45%;
-
 			image {
 				width: 60upx;
 				height: 60upx;
-
 			}
 		}
 	}
@@ -693,7 +764,9 @@
 	.tabsbox /deep/ #u-tab-item-0 {
 		position: relative;
 	}
-
+  .tabsbox /deep/ .u-tab-bar {
+    background-color: #c5aa7b !important;
+  }
 	.tabsbox /deep/ #u-tab-item-0::before {
 		content: '';
 		width: 2rpx;
@@ -718,9 +791,9 @@
 		background: url("../../static/images/delIcon.png") no-repeat center center;
 		background-size: contain;
 	}
-  .swipeBox /deep/ .u-swipe-action {
-    margin: 20rpx;
-    padding: 20rpx;
-    margin-top: 0;
-  }
+</style>
+<style>
+page {
+  background-color: #F7F7F7;
+}
 </style>

@@ -86,6 +86,7 @@
 				} else {
 					const that = this
 					uni.showLoading({
+            mask: true,
 						title: '正在登录...',
 						duration: 2000,
 					});
@@ -115,22 +116,22 @@
 								uni.removeStorageSync('inviteSpell');
 							}, 2000)
 						} else {
-              if (that.beforePage && that.beforePage.route !==
-                  'pages_category_page2/userModule/accountLogin' &&
-                  that.beforePage.route !== 'pages_category_page2/userModule/login' &&
+							if (that.beforePage && that.beforePage.route !==
+								'pages_category_page2/userModule/accountLogin' &&
+								that.beforePage.route !== 'pages_category_page2/userModule/login' &&
                   that.beforePage.route !== 'pages_category_page2/userModule/register') {
-                console.log(19)
-                uni.navigateBack({
-                  delta: 1
-                })
-              } else if (that.doubleBeforePage && that.doubleBeforePage.route !==
-                  'pages_category_page2/userModule/accountLogin' &&
-                  that.doubleBeforePage.route !== 'pages_category_page2/userModule/login' &&
+							  console.log(19)
+								uni.navigateBack({
+									delta: 1
+								})
+							} else if (that.doubleBeforePage && that.doubleBeforePage.route !==
+								'pages_category_page2/userModule/accountLogin' &&
+								that.doubleBeforePage.route !== 'pages_category_page2/userModule/login' &&
                   that.doubleBeforePage.route !== 'pages_category_page2/userModule/register') {
-                uni.navigateBack({
-                  delta: 2
-                })
-              } else {
+								uni.navigateBack({
+									delta: 2
+								})
+							} else {
 							setTimeout(function() {
 								uni.switchTab({
 									url: '../../pages/tabbar/user/index'

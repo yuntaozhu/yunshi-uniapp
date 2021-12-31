@@ -13,7 +13,7 @@
          <a v-show="componentContent.showMore" class="btn-all a-link" @click="jumpGroupWorks(productData)">更多<i class="iconfont icon-arrow-right"></i></a>
        </div>
        <div>
-       <swiper class="swiper pro-box" :indicator-dots="productData.show" :autoplay="true" :display-multiple-items="3">
+       <swiper class="swiper pro-box" :indicator-dots="false" :autoplay="true" :display-multiple-items="3" @change="swiperChange">
          <swiper-item class="swiper-slide pro-item-warp" v-for="(item,index) in productData.products" :key="index" @click="jumpProductDetail(item)">
           <div class="pro-item-inner">
             <div class="pro-item">
@@ -34,7 +34,10 @@
          <swiper-item v-if="productData.products.length" class="swiper-slide pro-item-warp" v-for="item in (3 - productData.products.length)">
          </swiper-item>
        </swiper>
- <!--      <div class="pagination group-pagination"></div>-->
+         <view class="swiper-dots" v-if="productData.products && productData.products.length > 3">
+           <text class="dot" :class="index - swiperCurrent <= 2 && index - swiperCurrent >=0  && 'dot-active'" v-for="(dot, index) in productData.products.length"
+                 :key="index"></text>
+         </view>
       </div>
     </div>
   </div>
@@ -46,22 +49,13 @@ export default {
   mixins: [commonMixin],
   data () {
     return {
-      // swiperOption: {
-      //   slidesPerView: 3, // 显示数量
-      //   spaceBetween: 0, // 间隔
-      //   autoplay: false, // 可选选项，自动滑动
-      //   loop: true,
-      //   pagination: {
-      //     el: '.group-pagination'
-      //   },
-      //   navigation: {
-      //     nextEl: '.swiper-button-next',
-      //     prevEl: '.swiper-button-prev'
-      //   }
-      // }
+      swiperCurrent: 0,
     }
   },
-  mounted() {
+  methods:{
+    swiperChange(e) {
+      this.swiperCurrent = e.detail.current;
+    }
   }
 }
 </script>
@@ -77,6 +71,7 @@ export default {
       box-shadow: 0px 20upx 30upx rgba(0, 0, 0, 0.3);
       opacity: 1;
       border-radius: 20upx;
+      position: relative;
     }
     .title{
       display: flex;
@@ -104,7 +99,7 @@ export default {
       }
     }
     .pro-box{
-      height: 432upx;
+      height: 390upx;
       display: flex;
       &.swiper-disabled{
         .uni-swiper-wrapper{
@@ -191,5 +186,25 @@ export default {
     //    opacity: 1;
     //  }
     //}
+    .swiper-dots {
+      display: flex;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 15rpx;
+      z-index: 66;
+      .dot {
+        width: 24upx;
+        height: 4upx;
+        background: #fff;
+        opacity: 0.5;
+        border-radius: 2upx;
+        margin: 0 10upx;
+      }
+
+      .dot-active {
+        opacity: 1;
+      }
+    }
   }
 </style>

@@ -2,13 +2,24 @@
 	<view class="container">
 		<!-- 我的评论 -->
 		<view class="evaluateTitle-box flex-row-plus flex-sp-around">
-			<view class="allEvaluate" :class="{'evaluateTitle-on' : evaluateTitleFlag == 1}" @click="evaluateTitleClick(1)">全部评价({{myCommentList.total}}）</view>
+			<view class="allEvaluate"
+				:class="{'evaluateTitle-on' : evaluateTitleFlag == 1}"
+				@click="evaluateTitleClick(1)"
+			>全部评价({{ myCommentList.total || 0}})</view>
       <view class="centerLine">|</view>
-			<view :class="{'evaluateTitle-on' : evaluateTitleFlag == 2}" @click="evaluateTitleClick(2)">有图({{myCommentList.imageTotal}}）</view>
+			<view
+				:class="{'evaluateTitle-on' : evaluateTitleFlag == 2}"
+				@click="evaluateTitleClick(2)"
+			>有图({{ myCommentList.imageTotal || 0}})</view>
 		</view>
 		<view v-if="evaluateTitleFlag == 1" class="mar-top-20">
-			<template v-if="myCommentList.total > 0">
-				<view class="evaluate-contentbox" @click="commentDetails(index)" v-for="(item, index) in commentVOList" :key="index">
+			<template>
+				<view
+					class="evaluate-contentbox"
+					v-for="(item, index) in commentVOList"
+					:key="index"
+					@click="commentDetails(index)"
+				>
 					<view class="evaluate-content flex-items flex-row flex-sp-between">
 						<view class="flex-items">
 							<image class="user-headSmallImg" v-if="item.headImage" :src="item.headImage"></image>
@@ -61,14 +72,18 @@
           </view>
 				</view>
 			</template>
-			<view v-else class="emptyOrder-box flex-items-plus flex-column">
+			<view v-if="evaluateEmpty" class="emptyOrder-box flex-items-plus flex-column">
 				<image class="emptyOrder-img" src="../../static/img/bgnull.png"></image>
 				<label class="font-color-999 fs26 mar-top-30">你还没有评论哦～</label>
 			</view>
 		</view>
 		<view v-if="evaluateTitleFlag == 2" class="mar-top-20">
-			<template v-if="myCommentList.imageTotal>0">
-			<view class="evaluate-contentbox" v-for="(item, index) in commentVOList" :key="index">
+			<template>
+			<view
+				class="evaluate-contentbox"
+				v-for="(item, index) in commentVOList"
+				:key="index"
+			>
 				<view class="evaluate-content flex-column" @click="commentDetails(index)" >
 					<view class="flex-items">
 						<image class="user-headSmallImg" v-if="item.headImage" :src="item.headImage"></image>
@@ -108,7 +123,7 @@
 				</view>
 			</view>
 			</template>
-			<view v-else class="emptyOrder-box flex-items-plus flex-column">
+			<view v-if="evaluateEmpty" class="emptyOrder-box flex-items-plus flex-column">
 				<image class="emptyOrder-img" src="../../static/img/bgnull.png"></image>
 				<label class="font-color-999 fs26 mar-top-30">你还没有评论哦～</label>
 			</view>
@@ -129,6 +144,8 @@
 				page:1,//当前页
 				pageSize:20,//每页记录数
 				loadingType:0,
+				topLeft: 0,
+        evaluateEmpty: false
 			}
 		},
 		onLoad() {
@@ -166,6 +183,7 @@
 				return imgDataResult
 			},
 			evaluateTitleClick(type) {
+        this.evaluateEmpty = false
 				if(type == 1){
 					this.state = ''
 				}else{
@@ -194,6 +212,9 @@
 					}
 					this.myCommentList = res.data
 					this.commentVOList = this.commentVOList.concat(res.data.page.list)
+          if (this.commentVOList.length === 0) {
+            this.evaluateEmpty = true
+          }
 				}).catch(res => {
           uni.hideLoading()
           uni.showToast({
@@ -235,122 +256,122 @@
 	}
 </script>
 
-<style lang="scss">
-	page {
+<style lang="scss" scoped>
+page {
+	background-color: #FFFFFF;
+}
+
+.container {
+	.emptyOrder-box {
+		margin-top: 70upx;
+
+		.emptyOrder-img {
+			margin-top: 45%;
+			width: 113upx;
+			height: 98upx;
+		}
+	}
+
+	.evaluateTitle-box {
+		color: #CCCCCC;
+		margin-top: 26upx;
+    border-bottom: 2rpx solid #F3F4F5;
+		.evaluateTitle-on {
+			padding-bottom: 20upx;
+			border-bottom: 4upx solid #C5AA7B;
+      color: #333333;
+		}
+	}
+
+	.evaluate-contentbox {
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		padding: 30upx 30upx;
 		background-color: #FFFFFF;
-	}
-
-	.container {
-		.emptyOrder-box {
-			margin-top: 70upx;
-
-			.emptyOrder-img {
-				margin-top: 45%;
-				width: 113upx;
-				height: 98upx;
-			}
-		}
-
-		.evaluateTitle-box {
-			color: #CCCCCC;
-			margin-top: 26upx;
-      border-bottom: 2rpx solid #F3F4F5;
-			.evaluateTitle-on {
-				padding-bottom: 20upx;
-				border-bottom: 4upx solid #C5AA7B;
-        color: #333333;
-			}
-		}
-
-		.evaluate-contentbox {
+    border-bottom: 2rpx solid #F3F4F5;
+		.evaluate-content {
+			width: 670upx;
 			display: flex;
-			justify-content: center;
-			flex-direction: column;
-			padding: 30upx 30upx;
-			background-color: #FFFFFF;
-      border-bottom: 2rpx solid #F3F4F5;
-			.evaluate-content {
-				width: 670upx;
-				display: flex;
-				justify-content: space-between;
-				.user-headSmallImg {
-					width: 46upx;
-					height: 46upx;
-					border-radius: 50%;
-				}
-        .skuValue {
-          text-align: left;
-          padding-left: 30rpx;
-        }
+			justify-content: space-between;
+			.user-headSmallImg {
+				width: 46upx;
+				height: 46upx;
+				border-radius: 50%;
 			}
+      .skuValue {
+        text-align: left;
+        padding-left: 30rpx;
+      }
+		}
 
-			.evaluateImg-box {
-				display: flex;
-				flex-direction: row;
-				flex-wrap: wrap;
-				margin-left: -9upx;
+		.evaluateImg-box {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			margin-left: -9upx;
 
-				.evaluate-Img {
-					width: 224upx;
-					height: 224upx;
-					border-radius: 10upx;
-					margin-left: 9upx;
-					margin-top: 9upx;
-				}
-			}
-
-			.goodsDes-box {
-				background-color: #F7F7F7;
-				padding: 20upx 44upx 20upx 20upx;
-
-				.goodsDes-img {
-					width: 180upx;
-					height: 180upx;
-					border-radius: 10upx;
-				}
-
-				.goodsDesText-box {
-					width: 416upx;
-					margin-left: 30upx;
-				}
-
-
-
-				.praise-box {
-					.praise-icon {
-						width: 50upx;
-						height: 50upx;
-					}
-
-				}
-			}
-
-			.addComments-box {
-				border-top: 1upx solid #EEEEEE;
-				margin-top: 35upx;
+			.evaluate-Img {
+				width: 224upx;
+				height: 224upx;
+				border-radius: 10upx;
+				margin-left: 9upx;
+				margin-top: 9upx;
 			}
 		}
-	}
-	.praise-icon {
-		width: 50upx;
-		height: 50upx;
-	}
-	.addCommentsBut {
-		width: 140upx;
-		height: 58upx;
-    background: #333333;
-		font-size: 26upx;
-		line-height: 58upx;
-		text-align: center;
-		color: #C5AA7B;
-	}
 
-	.addCommentsBut1 {
-		width: 140upx;
-		height: 58upx;
-		font-size: 26upx;
-    background: #333333;
-		line-height: 58upx;
-		text-align: center;
+		.goodsDes-box {
+			background-color: #F7F7F7;
+			padding: 20upx 44upx 20upx 20upx;
+
+			.goodsDes-img {
+				width: 180upx;
+				height: 180upx;
+				border-radius: 10upx;
+			}
+
+			.goodsDesText-box {
+				width: 416upx;
+				margin-left: 30upx;
+			}
+
+
+
+			.praise-box {
+				.praise-icon {
+					width: 50upx;
+					height: 50upx;
+				}
+
+			}
+		}
+
+		.addComments-box {
+			border-top: 1upx solid #EEEEEE;
+			margin-top: 35upx;
+		}
 	}
+}
+.praise-icon {
+	width: 50upx;
+	height: 50upx;
+}
+.addCommentsBut {
+	width: 140upx;
+	height: 58upx;
+  background: #333333;
+	font-size: 26upx;
+	line-height: 58upx;
+	text-align: center;
+	color: #C5AA7B;
+}
+
+.addCommentsBut1 {
+	width: 140upx;
+	height: 58upx;
+	font-size: 26upx;
+  background: #333333;
+	line-height: 58upx;
+	text-align: center;
+}
 </style>

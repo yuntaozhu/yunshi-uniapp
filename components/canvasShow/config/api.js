@@ -2,6 +2,7 @@
 
 // 获取当前环境变量 true => 生产环境 false => 开发环境
 // const BASEURL = process.env.VUE_APP_DOMAIN_PREFIX
+// const BASEURL = (process.env.NODE_ENV === 'production') ? 'https://ceres.zkthink.com/api' : 'https://ceresdev.zkthink.com/api'
 const BASEURL = (process.env.NODE_ENV === 'production') ? 'https://ceres.zkthink.com/api' : 'https://ceres.zkthink.com/api'
 
 

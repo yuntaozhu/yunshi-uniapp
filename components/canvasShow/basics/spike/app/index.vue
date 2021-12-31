@@ -13,7 +13,7 @@
         <div class="spike-card-top-time" v-if="state===2">
           活动已结束
         </div>
-        <div class="spike-card-top-time" v-else>
+        <div class="spike-card-top-time" v-if="state !==2 && count.length">
           距离{{count[0]}}还有 <div class="span">{{count[1]}}:{{count[2]}}:{{count[3]}}</div>
         </div>
         <a class="btn-more" @click="jumpSeckills(productData)">更多<i class="iconfont icon-arrow-right"></i></a>

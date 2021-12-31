@@ -98,7 +98,7 @@
 				</view>
 			</view>
 		</u-popup>
-		<shareSpell :isshareShow="isshareShow" @shareCancel='shareCancel' :url="url"></shareSpell>
+		<shareSpell ref="shareSpell" @shareCancel='shareCancel' :url="url"></shareSpell>
 	</view>
 </template>
 
@@ -119,7 +119,6 @@
 				}, {
 					name: '人满成团 失败退款'
 				}, ],
-				isshareShow:false,
 				collageId:0,
 				orderId:0,
 				type:0,
@@ -147,11 +146,44 @@
 				shopId:0,
 				attrList: [],
 				productDetail:{},
-				url:''
+				url:'',
+				shareTitle: ''
 			};
 		},
 		components:{
 			shareSpell
+		},
+		onShareAppMessage: function(res) {
+			var that = this;
+			//console.log('res=====',res);
+			if (res.from === 'button') {
+				//console.log('来自页面内转发按钮');
+			} else if (res.from === 'menu'){
+				//console.log('右上角菜单转发按钮');
+			}
+			this.url = '/pages_category_page1/goodsModule/inviteSpell?collageId='
+					+ this.collageId +'&orderId='+ this.orderId+'&type=0'+'&productId='+this.productId+'&skuId='+this.skuId+'&shopGroupWorkId='+this.shopGroupWorkId
+			this.shareTitle = `【仅剩${this.remainPerson}个名额】我${this.inviteSpell.price}元拼了${this.inviteSpell.productName}`
+			// 返回数据
+			return {
+				title: that.shareTitle,
+				path: that.url,
+				success: function(res) {
+					// 转发成功，可以把当前页面的链接发送给后端，用于记录当前页面被转发了多少次或其他业务
+					wx.request({
+						url: app.buildUrl("/member/share"),
+						data: {
+							url: utils.getCurrentPageUrlWithArgs()
+						},
+						success: function(res) {
+							//console.log('成功');
+						}
+					});
+				},
+				fail: function(res) {
+					// 转发失败
+				}
+			}
 		},
 		onUnload() {
 			if(this.timeOut){
@@ -169,7 +201,7 @@
 			this.getInviteSpell()
 			this.getProductSku()
 			this.queryProductDetail()
-			this.url = API.shareLink + '/#/pages_category_page1/goodsModule/inviteSpell?collageId='
+			this.url = '/pages_category_page1/goodsModule/inviteSpell?collageId='
 					+ this.collageId +'&orderId='+ this.orderId+'&type=0'+'&productId='+this.productId+'&skuId='+this.skuId+'&shopGroupWorkId='+this.shopGroupWorkId
 		},
 		methods:{
@@ -323,10 +355,10 @@
 				}
 			},
 			shareClick(){
-				this.isshareShow = true
+				this.$refs.shareSpell.shareShow = true
 			},
 			shareCancel(){
-				this.isshareShow = false
+				this.$refs.shareSpell.shareShow = false
 			},
 			goinvitePoster(){
 			  console.log(this.inviteSpell, 'test')
@@ -348,6 +380,7 @@
 			},
 			getInviteSpell(){
 				uni.showLoading({
+          mask: true,
 				  title: '加载中...',
 				})
 				NET.request(API.getInviteSpell, {
@@ -656,7 +689,7 @@ page{background-color: #F7F7F7;}
 		width: 690upx;
 		height: 80upx;
 		border-radius: 40upx 40upx;
-		background-image: linear-gradient(135deg, #FFA100 10%, #FF7911 100%);
+		background-color: #3D3C3D;
 		color: #FFFEFE;
 		font-size: 28upx;
 		line-height: 80upx;
@@ -690,7 +723,7 @@ page{background-color: #F7F7F7;}
 				width: 343upx;
 				height: 80upx;
 				border-radius: 40upx 0 0 40upx;
-				background-color: #FFC300;
+				background-color: #3D3C3D;
 				color: #FFFEFE;
 				font-size: 28upx;
 				line-height: 80upx;
@@ -702,7 +735,7 @@ page{background-color: #F7F7F7;}
 				width: 343upx;
 				height: 80upx;
 				border-radius: 0 40upx 40upx 0;
-				background-color: #FF6F00;
+				background-color: #3D3C3D;
 				color: #FFFEFE;
 				font-size: 28upx;
 				line-height: 80upx;

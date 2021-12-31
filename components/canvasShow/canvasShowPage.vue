@@ -22,6 +22,7 @@
         <com-price v-if="item.type==='priceList'" :componentContent="item.componentContent" :terminal="terminal" :typeId="typeId" :shopId="shopId"></com-price>
         <com-new-product v-if="item.type==='newProduct'" :componentContent="item.componentContent" :terminal="terminal" :typeId="typeId" :shopId="shopId"></com-new-product>
         <com-shop v-if="item.type==='shop'" :componentContent="item.componentContent" :terminal="terminal" :typeId="typeId" :shopId="shopId"></com-shop>
+        <com-live v-if="item.type==='live'" :componentContent="item.componentContent" :terminal="terminal" :typeId="typeId" :shopId="shopId"></com-live>
       </div>
   </div>
 </template>
@@ -48,6 +49,7 @@
   import comPrice from '@/components/canvasShow/basics/price/app'
   import comNewProduct from '@/components/canvasShow/basics/newProduct/app'
   import comShop from '@/components/canvasShow/basics/shop'
+  import comLive from '@/components/canvasShow/basics/live/app'
   import api from './config/api'
   import {sendReqMixin} from './config/mixin'
   export default {
@@ -83,7 +85,8 @@
       comNotice,
       comVip,
       comNewProduct,
-      comShop
+      comShop,
+      comLive
     },
     props: {
       terminal: {

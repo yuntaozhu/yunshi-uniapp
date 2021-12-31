@@ -120,7 +120,8 @@ export default {
   },
   methods: {
     getSelectByPriceId() {
-      wx.showLoading({
+      uni.showLoading({
+        mask: true,
         title: '加载中...',
       })
       NET.request(API.selectByPriceId,{
@@ -311,7 +312,8 @@ export default {
             icon: "none"
           })
         } else {
-          wx.showLoading({
+          uni.showLoading({
+            mask: true,
             title: '添加中...',
           })
           NET.request(API.ShoppingaddCart, {

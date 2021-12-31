@@ -17,10 +17,22 @@ export default {
 		const self = this
 		uni.getSystemInfo({
 		  success: function(res) {
-			// 根据 model 进行判断
-			if (res.model === 'iPhone X'|| res.model === 'iPhone XR' || res.model === 'iPhone XS Max' || res.model === 'iPhone 11' || res.model === 'iPhone 11 Pro' || res.model === 'iPhone 11 Pro Max' || res.model === 'iPhone 12' || res.model === 'iPhone 12 Pro' || res.model === 'iPhone 12 Pro Max') {
-			  self.globalData.isIphone = true
-			}
+			  console.log(res,'检查机型')
+				// 根据 model 进行判断
+				// const iphoneModels = [
+				// 	'iPhone X',
+				// 	'iPhone XR',
+				// 	'iPhone XS Max',
+				// 	'iPhone 11',
+				// 	'iPhone 11 Pro',
+				// 	'iPhone 11 Pro Max',
+				// 	'iPhone 12/13 (Pro)',
+				// 	'iPhone 12/13 mini',
+				// 	'iPhone 12/13 Pro Max'
+				// ]
+				if (res.safeArea.top > 20 && res.model.indexOf('iPhone') !== -1) {
+				  self.globalData.isIphone = true
+				}
 		  }
 		})
 		// 购物车右上角数量
@@ -31,16 +43,6 @@ export default {
 			   text: allCartNum
 			})
 		}
-	},
-	// onLoad:function(){
-  //   // #ifdef MP-WEIXIN
-  //   miniShopPlugin.initApp(this, wx);
-  //   // #endif
-	// },
-	onShow: function() {
-
-	},
-	onHide: function() {
 	},
 	globalData: {
 		isIphone:false,
@@ -78,6 +80,7 @@ export default {
 	.fs42{font-size: 42upx;}
 	.fs44{font-size: 44upx;}
 	.fs46{font-size: 46upx;}
+	.fs48{font-size: 46upx;}
 	.fs50{font-size: 50upx;}
 	.fs60{font-size: 60upx;}
 	.fs-bold{font-weight: bold;}
@@ -130,6 +133,7 @@ export default {
 	.mar-left-70{margin-left: 70upx;}
 	.mar-right-10{margin-right: 10upx;}
 	.mar-right-20{margin-right: 20upx;}
+	.mar-right-25{margin-right: 25upx;}
 	.mar-right-30{margin-right: 30upx;}
   .mar-right-35{margin-right: 35upx;}
 	.mar-right-40{margin-right: 40upx;}
@@ -194,6 +198,7 @@ export default {
 	.overflowNoDot{display:block;overflow:hidden;}
 	.discountsPriceLine{text-decoration:line-through;}
 	.border-bottom-Line{border-bottom: 1upx solid #EDEDED;}
+  .decoration {text-decoration: line-through;}
   .anonymous {
     margin-top: 25upx;
     .uni-checkbox-input {
@@ -265,6 +270,35 @@ export default {
   }
   uni-checkbox:not([disabled]) .uni-checkbox-input:hover {
     border-color: #C5AA7B;
+  }
+  .u-arrow {
+    display: inline-block;
+    width: 20rpx;
+    height: 20rpx;
+    border-top: 1rpx solid #999;
+    border-right: 1rpx solid #999;
+  }
+
+  .u-arrow-up {
+    transform: rotate(-45deg);
+  }
+
+  .u-arrow-down {
+    transform: rotate(135deg);
+  }
+
+  .u-arrow-left {
+    transform: rotate(-135deg);
+  }
+
+  .u-arrow-right {
+    transform: rotate(45deg);
+  }
+  .uni-picker-container .uni-picker-action.uni-picker-action-confirm {
+    color: #C5AA7B;
+  }
+  .u-drawer-content {
+    border-radius: 0 !important;
   }
 </style>
 <style>

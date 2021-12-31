@@ -1,6 +1,6 @@
 <template>
   <!-- 提交订单 -->
-  <view>
+  <view v-if="ifShow">
     <view class="content">
       <view class="address-box" @click="addAddressTap">
         <image src="../../static/images/orderAddress.png" class="address-img"></image>
@@ -11,7 +11,7 @@
             <text class="phone">{{userAddressInfo.receivePhone}}</text>
           </view>
           <view class="address-info">
-            <text>{{userAddressInfo.receiveAdress}}</text>
+            <text>{{userAddressInfo.receiveAdress}} {{userAddressInfo.address}}</text>
           </view>
         </view>
         <!-- 没有地址的 -->
@@ -97,6 +97,17 @@
           <image class="discount-img" src="../../static/images/arrowRight.png"></image>
         </view>
       </view>
+<!--      积分支付-->
+      <view class="integralPayBox" v-if="settlement.creditDeductLimit !== 0 && totalprice > orderCreditThreshold && integralNum !== 0">
+        <view class="integralBg">
+          <view class="integralTit fs26">可用{{integralNum}}积分抵扣{{integralPrice}}元</view>
+          <view class="maxIntegral">
+            <checkbox-group @change="changeIntegral" style="width: 50rpx">
+              <checkbox style="transform:scale(0.7);" class="integralCheckbox" color="#C5AA7B" value="1" :checked="selectIntegral"/>
+            </checkbox-group>
+          </view>
+        </view>
+      </view>
       <view class="pay-type-item">
         <radio-group @change="payTypeChange">
           <view class="pay-type-radio" v-if="showWechatPayType">
@@ -108,7 +119,7 @@
           </view>
           <view class="pay-type-radio" v-if="showAlipayPayType">
             <view class="pay-type-img">
-              <image class="pay-type-img-inner" src="../../static/images/alipay.png" mode="widthFix"/>
+              <image class="pay-type-img-inner" src="https://ceres.zkthink.com/static/images/alipay.png" mode="widthFix"/>
             </view>
             <label class="pay-type-label">支付宝支付</label>
             <radio class="pay-type-radio-item" style="transform:scale(0.7)" value="2" :checked="paymentMode == 2"/>
@@ -165,15 +176,17 @@
             <view class="content-box">
               <view v-if="usableListLength">
                 <view class="label-lingqu">可用优惠券列表</view>
-                <view class="coupon-item" v-for="(usableItem, index) in settlement.coupons" :key="index" @click="couponItemTap(index,usableItem)">
-                  <view class="money-box" v-if="usableItem.couponType == 1">￥{{usableItem.reduceMoney}}</view>
-                  <view class="money-box" v-else>{{usableItem.reduceMoney}}折券</view>
-                  <view class="info-box">
-                    <view class="info">满{{usableItem.fullMoney}}元可用</view>
-                    <view class="date" style="font-size:22upx;  margin-top: 20upx;">{{getDate(usableItem.startTime)}}至{{getDate(usableItem.endTime)}}</view>
+                <view class="couponBox">
+                  <view class="coupon-item" v-for="(usableItem, index) in settlement.coupons" :key="index" @click="couponItemTap(index,usableItem)">
+                    <view class="money-box" v-if="usableItem.couponType == 1">￥{{usableItem.reduceMoney}}</view>
+                    <view class="money-box" v-else>{{usableItem.reduceMoney}}折券</view>
+                    <view class="info-box">
+                      <view class="date font-color-999" style="font-size:22upx;  margin-top: 20upx;">{{getDate(usableItem.startTime.replace(/-/g, '.'))}}-{{getDate(usableItem.endTime.replace(/-/g, '.'))}}</view>
+                      <view class="info font-color-999">满{{usableItem.fullMoney}}元可用</view>
+                    </view>
+                    <image class="check-img" src="../../static/images/selectActive.png" v-if="couponCheckedindex == index"></image>
+                    <image class="check-img" src="../../static/images/selectEmpty.png" v-else></image>
                   </view>
-                  <image class="check-img" src="../../static/images/selectActive.png" v-if="couponCheckedindex == index"></image>
-                  <image class="check-img" src="../../static/images/selectEmpty.png" v-else></image>
                 </view>
               </view>
             </view>
@@ -196,9 +209,9 @@
                   <view class="coupon-item" v-for="(sItem, index) in shopCouponslist.shopCoupons" :key="sItem.id" @click="shopCouponItemTap(index,sItem)">
                     <view class="money-box" v-if="sItem.couponType == 1">￥{{sItem.reduceMoney}}</view>
                     <view class="money-box" v-else>{{sItem.reduceMoney}}折券</view>
-                    <view class="date" style="font-size:22upx;  margin-top: 10upx;">{{getDate(sItem.startTime)}}-{{getDate(sItem.endTime)}}</view>
+                    <view class="date font-color-999" style="font-size:22upx;  margin-top: 10upx;">{{getDate(sItem.startTime.replace(/-/g, '.'))}}-{{getDate(sItem.endTime.replace(/-/g, '.'))}}</view>
                     <view class="info-box">
-                      <view class="info">满{{sItem.fullMoney}}元可用</view>
+                      <view class="info font-color-999">满{{sItem.fullMoney}}元可用</view>
                     </view>
                     <image class="check-img" src="../../static/images/selectActive.png" v-if="selectCouponIdList.indexOf(sItem.id) >= 0"></image>
                     <image class="check-img" src="../../static/images/selectEmpty.png" v-else></image>
@@ -310,7 +323,15 @@ export default {
       showAlipayPayType: false,
       showHuabeiPayType: false,
       orderId: null,
-      couponType: 0
+      couponType: 0,
+      selectIntegral: true,
+      integralNum: 0,
+      skuCreditAmountMap: {},
+      ifShow: false,
+      integralRatio: 0, // 积分兑换比例
+      userTotalCredit: 0,
+      integralPrice: 0, // 总积分可减多少元
+      orderCreditThreshold: 0 // 满多少元可以抵扣
     }
   },
   onLoad(options) {
@@ -321,6 +342,7 @@ export default {
     this.decidePayType()
   },
   onShow() {
+    this.getQuery()
     if (uni.getStorageSync("skuItemDTOList") != "") {
       this.skuItemDTOList = uni.getStorageSync('skuItemDTOList')
       //console.log(this.skuItemDTOList, 66666)
@@ -347,6 +369,25 @@ export default {
     return true
   },
   methods: {
+    getQuery(){
+      NET.request(API.Query,{
+        name: 'credit_exchange_rate'
+      }, 'GET').then(res => {
+        this.integralRatio = parseFloat(res.data.dictDescribe)
+      }).catch(res => {
+
+      })
+    },
+    // 积分价格计算
+    changeIntegral() {
+      this.selectIntegral = !this.selectIntegral
+      if (this.selectIntegral) {
+        this.totalprice = this.totalprice - this.integralPrice
+      } else {
+        this.totalprice = this.totalprice + this.integralPrice
+      }
+      console.log(this.selectIntegral, 'test')
+    },
     back() {
       if (this.type == 2 || this.type) {
         uni.switchTab({
@@ -457,9 +498,9 @@ export default {
         }
         uni.removeStorageSync('receiveItem')
         this.usableListLength = res.data.coupons.length
-        //console.log(this.settlement, 'settlement')
         //console.log(this.selectCouponIdList, 'selectCouponIdList')
         this.getTotal()
+        this.ifShow = true
       }).catch(res => {
         uni.hideLoading()
       })
@@ -529,7 +570,7 @@ export default {
     // 店铺优惠券选择
     shopCouponItemTap(index, sItem) {
       // 取消选择优惠券
-      //console.log(this.selectShopCoupon, 'Youhui')
+      console.log(this.selectShopCoupon, sItem, 'Youhui')
       for (let i = 0; i < this.selectShopCoupon.length; i++) {
         // let skusTotal = 0
         // this.settlement.shops[this.shopIndex].skus.forEach((value, index) => {
@@ -540,7 +581,7 @@ export default {
         //   skusTotal += this.settlement.shops[this.shopIndex].distribution.distributionPrice
         // }
         // this.settlement.shops[this.shopIndex].total = skusTotal
-        this.settlement.shops[this.shopIndex].totalNum =   this.settlement.shops[this.shopIndex].total
+        this.settlement.shops[this.shopIndex].totalNum = this.settlement.shops[this.shopIndex].total
         this.settlement.shops[this.shopIndex].currentCoupon = {}
         this.shopcouponCheckedindex = 99999999
         this.shopCouponCheckedType = false
@@ -562,6 +603,8 @@ export default {
           icon: 'none'
         })
       } else {
+        console.log('fsdfsdfsdfdss')
+        console.log(this.totalprice, 'total')
         // 选择优惠券
         if (this.selectCouponIdList.indexOf(sItem.id) === -1) {
           if (this.promotionInfoDTO.couponId !== 0) {
@@ -584,6 +627,7 @@ export default {
               return false
             }
           }
+          console.log(this.settlement.shops[this.shopIndex].currentCoupon, '优惠券')
           for (let i = 0; i < this.selectShopCoupon.length; i++) {
             if (this.selectShopCoupon[i].id === this.settlement.shops[this.shopIndex].currentCoupon.id) {
               this.selectCouponIdList.splice(i, 1)
@@ -624,7 +668,6 @@ export default {
                   skustotal = this.settlement.shops[this.shopIndex].skus[k].total * (this.settlement.shops[this.shopIndex].shopCoupons[
                       this.shopCouIndex].reduceMoney / 10)
                   this.settlement.shops[this.shopIndex].skus[k].skuTotalNum = skustotal
-                  //console.log(skustotal)
                 }
               }
               shoptotal += this.settlement.shops[this.shopIndex].skus[k].skuTotalNum
@@ -639,6 +682,8 @@ export default {
     getTotal(item) {
       this.totalprice = 0
       this.totalCount = 0
+      this.integralPrice = 0
+      this.integralNum = 0
       let allNum = 0
       let shopslen = this.settlement.shops.length
       for (let i = 0; i < shopslen; i++) {
@@ -646,14 +691,38 @@ export default {
         allNum += this.settlement.shops[i].totalNum
         this.totalCount += this.settlement.shops[i].number
       }
-      if (item.couponType === 1 && this.totalprice - this.reduceMoney > 0) {
-        this.discountPrice = allNum - this.totalprice + this.reduceMoney
-      } else if (item.couponType === 2 && this.reduceMoney > 0) {
-        this.discountPrice = allNum - this.totalprice * (this.reduceMoney / 10)
-        console.log(this.discountPrice, allNum, this.totalprice, this.reduceMoney)
-        this.totalprice = allNum - this.discountPrice
-      } else {
-        this.discountPrice = allNum
+      if (item) {
+        console.log(this.discountPrice, 'discountPrice', allNum, 'allNum', this.totalprice, 'totalprice', this.reduceMoney, 'reduceMoney')
+        if (item.couponType === 1 && this.totalprice - this.reduceMoney > 0) {
+          this.discountPrice = allNum - this.totalprice + this.reduceMoney
+          this.totalprice = allNum - this.discountPrice
+        } else if (item.couponType === 2 && this.reduceMoney > 0) {
+          console.log(121212)
+          this.discountPrice = allNum - this.totalprice * (this.reduceMoney / 10)
+          this.totalprice = allNum
+        } else {
+          this.discountPrice = allNum
+        }
+      }
+      // 积分支付计算
+      var skuCreditMap = Object.keys(this.settlement.skuCreditMap);
+      if(skuCreditMap.length > 0) {
+        let creditNum = {}
+        creditNum = this.settlement.skuCreditMap
+        this.orderCreditThreshold = this.settlement.orderCreditThreshold
+        this.userTotalCredit = this.settlement.userTotalCredit
+        for (let i in creditNum) {
+          console.log(creditNum[i], 'item')
+          this.integralNum += creditNum[i]
+        }
+        if (this.integralNum > this.settlement.creditDeductLimit) {
+          this.integralNum = this.settlement.creditDeductLimit
+        } else if (this.integralNum > this.userTotalCredit) {
+          this.integralNum = this.userTotalCredit
+        }
+        this.integralPrice = this.integralNum * this.integralRatio
+        // 总价减去积分金额
+        this.totalprice = this.totalprice - this.integralPrice
       }
       this.recalcHuabei()
       // console.log(this.totalprice - this.reduceMoney, 'dis')
@@ -757,6 +826,7 @@ export default {
       } else {
         if (this.userAddressInfo.receiveName) {
           uni.showLoading({
+            mask: true,
             title: '订单提交中...',
           })
           let couponIdinfo = 0
@@ -820,6 +890,30 @@ export default {
               skusobj["priceId"] = this.settlement.shops[n].skus[m].priceId
               skusobj["useMember"] = this.settlement.shops[n].skus[m].useMember
               skusobj["composeId"] = this.settlement.shops[n].skus[m].composeId
+              // 积分传参
+              if (this.selectIntegral && this.settlement.creditDeductLimit !== 0 && this.totalprice > this.orderCreditThreshold && this.integralNum !== 0) {
+                let creditArr = this.settlement.skuCreditMap
+                for(let key in creditArr) {
+                  if (key == this.settlement.shops[n].skus[m].skuId) {
+                    if (this.settlement.shops[n].skus[m].ifCredit == 1) {
+                      if (this.integralNum !== 0) {
+                        if (this.settlement.shops[n].skus[m].creditLimit > this.integralNum) {
+                          skusobj["useCredit"] = this.integralNum
+                          skusobj["useCreditAmount"] = this.integralNum * this.integralRatio
+                          this.integralNum = 0
+                        } else {
+                          skusobj["useCredit"] = this.settlement.shops[n].skus[m].creditLimit
+                          skusobj["useCreditAmount"] = this.settlement.shops[n].skus[m].creditLimit * this.integralRatio
+                          this.integralNum = this.integralNum - this.settlement.shops[n].skus[m].creditLimit
+                        }
+                      } else {
+                        console.log('false')
+                        return false
+                      }
+                    }
+                  }
+                }
+              }
               data.shops[n].skus.push(skusobj)
             }
           }
@@ -843,6 +937,7 @@ export default {
           // #endif
 
           // uni.hideLoading()
+          console.log(this.settlement, '价格')
           NET.request(API.PlaceOrder, data, 'POST').then(res => {
             let submitResult = res.data
             that.orderId = res.data.orderId
@@ -1159,8 +1254,8 @@ page {
 }
 
 .address-box .address-img {
-  width: 70upx;
-  height: 70upx;
+  width: 71upx;
+  height: 57upx;
   margin-right: 20upx;
 }
 
@@ -1407,14 +1502,13 @@ page {
 
 .discount-item1 {
   width: 100%;
-  height: 60upx;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   background: white;
-  padding: 0 20rpx;
+  padding: 20rpx;
   border: 2rpx solid #E4E5E6;
 }
 .discount-item {
@@ -1426,7 +1520,7 @@ page {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 0 30upx;
+  padding: 0 20upx;
   background: white;
 }
 
@@ -1452,7 +1546,6 @@ page {
 
     .pay-type-radio-item {
       float: right;
-      margin-right: 20upx;
       width: 50upx;
       height: 50upx;
     }
@@ -1636,7 +1729,7 @@ page {
   height: 120upx;
   margin-top: 20upx;
   color: #FFFFFF;
-  flex-shrink: 0
+  flex-shrink: 0;
 }
 
 .coupon-item2 {
@@ -1704,7 +1797,7 @@ page {
 .check-img {
   width: 40upx;
   height: 40upx;
-  margin-top: 30rpx;
+  margin-top: 40rpx;
 }
 
 .mt30 {
@@ -1779,10 +1872,11 @@ page {
   display: flex;
   flex-flow: wrap;
   margin-top: 30rpx;
+  justify-content: space-between;
 }
 
 .coupon-item {
-  width: 50%;
+  width: 48%;
   height: 291rpx;
   background: url("../../static/images/couponsIcon.png") no-repeat center top;
   margin-top: 20upx;
@@ -1790,6 +1884,7 @@ page {
   flex-shrink: 0;
   text-align: center;
   padding-top: 1rpx;
+  background-size: contain;
 }
 
 .un-coupon-item {
@@ -1799,12 +1894,36 @@ page {
 .money-box {
   font-size: 40upx;
   font-weight: 500;
-  margin-top: 40rpx;
+  margin-top: 30rpx;
+}
+.integralPayBox {
+  margin: 20rpx 0;
+  .integralBg {
+    height: 98rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #FFFFFF;
+    padding: 0 20rpx;
+    .maxDeduction {
+      margin-right: 15rpx;
+    }
+  }
 }
 </style>
-<style scoped>
+<style>
  .pay-type-item /deep/ .uni-radio-input-checked {
    background-color: #C5AA7B !important;
    border-color: #C5AA7B !important;
+ }
+ .maxIntegral /deep/ .uni-checkbox-input {
+   width: 30rpx;
+   height: 30rpx;
+ }
+ .maxIntegral /deep/ .uni-checkbox-input-checked:before {
+   font-size: 30rpx;
+ }
+ .maxIntegral /deep/.uni-checkbox-input-checked {
+  border: 2rpx solid #C5AA7B !important;
  }
 </style>

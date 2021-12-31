@@ -5,7 +5,7 @@
 			 :is-scroll="false" :current="questionTypeFlag" @change="questionTypeActive"></u-tabs>
 		</view>
 		<view v-if="questionTypeFlag == 0">
-			<view v-if="problemList.length>0">
+			<view>
 				<view class="wid function-box">
 					<view class="finishbox" @click="finishClick" v-if="allCheckShow">完成</view>
 					<view v-else class="flex-row-plus editicon-box flex-items fs28" @click="editClick">
@@ -55,13 +55,13 @@
 				</view>
 				<view v-if="allCheckShow" class="pad-bot-140"></view>
 			</view>
-			<view v-else class="mar-top-60 empty-box">
+			<view v-if="ifEmpty" class="mar-top-60 empty-box">
 				<image class="question-empty" src="../../static/img/bgnull.png"></image>
-				<view class="tohome-box flex-items-plus">暂无问答内容</view>
+				<view class="tohome-box flex-items-plus">暂无提问内容</view>
 			</view>
 		</view>
 		<view v-if="questionTypeFlag == 1">
-			<view v-if="answerList.length>0">
+			<view>
 				<view class="finishbox" @click="finishClick" v-if="allCheckShow">完成</view>
 				<view v-else class="flex-row-plus editicon-box flex-items fs28" @click="editClick">
 					<image class="editicon" src="../../static/images/collectionEditicon.png"></image>
@@ -116,7 +116,7 @@
 				</view>
 				<view v-if="allCheckShow" class="pad-bot-140"></view>
 			</view>
-			<view v-else class="mar-top-60 empty-box">
+			<view v-if="ifEmpty" class="mar-top-60 empty-box">
 				<image class="question-empty" src="../../static/img/bgnull.png"></image>
 				<view class="tohome-box flex-items-plus">暂无问答内容</view>
 			</view>
@@ -143,7 +143,7 @@
 					删除回答后无法恢复
 				</view>
 				<view class="flex-display flex-sp-between">
-					<view class="btn submit" @click="delClick">继续删除</view>	
+					<view class="btn submit" @click="delClick">继续删除</view>
 				</view>
 			</view>
 			<view @click="cancelClick" class="cancelDel">
@@ -192,12 +192,12 @@
 				answerPage:1,
 				answerPageSize:10,
 				answerloadingType:0,
-				delType:0
+				delType:0,
+        ifEmpty: false
 			};
 		},
 		onLoad() {
 			this.getProblemList()
-			this.getAnswerList()
 		},
 		onReachBottom(){
 			if(this.questionTypeFlag == 0){
@@ -371,12 +371,17 @@
 			},
 			//我的提问列表
 			getProblemList(){
+        uni.showLoading({
+          mask: true,
+          title: '加载中...',
+        })
 				NET.request(API.getProblemList,
 				{
 					page:this.problemPage,
 					pageSize:this.problemPageSize
 				},
 				'GET').then(res => {
+          uni.hideLoading()
 					let total = res.data.total
 					this.questionTypeList[0].name = '我的提问('+ total +')'
 					if(res.data.list.length == 0){
@@ -385,6 +390,9 @@
 					}else{
 						this.problemList = this.problemList.concat(res.data.list)
 					}
+          if (this.problemList.length === 0) {
+            this.ifEmpty = true
+          }
 				}).catch(res => {
 					uni.showToast({
 						title:'我的提问查询失败',
@@ -394,12 +402,17 @@
 			},
 			//我的回答列表
 			getAnswerList(){
+        uni.showLoading({
+          mask: true,
+          title: '加载中...',
+        })
 				NET.request(API.getAnswerList,
 				{
 					page:this.answerPage,
 					pageSize:this.answerPageSize
 				},
 				'GET').then(res => {
+          uni.hideLoading()
 					let total = res.data.total
 					this.questionTypeList[1].name = '我的回答('+ total +')'
 					if(res.data.list.length == 0){
@@ -408,6 +421,9 @@
 					}else{
 						this.answerList = this.answerList.concat(res.data.list)
 					}
+          if (this.answerList.length === 0) {
+            this.ifEmpty = true
+          }
 				}).catch(res => {
 					uni.showToast({
 						title:'失败',
@@ -416,6 +432,7 @@
 				})
 			},
 			questionTypeActive(index) {
+        this.ifEmpty = false
 				this.questionTypeFlag = index
 				if(index==0){
 					this.problemPage = 1
@@ -504,7 +521,7 @@ page{background-color: #F7F7F7;}
 			width: 100%;
 			color: #333333;
 		}
-	
+
 		.submit {
 			background-color: #333333;
 			color: #FFEBC4;
@@ -514,14 +531,14 @@ page{background-color: #F7F7F7;}
 		position: absolute;
 		bottom: -50px;
 		left: 45%;
-		
+
 		image {
 			width: 60upx;
 			height: 60upx;
-	
+
 		}
 	}
-	
+
 	.function-box{
 		background-color: #F7F7F7;
 	}

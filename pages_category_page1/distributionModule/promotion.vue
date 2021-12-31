@@ -215,7 +215,7 @@
 	}
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 	.warp {
 		display: flex;
 		align-items: center;

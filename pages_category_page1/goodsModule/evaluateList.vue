@@ -80,6 +80,7 @@
 			//点赞
 			zanTap(index, likeId, actionType) {
 				uni.showLoading({
+          mask: true,
 					title: '提交中...',
 				})
 				NET.request(API.LikeOrUnLikeComment, {

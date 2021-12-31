@@ -1,0 +1,335 @@
+<template>
+	<view v-if="visible">
+		<view v-if="adInfo.jumpType === 3 && couponList && couponList.length> 0" class="mask mask-coupon ad-coupons"
+			@touchmove.stop.prevent="moveHandle">
+			<view class="ad-box-warp">
+				<view class="ad-boxs">
+					<image class="img" :src="adInfo.popupImg" mode="widthFix"></image>
+					<view class="coupon-list">
+						<scroll-view :scroll-top="0" class="scrollBox" scroll-y="true">
+							<view class="item" v-for="(item, index) in couponList" :key="index">
+								<view class="money">
+									<text class="num"
+										:class="[item.discountMode ===1?'num-minus':'num-discount']">{{ item.reduceMoney }}</text>
+									<text class="text">
+										满{{ item.fullMoney }}元可用
+									</text>
+								</view>
+								<view class="text">
+									<text>
+										{{item.activityName}}
+									</text>
+								</view>
+							</view>
+						</scroll-view>
+					</view>
+					<WxSendCoupon v-if="couponList && couponList.length > 0" :couponList="couponList" @closeAd="close">
+						<view class="btn-receive">一键领取</view>
+					</WxSendCoupon>
+				</view>
+				<view class="close-btn">
+					<image :src="adInfo.closeImg" class='btn' mode="widthFix" @click="close()"></image>
+				</view>
+			</view>
+		</view>
+		<view v-else-if="adInfo.jumpType !== 3" class="mask mask-coupon ad-link">
+			<view class="ad-box-warp">
+				<view class="ad-boxs" @click="goRoll()">
+					<image class="img" :src="adInfo.popupImg" mode="widthFix"></image>
+				</view>
+				<view class="close-btn">
+					<image :src="adInfo.closeImg" class='btn' mode="widthFix" @click="close()"></image>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	import WxSendCoupon from "./wx/wxSendCoupon";
+	const NET = require('../utils/request')
+	const API = require('../config/api')
+
+	export default {
+		name: "adWindow",
+		components: {
+			WxSendCoupon
+		},
+		props: {
+			triggerCondition: {
+				type: Number,
+				default: 1
+			}
+		},
+		data() {
+			return {
+				visible: false,
+				adInfo: {},
+				jumpContent: {},
+				couponList: [],
+				isLogin: false,
+				buyerUserId: 0,
+				cParams: {}
+			};
+		},
+		methods: {
+			// 阻止滑动
+			moveHandle() {
+				return
+			},
+			// 获取广告信息
+			getAd() {
+				const res = uni.getStorageSync('storage_key'),
+						token = res.token;
+				this.buyerUserId = res.buyerUserId
+				this.isLogin = !!token
+				NET.request(API.GetAd, {
+					triggerCondition: this.triggerCondition
+				}, 'POST').then(res => {
+					if (res.data) {
+						this.adInfo = res.data[0]
+						if (this.adInfo.jumpContent) {
+							this.jumpContent = JSON.parse(this.adInfo.jumpContent)
+						}
+						this.visible = true
+						if (this.adInfo.jumpType === 3) {
+							this.getCoupons()
+						}
+					}
+				}).catch(res => {
+
+				})
+			},
+			// 查询优惠券
+			getCoupons() {
+				if (this.isLogin) {
+					const _items = this.jumpContent.items
+					if (_items) {
+						NET.request(API.getCoupons, {
+							page: 1,
+							pageSize: 99,
+							ids: _items
+						}, 'GET').then(res => {
+							if (res.data) {
+								this.couponList = res.data.list
+							}
+						}).catch(res => {
+
+						})
+					}
+				} else {
+					uni.showToast({
+						title: '登录之后领取更多优惠',
+						icon: "none"
+					})
+					// uni.navigateTo({
+					// 	url: '/pages_category_page2/userModule/login'
+					// })
+				}
+			},
+			// 关闭弹窗
+			close() {
+				this.visible = false
+				var params = {}
+				if (this.isLogin) {
+					params.buyerUserId = this.buyerUserId
+				} else {
+					uni.getSystemInfo({
+						success: function(res) {
+							params.deviceId = res.deviceId
+						}
+					})
+				}
+				NET.request(API.adClose, params, 'POST').then(res => {}).catch(res => {})
+			},
+			goRoll() {
+				this.visible = false
+				switch (this.adInfo.jumpType) {
+					case 1:
+						uni.navigateTo({
+							url: '/pages_category_page1/goodsModule/goodsDetails?shopId=' + this.jumpContent
+								.shopId + '&productId=' + this.jumpContent.productId + '&skuId=' + this.jumpContent
+								.skuId
+						})
+						break
+					case 2:
+						uni.navigateTo({
+							url: `/pages_category_page1/goodsModule/goodsList?category3Id=${this.jumpContent.id}`
+						})
+						break
+					case 4:
+						uni.navigateToMiniProgram({
+							appId: this.jumpContent.appId,
+							path: this.jumpContent.id,
+							success(res) {
+								// 打开成功
+							}
+						})
+					case 5:
+						uni.navigateTo({
+							path: this.jumpContent.link
+						})
+						break
+				}
+			},
+		}
+	};
+</script>
+
+<style scoped lang="scss">
+.mask {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 55;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+.mask-coupon {
+	z-index: 9999;
+	background: rgba(39, 38, 39, .15);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	.ad-box-warp {
+		width: 100%;
+		position: relative;
+	}
+
+	flex-direction: column;
+
+	.ad-boxs {
+		position: relative;
+		width: 100%;
+
+		.img {
+			width: 100%;
+		}
+	}
+	.btn-receive {
+		width: 446rpx;
+		height: 84rpx;
+		background: #EC6F43;
+		border-radius: 42rpx;
+		display: block;
+		text-align: center;
+		font-size: 28rpx;
+		line-height: 84rpx;
+		color: #fff;
+		position: absolute;
+		bottom: 32rpx;
+		left: 50%;
+		margin-left: -223rpx;
+	}
+	.close-btn {
+		position: absolute;
+		bottom: -70rpx;
+		left: 50%;
+		margin-left: -25rpx;
+
+		.btn {
+			width: 50rpx;
+			height: 50rpx;
+		}
+	}
+}
+
+.ad-coupons {
+	.ad-box-warp {
+		width: 510rpx;
+	}
+
+	.coupon-list {
+		width: 446rpx;
+		height: 295rpx;
+		overflow: auto;
+		position: absolute;
+		top: 308rpx;
+		left: 50%;
+		margin-left: -223rpx;
+		.scrollBox {
+			height: 294upx;
+		}
+		.item {
+			width: 100%;
+			height: 140rpx;
+			background-color: #fff;
+			margin-top: 15rpx;
+			border-radius: 8rpx;
+			display: flex;
+			position: relative;
+			align-items: center;
+
+			&:first-child {
+				margin-top: 0px;
+			}
+
+			&:before,
+			&:after {
+				content: '';
+				width: 32rpx;
+				height: 32rpx;
+				background: #000;
+				border-radius: 50%;
+				display: block;
+				position: absolute;
+				top: 50%;
+				margin-top: -16rpx;
+			}
+
+			&:before {
+				left: -16rpx;
+			}
+
+			&:after {
+				right: -16rpx;
+			}
+
+			.money {
+				width: 190rpx;
+				text-align: center;
+
+				.num {
+					font-size: 48rpx;
+					color: #EC6F43;
+					display: block;
+
+					&.num-minus::before {
+						content: '¥';
+						font-size: 36rpx;
+					}
+
+					&.num-discount::after {
+						content: '折';
+						font-size: 36rpx;
+					}
+				}
+
+				.text {
+					font-size: 24rpx;
+					color: #999;
+				}
+			}
+
+			.text {
+				flex: 1;
+				padding-right: 16rpx;
+				width: 0;
+
+				text {
+					font-size: 32rpx;
+					color: #333;
+					display: block;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+			}
+		}
+	}
+}
+</style>

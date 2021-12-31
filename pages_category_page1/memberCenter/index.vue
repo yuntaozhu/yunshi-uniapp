@@ -1,5 +1,5 @@
 <template>
-  <view class="memberCenter">
+  <view class="memberCenter" v-if="isShow">
     <view class="memberBox">
       <view class="posBox">
         <view class="memberBoxTop">
@@ -49,18 +49,6 @@
         <view class="signItem flex-items flex-sp-between">
           <view class="itemLeft flex-items">
             <view class="leftIcon">
-              <image src="../../static/img/member/memberList1.png"></image>
-            </view>
-            <view class="leftInfo">
-              <label class="fs28 font-color-333">签到</label>
-              <view class="fs24 font-color-999">每日签到获取成长值</view>
-            </view>
-          </view>
-          <view class="rightBtn" @click="goToSign">去签到</view>
-        </view>
-        <view class="signItem flex-items flex-sp-between">
-          <view class="itemLeft flex-items">
-            <view class="leftIcon">
               <image src="../../static/img/member/memberList2.png"></image>
             </view>
             <view class="leftInfo">
@@ -84,7 +72,8 @@ export default {
     return {
       memberData: {},
       equityList: [],
-      levelInfo: {}
+      levelInfo: {},
+      isShow: false
     }
   },
   onLoad() {
@@ -97,11 +86,13 @@ export default {
     getMemberShipList() {
       // 获取会员信息
       uni.showLoading({
+        mask: true,
         title: '加载中...',
       })
       NET.request(API.getMemberShipList, {
       }, 'GET').then(res => {
         uni.hideLoading()
+        this.isShow = true
         this.equityList = res.data
       }).catch(res => {
       })
@@ -126,12 +117,6 @@ export default {
         this.levelInfo = res.data
         uni.setStorageSync('storage_levelInfo', this.levelInfo);
       }).catch(res => {
-      })
-    },
-    // 签到
-    goToSign() {
-      uni.navigateTo({
-        url: '../memberCenter/memberSign'
       })
     }
   }

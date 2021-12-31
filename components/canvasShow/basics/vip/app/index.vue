@@ -11,45 +11,51 @@
         <a v-show="componentContent.showMore" class="btn-more a-link" @click="jumpVip">更多<i class="iconfont icon-arrow-right"></i></a>
       </div>
       <div>
-      <swiper class="swiper vip-list" :indicator-dots="true" :autoplay="true" v-if="productData.length > 2">
-        <swiper-item class="vip-item-warp" v-for="(itemJ,indexJ) in listTemp" :key="indexJ">
-          <div class="vip-item"  v-for="(item,index) in itemJ" :key="index"  @click="jumpProductDetail(item)">
-            <div class="vip-item-img">
-              <image v-show="item.image" class="img" :src="item.image">
-            </div>
-            <div class="vip-item-info">
-              <h3 class="name">
-                {{item.productName}}
-              </h3>
-              <div class="stock">
-                还剩{{item.stockNumber}}件
-              </div>
-              <div class="original-price">
-                ¥ {{item.originalPrice}}
-              </div>
-              <div class="price-warp">
-                <div class="flag">
-                  <!-- #ifdef MP-WEIXIN -->
-                  <img src="../../../static/images/vip/flag-vip.png" alt="会员价" class="flagImg"/>
-                  <!-- #endif -->
-                  <!-- #ifdef H5 || APP-PLUS -->
-                  <image class="flagImg" src="../../../static/images/vip/flag-vip.png" alt="会员专区" mode="widthFix"/>
-                  <!-- #endif -->
+        <div v-if="productData.length > 2">
+          <swiper class="swiper vip-list" :indicator-dots="false" :autoplay="true" @change="swiperChange">
+            <swiper-item class="vip-item-warp" v-for="(itemJ,indexJ) in listTemp" :key="indexJ">
+              <div class="vip-item"  v-for="(item,index) in itemJ" :key="index"  @click="jumpProductDetail(item)">
+                <div class="vip-item-img">
+                  <image v-show="item.image" class="img" :src="item.image">
                 </div>
-                <div class="price">
-                  ¥ {{item.price}}
+                <div class="vip-item-info">
+                  <h3 class="name">
+                    {{item.productName}}
+                  </h3>
+                  <div class="stock">
+                    还剩{{item.stockNumber}}件
+                  </div>
+                  <div class="original-price">
+                    ¥ {{item.originalPrice}}
+                  </div>
+                  <div class="price-warp">
+                    <div class="flag">
+                      <!-- #ifdef MP-WEIXIN -->
+                      <img src="../../../static/images/vip/flag-vip.png" alt="会员价" class="flagImg"/>
+                      <!-- #endif -->
+                      <!-- #ifdef H5 || APP-PLUS -->
+                      <image class="flagImg" src="../../../static/images/vip/flag-vip.png" alt="会员专区" mode="widthFix"/>
+                      <!-- #endif -->
+                    </div>
+                    <div class="price">
+                      ¥ {{item.price}}
+                    </div>
+                  </div>
+                  <div class="btn-buy">
+                    <span>去购买</span>
+                    <div class="progress">
+                      <i></i>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="btn-buy">
-                <span>去购买</span>
-                <div class="progress">
-                  <i></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </swiper-item>
-      </swiper>
+            </swiper-item>
+          </swiper>
+          <view class="swiper-dots" v-if="listTemp && listTemp.length > 1">
+            <text class="dot" :class="swiperCurrent === index && 'dot-active'" v-for="(dot, index) in listTemp.length"
+                  :key="index"></text>
+          </view>
+        </div>
         <div class="swiper vip-list" v-else>
           <div class="vip-item-warp" v-for="(itemJ,indexJ) in listTemp" :key="indexJ">
             <div class="vip-item"  v-for="(item,index) in itemJ" :key="index" @click="jumpProductDetail(item)">
@@ -101,13 +107,7 @@ export default {
   mixins: [commonMixin],
   data () {
     return {
-      // swiperOption: {
-      //   autoplay: false, // 可选选项，自动滑动
-      //   loop: true,
-      //   pagination: {
-      //     el: '.vip-pagination'
-      //   }
-      // }
+      swiperCurrent: 0,
     }
   },
   computed: {
@@ -126,6 +126,11 @@ export default {
       return arrTemp;
     }
   },
+  methods:{
+    swiperChange(e) {
+      this.swiperCurrent = e.detail.current;
+    }
+  }
 }
 </script>
 
@@ -134,6 +139,7 @@ export default {
   &-card{
     background: #333333;
     padding: 0 20upx 20upx;
+    position: relative;
   }
   &-title{
     padding: 42upx 0 28upx 30upx;
@@ -160,7 +166,7 @@ export default {
     }
   }
   &-list{
-    height: 620upx;
+    height: 562upx;
   }
   &-item{
     display: flex;
@@ -186,10 +192,10 @@ export default {
       position: relative;
       .name{
         font-size: 28upx;
-        height: 75rpx;
+        //height: 75rpx;
         line-height: 40upx;
         color: #333333;
-        padding: 30upx 0 10upx;
+        margin: 30upx 0 10upx;
         overflow:hidden;
         text-overflow:ellipsis;
         display:-webkit-box;
@@ -214,6 +220,7 @@ export default {
         font-size: 24upx;
         line-height: 34upx;
         color: #CCCCCC;
+        text-decoration: line-through;
       }
       .flag{
         float: left;
@@ -246,6 +253,7 @@ export default {
           line-height: 34upx;
           color: #FFFFFF;
           margin-bottom: 10upx;
+          display: block;
         }
         .progress{
           height: 8upx;
@@ -265,28 +273,32 @@ export default {
       }
     }
   }
-  ::v-deep .uni-swiper-dots{
-    display: flex;
-    justify-content: center;
-    padding-top:20upx;
-    .uni-swiper-dot{
-      width: 24upx;
-      height: 4upx;
-      background: #fff;
-      opacity: 0.5;
-      border-radius: 2upx;
-      margin: 0 5upx;
-      &-active{
-        opacity: 1;
-      }
-    }
-  }
 .vip-item-info {
   .price-warp {
     display: flex;
     align-items: center;
   }
 }
+  .swiper-dots {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 15upx;
+    z-index: 66;
+    .dot {
+      width: 24upx;
+      height: 4upx;
+      background: #fff;
+      opacity: 0.5;
+      border-radius: 2upx;
+      margin: 0 10upx;
+    }
+
+    .dot-active {
+      opacity: 1;
+    }
+  }
   //.pagination{
   //  display: flex;
   //  justify-content: center;

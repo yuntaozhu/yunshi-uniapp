@@ -10,7 +10,7 @@
 					{{item.classifyName}}
 				</view>
 			</scroll-view>
-			<scroll-view v-if="slist.length > 0"  scroll-with-animation scroll-y class="right-aside">
+			<scroll-view scroll-with-animation scroll-y class="right-aside">
 				<view v-for="item in slist" :key="item.classifyId" class="s-list">
 			<view class="classBox flex-items-plus">
 			  <image class="emptyOrder-img" src="../../../static/images/classRight.png"></image>
@@ -25,7 +25,7 @@
 					</view>
 				</view>
 			</scroll-view>
-			<view v-else class="emptyOrder-box flex-items-plus flex-column">
+			<view v-if="ifEmpty" class="emptyOrder-box flex-items-plus flex-column">
 				<image class="emptyOrder-img" src="../../../static/img/bgnull.png"></image>
 				<label class="font-color-999 fs26 mar-top-30">该分类没有商品～</label>
 			</view>
@@ -44,7 +44,8 @@
 				currentIndex: 0,
 				currentId:'',
 				flist: [],
-				slist: []
+				slist: [],
+        ifEmpty: false
 			}
 		},
 		onLoad() {
@@ -53,6 +54,7 @@
 		methods: {
 			loadData(){
 				uni.showLoading({
+          mask: true,
 					title:'加载中...'
 				})
 				NET.request(API.FindCategoryListByDepth, {
@@ -68,6 +70,7 @@
 			},
 			getChildCategory(){
 				uni.showLoading({
+          mask: true,
 					title:'加载中...'
 				})
 				NET.request(API.FindCategoryListByDepth,{
@@ -75,6 +78,9 @@
 				},'GET').then(res => {
 					uni.hideLoading()
 					this.slist = res.data
+          if (this.slist.length === 0) {
+            this.ifEmpty = true
+          }
 				}).catch(res => {
 					uni.hideLoading()
 				})

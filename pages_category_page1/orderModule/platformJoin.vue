@@ -64,6 +64,7 @@ const API = require('../../config/api')
           }
         }
         uni.showLoading({
+          mask: true,
           title:'正在申请介入...'
         })
         NET.request(API.platform, {

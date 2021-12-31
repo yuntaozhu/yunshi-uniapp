@@ -1,11 +1,11 @@
 <template>
 	<view class="messageCenter">
-		<view v-if="messageList.length>0">
-			<view class="flex-display flex-sp-between fs28 pad-bot-20">
+		<view>
+			<view class="flex-items flex-sp-between fs26 topTitBox">
 				<view>
 					未读消息{{num}}条
 				</view>
-				<view @click="allMessage">
+				<view v-if="num!=0" class="allRead" @click="allMessage">
 					全部已读
 				</view>
 			</view>
@@ -17,6 +17,7 @@
 							<view v-if="item.noticeType == 1" class="messageTypeL">
 								<view class="iconBox">
 									<image src="../../static/images/notice.png" alt=""></image>
+									<view class="redBox" v-if="item.ifRead ===0"></view>
 								</view>
 								<span>订单消息</span>
 							</view>
@@ -27,20 +28,19 @@
 								<span>系统公告</span>
 							</view>
 							<view class="messageTypeR">{{item.createTime}}</view>
-							<view class="redBox" v-if="item.ifRead==0"></view>
 						</view>
-						<view class="messageInfo mar-left-35 mar-right-35">
-							<rich-text :nodes="item.htmlData"></rich-text>
+						<view>
+							<rich-text class="messageInfo" :nodes="item.htmlData"></rich-text>
 						</view>
 					</view>
-					<view class="messageBtn">
-						<span class="viewDetail">查看详情</span>
-						<span class="arrow"></span>
-					</view>
+					<!--					<view class="messageBtn">-->
+					<!--						<span class="viewDetail">查看详情</span>-->
+					<!--						<span class="arrow"></span>-->
+					<!--					</view>-->
 				</view>
 			</u-swipe-action>
 		</view>
-		<view v-else class="mar-top-60 empty-box">
+		<view v-if="ifEmpty" class="mar-top-60 empty-box">
 			<image class="question-empty" src="../../static/img/bgnull.png"></image>
 			<view class="tohome-box flex-items-plus">暂无消息</view>
 		</view>
@@ -57,7 +57,7 @@
 				list: 3,
 				messageList: [],
 				page: 1,
-				pageSize: 5,
+				pageSize: 10,
 				loadingType: 0,
 				num: 0,
 				options: [{
@@ -66,12 +66,14 @@
 						backgroundColor: '#F15C48'
 					}
 				}],
+        ifEmpty: false
 			}
 		},
 		onShow() {
 			this.page = 1
 			this.messageList = []
 			this.getAllMessage()
+			this.GetUser()
 		},
 		onReachBottom() {
 			if (this.loadingType == 1) {
@@ -82,6 +84,13 @@
 			}
 		},
 		methods: {
+			GetUser() {
+				NET.request(API.GetUser, {}, 'GET').then(res => {
+					this.num = res.data.notRead
+				}).catch(res => {
+			
+				})
+			},
 			parseText(html) {
 				parse(html, (err, htmlData) => {
 					console.log(htmlData)
@@ -107,6 +116,7 @@
 			},
 			getAllMessage() {
 				uni.showLoading({
+					mask: true,
 					title: '加载中...'
 				})
 				NET.request(API.getMessage, {
@@ -147,9 +157,12 @@
 							})
 							return item
 						})
-						let unReadList = []
-						unReadList = this.messageList.filter(el => el.ifRead == 0)
-						this.num = unReadList.length
+            if (this.messageList.length === 0) {
+              this.ifEmpty = true
+            }
+						// let unReadList = []
+						// unReadList = this.messageList.filter(el => el.ifRead == 0)
+						// this.num = unReadList.length
 					}
 				}).catch(res => {
 					uni.hideLoading()
@@ -162,6 +175,7 @@
 			// 删除消息
 			productClick(item) {
 				uni.showLoading({
+					mask: true,
 					title: '正在删除...'
 				})
 				NET.request(API.delMessage, {
@@ -173,6 +187,7 @@
 						this.page = 1
 						this.messageList = []
 						this.getAllMessage()
+						this.GetUser()
 					} else {
 						uni.showToast({
 							title: res.errMsg,
@@ -192,6 +207,7 @@
 						this.page = 1
 						this.messageList = []
 						this.getAllMessage()
+						this.GetUser()
 					} else {
 						uni.showToast({
 							title: res.errMsg,
@@ -229,56 +245,55 @@
 </script>
 
 <style lang="scss" scoped>
+	page {
+		background: #FFFFFF;
+	}
+
 	.messageCenter {
-		background: #f7f7f7;
-		padding: 30upx;
 		height: 100%;
 		width: 100%;
 
+		.topTitBox {
+			height: 100rpx;
+			padding: 0 20rpx;
+			background: #f7f7f7;
+
+			.allRead {
+				width: 144rpx;
+				height: 56rpx;
+				line-height: 56rpx;
+				text-align: center;
+				color: #333333;
+				background: #FFFFFF;
+			}
+		}
 		.empty-box {
 			display: flex;
 			justify-content: center;
 			flex-direction: column;
 			align-items: center;
-
 			.tohome-box {
 				color: #999999;
 				margin-top: 50rpx;
 			}
-
 			.question-empty {
 				width: 113rpx;
 				height: 98rpx;
 			}
 		}
-
 		.u-swipe-action {
 			margin-bottom: 20upx !important;
 		}
-
 		.messageItem {
 			width: 100%;
 			background: #FFFFFF;
-			border-radius: 16upx;
-
+			border-bottom: 2rpx solid #F8F8F8;
 			.messageBox {
 				.messageType {
 					padding: 30upx;
 					display: flex;
 					align-items: center;
 					justify-content: space-between;
-					position: relative;
-
-					.redBox {
-						width: 20upx;
-						height: 20upx;
-						background-color: red;
-						border-radius: 50%;
-						position: absolute;
-						right: 30upx;
-						top: 20upx;
-					}
-
 					.iconBox {
 						border-radius: 50%;
 						background: #C5AA7B;
@@ -288,55 +303,55 @@
 						align-items: center;
 						justify-content: center;
 						margin-right: 20upx;
+						position: relative;
+						.redBox {
+							width: 20upx;
+							height: 20upx;
+							background-color: red;
+							border-radius: 50%;
+							position: absolute;
+							right: 0upx;
+							top: 0upx;
+						}
 					}
-
 					.messageTypeL {
 						display: flex;
 						align-items: center;
-
 						image {
 							width: 50upx;
 							height: 50upx;
 							border-radius: 50%;
 						}
-
 						span {
 							font-size: 32upx;
 							color: #333333;
 						}
 					}
-
 					.messageTypeR {
-						color: #999999;
-						font-size: 26upx;
+						color: #CCCCCC;
+						font-size: 24upx;
 					}
 				}
-
 				.messageInfo {
-					width: 620upx;
+					width: 680upx;
 					word-wrap: break-word;
 					overflow: hidden;
 					text-overflow: ellipsis;
 					display: -webkit-box;
-					-webkit-line-clamp: 3;
+					-webkit-line-clamp: 2;
 					-webkit-box-orient: vertical;
-
-
+					margin: 20upx 40upx 20upx;
 					img {
 						width: 100%;
 						margin-bottom: 25upx;
 					}
-
 					p {
 						padding: 0 40upx;
 						color: #999999;
 						font-size: 28upx;
 					}
 				}
-
-
 			}
-
 			.messageBtn {
 				margin-top: 20upx;
 				border-top: 1upx solid #EEEEEE;
@@ -345,12 +360,10 @@
 				justify-content: space-between;
 				align-items: center;
 				padding: 0 40upx;
-
 				.viewDetail {
 					color: #333333;
 					font-size: 28upx;
 				}
-
 				.arrow {
 					display: block;
 					width: 28upx;
@@ -360,10 +373,5 @@
 				}
 			}
 		}
-	}
-</style>
-<style>
-	page {
-		background: #f7f7f7;
 	}
 </style>

@@ -1,10 +1,10 @@
 <template>
   <div class="notice-list" :class="'terminal'+terminal" :style="{backgroundColor:componentContent.bgColor}">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide" v-for="(item,index) in noticesList" :key="index">
+    <swiper class="swiper-wrapper" :indicator-dots="false" :autoplay="true" :vertical="true">
+      <swiper-item class="swiper-slide" v-for="(item,index) in noticesList" :key="index">
         <div class="a-link" @click="jumpNoticeDetail(item)" :style="{color:componentContent.titColor}"><span>{{item.noticeTitle}}</span></div>
-      </div>
-    </div>
+      </swiper-item>
+    </swiper>
   </div>
 </template>
 
@@ -19,13 +19,6 @@ export default {
   data () {
     return {
       noticesList: [],
-      // swiperOption: {
-      //   autoplay: false, // 可选选项，自动滑动
-      //   loop: true,
-      //   pagination: {
-      //     el: '.swiper-pagination'
-      //   }
-      // }
     }
   },
   props: {
@@ -37,13 +30,6 @@ export default {
       type: Object
     }
   },
-  // components: {
-  //   Swiper,
-  //   SwiperSlide
-  // },
-  // directives: {
-  //   swiper: directive
-  // },
   mounted() {
     this.getData()
   },
@@ -67,14 +53,13 @@ export default {
 .notice-list{
   height: 60upx;
   line-height: 60upx;
-  padding: 0 20upx;
   .a-link{
-    display: block;
+    // display: block;
     cursor: pointer;
     overflow: hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
-    text-align: center;
+    margin: 0 20upx;
     span{
       display: inline-block;
       padding-left: 50upx;
@@ -94,9 +79,10 @@ export default {
       margin: 0 auto;
     }
     .a-link{
-      display: block;
       cursor: pointer;
+      display: block;
       text-align: left;
+      margin: 0 20upx;
       span{
         display: block;
         padding-left: 25upx;

@@ -65,6 +65,7 @@
 		methods: {
 			getSalesOrderPage() {
 				uni.showLoading({
+          mask: true,
 					title: '加载中...'
 				})
 				NET.request(API.FindMySalesPage, {

@@ -69,6 +69,7 @@ export default {
         return
       }
       uni.showLoading({
+        mask: true,
         title: '提交中...',
       })
       if(this.fileList.length>0){

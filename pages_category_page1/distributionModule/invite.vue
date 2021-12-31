@@ -206,7 +206,7 @@
 	}
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 	.guanbiBox{
 		padding: 30upx 20upx;
 

@@ -1,6 +1,6 @@
 {
     "name" : "cereshop",
-    "appid" : "__UNI__BA992F9",
+    "appid" : "__UNI__FF9597B",
     "description" : "cereshop",
     "versionName" : "1.5.0",
     "versionCode" : 150,
@@ -9,6 +9,10 @@
         "kernel" : {
             "ios" : "WKWebview"
         },
+        "optimization" : {
+            "subPackages" : true // 小程序 开启分包优化
+        },
+        "runmode" : "liberate", // 开启分包优化后，必须配置资源释放模式
         "usingComponents" : true,
         "compilerVersion" : 3,
         /* 5+App特有相关 */
@@ -121,8 +125,22 @@
             "postcss" : true,
             "minified" : false
         },
-        "usingComponents" : true,
-        "permission" : {}
+        // "usingComponents" : true,
+        "component" : true,
+        "permission" : {},
+        "plugins" : {
+            // 卡券
+            "sendCoupon" : {
+                "version" : "latest",
+                "provider" : "wxf3f436ba9bd4be7b"
+            },
+            // 直播
+            "live-player-plugin" : {
+                // "version": "1.3.2", // 注意该直播组件最新版本号，微信开发者工具调试时可获取最新版本号
+                "version" : "latest",
+                "provider" : "wx2b03c6e691cd7370"
+            }
+        }
     },
     "mp-alipay" : {
         "appid" : "2021002142606276"

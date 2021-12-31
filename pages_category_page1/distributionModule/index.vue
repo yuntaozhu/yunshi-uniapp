@@ -3,7 +3,7 @@
 		<view class="inStoreBackImg flex-items-plus" v-if="StoreListData.length>0">
 			<label>选择进入的店铺</label>
 		</view>
-		<view v-if="StoreListData.length>0">
+		<view>
 			<view class="flex-items-plus flex-column" v-for="(item,index) in StoreListData" :key="index" @click="getStore(item)">
 				<view class="store-box flex-items-plus flex-sp-between mar-top-30 bor-line-E5E5E5 pad-bot-30">
           <view class="flex-items-plus">
@@ -23,7 +23,7 @@
 				</view>
 			</view>
 		</view>
-		<view v-else class="emptyCart-box flex-items-plus flex-column">
+		<view v-if="ifEmpty" class="emptyCart-box flex-items-plus flex-column">
 			<image class="emptyCart-img" src="../../static/img/bgnull.png"></image>
 			<label class="font-color-999 fs26 mar-top-30">这里空空如也~</label>
 		</view>
@@ -44,6 +44,7 @@
 				page: 1,
 				pageSize: 20,
 				loadingType:0,
+        ifEmpty: false
 			}
 		},
 		onLoad() {
@@ -72,6 +73,7 @@
 			},
 			getStoreList() {
 				uni.showLoading({
+          mask: true,
 					title: '加载中...'
 				})
 				NET.request(API.FindSaleStoreList, {
@@ -84,6 +86,9 @@
 						this.page = this.page
 					}
 					this.StoreListData = this.StoreListData.concat(res.data.list)
+          if (this.StoreListData.length === 0) {
+            this.ifEmpty = true
+          }
 				}).catch(res => {
 					uni.hideLoading()
 				})

@@ -9,7 +9,7 @@
       <!-- #endif -->
     </div>
     <div v-if="componentContent.arrangeType == '横向滑动' && productData.products.length > 2" class="product-list">
-      <swiper ref="mySwiper" class="swiper product-list-box" :indicator-dots="true" :autoplay="true" :display-multiple-items="2">
+      <swiper ref="mySwiper" class="swiper product-list-box" :indicator-dots="false" :autoplay="true" :display-multiple-items="2" @change="swiperChange">
         <swiper-item class="swiper-slide product-list-item-warp" v-for="(item,index) in productData.products.slice(0, 10)" :key="index" @click="jumpProductDetail(item)">
           <div class="product-list-item">
           <div class="product-list-img">
@@ -40,6 +40,10 @@
           </div>
         </swiper-item>
       </swiper>
+      <view class="swiper-dots" v-if="productData.products && productData.products.length > 2">
+        <text class="dot" :class="index - swiperCurrent <= 1 && index - swiperCurrent >=0  && 'dot-active'" v-for="(dot, index) in productData.products.length"
+              :key="index"></text>
+      </view>
 <!--      <div class="pagination discount-pagination" slot="pagination"></div>-->
     </div>
     <div v-else class="product-list">
@@ -85,20 +89,12 @@ export default {
   mixins: [commonMixin],
   data () {
     return {
-      // swiperOption: {
-      //   slidesPerView: 2,
-      //   spaceBetween: 14,
-      //   autoplay: false, // 可选选项，自动滑动
-      //   loop: true,
-      //   pagination: {
-      //     el: '.discount-pagination',
-      //     clickable: true
-      //   },
-      //   navigation: {
-      //     nextEl: '.swiper-button-next',
-      //     prevEl: '.swiper-button-prev'
-      //   }
-      // }
+      swiperCurrent: 0,
+    }
+  },
+  methods:{
+    swiperChange(e) {
+      this.swiperCurrent = e.detail.current;
     }
   }
 }
@@ -231,22 +227,43 @@ export default {
   }
 }
 
-::v-deep .uni-swiper-dots{
+//::v-deep .uni-swiper-dots{
+//  display: flex;
+//  justify-content: center;
+//  padding: 10upx 0;
+//  .uni-swiper-dot{
+//    width: 10upx;
+//    height: 10upx;
+//    background: #333333;
+//    opacity: 0.3;
+//    border-radius: 5upx;
+//    margin: 0 5upx;
+//    &-active{
+//      width: 20upx;
+//      height: 10upx;
+//      opacity: 1;
+//    }
+//  }
+//}
+.swiper-dots {
   display: flex;
-  justify-content: center;
-  padding: 10upx 0;
-  .uni-swiper-dot{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 15rpx;
+  z-index: 66;
+  .dot {
     width: 10upx;
     height: 10upx;
     background: #333333;
     opacity: 0.3;
     border-radius: 5upx;
-    margin: 0 5upx;
-    &-active{
-      width: 20upx;
-      height: 10upx;
-      opacity: 1;
-    }
+    margin: 0 10upx;
+  }
+
+  .dot-active {
+    width: 20upx;
+    opacity: 1;
   }
 }
 //.pagination{
@@ -276,7 +293,8 @@ export default {
   font-size: 24upx;
   background-color: transparent;
   margin: 20upx auto 0;
-  display: block;
+  display: flex;
+  align-items: center;
 }
 
 </style>

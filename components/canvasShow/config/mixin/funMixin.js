@@ -28,6 +28,7 @@ export const tool = {
     // 判断url
     jumpLink (linkObj) {
       var link = ''
+      console.log(linkObj.data)
       if(linkObj && linkObj.typeText && linkObj.data){
         switch (linkObj.typeText) {
           case '类别':
@@ -41,6 +42,8 @@ export const tool = {
             break
           case '自定义':
             // router.push("/category");
+          case '公告':
+            this.jumpNoticeDetail(linkObj.data)
             break
         }
       } else if(linkObj.selsectValue==='/index'){
@@ -155,6 +158,12 @@ export const tool = {
     jumpNoticeDetail(item){
       uni.navigateTo({
         url: '/pages_category_page2/userModule/messageDetail?noticeId=' + item.noticeId
+      })
+    },
+    // 跳转到直播列表
+    jumpLive(){
+      uni.navigateTo({
+        url: '/pages_category_page2/livePage/index'
       })
     },
     // 领取优惠券

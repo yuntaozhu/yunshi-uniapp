@@ -13,7 +13,7 @@ export default {
   },
   onLoad(e) {
     // 获取传递过来的链接
-    this.url = e.url
+    this.url = `${e.url}/#/?&username=${e.username}&user=${e.user}`
   }
 }
 </script>

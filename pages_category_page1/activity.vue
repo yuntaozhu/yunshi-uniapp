@@ -90,7 +90,7 @@
 	}
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 	page {
 		background-color: #FBE7E0;
 	}

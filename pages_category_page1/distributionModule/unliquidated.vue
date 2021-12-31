@@ -160,6 +160,7 @@
 		methods: {
 			getZSalesOrderData() {
 				uni.showLoading({
+          mask: true,
 					title:'加载中...'
 				})
 				NET.request(API.GetNotReward, {
@@ -183,6 +184,7 @@
 			},
 			getJSalesOrderData() {
 				uni.showLoading({
+          mask: true,
 					title:'加载中...'
 				})
 				NET.request(API.GetNotReward, {

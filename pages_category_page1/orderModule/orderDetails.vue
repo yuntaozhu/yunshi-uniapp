@@ -75,7 +75,7 @@
 							<text class="phone">{{dataList.receivePhone}}</text>
 						</view>
 						<view class="address-info">
-							<text>{{dataList.receiveAdress}}</text>
+							<text>{{dataList.receiveAdress}} {{dataList.address}}</text>
 						</view>
 					</view>
 					<image src="../../static/images/arrowRight.png" v-if="false" class="arrow-right-img"></image>
@@ -89,17 +89,21 @@
 								<text class="shop-name">{{dataList.shopName}}</text>
 								<image src="../../static/images/arrowRight.png" class="arrow-img"></image>
 							</view>
+							<view class="toService" @click="openService">
+								<image src="../../static/images/serviceImg-order-detail.png"  class="service-img" ></image>
+								<text>联系客服</text>
+							</view>
 						</view>
 						<view class="order-info-box">
 							<view class="order-info">
-								<view class="order-info-item" v-for="(proItem, proIndex) in dataList.skus"
+								<view class="order-info-item" v-for="proItem in dataList.skus"
 									:key="proItem.productId" @click="goodsItemTap(proItem.productId,proItem.skuId)">
 									<image :src="proItem.image" class="product-img"></image>
 									<view class="info-box">
 										<text class="product-name">{{proItem.productName}}</text>
 										<view class="price-sku-box">
 											<view class="product-sku">
-												<view class="mar-left-20" v-for="(vItem, proIndex) in proItem.values">
+												<view class="mar-left-20" v-for="vItem in proItem.values">
 													<text>{{vItem}}</text>
 												</view>
 											</view>
@@ -275,7 +279,7 @@
 				<radio-group @change="payTypeChange" v-model="paymentMode">
 					<view class="pay-type-radio">
 						<view class="pay-type-img">
-							<img class="pay-type-img-inner" src="../../static/images/alipay.png" />
+							<img class="pay-type-img-inner" src="https://ceres.zkthink.com/static/images/alipay.png" />
 						</view>
 						<label class="pay-type-label">支付宝支付</label>
 						<radio class="pay-type-radio-item" style="transform:scale(0.7)" :checked="paymentMode == 2"
@@ -336,18 +340,29 @@
 </template>
 
 <script>
-	const NET = require('../../utils/request')
-	const API = require('../../config/api')
-	import uniSteps from "@/components/uni-steps/uni-steps.vue"
 	import ClipboardJS from "clipboard";
 	// #ifdef H5
 	var jweixin = require('jweixin-module')
 	// #endif
+
+	import uniSteps from "@/components/uni-steps/uni-steps.vue"
+
+	const NET = require('../../utils/request')
+	const API = require('../../config/api')
 	export default {
+		components: {
+			uniSteps,
+		},
 		data() {
 			return {
 				canApplyIntervention: false,
-				dataList: [],
+				dataList: {
+					orderFormid:null,
+					createTime:null,
+					orderPrice:0,
+					logisticsPrice:0,
+					discountPrice:0
+				},
 				orderId: 0,
 				active: 0,
 				steps: [],
@@ -370,11 +385,13 @@
 				fenqiDisabledList: [true, true, true],
 				huabeiChargeType: 1,
 				huabeiFeeRateList: [0, 0, 0],
-				alipayInfo: {}
+				alipayInfo: {},
+
+				// 客服
+				serviceURL: '',
+				corpId: '',
+				isLoading: false
 			}
-		},
-		components: {
-			uniSteps
 		},
 		onLoad(options) {
 			this.isIphone = getApp().globalData.isIphone;
@@ -469,6 +486,7 @@
 					let data = res.data
 					this.dateformat(res.data.time)
 					this.dataList = data
+					console.log(this.dataList)
 					console.log(dataList.collageDetail.length, 888)
 					this.getShippingTrace(this.dataList.express, this.dataList.deliverFormid)
 					if (this.dataList.state == 1 || this.dataList.state == 6) {
@@ -571,6 +589,7 @@
 			},
 			doDel() {
 				uni.showLoading({
+          mask: true,
 					title: '提交中...',
 				})
 				NET.request(API.DelOrder, {
@@ -639,6 +658,7 @@
 			},
 			doCancel() {
 				uni.showLoading({
+          mask: true,
 					title: '提交中...',
 				})
 				NET.request(API.CancelOrder, {
@@ -663,6 +683,7 @@
 				// #endif
 				// #ifndef MP-ALIPAY
 				uni.showLoading({
+          mask: true,
 					title: '订单提交中...',
 				})
 				// #endif
@@ -775,6 +796,7 @@
 			// 继续付款
 			continuePay() {
 				uni.showLoading({
+          mask: true,
 					title: '加载中...',
 				})
 				const payInfo = Object.assign({}, this.alipayInfo, {
@@ -1050,6 +1072,59 @@
 					}
 				})
 			},
+			openService() {
+				if (this.isLoading) { return }
+				const shopids = uni.getStorageSync('service_shopids') || []
+				const corpIds = uni.getStorageSync('service_corpIds') || []
+				const urls = uni.getStorageSync('service_urls') || []
+
+				const index = shopids.indexOf(this.shopId)
+				if (index === -1) {
+					this.isLoading = true
+					const id = this.shopId || null
+					NET.request(API.CustomerService, {
+						id
+					}, 'get').then(res => {
+						if (res.code === '') {
+							shopids.push(this.shopId)
+							corpIds.push(res.data.corpId)
+							urls.push(res.data.url)
+
+							uni.setStorageSync('service_shopids', shopids);
+							uni.setStorageSync('service_corpIds', corpIds);
+							uni.setStorageSync('service_urls', urls);
+
+							this.corpId = res.data.corpId
+							this.serviceURL = res.data.url
+							// #ifdef MP-WEIXIN
+							this.flyToService()
+							// #endif
+						}
+						this.isLoading = false
+					}).catch(err => {
+						console.log(err)
+						this.isLoading = false
+					})
+				} else {
+					this.corpId = corpIds[index]
+					this.serviceURL = urls[index]
+
+					// #ifdef MP-WEIXIN
+					this.flyToService()
+					// #endif
+				}
+			},
+			flyToService() {
+				if (!this.serviceURL || !this.corpId) { return }
+				// 获取店铺id、客服链接
+				const extInfo = { // 客服信息
+					url: this.serviceURL // 客服链接
+				}
+				wx.openCustomerServiceChat({
+					extInfo,
+					corpId: this.corpId // 企业ID
+				})
+			}
 		},
 		filters: {
 			clip2Decimal(value) {
@@ -1062,7 +1137,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	page {
 		background: #f7f7f7;
 	}
@@ -1178,6 +1253,22 @@
 
 	.order-list-box {
 		margin-top: 20upx;
+		.toService{
+			line-height: 40rpx;
+			padding: 0 8rpx;
+			border: 1rpx solid #FAF6ED;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			.service-img{
+				width: 60upx;
+				height: 60upx;
+				margin-right: 12rpx;
+			}
+			text{
+				line-height: 40rpx;
+			}
+		}
 	}
 
 	.order-list-box .item {

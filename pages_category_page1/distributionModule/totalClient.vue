@@ -77,6 +77,7 @@
 		methods: {
 			getSalesCustomer() {
 				uni.showLoading({
+          mask: true,
 					title: '加载中...'
 				})
 				NET.request(API.FindSalesCustomerList, {

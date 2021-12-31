@@ -17,12 +17,7 @@ const request = (url, data, method = 'GET') => {
 				if (res.statusCode == 200) {
 					if (res.data.code === "200" || res.data.code === "") {
 						resolve(res.data)
-					} else if (res.data.code === "20004") {
-						uni.removeStorageSync("storage_key")
-						uni.navigateTo({
-							url: '/pages_category_page2/userModule/login'
-						})
-					} else if (res.data.code === "20005") {
+					} else if (res.data.code === "20004" || res.data.code === "20005") {
 						uni.removeStorageSync("storage_key")
 						uni.navigateTo({
 							url: '/pages_category_page2/userModule/login'

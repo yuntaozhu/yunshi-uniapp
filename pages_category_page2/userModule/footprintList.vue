@@ -12,30 +12,27 @@
 				<view class="daytime">
 					<label class="mar-left-30">{{ditem.createTime}}</label>
 				</view>
-				<u-swipe-action :show="item.show" :index="index"
-					v-for="(item, index) in ditem.products" :key="item.footprintId"
-					@click="click(index,findex)" @open="open(index,findex)"
-					:options="options"
-				>
-					<view class="itemBox">
-						<view @click.stop="toGoodsDetails(item.productId,item.shopId,item.skuId)" class="item u-border-bottom wid flex-row-plus flex-items">
-							<view v-show="allCheckShow" class="selectIconBox">
-								<image v-if="item.selected == 1" @click.stop="footItemSel(index,findex,0)" src="../../static/images/selectActive.png" class="cart-select-img"></image>
-								<image v-else @click.stop="footItemSel(index,findex,1)" src="../../static/images/selectEmpty.png" class="cart-select-img"></image>
-							</view>
-							<image class="product-img" mode="aspectFill" :src="item.image" />
-							<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
-							<view class="title-wrap mar-left-20">
-								<text class="title u-line-2">{{ item.productName }}</text>
-								<view class="flex-column-plus font-color-C5AA7B flex-row">
-									<label class="fs22">¥</label>
-									<label class="fs24 mar-left-5">{{item.price}}</label>
-								</view>
-								<label class="font-color-999 discountsPriceLine fs24">¥{{item.originalPrice}}</label>
-							</view>
-						</view>
-					</view>
-				</u-swipe-action>
+        <view class="listItem" :index="index" v-for="(item, index) in ditem.products" :key="item.footprintId" @click="click(index,findex)">
+          <u-swipe-action :show="item.show" @open="open(index,findex)" :options="options">
+            <view class="itemBox">
+              <view @click.stop="toGoodsDetails(item.productId,item.shopId,item.skuId)" class="item wid flex-display">
+                <view v-show="allCheckShow" class="selectIconBox">
+                  <image v-if="item.selected == 1" @click.stop="footItemSel(index,findex,0)" src="../../static/images/selectActive.png" class="cart-select-img"></image>
+                  <image v-else @click.stop="footItemSel(index,findex,1)" src="../../static/images/selectEmpty.png" class="cart-select-img"></image>
+                </view>
+                <image class="product-img" mode="aspectFill" :src="item.image" />
+                <!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
+                <view class="title-wrap mar-left-20">
+                  <text class="title u-line-2 fs28">{{ item.productName }}</text>
+                  <view class="flex-items">
+                    <label class="fs40 mar-right-20 font-color-C83732">¥{{item.price}}</label>
+                    <label class="font-color-CCC discountsPriceLine fs24">¥{{item.originalPrice}}</label>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </u-swipe-action>
+        </view>
 			</view>
 			<view v-show="allCheckShow" class="allcheck-box flex-row-plus flex-sp-between flex-items">
 				<view class="left">
@@ -163,6 +160,7 @@
 					this.footEmpty = false
 				}
 				uni.showLoading({
+            mask: true,
 					  title: '加载中...',
 				})
 				NET.request(API.getFootprintList,
@@ -243,6 +241,9 @@
 </script>
 
 <style lang="scss">
+page {
+  background: #f7f7f7;
+}
 .footprint-box{
 	.function-box{
 		background-color: #FFFFFF;
@@ -266,9 +267,10 @@
 		height: 50rpx;
 	}
 	.swipe-box{
-    .itemBox {
+    .listItem {
       padding: 0 24rpx;
       background: #F8F8F8;
+      margin-bottom: 20rpx;
     }
 		.daytime{
 			width: 100%;
@@ -282,12 +284,14 @@
       background: #FFFFFF;
       .selectIconBox {
         margin-right: 14upx;
+        display: flex;
+        align-items: center;
       }
 		}
 		.product-img{
-			width: 180rpx;
-			flex: 0 0 180rpx;
-			height: 180rpx;
+			width: 200rpx;
+			flex: 0 0 200rpx;
+			height: 200rpx;
 		}
 		.head-img{
 			width: 80rpx;
@@ -297,9 +301,8 @@
 		}
 		.title {
 			text-align: left;
-			font-size: 28rpx;
-			color: $u-content-color;
-			margin-top: 20rpx;
+			color: #333333;
+      height: 150rpx;
 		}
 		.cart-select-img {
 		  width: 98upx;

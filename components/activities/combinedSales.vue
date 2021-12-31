@@ -158,6 +158,7 @@ export default {
     changeSkuItemValue(item,index) {
       this.curProIndex = index
       uni.showLoading({
+        mask: true,
         title: '加载中...'
       })
       NET.request(API.QueryProductDetail, {

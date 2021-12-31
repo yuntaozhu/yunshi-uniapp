@@ -89,6 +89,7 @@
 					});
 				} else {
 					uni.showLoading({
+            mask: true,
 						title: '正在注册...',
 						duration: 2000,
 					})

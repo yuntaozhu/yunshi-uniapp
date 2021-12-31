@@ -11,32 +11,33 @@
       <!--		<view class="item" :class="selectIndex == 1 ? 'selected' : ''" @click="sales"><span>销量</span></view>-->
       <!--		<view class="item" :class="selectIndex == 2 ? 'selected' : ''" @click="priceClick"><span>价格</span></view>-->
       <!--	  </view>-->
-
-      <view class="shop-list-nav">
-        <view class="nav-item-sort" @click="sortTap(1)">
-          <text class="nav-title" :class="{'active' : sortIndex == 1}">综合</text>
-        </view>
-        <view class="nav-item-sort" @click="sortTap(2)">
-          <text class="nav-title" :class="{'active' : sortIndex == 2}">价格</text>
-          <view class="r">
-            <view class="arrowUp" :class="{activeUp: type == 1}"></view>
-            <view class="arrowDown" :class="{activeDown: type == 2}"></view>
-            <!--          <image src="../../static/images/arrowSortUp.png" v-if="type == 1" class="arrow-img padd-t"></image>-->
-            <!--          <image src="../../static/images/arrowSortDown.png" v-if="type == 2" class="arrow-img padd-b"></image>-->
+      <view id="boxFixed" class="nav-warp">
+        <view class="shop-list-nav" :class="{'is-fixed' : isFixed}">
+          <view class="nav-item-sort" @click="sortTap(1)">
+            <text class="nav-title" :class="{'active' : sortIndex == 1}">综合</text>
           </view>
-        </view>
-        <view class="nav-item-sort" @click="sortTap(3)">
-          <text class="nav-title" :class="{'active' : sortIndex == 3}">销量</text>
-          <view class="r">
-            <view class="arrowUp" :class="{activeUp: volume == 1}"></view>
-            <view class="arrowDown" :class="{activeDown: volume == 2}"></view>
-            <!--          <image src="../../static/images/arrowSortUp.png" v-if="volume == 1" class="arrow-img padd-t"></image>-->
-            <!--          <image src="../../static/images/arrowSortDown.png" v-if="volume == 2" class="arrow-img padd-b"></image>-->
+          <view class="nav-item-sort" @click="sortTap(2)">
+            <text class="nav-title" :class="{'active' : sortIndex == 2}">价格</text>
+            <view class="r">
+              <view class="arrowUp" :class="{activeUp: type == 1}"></view>
+              <view class="arrowDown" :class="{activeDown: type == 2}"></view>
+              <!--          <image src="../../static/images/arrowSortUp.png" v-if="type == 1" class="arrow-img padd-t"></image>-->
+              <!--          <image src="../../static/images/arrowSortDown.png" v-if="type == 2" class="arrow-img padd-b"></image>-->
+            </view>
+          </view>
+          <view class="nav-item-sort" @click="sortTap(3)">
+            <text class="nav-title" :class="{'active' : sortIndex == 3}">销量</text>
+            <view class="r">
+              <view class="arrowUp" :class="{activeUp: volume == 1}"></view>
+              <view class="arrowDown" :class="{activeDown: volume == 2}"></view>
+              <!--          <image src="../../static/images/arrowSortUp.png" v-if="volume == 1" class="arrow-img padd-t"></image>-->
+              <!--          <image src="../../static/images/arrowSortDown.png" v-if="volume == 2" class="arrow-img padd-b"></image>-->
+            </view>
           </view>
         </view>
       </view>
     </view>
-    <view class="spikeList mar-top-20">
+    <view class="spikeList">
       <view class="listItem" v-for="(item,index) in getDiscount" :key="index">
         <view class="itemBox">
           <img :src="item.image">
@@ -88,9 +89,24 @@ export default {
       volume: '',//销量
       shopShowType:false,
       selectIndex:0,
-      sortIndex: 1
+      sortIndex: 1,
+      isFixed: false,
+        boxFixedTop: 0,
     }
   },
+  onPageScroll(res) {
+    console.log(res,'ssssssssss')
+      let scrollTop = res.scrollTop // 滚动条偏移量
+      let offsetTop = this.boxFixedTop // 要滚动到顶部吸附的元素的偏移量
+      this.isFixed = scrollTop > offsetTop ? true : false; // 如果滚动到顶部了，this.isFixed就为true
+  },
+    onReady(){
+        const query = uni.createSelectorQuery().in(this);
+        query.select('#boxFixed').boundingClientRect(data => {
+            console.log(data,'boxFixed')
+            this.boxFixedTop = data.top
+        }).exec()
+    },
   onLoad(options) {
     if(options.shopId && options.shopDiscountId){
       this.shopShowType = false
@@ -288,14 +304,6 @@ page {
 </style>
 <style lang="scss" scoped>
 .spikeListBox {
-  .spikeBgBox {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 99;
-    background: #333333;
-  }
   .discountBg {
     width: 100%;
     height: 440rpx;
@@ -343,7 +351,6 @@ page {
   }
   .spikeList {
     padding: 20upx 30upx 20upx 30upx;
-    margin-top: 400rpx;
     .listItem {
       display: flex;
       padding: 30rpx;
@@ -431,7 +438,7 @@ page {
   }
  /* #ifdef MP-WEIXIN */
  .spikeList{
-	 margin-top: 530rpx;
+	 /*margin-top: 530rpx;*/
  }
  /* #endif */
   .filterBox {
@@ -447,14 +454,30 @@ page {
     }
   }
 }
-
+.nav-warp{
+  height: 80rpx;
+}
 .shop-list-nav {
   display: flex;
   flex-direction: row;
   align-items: center;
   height: 80rpx;
   line-height: 76rpx;
+  background-color: #333;
+  &.is-fixed{
+    position: fixed;
+    top: 44rpx;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+  }
+    /* #ifdef MP-WEIXIN */
+    &.is-fixed{
+        top: 0px;
+    }
+    /* #endif */
 }
+
 
 .nav-item {
   flex: 1;

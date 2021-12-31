@@ -22,6 +22,7 @@ export const componentMap = [
     ['priceList', () => import('./basics/price/app')], // 定价捆绑
     ['discountList', () => import('./basics/discount/app')], // 限时折扣
     ['newProduct', () => import('./basics/newProduct/app')], // 每日上新
+    ['live', () => import('./basics/live/app')], // 直播
     ['shop', () => import('./basics/shop')] // 每日好店
   ]),
   // H5
@@ -47,6 +48,7 @@ export const componentMap = [
     ['priceList', () => import('./basics/price/app')], // 定价捆绑
     ['discountList', () => import('./basics/discount/app')], // 限时折扣
     ['newProduct', () => import('./basics/newProduct/app')], // 每日上新
+    ['live', () => import('./basics/live/app')], // 直播
     ['shop', () => import('./basics/shop')] // 每日好店
   ]),
   // APP
@@ -72,6 +74,7 @@ export const componentMap = [
     ['priceList', () => import('./basics/price/app')], // 定价捆绑
     ['discountList', () => import('./basics/discount/app')], // 限时折扣
     ['newProduct', () => import('./basics/newProduct/app')], // 每日上新
+    ['live', () => import('./basics/live/app')], // 直播
     ['shop', () => import('./basics/shop')] // 每日好店
   ]),
   // PC
@@ -97,6 +100,7 @@ export const componentMap = [
     ['priceList', () => import('./basics/price/pc')], // 定价捆绑
     ['discountList', () => import('./basics/discount/pc')], // 限时折扣
     ['newProduct', () => import('./basics/newProduct/app')], // 每日上新
+    ['live', () => import('./basics/live/app')], // 直播
     ['shop', () => import('./basics/shop')] // 每日好店
   ])
 ]

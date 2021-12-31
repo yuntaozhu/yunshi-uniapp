@@ -18,7 +18,7 @@
             <div class="b" v-else>{{item.reduceMoney}}</div>
             <div class="b" v-if="item.couponType == 2">折券</div>
           </div>
-          <div class="coupon-item-date">{{item.activityStartTime.split(' ')[0].replace(/-/g, '.')}}-{{item.activityEndTime.split(' ')[0].replace(/-/g, '.')}}</div>
+          <div class="coupon-item-date">{{item.startTime.split(' ')[0].replace(/-/g, '.')}}-{{item.endTime.split(' ')[0].replace(/-/g, '.')}}</div>
           <div class="coupon-item-text">{{item.content}}</div>
         </div>
         <button v-if="item.state === 0" class="coupon-item-btn">已领取</button>

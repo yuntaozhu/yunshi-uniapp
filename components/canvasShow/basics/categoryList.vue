@@ -32,78 +32,78 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.category-list{
-  padding: 20upx 0;
-  .hom-title{
-    font-size: 22upx;
-    color: #333;
-    line-height: 1em;
-    margin-bottom: 23upx;
-    font-weight: bold;
-    text-align: center;
-  }
-  .content-warp{
-    display: flex;
-    .ul{
-      width: 100%;
+  .category-list{
+    padding: 20upx 0;
+    .hom-title{
+      font-size: 22upx;
+      color: #333;
+      line-height: 1em;
+      margin-bottom: 23upx;
+      font-weight: bold;
+      text-align: center;
+    }
+    .content-warp{
       display: flex;
-      flex-wrap: wrap;
-      .li{
-        flex: 1;
-        padding: 10upx 0 0 10upx;
-        box-sizing: border-box;
-        .item{
-          height: auto;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          .imgBox {
-            padding-bottom: 80%;
-            background-color: #cacaca;
-            position: relative;
-          }
-          img {
-            max-width: 100%;
-            height: 100%;
-            max-height: 100%;
-            position: absolute;
-            margin: auto;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
+      .ul{
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        .li{
+          flex: 1;
+          padding: 10upx 0 0 10upx;
+          box-sizing: border-box;
+          .item{
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            .imgBox {
+              padding-bottom: 80%;
+              background-color: #cacaca;
+              position: relative;
+            }
+            img {
+              max-width: 100%;
+              height: 100%;
+              max-height: 100%;
+              position: absolute;
+              margin: auto;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+            }
           }
         }
       }
+      .number5 {
+        display: block;
+        .li {
+          width: 25%;
+          float: left;
+        }
+        .li:nth-child(1) {
+          width: 50%;
+        }
+      }
     }
-    .number5 {
+  }
+  @media screen and (max-width: 768px) {
+    .category-list .content-warp .ul .li{
+      flex: 0 0 50%;
+    }
+  }
+  .terminal1,.terminal2,.terminal3{
+    &.category-list .content-warp{
       display: block;
-      .li {
-        width: 25%;
-        float: left;
-      }
-      .li:nth-child(1) {
-        width: 50%;
-      }
-    }
-  }
-}
-@media screen and (max-width: 768px) {
-  .category-list .content-warp .ul .li{
-    flex: 0 0 50%;
-  }
-}
-.terminal1,.terminal2,.terminal3{
-  &.category-list .content-warp{
-    display: block;
-    .ul{
-      margin: -15upx 0 0 -15upx;
-      width: auto;
-      .li{
-        flex: 0 0 50%;
-        padding: 15upx 0 0 15upx;
+      .ul{
+        margin: -15upx 0 0 -15upx;
+        width: auto;
+        .li{
+          flex: 0 0 50%;
+          padding: 15upx 0 0 15upx;
+        }
       }
     }
   }
-}
 </style>

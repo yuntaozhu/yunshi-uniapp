@@ -95,8 +95,6 @@
       				<view
       					class="u-btn-picker u-btn-picker--primary"
       					:style="{ color: moving ? cancelColor : confirmColor }"
-      					hover-class="u-opacity"
-      					:hover-stay-time="150"
       					@touchmove.stop=""
       					@tap.stop="getResult('confirm')"
       				>

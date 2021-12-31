@@ -112,6 +112,7 @@
 			},
 			getSendReturnGoods() {
 				uni.showLoading({
+          mask: true,
 					url:'物流信息提交中...'
 				})
 				NET.request(API.SendReturnGoods, {

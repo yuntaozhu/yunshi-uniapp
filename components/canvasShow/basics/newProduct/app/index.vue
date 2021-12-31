@@ -187,7 +187,8 @@ export default {
   font-size: 24upx;
   background-color: transparent;
   margin: 20upx auto 0;
-  display: block;
+  display: flex;
+  align-items: center;
 }
 
 </style>

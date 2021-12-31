@@ -3,7 +3,7 @@
 	<view>
 		<view class="content">
 			<view class="order-list-box">
-				<view v-if="FindReturnData.total>0">
+				<view>
 					<view class="item" v-for="item in FindReturnDatalist">
 						<view class="order-list-top">
 							<view class="top-l" @click="goShop(item.shopId)">
@@ -71,19 +71,39 @@
 						</view>
 					</view>
 				</view>
-				<view v-else class="emptyCart-box flex-items-plus flex-column">
+				<view v-if="ifEmpty" class="emptyCart-box flex-items-plus flex-column">
 					<image class="emptyCart-img" src="../../static/img/bgnull.png"></image>
-					<label class="font-color-999 fs26 mar-top-30">这里空空如也~</label>
+					<label class="font-color-999 fs26 mar-top-30">暂无售后记录~</label>
 				</view>
 			</view>
 		</view>
+    <!-- 优惠券领取 -->
+    <tui-modal :show="delRecord" :custom="true" :fadein="true">
+      <view class="Put-box1">
+        <view class="text-align fs34 fs-bold">
+          是否删除此记录
+        </view>
+        <view class="flex-display flex-sp-between">
+          <view class="btn" @click="delRecord = false">
+            取消
+          </view>
+          <view class="btn submit" @click="delRecordFn">
+            确定
+          </view>
+        </view>
+      </view>
+    </tui-modal>
 	</view>
 </template>
 
 <script>
+  import tuiModal from "@/components/modal/modal";
 	const NET = require('../../utils/request')
 	const API = require('../../config/api')
 	export default {
+    components: {
+      tuiModal
+    },
 		data() {
 			return {
 				FindReturnData:[],
@@ -95,6 +115,9 @@
 				page:1,//当前页
 				pageSize:20,//每页记录数
 				loadingType:0,
+        delRecord: false,
+        currentAfterId: '',
+        ifEmpty: false
 			}
 		},
 		onLoad(){
@@ -153,6 +176,9 @@
 						this.page = this.page
 					}
 					this.FindReturnDatalist = this.FindReturnDatalist.concat(res.data.list)
+          if (this.FindReturnDatalist.length === 0) {
+            this.ifEmpty = true
+          }
 					this.FindReturnData = res.data
 				}).catch(res => {
 					uni.hideLoading()
@@ -161,6 +187,32 @@
 			},
       // 删除记录
       deleteRecord (item) {
+        this.currentAfterId = item.afterId
+        this.delRecord = true
+      },
+      delRecordFn () {
+        this.delRecord = false
+        uni.showLoading({
+          title:'正在删除...'
+        })
+        NET.request(API.deleteAfter, {
+          id: this.currentAfterId,
+        }, 'POST').then(res => {
+          uni.hideLoading()
+          uni.showToast({
+            title:'删除成功',
+            icon:'none',
+            duration:1500
+          })
+          this.currentAfterId = ''
+          setTimeout(() => {
+            this.page = 1
+            this.FindReturnDatalist = []
+            this.getFindReturn()
+          }, 2000);
+        }).catch(res => {
+          uni.hideLoading()
+        })
       },
 			// 撤销申请
 			cancelRefundTap(item){
@@ -231,11 +283,26 @@
 	}
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 	page {
 		background-color: #F7F7F7;
 	}
-
+  .Put-box1 {
+    .btn {
+      text-align: center;
+      margin-top: 40rpx;
+      border: 2rpx solid #333333;
+      height: 80upx;
+      line-height: 80upx;
+      width: 100%;
+      color: #333333;
+    }
+    .submit {
+      background-color: #333333;
+      color: #FFEBC4;
+      margin-left: 20rpx;
+    }
+  }
 	.emptyCart-box {
 		margin-top: 70upx;
 

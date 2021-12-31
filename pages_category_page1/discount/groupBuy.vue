@@ -36,8 +36,10 @@
 		   <img :src="item.image">
 		 </view>
        <view class="itemInfo">
-         <p>{{item.productName}}</p>
-         <view class="number" v-if="item.limitNumber">限量{{item.limitNumber}}件 / 剩余{{item.limitStockNumber}}件</view>
+         <view class="title">
+           <p>{{item.productName}}</p>
+           <view class="number" v-if="item.limitNumber">限量{{item.limitNumber}}件 / 剩余{{item.limitStockNumber}}件</view>
+         </view>
          <view class="originalPrice">原价: ¥{{item.originalPrice}}</view>
          <view class="price">
            <view class="currentPrice flex-row-plus flex-items-plus font-color-FF7800">
@@ -57,7 +59,10 @@
            </view>
          </view>
        </view>
-
+     </view>
+     <view v-if="ifEmpty" class="emptyOrder-box flex-items-plus flex-column">
+       <image class="emptyOrder-img" src="../../static/img/bgnull.png"></image>
+       <label class="font-color-999 fs26 mar-top-30">暂无活动商品～</label>
      </view>
    </view>
  </view>
@@ -83,7 +88,8 @@ export default {
 			volume:1,//销量
 			shopShowType:false,
 			selectIndex:0,
-      sortIndex: 0
+      sortIndex: 0,
+      ifEmpty: false
 		}
 	},
 	onLoad(options) {
@@ -171,6 +177,9 @@ export default {
 			})
 		},
 		getGroupBuylist(){
+      uni.showLoading({
+        title: '加载中...',
+      })
       let param = {
         page:this.page,
         pageSize:this.pageSize,
@@ -180,19 +189,20 @@ export default {
         volume:this.volume
       }
 			NET.request(API.getGroupBuyList,param,'GET').then(res => {
-				console.log(res,123456)
-
+        uni.hideLoading()
 				if(res.data.page.list.length == 0){
 					this.loadingType = 1
 					this.page = this.page
 				}else{
 					this.groupBuy = this.groupBuy.concat(res.data.page.list)
+          if (this.groupBuy.length === 0) {
+            this.ifEmpty = true
+          }
 				}
 				if(this.shopShowType == false){
 					this.dateformat(res.data.time)
 					this.countDown()
 				}
-				console.log(this.groupBuy,2222)
 			}).catch(res => {
 				uni.showToast({
 					title:'失败',
@@ -335,6 +345,9 @@ page {
       }
       .itemInfo {
         flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         .iconBox {
           image {
             width: 58rpx;
@@ -354,15 +367,17 @@ page {
           line-clamp: 2;
           -webkit-box-orient: vertical;
         }
-        .number {
-          color: #C5AA7B;
-          font-size: 26rpx;
-          height: 40rpx;
-          background: #FFFFFF;
-          border: 2rpx solid #E4E5E6;
-          font-weight: 400;
-          display: inline;
-          padding: 0 5rpx;
+        .tilte{
+          .number {
+            color: #C5AA7B;
+            font-size: 26rpx;
+            height: 40rpx;
+            background: #FFFFFF;
+            border: 2rpx solid #E4E5E6;
+            font-weight: 400;
+            display: inline;
+            padding: 0 5rpx;
+          }
         }
         .originalPrice {
           font-size: 24upx;
@@ -420,7 +435,6 @@ page {
   height: 80rpx;
   line-height: 76rpx;
 }
-
 .nav-item {
   flex: 1;
   font-size: 30rpx;
@@ -431,14 +445,9 @@ page {
   height: 80rpx;
   line-height: 76rpx;
 }
-
-.nav-title {
-}
-
 .nav-item.active {
   color: #C5AA7B;
 }
-
 .nav-item .line {
   display: inline-block;
   width: 80rpx;
@@ -446,11 +455,9 @@ page {
   background: #fff;
   border-radius: 2rpx;
 }
-
 .nav-item.active .line {
   background: #C5AA7B;
 }
-
 .nav-item.padd-l {
   padding-left: 20%;
   box-sizing: border-box;
@@ -502,6 +509,14 @@ page {
   }
   .activeUp {
     border-color: transparent transparent #C5AA7B transparent;
+  }
+}
+.emptyOrder-box {
+  margin-top: 70upx;
+  .emptyOrder-img {
+    margin-top: 45%;
+    width: 113upx;
+    height: 98upx;
   }
 }
 </style>

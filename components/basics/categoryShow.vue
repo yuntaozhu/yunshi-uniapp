@@ -9,7 +9,7 @@
             </view>
             <view class="product-list-info">
               <view class="product-name">{{item.productName}}</view>
-              <view>
+              <view class="flex">
                 <view class="shop-box" @click.stop="jumpStore(item)">
                   <view class="shop-name" @click="jumpProductDetail(item)">{{item.shopName}}</view>
                   <view class="shop-logo">
@@ -64,6 +64,7 @@ name: "categoryShow",
   methods:{
     getData(){
       uni.showLoading({
+        mask: true,
         title:'加载中...'
       })
       NET.request(API.getProducts, {
@@ -156,11 +157,16 @@ name: "categoryShow",
         margin-bottom: 18upx;
         line-height: 40upx;
       }
+      .flex{
+        display: flex;
+        align-items: center;
+      }
       .shop-box{
         background-color: #333333;
         border-radius: 0upx 20upx 20upx 0upx;
         line-height: 40upx;
-        display: inline-block;
+        display: flex;
+        align-items: center;
         height: 40upx;
         margin-right: 10upx;
         float: left;
@@ -187,12 +193,9 @@ name: "categoryShow",
       .buy-count{
         color: #C5AA7B;
         font-size: 20upx;
-        margin-bottom: 16upx;
         border: 2upx solid #E4E5E6;
         line-height: 36upx;
         padding: 0 5upx;
-        display: inline-block;
-
       }
       .price-warp{
         display: flex;

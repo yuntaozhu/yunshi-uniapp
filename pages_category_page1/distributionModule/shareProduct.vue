@@ -14,13 +14,21 @@
 					</view>
 					<!-- 内容 -->
 					<view class="imgBox">
-						<view v-if="shareType==1" class="boxInner imgBoxShop" :style="{'backgroundImage':'url(' + erweima + ')'}"></view>
-						<view v-else class="boxInner imgBoxProduct" :style="{'backgroundImage':'url(' + erweima + ')'}"></view>
+						<view
+							v-if="shareType==1"
+							class="boxInner imgBoxShop"
+							:style="{'backgroundImage':'url(' + erweima + ')'}"
+						></view>
+						<view
+							v-else
+							class="boxInner imgBoxProduct"
+							:style="{'backgroundImage':'url(' + erweima + ')'}"
+						></view>
 					</view>
 					<!-- 分享 -->
 				</view>
 			</view>
-			<view class="fenx">
+			<view class="fenx" :style="{'height':(isIphone === true? 140:130)+'rpx'}">
 				<view class="shareBox" :class="{'width100':noMp}" hover-class="btn-click" @click="WXfenx">
 					<view style="flex: 1;text-align: center;display: flex;">
 						<view style="margin-left: 120rpx;" v-if="noMp">
@@ -70,10 +78,12 @@
 				salesId: null,
 				productId: null,
 				noMp: false,
-				shareType: 1
+				shareType: 1,
+				isIphone:false
 			}
 		},
 		onLoad: function(options) {
+			this.isIphone = getApp().globalData.isIphone;
 			if (options.productId) {
 				this.productId = options.productId
 			}
@@ -103,17 +113,22 @@
 			// 保存图片到本地
 			WXfenx() {
 				// #ifdef MP-WEIXIN || MP-ALIPAY
+				uni.showLoading({
+					title:'图片保存中...'
+				})
 				uni.getImageInfo({
 					src: this.erweima,
 					success: function(image) {
 						uni.saveImageToPhotosAlbum({
 							filePath: image.path,
 							success: function() {
+								uni.hideLoading()
 								uni.showToast({
 									title: '图片保存成功'
 								});
 							},
 							fail: function() {
+								uni.hideLoading()
 								uni.showModal({
 									title: '图片保存失败',
 									content: '请确认是否已开启授权',
@@ -195,7 +210,7 @@
 	}
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 	.warp {
 		display: flex;
 		align-items: center;
@@ -260,7 +275,6 @@
 		z-index: 10001;
 		background-color: #F7F7F7;
 		width: 100%;
-		height: 98rpx;
 		display: flex;
 		color: #343434;
 

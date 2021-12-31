@@ -47,7 +47,8 @@
 				headImage:'',
 				image:'',
 				qrcode:'',
-				qrcodeimg:''
+				qrcodeimg:'',
+				loadingQrcode: true
 			};
 		},
 		onLoad(options) {
@@ -56,11 +57,18 @@
 		},
 		methods:{
 			savePoster(type){
+				if (this.loadingQrcode) {
+					uni.showToast({
+						icon:"none",
+						title:"请稍等,正在生成二维码..."
+					})
+					return
+				}
 				if(type == 1){
 					uni.showLoading({
-						title:"保存中..."
+            mask: true,
+						title:"生成图片中..."
 					})
-          console.log(9999)
 					let that = this
 					setTimeout(function(){
             // #ifdef H5 || MP-WEIXIN || APP-PLUS
@@ -69,7 +77,7 @@
 							quality: 0, // 图片质量
 							canvasId: 'posterCanvas', // 画布ID
 							success(res) {
-							  console.log(res.tempFilePath, 'test')
+							  console.log(res.tempFilePath, 'test0000')
                 that.saveDownload(res.tempFilePath)
 							},
 							fail() {
@@ -116,6 +124,7 @@
 					},5000)
 				}else if(type == 2){
 					uni.showLoading({
+            mask: true,
 						title:"图片生成中..."
 					})
 					let that = this
@@ -161,43 +170,48 @@
 				}
 			},
       saveDownload (file) {
-        uni.downloadFile({
-          url: file,//网络路径，下载下来
-          success: (res1) => {
-            if (res1.statusCode === 400 || res1.statusCode === 200) {
-              // 2-保存图片至相册
-              console.log(2222)
-              uni.saveImageToPhotosAlbum({ // 存成图片至手机
-                filePath: file, //画布保存的图片临时文件
-                success(res2) {
-                  console.log(3333)
-                  uni.hideLoading();
-                  uni.showToast({
-                    title: '图片保存成功~',
-                    duration: 2000
-                  })
-                },
-                fail(res3) {
-                  if (res3.errMsg === 'saveImageToPhotosAlbum:fail auth deny') {
-                    that.$store.dispatch('SetPhoneShow', 1)
-                    uni.showToast({
-                      title: '保存失败，稍后再试',
-                      duration: 2000,
-                      icon: 'none'
-                    })
-                  } else {
-                    uni.showToast({
-                      title: '保存失败，稍后再试',
-                      duration: 2000,
-                      icon: 'none'
-                    })
-                  }
-                  uni.hideLoading();
-                }
-              })
-            }
-          }
-        })
+				const that = this
+			  uni.showLoading({
+			  mask: true,
+			  			title:"图片保存中..."
+			  		})
+	        console.log(file,'test1')
+	        uni.getImageInfo({
+	          src: file,
+	          success: (res1) => {
+	            console.log(res1, 'test2')
+	              // 2-保存图片至相册
+	              console.log(2222)
+	              uni.saveImageToPhotosAlbum({ // 存成图片至手机
+	                filePath: res1.path, //画布保存的图片临时文件
+	                success(res2) {
+	                  console.log(3333)
+	                  uni.hideLoading();
+	                  uni.showToast({
+	                    title: '图片保存成功~',
+	                    duration: 2000
+	                  })
+	                },
+	                fail(res3) {
+	                  if (res3.errMsg === 'saveImageToPhotosAlbum:fail auth deny') {
+	                    // that.$store.dispatch('SetPhoneShow', 1)
+	                    uni.showToast({
+	                      title: '保存失败，请检查是否授权小程序保存图片！',
+	                      duration: 3000,
+	                      icon: 'none'
+	                    })
+	                  } else {
+	                    uni.showToast({
+	                      title: '保存失败，稍后再试',
+	                      duration: 2000,
+	                      icon: 'none'
+	                    })
+	                  }
+	                  uni.hideLoading();
+	                }
+	              })
+	          }
+	        })
       },
 			getShare(){
 				NET.request(API.getShare,
@@ -211,6 +225,7 @@
 				"GET").then(res => {
 					this.qrcode = res.data.qrcode
 					this.getCanvas()
+					this.loadingQrcode = false
 				}).catch(res => {
 				})
 			},

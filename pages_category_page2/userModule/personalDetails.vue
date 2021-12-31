@@ -141,6 +141,7 @@
         if (type === 1) {
           if (this.item.name !== this.name) {
             uni.showLoading({
+              mask: true,
               title: "正在加载中"
             })
             NET.request(API.UpdateUser, {
@@ -161,6 +162,7 @@
         } else {
           if (this.item.phone !== this.phone) {
             uni.showLoading({
+              mask: true,
               title: "正在加载中"
             })
             NET.request(API.UpdateUser, {
@@ -185,6 +187,7 @@
 				if (this.birthday == '1970-01-01' || this.birthday == '') {
 					let birthday = content.year + '-' + content.month + '-' + content.day
 					uni.showLoading({
+            mask: true,
 						title: "正在加载中"
 					})
 					NET.request(API.UpdateUser, {
@@ -208,6 +211,7 @@
 			// 提交修改性别
 			ConfirmSex(content) {
 				uni.showLoading({
+          mask: true,
 					title: "正在加载中"
 				})
 				let sex = content[0].label
@@ -254,6 +258,7 @@
 			},
 			quit() {
 				uni.showLoading({
+          mask: true,
 					title: '正在退出...',
 					duration: 2000,
 				});
@@ -271,6 +276,7 @@
 			onGetAuthorize() {
 				const that = this
 				uni.showLoading({
+          mask: true,
 					title: '验证中...',
 				})
 				my.getPhoneNumber({

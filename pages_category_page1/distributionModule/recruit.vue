@@ -61,7 +61,7 @@
 			</view>
 
 		</view>
-		<view class="butBox flex-items-plus" @click="informationShowClick">
+		<view class="butBox flex-items-plus" :style="{'padding-bottom':(isIphone === true? 20:0)+'rpx'}" @click="informationShowClick">
 			<view class="submitbut">我要成为分销员</view>
 		</view>
 		<!-- 填写信息弹窗 -->
@@ -104,10 +104,12 @@
 				userName:'',
 				mobile:'',
 				inviteId:'',
-				shopId:0
+				shopId:0,
+				isIphone:false
 			}
 		},
 		onLoad(options) {
+			this.isIphone = getApp().globalData.isIphone;
 			if (getApp().globalData.distributeRecruitItem) {
 				const item = getApp().globalData.distributeRecruitItem
 				this.shopId = parseInt(item.shopId)
@@ -115,6 +117,7 @@
 			} else {
 				this.shopId = parseInt(options.shopId)
 			}
+			this.isIphone = getApp().globalData.isIphone;
 		},
 		methods: {
 			informationShowClick() {
@@ -212,7 +215,7 @@
 		}
 
 		.butBox {
-			height: 98upx;
+			height: 130upx;
 			width: 100%;
 			position: absolute;
 			bottom: 0upx;

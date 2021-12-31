@@ -38,27 +38,20 @@
 					"headImg": ''
 				},
 				noMp: false,
-				beforePage: undefined,
-				doubleBeforePage: undefined
+				// beforePage: undefined,
+				// doubleBeforePage: undefined
 			}
 		},
 		onLoad(options) {
 			// #ifndef MP
 			this.noMp = true
 			// #endif
-			var pages = getCurrentPages()
-			if (pages.length >= 2) {
-				this.beforePage = pages[pages.length - 2]
-			}
-			if (pages.length >= 3) {
-				this.doubleBeforePage = pages[pages.length - 3]
+			const pages = getCurrentPages()
+			uni.setStorageSync('last_page', pages[pages.length - 2].route);
+			if (pages[pages.length - 2].options) {
+				uni.setStorageSync('last_page_options', pages[pages.length - 2].options);
 			}
 		},
-    onUnload () {
-      uni.switchTab({
-        url: '../../pages/tabbar/index/index'
-      })
-    },
     onBackPress(){
       uni.switchTab({
         url: '../../pages/tabbar/index/index'
@@ -81,40 +74,42 @@
 					url: 'register'
 				})
 			},
+			// 微信登录
 			GetUserInfo() {
 				const that = this
-				// #ifdef APP-PLUS
-				uni.login({
-					provider: 'weixin',
-					success: function(loginRes) {
-						// 获取用户信息
-						uni.getUserInfo({
-							provider: 'weixin',
-							success: function(infoRes) {
-								let wechatOpenId = infoRes.userInfo.openId
-								let avatarUrl = infoRes.userInfo.avatarUrl
-								NET.request(API.WxAppLogin, {
-									'wechatOpenId': wechatOpenId
-								}, 'POST').then(res => {
-									let data = {
-										wechatOpenId: wechatOpenId,
-										headImg: avatarUrl
-									}
-									that.loginSuc(res.data, data)
-								}).catch(res => {
-									console.log('WxAppLogin failed: ', res)
-								})
-							},
-							fail: () => {
-								uni.showToast({
-									title: "微信登录授权失败",
-									icon: "none"
-								});
-							}
-						});
-					}
-				});
-				// #endif
+				// // #ifdef APP-PLUS
+				// uni.login({
+				// 	provider: 'weixin',
+				// 	success: function(loginRes) {
+				// 		// 获取用户信息
+				// 		uni.getUserInfo({
+				// 			provider: 'weixin',
+				// 			success: function(infoRes) {
+				// 				let wechatOpenId = infoRes.userInfo.openId
+				// 				let avatarUrl = infoRes.userInfo.avatarUrl
+				// 				NET.request(API.WxAppLogin, {
+				// 					'wechatOpenId': wechatOpenId
+				// 				}, 'POST').then(res => {
+				// 					let data = {
+				// 						wechatOpenId: wechatOpenId,
+				// 						headImg: avatarUrl
+				// 					}
+				// 					that.loginSuc(res.data, data)
+				// 				}).catch(res => {
+				// 					console.log('WxAppLogin failed: ', res)
+				// 				})
+				// 			},
+				// 			fail: () => {
+				// 				uni.showToast({
+				// 					title: "微信登录授权失败",
+				// 					icon: "none"
+				// 				});
+				// 			}
+				// 		});
+				// 	}
+				// });
+				// // #endif
+
 				// #ifdef MP-WEIXIN
 				uni.login({
 					provider: 'weixin',
@@ -213,16 +208,26 @@
 							uni.hideLoading()
 						}
 					}) */
-					if (this.beforePage && this.beforePage.route !== 'pages_category_page2/userModule/accountLogin'
-						&& this.beforePage.route !== 'pages_category_page2/userModule/login') {
-						uni.navigateBack({
-						    delta: 1
+
+					const last_page = uni.getStorageSync('last_page') || ''
+					if (last_page) {
+						const last_page_options = uni.getStorageSync('last_page_options') || ''
+						const str = JSON.stringify(last_page_options).replaceAll('{', '').replaceAll('}', '').replaceAll('"', '').replaceAll(':', '=').replaceAll(',', '&')
+						// 保留其他路由，需跳转2下 到最后登录页面
+						// uni.navigateBack({
+						//     delta: 1
+						// })
+						// uni.redirectTo({
+						// 	url: `/${last_page}?${str}`,
+						// 	// url: `/${last_page}?` + str
+						// })
+
+						// 清空其他路由，直接跳转最后登录页面
+						uni.reLaunch({
+							url: `/${last_page}?${str}`,
+							// url: `/${last_page}?` + str
 						})
-					} else if (this.doubleBeforePage && this.doubleBeforePage.route !== 'pages_category_page2/userModule/accountLogin'
-						&& this.doubleBeforePage.route !== 'pages_category_page2/userModule/login') {
-						uni.navigateBack({
-						    delta: 2
-						})
+						return
 					} else {
 						// #ifdef MP-ALIPAY
 						uni.navigateTo({
@@ -235,8 +240,8 @@
 						})
 						// #endif
 					}
-				} else {
-					uni.navigateTo({
+				} else { // 第一次登录，绑定手机号
+					uni.redirectTo({
 						url: 'bindPhone?data=' + JSON.stringify(data)
 					})
 				}
@@ -252,9 +257,9 @@
 					}, 'POST').then(res => {
 					  uni.removeStorageSync('salesId');
 					  uni.removeStorageSync('shopId');
-					}).catch(res => {
+					}).catch(err => {
 					  console.log('login bindSalesCustomer error')
-					  console.dir(res)
+					  console.dir(err)
 					})
 				}
 			}

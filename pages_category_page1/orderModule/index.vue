@@ -7,7 +7,7 @@
 					@change="orderStateChange"></u-tabs>
 			</view>
 			<view class="order-list-box">
-				<view v-if="listTotal > 0">
+				<view>
 					<view class="item" v-if="item.skus[0].ifAdd!==1"  v-for="(item, index) in list" :key="index" @click="itemTap(item.orderId,item)">
 						<view class="order-list-top">
 							<view class="top-l" @click.stop="goShop(item.shopId)">
@@ -77,7 +77,7 @@
 						</view>
 					</view>
 				</view>
-				<view v-else class="emptyOrder-box flex-items-plus flex-column">
+				<view v-if="ifEmpty" class="emptyOrder-box flex-items-plus flex-column">
 					<image class="emptyOrder-img" src="../../static/images/emptyOrderImg.png"></image>
 					<label class="font-color-999 fs26 mar-top-30">你还没有订单哦～</label>
 				</view>
@@ -89,7 +89,7 @@
 				<radio-group @change="payTypeChange" v-model="paymentMode">
 					<view class="pay-type-radio">
 						<view class="pay-type-img">
-							<img class="pay-type-img-inner" src="../../static/images/alipay.png" />
+							<img class="pay-type-img-inner" src="https://ceres.zkthink.com/static/images/alipay.png" />
 						</view>
 						<label class="pay-type-label">支付宝支付</label>
 						<radio class="pay-type-radio-item" style="transform:scale(0.7)" :checked="paymentMode == 2"
@@ -146,16 +146,39 @@
 				</view>
 			</view>
 		</u-popup>
+    <!-- 取消订单 -->
+    <tui-modal :show="closeTips" :custom="true" :fadein="true">
+      <view class="Put-box1">
+        <view class="text-align fs34 fs-bold">
+          温馨提示
+        </view>
+        <view class="mar-top-40 text-align">
+          您确定要取消该订单吗？
+        </view>
+        <view class="flex-display flex-sp-between">
+          <view class="btn" @click="closeTips = false">
+            点错了
+          </view>
+          <view class="btn submit" @click="doCancel">
+            确定取消
+          </view>
+        </view>
+      </view>
+    </tui-modal>
 	</view>
 </template>
 
 <script>
+  import tuiModal from "@/components/modal/modal";
 	const NET = require('../../utils/request')
 	const API = require('../../config/api')
 	// #ifdef H5
 	var jweixin = require('jweixin-module')
 	// #endif
 	export default {
+    components: {
+      tuiModal
+    },
 		data() {
 			return {
 				type: 0,
@@ -195,7 +218,11 @@
 				fenqiDisabledList: [true, true, true],
 				huabeiChargeType: 1,
 				huabeiFeeRateList: [0, 0, 0],
-				alipayInfo: {}
+				alipayInfo: {},
+        ifEmpty: false,
+        closeTips: false,
+        currentOrderId: null,
+        currentIndex: null
 			}
 		},
 		onLoad(options) {
@@ -254,6 +281,7 @@
 				this.orderState = this.tabList[index].number
 				this.page = 1
 				this.list = []
+        this.ifEmpty = false
 				this.getListData()
 			},
 			// 订单列表数据
@@ -262,6 +290,7 @@
 					this.orderState = ''
 				}
 				uni.showLoading({
+          mask: true,
 					title: '加载中...',
 				})
 				NET.request(API.FindOrderList, {
@@ -276,41 +305,38 @@
 					uni.hideLoading()
 					this.listTotal = res.data.total
 					this.list = this.list.concat(res.data.list)
+          if (this.list.length === 0) {
+            this.ifEmpty = true
+          }
 				}).catch(res => {
 					uni.hideLoading()
 				})
 			},
 			cancelOrder(orderId, index) {
-				uni.showModal({
-					title: '温馨提示',
-					content: '您确定要取消该订单吗？',
-					confirmText: '确定取消',
-					cancelText: '点错了',
-					success: res => {
-						if (res.confirm) {
-							this.doCancel(orderId, index)
-						} else if (res.cancel) {
-							console.log('用户点击取消')
-						}
-					}
-				})
+        this.currentOrderId = orderId
+        this.currentIndex = index
+        this.closeTips = true
 			},
-			doCancel(orderId, index) {
+			doCancel() {
+        this.closeTips = false
 				uni.showLoading({
+          mask: true,
 					title: '提交中...',
 				})
 				NET.request(API.CancelOrder, {
-					orderId: orderId
+					orderId: this.currentOrderId
 				}, 'POST').then(res => {
 					uni.hideLoading()
 					uni.showToast({
 						title: '取消成功',
 					})
 					setTimeout(() => {
-						this.type = 0
-						this.orderState = 0
+						// this.type = 0
+						// this.orderState = 0
 						this.page = 1
 						this.list = []
+            this.currentOrderId = null
+            this.currentIndex = null
 						this.getListData()
 					}, 1500);
 
@@ -384,8 +410,8 @@
 						title: '删除成功',
 					})
 					setTimeout(() => {
-						this.type = 0;
-						this.orderState = 0
+						// this.type = 0;
+						// this.orderState = 0
 						this.page = 1
 						this.list = []
 						this.getListData()
@@ -1065,32 +1091,47 @@
 	}
 
 	.period-radio {
-		margin: 30upx;
-		padding-right: 100upx;
-		width: 95%;
-		border-bottom: 1px solid #EFEFEF;
+    margin: 30 upx;
+    padding-right: 100 upx;
+    width: 95%;
+    border-bottom: 1px solid #EFEFEF;
 
-		.period-amount {
-			display: inline-block;
+    .period-amount {
+      display: inline-block;
 
-			.period-each-charge {
-				display: inline-block;
-				margin-top: 12upx;
-				margin-left: 6upx;
-				font-size: 26upx;
-				color: #b7b7b7;
-				margin-bottom: 13upx;
-			}
-		}
+      .period-each-charge {
+        display: inline-block;
+        margin-top: 12 upx;
+        margin-left: 6 upx;
+        font-size: 26 upx;
+        color: #b7b7b7;
+        margin-bottom: 13 upx;
+      }
+    }
 
-		.period-each {
-			display: block;
-		}
+    .period-each {
+      display: block;
+    }
 
-		.period-type-radio-item {
-			float: right;
-		}
-	}
+    .period-type-radio-item {
+      float: right;
+    }
+  }
+  .Put-box1 {
+    .btn {
+      text-align:center;
+      margin-top:40rpx;
+      border: 2rpx solid #333333;
+      height: 80rpx;
+      line-height: 80rpx;
+      width: 240rpx;
+      color: #333333;
+    }
+    .submit {
+      background-color: #333333;
+      color: #FFEBC4;
+    }
+  }
 </style>
 <style scoped>
 	.container /deep/ .u-tab-item {

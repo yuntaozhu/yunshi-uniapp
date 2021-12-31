@@ -35,7 +35,11 @@ module.exports = {
 	WxAppLogin: WX_API_BASE + '/app/wxAppLogin', // APP微信登录
 
 
-
+	// 查询直播间列表
+	LiveRoomes: WX_API_BASE + '/canvas/selectLiveList',
+	SubScribeLive: WX_API_BASE + '/live/subscribeLive',
+	// 小程序客服查询
+	CustomerService: WX_API_BASE + '/kf/getAppletKf',
 
 
 	//分类
@@ -120,9 +124,11 @@ module.exports = {
 	SelectedCart: WX_API_BASE + '/cart/selected', //  选中商品
 	UpdateSkuCart: WX_API_BASE + '/cart/updateSku', //  购物车更换商品规格
 
-
 	//优惠券
+	getCoupons: WX_API_BASE + '/canvas/getCoupons', // 优惠券查询
 	ReceiveCoupon: WX_API_BASE + '/coupon/takeCoupon', //  领取优惠券
+	buildParam4Plug: WX_API_BASE + '/coupon/buildParam4Plug', //  领取优惠券
+
 
 	//分销中心
 	FindSaleStoreList: WX_API_BASE + '/distributor/getDistributorAll', //  分销中心列表查询
@@ -146,6 +152,7 @@ module.exports = {
 	CancelReturnGoods: WX_API_BASE + '/after/returnGoods', //  撤销退货
 	ShippingCompany: WX_API_BASE + '/order/getExpressSelect', //  选择快递公司查询
 	SendReturnGoods: WX_API_BASE + '/order/returnExpress', //  填写退货物流单
+	deleteAfter: WX_API_BASE + '/after/deleteAfter', //  删除售后记录
 
 	//申请分销员
 	Apply: WX_API_BASE + '/distributor/addDistributor', //  申请分销员
@@ -230,5 +237,22 @@ module.exports = {
 	selectProductListByPriceId: WX_API_BASE + '/product/selectProductListByPriceId', // 捆绑商品查询
 	// queryProductListBySession:				 WX_API_BASE + '/platform-seckill/queryProductListBySession' // 根据场次时间查询商品列表 /order/getOrderPolite
 	// 支付有礼
-	getOrderPolite: WX_API_BASE + '/order/getOrderPolite' // 支付有礼
+	getOrderPolite: WX_API_BASE + '/order/getOrderPolite', // 支付有礼
+	// 积分签到
+	creditSignIn: WX_API_BASE + '/credit/signIn', // 积分签到
+	exchangeCoupon: WX_API_BASE + '/credit/exchangeCoupon', // 积分兑换优惠券
+	selectByMonth: WX_API_BASE + '/credit/selectByMonth', // 根据月份查询签到记录
+	selectCreditCouponList: WX_API_BASE + '/credit/selectCreditCouponList', // 查询可以积分兑换的优惠券
+	selectCreditRecord: WX_API_BASE + '/credit/selectCreditRecord', // 查询积分记录
+
+	// 首页广告
+	GetAd: WX_API_BASE + '/advert/selectByCondition', //  获取首页广告
+	adClose: WX_API_BASE + '/advert/closeAdvert', //  关闭首页广告
+	takeBatchCoupon: WX_API_BASE + '/coupon/takeBatchCoupon', //  批量领取优惠券
+
+	// 渠道优惠券
+	getChannelCoupon: WX_API_BASE + '/coupon/getChannelCouponDetail', // 获取渠道优惠券
+	getChannelProduct: WX_API_BASE + '/credit/signIn', // 获取渠道优惠券推荐产品
+	getRandomProduct: WX_API_BASE + '/product/getRandomSortProduct', // 查询随机排序的商品
+
 }

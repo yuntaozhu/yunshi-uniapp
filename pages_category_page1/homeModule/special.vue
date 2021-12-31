@@ -69,6 +69,7 @@
 			getSubjectDetailByKeyList() {
 				let _this = this
 				uni.showLoading({
+          mask: true,
 					title: '加载中...'
 				})
 				NET.request(API.SubjectWithProduct + this.key, {

@@ -24,7 +24,7 @@
 					<view class="user-logoin-title" v-else>{{infoitem.phone}}</view>
 					<view class="experience flex-items" @click="goToMemberCenter">
 						<label>成长值</label>
-						<view class="experienceValue">{{useritem.growth}} / {{useritem.nextLevelGrowth}}</view>
+						<view class="experienceValue">{{useritem.growth || 0}} / {{useritem.nextLevelGrowth || 0}}</view>
 					</view>
 				</view>
 				<view class="notice" @click="toMessage">
@@ -125,6 +125,31 @@
 					<image class="item-btn-icon" src="../../../static/img/user/kaquan.png" mode="widthFix"></image>
 					<view class="item-btn-text">银行卡</view>
 				</view>
+        <view class="item-btn" @click="goIntegral">
+          <image class="item-btn-icon" src="../../../static/img/user/myIntegral.png" mode="widthFix"></image>
+          <view class="item-btn-text">我的积分</view>
+        </view>
+        <view class="item-btn" @click="goSign">
+          <image class="item-btn-icon" src="../../../static/img/user/signIcon.png" mode="widthFix"></image>
+          <view class="item-btn-text">签到</view>
+        </view>
+        <view class="item-btn" @click="goCouponList">
+          <image class="item-btn-icon" src="../../../static/img/user/userCouponIcon.png" mode="widthFix"></image>
+          <view class="item-btn-text">优惠券</view>
+        </view>
+				<!-- <view class="item-btn">
+						<image class="item-btn-icon" src="../../../static/img/user/service.png" mode="widthFix"></image>
+						<view class="item-btn-text">平台客服</view>
+					</view> -->
+				<button open-type="contact" class="item-btn btnNone">
+					<image class="item-btn-icon" src="../../../static/img/user/service.png" mode="widthFix"></image>
+					<view class="item-btn-text">平台客服</view>
+				</button>
+
+				<!-- <view class="item-btn" @click="toSuccess">
+          <image class="item-btn-icon" src="../../../static/img/user/userCouponIcon.png" mode="widthFix"></image>
+          <view class="item-btn-text">成功测试</view>
+        </view> -->
 <!--        <view class="item-btn" @click="goWxShop">-->
 <!--          <image class="item-btn-icon" src="../../../static/img/user/kaquan.png" mode="widthFix"></image>-->
 <!--          <view class="item-btn-text">测试</view>-->
@@ -147,7 +172,10 @@
 			return {
 				item: {},
 				infoitem: {},
-				useritem: {}
+				useritem: {},
+				isLoading: false,
+				corpId: null,
+				serviceURL: null,
 			}
 		},
 		onLoad() {},
@@ -164,6 +192,13 @@
       //     url: `plugin-private://wxf0713a10bbae8732/pages/productDetail/productDetail?productId=59656518`,
       //   })
       // },
+			// 测试
+			// toSuccess() {
+			// 	uni.navigateTo({
+			// 		url: '../../../pages_category_page1/goodsModule/evaSuccessful'
+			// 		// url: '../../../pages_category_page1/orderModule/paySuccessful'
+			// 	})
+			// },
 			toMessage() {
 				if (JSON.stringify(this.item) == '{}') {
 					uni.navigateTo({
@@ -283,19 +318,18 @@
 				})
 				// #endif
 				// #ifdef MP-WEIXIN
-				console.log('wx test')
-				var url = API.SettledMerchantPrefix + `/#/?username=${username}&user=${token}`
+				var url = API.SettledMerchantPrefix
 				uni.navigateTo({
-					url: `../../../pages_category_page1/linkOthers/index?url=${url}`
+					url: `../../../pages_category_page1/linkOthers/index?url=${url}&username=${username}&user=${token}`
 					// 此处的链接为小程序上面新建的webview页面路径，参数url为要跳转外链的地址
 					// url: '../../../pages_category_page1/linkOthers/index?url=' + encodeURIComponent(url)
 					// url:'../../../pages_category_page2/userModule/coupon'
 				})
 				// #endif
 				// #ifdef MP-ALIPAY
-				var url = API.SettledMerchantPrefix + `/#/?username=${username}&user=${token}`
+				var url = API.SettledMerchantPrefix
 				uni.navigateTo({
-					url: `../../../pages_category_page1/linkOthers/index?url=${url}`
+          url: `../../../pages_category_page1/linkOthers/index?url=${url}&username=${username}&user=${token}`
 					// 此处的链接为小程序上面新建的webview页面路径，参数url为要跳转外链的地址
 					// url: '../../../pages_category_page1/linkOthers/index?url=' + encodeURIComponent(url)
 					// url:'../../../pages_category_page2/userModule/coupon'
@@ -347,7 +381,7 @@
 					})
 				} else {
 					uni.navigateTo({
-						url: '../../../pages_category_page1/orderModule/afterSale'
+						url: '../../../pages_category_page2/orderModule/afterSale'
 					})
 				}
 			},
@@ -363,6 +397,41 @@
 					})
 				}
 			},
+      // 我的积分
+      goIntegral() {
+        if (JSON.stringify(this.item) == '{}') {
+          uni.navigateTo({
+            url: '../../../pages_category_page2/userModule/login'
+          })
+        } else {
+          uni.navigateTo({
+            url: '../../../pages_category_page1/integral/index'
+          })
+        }
+      },
+      // 签到
+      goSign() {
+        if (JSON.stringify(this.item) == '{}') {
+          uni.navigateTo({
+            url: '../../../pages_category_page2/userModule/login'
+          })
+        } else {
+          uni.navigateTo({
+            url: '../../../pages_category_page1/integral/sign'
+          })
+        }
+      },
+      goCouponList() {
+        if (JSON.stringify(this.item) == '{}') {
+          uni.navigateTo({
+            url: '../../../pages_category_page2/userModule/login'
+          })
+        } else {
+          uni.navigateTo({
+            url: '../../../pages_category_page1/coupon/list'
+          })````
+        }
+      },
 			//判断是否是分销员
 			getApplyState() {
 				NET.request(API.HasApply, {
@@ -384,7 +453,7 @@
 						url: '../../../pages_category_page1/orderModule/index?type=' + type
 					})
 				}
-			}
+			},
 		}
 	}
 </script>
@@ -511,7 +580,7 @@
 
 			.order-box {
 				width: 690upx;
-				height: 196upx;
+				height: 196upx !important;
 				background: rgba(255, 255, 255, 1);
 				box-shadow: 0px 0px 10upx 0px rgba(51, 51, 51, 0.1);
 				display: flex;
@@ -566,7 +635,7 @@
 
 				.item-btn-icon {
 					width: 90upx;
-					height: 90upx;
+					height: 90upx !important;
 				}
 
 				.item-btn-text {
@@ -594,6 +663,14 @@
 					height: 24upx;
 				}
 
+			}
+			.btnNone{
+				margin: 0;
+				padding: 0;
+				line-height: normal;
+				&::after{
+					display: none;
+				}
 			}
 
 			.mt20 {

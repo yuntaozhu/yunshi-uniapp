@@ -2,30 +2,30 @@
 	<!-- 编辑/添加地址 -->
 	<view class="container flex-center flex-column">
     <!-- #ifdef MP-WEIXIN -->
-    <view class="wxAddress flex-items flex-end" v-if="type == 1">
-      <view class="wxBtnBox flex-items" @click="addAddressWx">
-        <image class="" src="../../static/images/withdraw.png"></image>
-      </view>
-    </view>
+<!--    <view class="wxAddress flex-items flex-end" v-if="type == 1">-->
+<!--      <view class="wxBtnBox flex-items" @click="addAddressWx">-->
+<!--        <image class="" src="../../static/images/withdraw.png"></image>-->
+<!--      </view>-->
+<!--    </view>-->
     <!-- #endif -->
 		<view class="addressBack-box">
 			<view class="consignee-box bor-line-F7F7F7">
-				<input v-model="username" class="fs28"  placeholder-class="consignee" placeholder="收货人" />
+				<input v-model="addressData.username" class="fs28"  placeholder-class="consignee" placeholder="收货人" />
 			</view>
 			<view class="iphoneNum-box bor-line-F7F7F7">
-				<input type="number" v-model="phone" class="fs28" placeholder-class="iphoneNum" placeholder="手机号码" />
+				<input type="number" v-model="addressData.phone" class="fs28" placeholder-class="iphoneNum" placeholder="手机号码" />
 			</view>
 			<view @click="locationClick" class="location-box bor-line-F7F7F7 flex-row-plus flex-sp-between flex-items">
 				<view class="fs28 location">所在地</view>
 				<view class="locationBox">
 <!--					<city-select v-model="locationShowFalg" @city-change="cityChange"></city-select>-->
-          <u-picker-cere mode="region" v-model="locationShowFalg" @confirm="cityChange" :default-region='defaultRegion' title="所在地"></u-picker-cere>
-					<text v-model="ssqText">{{ssqText}}</text>
+          <u-picker-cere mode="region" v-model="locationShowFalg" @confirm="cityChange" :default-region='addressData.defaultRegion' title="所在地"></u-picker-cere>
+					<text v-model="addressData.ssqText">{{addressData.ssqText}}</text>
 					<image class="arrow mar-left-20" src="../../static/images/greyArrow.png"></image>
 				</view>
 			</view>
 			<view class="detailAddress-box">
-				<input class="fs28" v-model="address" placeholder-class="detailAddress" placeholder="详细地址：如道路、门牌号、小区、楼栋号、单元等" />
+				<input class="fs28" v-model="addressData.address" placeholder-class="detailAddress" placeholder="详细地址：如道路、门牌号、小区、楼栋号、单元等" />
 			</view>
 		</view>
 		<view class="addressTagBack-box">
@@ -38,14 +38,14 @@
 			</view>
 			<view class="defaultState-box flex-row-plus flex-sp-between flex-items">
 				<view class="fs28 defaultState">设为默认地址</view>
-				<u-switch v-model="isDefault" active-color="#C5AA7B" inactive-color="#eee"></u-switch>
+				<u-switch v-model="ifDefault" active-color="#C5AA7B" inactive-color="#eee"></u-switch>
 			</view>
 		</view>
 		<view class="deleteAddress-box" @click="delAddress" v-if="type == 2">
 			<text class="font-color-C5AA7B">删除收货地址</text>
 		</view>
 		<view class="saveAddress-box">
-			<view class="saveAddress" v-if="type == 1" @click="addAddressClick">保存</view>
+			<view class="saveAddress" v-if="type == 1 || type == 3" @click="addAddressClick">保存</view>
 			<view class="saveAddress" v-else @click="saveAddressClick">保存</view>
 		</view>
 		<!-- 所在地弹窗 -->
@@ -95,7 +95,7 @@ const API = require('../../config/api')
 				ssqText:'',
 				address:'',
 				tag:'',
-				isDefault:false,
+				ifDefault:false,
 				province:'',
 				city:'',
 				area:'',
@@ -103,7 +103,16 @@ const API = require('../../config/api')
 				ordertype:0,
 				editAddress:{},
         addressTagIndex: 0,
-        defaultRegion: []
+        defaultRegion: [],
+        addressData: {
+          username: '',
+          phone: '',
+          ssqText: '',
+          address: '',
+          defaultRegion: [],
+          city:'',
+          province:'',
+        }
 			}
 		},
 		onLoad(options) {
@@ -112,58 +121,56 @@ const API = require('../../config/api')
 				this.ordertype = 1
 			}
 			let receiveId = options.receiveId
+      this.id = receiveId
 			if(this.type == 2){
         uni.showLoading({
+          mask: true,
           title: '请稍后...',
         })
         NET.request(API.receiveGetInfo,{receiveId:receiveId},"GET").then(res => {
           this.editAddress = res.data
-          this.username = this.editAddress.receiveName
-          this.phone = this.editAddress.receivePhone
-          this.ssqText = this.editAddress.receiveAdress
-          this.address = this.editAddress.address
+          this.addressData.username = this.editAddress.receiveName
+          this.addressData.phone = this.editAddress.receivePhone
+          this.addressData.ssqText = this.editAddress.receiveAdress
+          this.addressData.address = this.editAddress.address
           this.tag = this.editAddress.label
           for(let i=0;i<this.addressTagList.length;i++){
             if(this.addressTagList[i].label === this.tag){
               this.addressTagIndex = i
             }
           }
-          this.isDefault = this.editAddress.defult
-          this.defaultRegion = this.ssqText.split("-")
-          this.province = this.defaultRegion[0]
-          this.city = this.defaultRegion[1]
-          this.area = this.defaultRegion[2]
-          this.id = this.editAddress.receiveId
+          this.ifDefault = this.editAddress.defult
+          this.addressData.defaultRegion = this.ssqText.split("-")
+          this.addressData.province = this.defaultRegion[0]
+          this.addressData.city = this.defaultRegion[1]
+          this.addressData.area = this.defaultRegion[2]
+          this.addressData.id = this.editAddress.receiveId
           uni.hideLoading()
         }).catch(res => {
 
         })
-        // this.editAddress = JSON.parse(uni.getStorageSync('editAddress')) receiveGetInfo
-        // if(Object.keys(this.editAddress).length > 0){
-        //   this.username = this.editAddress.receiveName
-        //   this.phone = this.editAddress.receivePhone
-        //   this.ssqText = this.editAddress.receiveAdress
-        //   this.address = this.editAddress.address
-        //   this.tag = this.editAddress.label
-        //   this.isDefault = this.editAddress.defult
-        //   let ssqarr = this.ssqText.split("-")
-        //   this.province = ssqarr[0]
-        //   this.city = ssqarr[1]
-        //   this.area = ssqarr[2]
-        //   this.id = this.editAddress.receiveId
-        // }
-
 			}
+      if (this.type == 3) {
+        let obj = JSON.parse(options.wxAddressData)
+        this.addressData = obj
+        // this.username = obj.username
+        // this.phone = obj.phone
+        // this.ssqText =  obj.ssqText
+        // this.defaultRegion = obj.defaultRegion
+        // this.address = obj.address
+        // this.province = obj.provinceName
+        // this.city = obj.cityName
+      }
 			if(this.editAddress != ''){
 				uni.removeStorageSync('editAddress')
 			}
 		},
 		methods: {
 			cityChange(e) {
-				this.ssqText = e.province.label + '-' + e.city.label + '-' + e.area.label;
-				this.province = e.province.label
-				this.city = e.city.label
-				this.area = e.area.label
+				this.addressData.ssqText = e.province.label + '-' + e.city.label + '-' + e.area.label;
+				this.addressData.province = e.province.label
+				this.addressData.city = e.city.label
+				this.addressData.area = e.area.label
 			},
 			locationClick(){
 				this.locationShowFalg = true
@@ -183,31 +190,31 @@ const API = require('../../config/api')
 			//编辑地址
 			saveAddressClick(){
 				let phoneCodeVerification = /^[1][3-9][0-9]{9}$/;
-				if(this.username==''){
+				if(this.addressData.username==''){
 					uni.showToast({
 					    title: '请输入收货人！',
 					    duration: 2000,
 						icon:'none'
 					});
-				}else if(this.phone==''){
+				}else if(this.addressData.phone ==''){
 					uni.showToast({
 					    title: '请输入手机号！',
 					    duration: 2000,
 						icon:'none'
 					});
-				}else if(!phoneCodeVerification.test(this.phone)){
+				}else if(!phoneCodeVerification.test(this.addressData.phone)){
 					uni.showToast({
 						title: '请输入正确的手机号！',
 						duration: 2000,
 						icon:'none'
 					});
-				}else if(this.province==''||this.city==''||this.city==''){
+				}else if(this.addressData.province==''||this.addressData.city==''){
 					uni.showToast({
 					    title: '所在地不能为空！',
 					    duration: 2000,
 						icon:'none'
 					});
-				}else if(this.address==''){
+				}else if(this.addressData.address==''){
 					uni.showToast({
 					    title: '请输入详细地址！',
 					    duration: 2000,
@@ -216,12 +223,12 @@ const API = require('../../config/api')
 				}else{
 					NET.request(API.AddresUpdate,{
 						receiveId: this.id,
-						receiveName: this.username,
-						receivePhone: this.phone,
-						receiveAdress: this.ssqText,
-						address:this.address,
+						receiveName: this.addressData.username,
+						receivePhone: this.addressData.phone,
+						receiveAdress: this.addressData.ssqText,
+						address:this.addressData.address,
 						label:this.tag,
-						defult:this.isDefault
+						defult:this.ifDefault
 					},'POST').then(res => {
 						uni.navigateBack({
 							delta: 1
@@ -236,31 +243,31 @@ const API = require('../../config/api')
 			//新增地址
 			addAddressClick(){
 				let phoneCodeVerification = /^[1][3-9][0-9]{9}$/;
-				if(this.username==''){
+				if(this.addressData.username==''){
 					uni.showToast({
 					    title: '请输入收货人！',
 					    duration: 2000,
 						icon:'none'
 					});
-				}else if(this.phone==''){
+				}else if(this.addressData.phone==''){
 					uni.showToast({
 					    title: '请输入手机号！',
 					    duration: 2000,
 						icon:'none'
 					});
-				}else if(!phoneCodeVerification.test(this.phone)){
+				}else if(!phoneCodeVerification.test(this.addressData.phone)){
 				 	uni.showToast({
 				 	    title: '请输入正确的手机号！',
 				 	    duration: 2000,
 				 		icon:'none'
 				 	});
-				 }else if(this.province==''||this.city==''||this.city==''){
+				 }else if(this.addressData.province==''||this.addressData.city==''){
 					uni.showToast({
 					    title: '所在地不能为空！',
 					    duration: 2000,
 						icon:'none'
 					});
-				}else if(this.address==''){
+				}else if(this.addressData.address==''){
 					uni.showToast({
 					    title: '请输入详细地址！',
 					    duration: 2000,
@@ -269,12 +276,12 @@ const API = require('../../config/api')
 				}else{
 					NET.request(API.AddresAdd,
 					{
-						receiveName: this.username,
-						receivePhone: this.phone,
-						receiveAdress: this.ssqText,
-						address:this.address,
+						receiveName: this.addressData.username,
+						receivePhone: this.addressData.phone,
+						receiveAdress: this.addressData.ssqText,
+						address:this.addressData.address,
 						label:this.tag,
-						defult:this.isDefault
+            ifDefault: this.ifDefault ? 1 : 0
 					},'POST').then(res => {
 						if(this.ordertype == 1){
 							uni.setStorageSync('receiveItem', res.data)
@@ -291,20 +298,20 @@ const API = require('../../config/api')
 					})
 				}
 			},
-      addAddressWx() {
-        let self = this
-        uni.chooseAddress({
-          success(res){
-            self.username = res.userName
-            self.phone = res.telNumber
-            self.ssqText =  `${res.provinceName}-${res.cityName}-${res.countyName}`
-            self.defaultRegion = self.ssqText.split("-")
-            self.address = res.detailInfo
-            self.province = res.provinceName
-            self.city = res.cityName
-          }
-        })
-      },
+      // addAddressWx() {
+      //   let self = this
+      //   uni.chooseAddress({
+      //     success(res){
+      //       self.username = res.userName
+      //       self.phone = res.telNumber
+      //       self.ssqText =  `${res.provinceName}-${res.cityName}-${res.countyName}`
+      //       self.defaultRegion = self.ssqText.split("-")
+      //       self.address = res.detailInfo
+      //       self.province = res.provinceName
+      //       self.city = res.cityName
+      //     }
+      //   })
+      // },
 			//删除地址
 			delAddress(){
 				uni.showModal({
@@ -322,7 +329,7 @@ const API = require('../../config/api')
 			},
 			subm(){
 				NET.request(API.AddresDelete,{
-					receiveId:this.id
+					receiveId: this.id
 				},'POST').then(res => {
 					if(res.code === "200"){
 						uni.navigateBack({

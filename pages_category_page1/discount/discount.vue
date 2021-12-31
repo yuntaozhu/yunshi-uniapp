@@ -282,7 +282,7 @@ page {
     .discountBg {
       width: 100%;
       height: 480rpx;
-      background: url("../../static/images/discount.png") no-repeat left top;
+      background: url("https://ceres.zkthink.com/static/images/discount.png") no-repeat left top;
       background-size: contain;
       position: relative;
       .discountInfoBox {

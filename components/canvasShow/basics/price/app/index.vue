@@ -20,7 +20,7 @@
         <a v-show="componentContent.showMore" class="btn-all a-link" @click="jumpCombination(productData)">更多<i class="iconfont icon-arrow-right"></i></a>
       </div>
       <div>
-      <swiper class="swiper pro-box" :indicator-dots="true" :autoplay="true" :display-multiple-items="2">
+      <swiper class="swiper pro-box" :indicator-dots="false" :autoplay="true" :display-multiple-items="2" @change="swiperChange">
         <swiper-item class="pro-item-warp" v-for="(item,index) in productData.composeProducts" :key="index" @click="jumpProductDetail(item)">
           <div class="pro-item-inner">
           <div class="pro-item">
@@ -47,6 +47,10 @@
           </div>
         </swiper-item>
       </swiper>
+        <view class="swiper-dots" v-if="productData.composeProducts && productData.composeProducts.length > 2">
+          <text class="dot" :class="index - swiperCurrent <= 1 && index - swiperCurrent >=0  && 'dot-active'" v-for="(dot, index) in productData.composeProducts.length"
+                :key="index"></text>
+        </view>
       </div>
     </div>
   </div>
@@ -57,23 +61,16 @@
 import {commonMixin} from '../mixin'
 export default {
   mixins: [commonMixin],
-  // data () {
-    // return {
-    //   swiperOption: {
-    //     slidesPerView: 2, // 显示数量
-    //     spaceBetween: 20, // 间隔
-    //     autoplay: false, // 可选选项，自动滑动
-    //     loop: true,
-    //     pagination: {
-    //       el: '.price-pagination'
-    //     },
-    //     navigation: {
-    //       nextEl: '.swiper-button-next',
-    //       prevEl: '.swiper-button-prev'
-    //     }
-    //   }
-    // }
-  // }
+  data () {
+    return {
+      swiperCurrent: 0,
+    }
+  },
+  methods:{
+    swiperChange(e) {
+      this.swiperCurrent = e.detail.current;
+    }
+  }
 }
 </script>
 
@@ -87,6 +84,7 @@ export default {
     box-shadow: 0 20upx 30upx rgba(0, 0, 0, 0.3);
     opacity: 1;
     border-radius: 20upx;
+    position: relative;
   }
   .title{
     display: flex;
@@ -181,18 +179,38 @@ export default {
       }
     }
   }
-  .pagination{
+  //.pagination{
+  //  display: flex;
+  //  justify-content: center;
+  //  ::v-deep .swiper-pagination-bullet{
+  //    width: 24upx;
+  //    height: 4upx;
+  //    background: #fff;
+  //    opacity: 0.5;
+  //    border-radius: 2upx;
+  //    margin: 0 5upx;
+  //  }
+  //  ::v-deep .swiper-pagination-bullet-active{
+  //    opacity: 1;
+  //  }
+  //}
+  .swiper-dots {
     display: flex;
-    justify-content: center;
-    ::v-deep .swiper-pagination-bullet{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 15rpx;
+    z-index: 66;
+    .dot {
       width: 24upx;
       height: 4upx;
       background: #fff;
       opacity: 0.5;
       border-radius: 2upx;
-      margin: 0 5upx;
+      margin: 0 10upx;
     }
-    ::v-deep .swiper-pagination-bullet-active{
+
+    .dot-active {
       opacity: 1;
     }
   }

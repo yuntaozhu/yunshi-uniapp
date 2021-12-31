@@ -142,6 +142,7 @@
 			onGetAuthorize() {
 				const that = this
 				uni.showLoading({
+          mask: true,
 					title: '验证中...',
 				})
 				my.getPhoneNumber({

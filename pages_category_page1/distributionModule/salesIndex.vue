@@ -80,6 +80,7 @@
 		methods: {
 			getSalesMainInfo() {
 				uni.showLoading({
+          mask: true,
 					title: '加载中...'
 				})
 				NET.request(API.QuerySalesMainInfo, {
@@ -135,6 +136,7 @@
 				// #endif
 
 				uni.showLoading({
+          mask: true,
 				  title: '请稍候...'
 				})
 				/* const res = {'data':'https://cereshop.oss-cn-shenzhen.aliyuncs.com/test/2021-06-10/64223b9f0eef41abbb5d4056b9a40e2a08441534-3cbe-47af-8134-fc74635e069f.png'}

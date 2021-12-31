@@ -81,7 +81,7 @@
 		},
 		methods: {
 			searchList(type){
-				wx.showLoading({
+        uni.showLoading({
 				      title: '加载中...',
 				})
 				if(type == 1){

@@ -68,6 +68,7 @@
 		methods: {
 			getStoreProductList() {
 				uni.showLoading({
+          mask: true,
 					title: '加载中...'
 				})
 				NET.request(API.StoreProductList, {
@@ -104,6 +105,7 @@
 				// #endif
 
 				uni.showLoading({
+          mask: true,
 				  title: '请稍候...'
 				})
 				NET.request(API.getSharePic, {

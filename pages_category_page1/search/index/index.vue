@@ -15,8 +15,8 @@
 		</view>
 
 		<!-- 热门搜索 -->
-		<view class="hotSearchBox">
-			<view class="mar-top-30 mar-leftgetList-30" v-if="hotSearchList.length>0">
+		<view class="hotSearchBox tipsBox">
+			<view class="boxTitle mar-leftgetList-30" v-if="hotSearchList.length>0">
 				<label class="fs30 font-color-999 fs-weight-300">热门搜索</label>
 				<image class="seeIcon hotSearchListSee-icon" v-if="isSee" @click="changeHotSearchListIsSee"
 					src="../../../static/img/see.png"></image>
@@ -26,8 +26,8 @@
 			<view>
 				<view class="flex-wrap-1 flex-row" v-if="isSee">
 					<view v-for="(item, index) in hotSearchList" :key="index"
-						class="historySearDel-box mar-top-30 flex-items-plus mar-right-30">
-						<view @click="historyKeyword(item)" class="fs28">{{item}}</view>
+						class="historySearDel-box flex-items-plus mar-right-30">
+						<view class="boxContent" @click="historyKeyword(item)">{{item}}</view>
 					</view>
 				</view>
 				<view v-else class="notSeeContent">当前热门搜索已隐藏</view>
@@ -36,19 +36,22 @@
 		<view class="line" color="#F3F4F5" />
 
 		<!-- 历史搜索 -->
-		<view class="historyBox">
-			<view class="mar-top-30 mar-leftgetList-30" v-if="historyList.length>0">
+		<view class="historyBox tipsBox">
+			<view class="boxTitle mar-leftgetList-30" v-if="historyList.length>0">
 				<label class="fs30 font-color-999 fs-weight-300 ">历史搜索</label>
 				<image class="historyDel-icon" @click="historyDelAll" src="../../../static/img/index/historyDel_icon.png">
 				</image>
 			</view>
 			<view class="historySear-box flex-wrap-1 flex-row">
-				<view v-for="(item, index) in historyList" :key="item.searchId"
-					class="historySearDel-box mar-top-30 flex-items-plus flex-sp-between mar-right-30">
-					<view @click="historyKeyword(item.search)" class="historyText fs28 line1">{{item.search}}</view>
-					<view class="historyIconBox">
-						<label class="font-color-DDD fs22 pad-topbot-10 text-align">|</label>
-						<image class="historySearDel-icon text-align" @click="historyDelOne(item.searchId)"
+				<view
+					v-for="(item, index) in historyList"
+					:key="item.searchId"
+					class="historySearDel-box flex-items-plus flex-sp-between mar-right-30"
+				>
+					<view class="boxContent historyText line1" @click="historyKeyword(item.search)">{{item.search}}</view>
+					<label class="font-color-DDD fs22 pad-topbot-10 text-align">|</label>
+					<view class="historyIconBox" @click="historyDelOne(item.searchId)">
+						<image class="historySearDel-icon text-align"
 							src="../../../static/img/index/historySearDel_icon.png"></image>
 					</view>
 				</view>
@@ -164,104 +167,97 @@
 </script>
 
 <style lang='scss' scoped>
-	input {
-		padding-left: 80upx;
-	}
-
-	.emptyCart-box {
-		margin-top: 70upx;
-
-		.emptyCart-img {
-			width: 270upx;
-			height: 270upx;
-		}
-	}
-
+input {
+	padding-left: 80upx;
+}
+.searchImg-box{
 	.searchImg {
 		width: 36upx;
 		height: 36upx;
 		position: absolute;
 		left: 60upx;
 	}
-
 	.search-box {
 		background-color: #F1F1F1;
 		width: 530upx;
 		height: 66upx;
 	}
-
 	.searchboxPlace {
 		font-size: 26upx;
 		color: #A9A9A9;
 		padding-right: 30upx;
 	}
-
 	.searchClose-icon {
 		width: 30upx;
 		height: 30upx;
 		margin-left: -50upx;
 	}
-
-	.historyDel-icon {
-		width: 30upx;
-		height: 30upx;
-		position: absolute;
-		right: 30upx;
+}
+// 热门搜索
+.hotSearchBox{
+	padding: 0 36upx;
+	.historyText{
+		flex: 1;
 	}
-
-	.historySearDel-box {
-		background-color: #F1F1F1;
-		padding: 10upx 30upx;
-		text-align: center;
-		height: 54upx;
-		line-height: 54upx;
-		overflow: hidden;
+	.hotSearchListSee-icon {
+		height: 24upx;
 	}
-
-	.historySearDel-icon {
-		width: 16upx;
-		height: 16upx;
-	}
-	.hotSearchBox{
-		padding: 0 36upx;
-		
+	.hotSearchListNotSee-icon {
+		height: 36upx;
 	}
 	.seeIcon {
 		width: 40upx;
 		position: absolute;
 		right: 30upx;
 	}
-
-	.hotSearchListSee-icon {
-		height: 24upx;
-	}
-
-	.hotSearchListNotSee-icon {
-		height: 36upx;
-	}
-
 	.notSeeContent {
 		margin-top: 20upx;
 		text-align: center;
 		font-size: 24upx;
 		color: #CCCCCC;
 	}
-	.line{
-		margin: 70upx 30upx;
-		height: 2upx;
-		background: #F3F4F5;
+}
+.line{
+	margin: 70upx 0;
+	height: 2upx;
+	background: #F3F4F5;
+}
+// 历史搜索
+.historyBox{
+	padding: 0 36upx;
+	.historySear-box{
+		width: 100%;
 	}
-	.historyBox{
-		padding: 0 36upx;
-		
-		.historySear-box{
-			width: 100%;
-		}
-	}
-	.historyText{
-		flex: 1;
+	.historyDel-icon {
+		width: 30upx;
+		height: 30upx;
+		position: absolute;
+		right: 30upx;
 	}
 	.historyIconBox{
 		width: 50upx;
+		.historySearDel-icon {
+			width: 16upx;
+			height: 16upx;
+		}
 	}
+}
+.tipsBox{
+	padding: 15rpx 24rpx;
+}
+.boxTitle{
+	margin: 30rpx 0;
+}
+.historySearDel-box {
+	height: 54upx;
+	line-height: 54upx;
+	margin: 15rpx 15rpx;
+	background-color: #F1F1F1;
+	text-align: center;
+	overflow: hidden;
+	.boxContent{
+		font-size: 28rpx;
+		padding: 0 30rpx;
+	}
+}
 </style>

@@ -66,6 +66,10 @@
           </view>
         </view>
       </view>
+      <view v-if="ifEmpty" class="emptyOrder-box flex-items-plus flex-column">
+        <image class="emptyOrder-img" src="../../static/img/bgnull.png"></image>
+        <label class="font-color-999 fs26 mar-top-30">暂无活动商品～</label>
+      </view>
     </view>
   </view>
 </template>
@@ -95,7 +99,8 @@ export default {
       sortIndex: 0,
       discountInfo: {},
       time: '',
-      discountId: ''
+      discountId: '',
+      ifEmpty: false
 		}
 	},
 	onLoad(options) {
@@ -203,6 +208,7 @@ export default {
 		},
 		getDiscountList(){
       uni.showLoading({
+        mask: true,
         title: 'Loading...',
       })
       let param = {
@@ -219,6 +225,9 @@ export default {
 					this.page = this.page
 				}else{
 					this.getDiscount = this.getDiscount.concat(res.data.list)
+          if (this.getDiscount.length === 0) {
+            this.ifEmpty = true
+          }
 				}
 			}).catch(res => {
 				uni.showToast({
@@ -303,7 +312,7 @@ page {
     .discountBg {
       width: 100%;
       height: 480rpx;
-      background: url("../../static/images/discount.png") no-repeat left top;
+      background: url("https://ceres.zkthink.com/static/images/discount.png") no-repeat left top;
       background-size: contain;
       position: relative;
       .discountInfoBox {
@@ -482,7 +491,15 @@ page {
 
 .nav-title {
 }
+.emptyOrder-box {
+  margin-top: 70upx;
 
+  .emptyOrder-img {
+    margin-top: 30%;
+    width: 216upx;
+    height: 152upx;
+  }
+}
 .nav-item.active {
   color: #C5AA7B;
 }

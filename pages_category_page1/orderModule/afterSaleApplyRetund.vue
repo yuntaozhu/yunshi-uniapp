@@ -201,6 +201,7 @@ export default {
         });
       } else {
         uni.showLoading({
+          mask: true,
           title: '正在提交...',
         })
         let skusobjdata = []

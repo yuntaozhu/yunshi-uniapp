@@ -1,8 +1,8 @@
 <template>
   <div class="banner" :class="'terminal' + terminal">
     <swiper class="swiper" :indicator-dots="false" :autoplay="true" :style="{'height':bannerHeight + 'rpx'}" @change="swiperChange">
-      <swiper-item class="banner-item" v-for="(item,index) in bannerList" :key="index" :style="{backgroundImage: 'url('+ item.bannerUrl +')','height':bannerHeight + 'rpx'}"  @click="jumpLink(item.linkObj)">
-        <!--        <div class="a-link" @click="jumpLink(item.linkObj)"><img class="img" :src="item.bannerUrl" v-show="item.bannerUrl" mode="widthFix"></div>-->
+      <swiper-item class="banner-item" v-for="(item,index) in bannerList" :key="index" :style="{backgroundImage: 'url('+ item.bannerUrl +')'}"  @click="jumpLink(item.linkObj)">
+<!--        <div class="a-link" @click="jumpLink(item.linkObj)"><img class="img" :src="item.bannerUrl" v-show="item.bannerUrl" mode="widthFix"></div>-->
       </swiper-item>
     </swiper>
     <view class="swiper-dots" v-if="bannerList && bannerList.length > 1">
@@ -13,43 +13,43 @@
 </template>
 
 <script>
-import {funMixin} from '../config/mixin'
-export default {
-  name: 'cereBanner',
-  mixins: [funMixin],
-  data () {
-    return {
-      bannerHeight: 0,
-      swiperCurrent: 0
-    }
-  },
-  props: {
-    terminal: {
-      type: Number,
-      default: 4
+  import {funMixin} from '../config/mixin'
+  export default {
+    name: 'cereBanner',
+    mixins: [funMixin],
+    data () {
+      return {
+        bannerHeight: 0,
+        swiperCurrent: 0
+      }
     },
-    componentContent: {
-      type: Object
-    }
-  },
-  mounted() {
-    this.bannerHeight = this.componentContent.height
-    this.$forceUpdate() // 刷新轮播图
-  },
-  computed: {
-    bannerList: function () {
-      console.log(this.componentContent)
-      return this.componentContent.bannerData.filter(function (item) {
-        return item.bannerUrl
-      })
-    }
-  },
-  methods:{
-    swiperChange(e) {
-      this.swiperCurrent = e.detail.current;
+    props: {
+      terminal: {
+        type: Number,
+        default: 4
+      },
+      componentContent: {
+        type: Object
+      }
+    },
+    mounted() {
+      this.bannerHeight = this.componentContent.height
+      this.$forceUpdate() // 刷新轮播图
+    },
+    computed: {
+      bannerList: function () {
+        console.log(this.componentContent)
+        return this.componentContent.bannerData.filter(function (item) {
+          return item.bannerUrl
+        })
+      }
+    },
+    methods:{
+      swiperChange(e) {
+        this.swiperCurrent = e.detail.current;
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

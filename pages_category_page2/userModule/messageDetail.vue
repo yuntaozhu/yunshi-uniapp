@@ -65,7 +65,7 @@
 				})
 			},
       getNotice() {
-        wx.showLoading({
+        uni.showLoading({
           title: '加载中...',
         })
         NET.request(API.readNotice, {
