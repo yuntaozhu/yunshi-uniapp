@@ -8,12 +8,12 @@
           天
         </view>
       </view>
-      <view v-if="currentDay === lastDay" class="signState flex-center mar-top-30">
+      <view v-if="currentDay == lastDay" class="signState flex-center mar-top-30">
         <view class="signStateBg flex-items flex-center noSign" @click="test">
           <text class="fs48">已签到</text>
         </view>
       </view>
-      <view v-if="currentDay !== lastDay" class="signState flex-center mar-top-30" @click="signInFn" >
+      <view v-if="currentDay != lastDay" class="signState flex-center mar-top-30" @click="signInFn" >
         <view class="signStateBg flex-items flex-center">
           <text class="fs48">未签到</text>
         </view>
@@ -84,6 +84,7 @@
 
 <script>
 import tuiModal from "@/components/modal/modal";
+import dateUtil from "@/utils/dateUtil"
 const NET = require('../../utils/request')
 const API = require('../../config/api')
 export default {
@@ -97,11 +98,11 @@ export default {
       year: new Date().getFullYear(), // 当前年
       month: new Date().getMonth() + 1, // 当前月
       continuousNum: '', // 连续签到天数
-      currentDay: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${this.formatNum(new Date().getDate())}`,
+      currentDay: dateUtil.formatDate(),
+      currentMonth: dateUtil.formatMonth(),
       lastDay: '',
       weeked: '', // 今天周几
       dayArr: [], // 当前月每日
-      localDate: '', // 今天日期
       day: new Date().getDate(), // 当前日
       weekArr: ['日', '一', '二', '三', '四', '五', '六'], // 每周
       type: 'sign',
@@ -121,8 +122,8 @@ export default {
         mask: true,
         title: '请稍等...',
       })
-      let currentDay = new Date().getFullYear() + '-' + this.formatNum(new Date().getMonth() + 1) + '-' + this.formatNum(new Date().getDate())
-      let selectMoth = this.year + '-' + this.formatNum(this.month)
+      let selectMonth = this.year + '-' + this.formatNum(this.month)
+      const that = this
       NET.request(API.selectByMonth,
         {
           month: `${this.year}-${this.formatNum(this.month)}`
@@ -130,38 +131,42 @@ export default {
         'POST')
         .then(res => {
           uni.hideLoading()
-          let currentMoth  = `${new Date().getFullYear()}-${this.formatNum(new Date().getMonth() + 1)}`
-          this.signList = res.data
+
+          that.signList = res.data
+
           // 初始日期
-          this.initDate()
+          that.initDate()
+
           // 今天日期
-          if (currentMoth === selectMoth) {
-            console.log('currentMoth === selectMoth', currentMoth === selectMoth)
-            this.continuousNum = this.signList[this.signList.length - 1].continueDay || 0;
-            this.lastDay = this.signList[this.signList.length - 1].createTime.substring(0,10);
-            this.localDate = currentDay;
+          if (that.currentMonth === selectMonth) {
+            console.log('currentMoth === selectMonth', that.currentMoth === selectMonth)
+            that.continuousNum = that.signList[that.signList.length - 1].continueDay || 0;
+            that.lastDay = that.signList[that.signList.length - 1].createTime.substring(0,10);
+            console.log('this.lastDay', that.lastDay)
           }
+
           // 今天周几
-          this.weeked = this.weekArr[new Date().getDay()];
+          that.weeked = that.weekArr[new Date().getDay()];
+
           // 签到功能
-          if (this.type != 'calendar') {
-            for (let i in this.dayArr) {
-              this.$set(this.dayArr[i], 'flag', false);
+          if (that.type !== 'calendar') {
+            for (let i in that.dayArr) {
+              that.$set(this.dayArr[i], 'flag', false);
             }
           }
-          this.signList.forEach((item) => {
+
+          that.signList.forEach((item) => {
             item['day'] = parseInt(item.createTime.slice(8, 10))
           })
-          for (let i = 0; i < this.signList.length; i++) {
-            for (let j = 0; j < this.dayArr.length; j++) {
-              if (this.signList[i].day === this.dayArr[j].day && this.dayArr[j].date !== '') {
-                console.log(this.signList[i].day, '-', this.dayArr[j].day)
-                this.dayArr[j].select = 1
+
+          for (let i = 0; i < that.signList.length; i++) {
+            for (let j = 0; j < that.dayArr.length; j++) {
+              if (that.signList[i].day === that.dayArr[j].day && that.dayArr[j].date !== '') {
+                that.dayArr[j].select = 1
               }
             }
           }
           this.ifShow = true
-        console.log(this.dayArr, 'dayArr')
       }).catch(res => {})
     },
     signDate(event) {
@@ -207,7 +212,7 @@ export default {
         // 得到需补充天数
         let value = (new Date(that.year, that.month - 1, i)).getDay();
         // 补充前面空白日期
-        if (i == 1 && value != 0) that.addBefore(value);
+        if (i === 1 && value !== 0) that.addBefore(value);
         // 添加本月日期
         let obj = {};
         obj.date = that.year + '-' + that.formatNum(that.month) + '-' + that.formatNum(i);
@@ -215,7 +220,7 @@ export default {
         obj.select = 0
         that.dayArr.push(obj);
         // 补充后面空白日期
-        if (i == totalDay && value != 6) that.addAfter(value);
+        if (i === totalDay && value !== 6) that.addAfter(value);
       }
     },
     // 补充前面空白日期
@@ -242,7 +247,7 @@ export default {
     // 上一个月
     lastMonth() {
       let that = this;
-      if (that.month == 1) {
+      if (that.month === 1) {
         that.year -= 1;
         that.month = 12;
       } else {
@@ -253,7 +258,7 @@ export default {
     // 下一个月
     nextMonth() {
       let that = this;
-      if (that.month == 12) {
+      if (that.month === 12) {
         that.year += 1;
         that.month = 1;
       } else {

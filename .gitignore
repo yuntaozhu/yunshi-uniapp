@@ -9,16 +9,7 @@
 *.njsproj
 *.sln
 *.hbuilderx
-/unpackage/dist/dev
-/unpackage/dist/static
-/unpackage/dist/build/mp-alipay/
-/unpackage/dist/build/mp-weixin/
-/unpackage/dist/build/app-plus/
-/unpackage/cache/
-/unpackage/cache/apk
-/unpackage/release
-/unpackage/res
-/unpackage/resources
+/unpackage
 /node_modules
 package-lock.json
 
