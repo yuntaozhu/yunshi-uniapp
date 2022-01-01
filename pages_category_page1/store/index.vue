@@ -176,9 +176,11 @@
 			canvasPage
 		},
 		onLoad(options) {
+			// #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
       let menuButtonInfo = uni.getMenuButtonBoundingClientRect()
       this.topHeight = menuButtonInfo.top
       console.log(this.topHeight, menuButtonInfo.top, 'fsfsfsfs')
+			// #endif
       this.isIphone = getApp().globalData.isIphone;
 			if (getApp().globalData.shopShareItem) {
 				const item = getApp().globalData.shopShareItem

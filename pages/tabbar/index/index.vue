@@ -59,9 +59,11 @@
 			}
 		},
 		onShow() {
+            // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
       let menuButtonInfo = uni.getMenuButtonBoundingClientRect()
       this.topHeight = menuButtonInfo.top + 10
       this.height = menuButtonInfo.height
+            // #endif
             this.$refs.adWindow.getAd()
     },
 		onPageScroll(e) {
