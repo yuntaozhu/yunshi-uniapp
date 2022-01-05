@@ -21,8 +21,8 @@
             <view class="r">
               <view class="arrowUp" :class="{activeUp: type == 1}"></view>
               <view class="arrowDown" :class="{activeDown: type == 2}"></view>
-              <!--          <image src="../../static/images/arrowSortUp.png" v-if="type == 1" class="arrow-img padd-t"></image>-->
-              <!--          <image src="../../static/images/arrowSortDown.png" v-if="type == 2" class="arrow-img padd-b"></image>-->
+              <!--          <image src="https://ceres.zkthink.com/static/images/arrowSortUp.png" v-if="type == 1" class="arrow-img padd-t"></image>-->
+              <!--          <image src="https://ceres.zkthink.com/static/images/arrowSortDown.png" v-if="type == 2" class="arrow-img padd-b"></image>-->
             </view>
           </view>
           <view class="nav-item-sort" @click="sortTap(3)">
@@ -30,8 +30,8 @@
             <view class="r">
               <view class="arrowUp" :class="{activeUp: volume == 1}"></view>
               <view class="arrowDown" :class="{activeDown: volume == 2}"></view>
-              <!--          <image src="../../static/images/arrowSortUp.png" v-if="volume == 1" class="arrow-img padd-t"></image>-->
-              <!--          <image src="../../static/images/arrowSortDown.png" v-if="volume == 2" class="arrow-img padd-b"></image>-->
+              <!--          <image src="https://ceres.zkthink.com/static/images/arrowSortUp.png" v-if="volume == 1" class="arrow-img padd-t"></image>-->
+              <!--          <image src="https://ceres.zkthink.com/static/images/arrowSortDown.png" v-if="volume == 2" class="arrow-img padd-b"></image>-->
             </view>
           </view>
         </view>
@@ -49,7 +49,7 @@
               <view class="originalPrice">原价: ¥{{item.originalPrice}}</view>
               <view class="flex-row-plus flex-items-plus">
                 <view class="iconBox">
-                  <image src="../../static/images/memberCenterIcon.png"></image>
+                  <image src="https://ceres.zkthink.com/static/images/memberCenterIcon.png"></image>
                 </view>
                 <view class="flex-row-plus flex-items priceInfo">
                   <label class="fs24">￥</label>
@@ -307,7 +307,7 @@ page {
   .discountBg {
     width: 100%;
     height: 440rpx;
-    background: url("../../static/images/memberCenterBg.png") no-repeat center center;
+    background: url("https://ceres.zkthink.com/static/images/memberCenterBg.png") no-repeat center center;
     background-size: contain;
     position: relative;
   }

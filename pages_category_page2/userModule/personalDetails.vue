@@ -5,7 +5,7 @@
 			<view class="personalHead-box flex-sp-between flex-display flex-items">
 				<label>头像</label>
 				<image class="user-headImg" v-if="item.headImage" :src="item.headImage"></image>
-				<image class="user-headImg" v-else src="../../static/img/user/morentouxiang.png"></image>
+				<image class="user-headImg" v-else src="https://ceres.zkthink.com/static/img/user/morentouxiang.png"></image>
 			</view>
 		</view>
 		<view class="personalBack-box flex-items-plus flex-column">
@@ -13,8 +13,9 @@
 				<label>昵称</label>
 <!--				<label class="font-color-999" v-if="item.name">{{item.name}}</label>-->
 <!--        <label class="font-color-999" v-else>{{item.phone}}</label>-->
-        <input class="nameInput" v-if="name" v-model="name" type="text" placeholder="请输入内容" @blur="changeName(1)" />
-        <input class="nameInput" v-else type="text" v-model="phone" placeholder="请输入内容" @blur="changeName(2)" />
+        <!-- <input class="nameInput" v-if="name" v-model="name" type="text" placeholder="请输入内容" @blur="changeName(1)" /> -->
+        <!-- <input class="nameInput" v-else type="text" v-model="phone" placeholder="请输入内容" @blur="changeName(2)" /> -->
+				<input class="nameInput" v-model="name" type="text" placeholder="请输入内容" @blur="changeName" />
 			</view>
 			<view class="personalHead-box flex-sp-between flex-display flex-items" @click="sexShowClick">
 				<label>性别</label>
@@ -137,50 +138,31 @@
 				}
 			},
       // 修改昵称
-      changeName(type) {
-        if (type === 1) {
-          if (this.item.name !== this.name) {
-            uni.showLoading({
-              mask: true,
-              title: "正在加载中"
-            })
-            NET.request(API.UpdateUser, {
-              name: this.name
-            }, 'POST').then(res => {
-              this.GetUser()
-              uni.hideLoading()
-              uni.showToast({
-                title: '修改成功',
-                icon: "success"
-              })
-            }).catch(res => {
-              uni.hideLoading()
-            })
-          } else {
-            return false
-          }
-        } else {
-          if (this.item.phone !== this.phone) {
-            uni.showLoading({
-              mask: true,
-              title: "正在加载中"
-            })
-            NET.request(API.UpdateUser, {
-              name: this.phone
-            }, 'POST').then(res => {
-              this.GetUser()
-              uni.hideLoading()
-              uni.showToast({
-                title: '修改成功',
-                icon: "success"
-              })
-            }).catch(res => {
-              uni.hideLoading()
-            })
-          } else {
-            return false
-          }
-        }
+      changeName() {
+				const newName = this.name || this.phone
+				if (!newName) {
+					uni.showToast({
+						title: '请输入新的内容',
+						icon: "none"
+					})
+					return false
+				}
+				uni.showLoading({
+					mask: true,
+					title: "正在加载中"
+				})
+				NET.request(API.UpdateUser, {
+					name: newName
+				}, 'POST').then(res => {
+					this.GetUser()
+					uni.hideLoading()
+					uni.showToast({
+						title: '修改成功',
+						icon: "success"
+					})
+				}).catch(res => {
+					uni.hideLoading()
+				})
       },
 			// 提交修改生日
 			ConfirmTime(content) {

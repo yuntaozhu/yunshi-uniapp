@@ -3,9 +3,9 @@
 		<!-- 店铺首页 -->
 		<view class="content" v-if="id">
 			<view class="shop-top" :style="{'padding-top': topHeight + 'px'}">
-				<image src="../../static/images/back_img04.png" class="back" @click="back"></image>
+				<image src="https://ceres.zkthink.com/static/images/back_img04.png" class="back" @click="back"></image>
         <view class="search-btn" @click="searchPro">
-          <image class="search-icon" src="@/static/images/searchImg1.png" mode="widthFix"></image>
+          <image class="search-icon" src="https://ceres.zkthink.com/images/searchImg1.png" mode="widthFix"></image>
           <text class="fs24 font-color-999 mar-left-10">请输入您想要的宝贝</text>
         </view>
 			</view>
@@ -20,7 +20,7 @@
               </view>
 							<!-- #ifdef MP-WEIXIN -->
 							<view v-if="hasService" class="btns flex-column-plus mar-left-10" @click="flyToService">
-								<image class="store-icon" src="../../static/images/service-product-detail.png"></image>
+								<image class="store-icon" src="https://ceres.zkthink.com/static/images/service-product-detail.png"></image>
 								<text>客服</text>
 							</view>
 							<!-- #endif -->
@@ -28,9 +28,9 @@
 					</view>
 					<view class="contentRight">
 						<view class="favorites-box cur-poi" @click="collectToggle">
-              <image v-if="ifCollect === 0" class="store-icon" src="../../static/images/iconShoucang.png">
+              <image v-if="ifCollect === 0" class="store-icon" src="https://ceres.zkthink.com/static/images/iconShoucang.png">
               </image>
-              <image v-else class="store-icon" src="../../static/images/shoucangActive.png"></image>
+              <image v-else class="store-icon" src="https://ceres.zkthink.com/static/images/shoucangActive.png"></image>
               <text class="text">{{ifCollect === 0? '收藏' : '取消'}}</text>
             </view>
 					</view>
@@ -38,12 +38,12 @@
         <view class="distributorBox flex-items flex-sp-between" @click="applyForRecruit">
           <view class="distributor">
             <view class="flex-display flex-items">
-              <image class="item-btn-icon" src="../../static/img/user/fenxiao2.png" mode="widthFix"></image>
+              <image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/fenxiao2.png" mode="widthFix"></image>
               <view>成为分销员</view>
             </view>
           </view>
           <view class="rightArrow">
-            <image src="../../static/images/arrowRight.png"></image>
+            <image src="https://ceres.zkthink.com/static/images/arrowRight.png"></image>
           </view>
         </view>
       </view>
@@ -91,18 +91,18 @@
                   <view class="nav-item-sort" @click="sortTap(2)">
                     <text class="nav-title" :class="{'active' : sortIndex == 2}">价格</text>
                     <view class="r">
-                      <image src="../../static/images/arrowSortUp.png" v-if="type == 1"
+                      <image src="https://ceres.zkthink.com/static/images/arrowSortUp.png" v-if="type == 1"
                              class="arrow-img padd-t"></image>
-                      <image src="../../static/images/arrowSortDown.png" v-if="type == 2"
+                      <image src="https://ceres.zkthink.com/static/images/arrowSortDown.png" v-if="type == 2"
                              class="arrow-img padd-b"></image>
                     </view>
                   </view>
                   <view class="nav-item-sort" @click="sortTap(3)">
                     <text class="nav-title" :class="{'active' : sortIndex == 3}">销量</text>
                     <view class="r">
-                      <image src="../../static/images/arrowSortUp.png" v-if="volume == 1"
+                      <image src="https://ceres.zkthink.com/static/images/arrowSortUp.png" v-if="volume == 1"
                              class="arrow-img padd-t"></image>
-                      <image src="../../static/images/arrowSortDown.png" v-if="volume == 2"
+                      <image src="https://ceres.zkthink.com/static/images/arrowSortDown.png" v-if="volume == 2"
                              class="arrow-img padd-b"></image>
                     </view>
                   </view>
@@ -167,7 +167,7 @@
 				ifCollect: 0,
 				salesId: 0, //分销员id
         fansNumber: '', // 粉丝数
-        topHeight: 0,
+        topHeight: 10,
 				hasService: false,
 				isLoading: false,
 			}
@@ -176,11 +176,11 @@
 			canvasPage
 		},
 		onLoad(options) {
-			// #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
+            // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
       let menuButtonInfo = uni.getMenuButtonBoundingClientRect()
       this.topHeight = menuButtonInfo.top
       console.log(this.topHeight, menuButtonInfo.top, 'fsfsfsfs')
-			// #endif
+            // #endif
       this.isIphone = getApp().globalData.isIphone;
 			if (getApp().globalData.shopShareItem) {
 				const item = getApp().globalData.shopShareItem
@@ -480,7 +480,7 @@
       },
 			// 获取客服url
 			getServiceUrl(id) {
-				if (this.isLoading || !id) { return }
+				if (this.isLoading || !id || id === 'null') { return }
 				const shopids = uni.getStorageSync('service_shopids') || []
 				const corpIds = uni.getStorageSync('service_corpIds') || []
 				const urls = uni.getStorageSync('service_urls') || []

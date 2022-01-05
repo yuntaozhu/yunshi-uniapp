@@ -1,7 +1,7 @@
 <template>
 	<view class="container flex-items-plus flex-column">
 		<view class="login-logoBox">
-			<image class="login-logo" src="../../static/images/loginLogo.png"></image>
+			<image class="login-logo" src="https://ceres.zkthink.com/static/images/loginLogo.png"></image>
 		</view>
 		<view class="loginTitle-text flex-column-plus flex-items font-color-666 fs26">
 			<label>为了给您提供更好的服务</label>

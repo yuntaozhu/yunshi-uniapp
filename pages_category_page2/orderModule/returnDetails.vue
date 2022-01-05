@@ -8,14 +8,14 @@
 						<text class="status">无退货</text>
 						<!-- <text class="label" v-if="deliveryfalse">还剩1天22时30分</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsTime.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsTime.png"></image>-->
 				</view>
 				<view class="status-title-box" v-if='status == 1'>
 					<view class="l">
 						<text class="status">退货审核中</text>
 						<!-- <text class="label" v-if="deliveryfalse">还剩1天22时30分</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsTime.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsTime.png"></image>-->
 				</view>
 				<!--  审核通过-->
 				<view class="status-title-box" v-if="status == 10">
@@ -23,7 +23,7 @@
 						<text class="status">审核通过</text>
 						<!-- <text class="label" v-if="deliveryfalse">2020年4月24日 22:00:00</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsSuccess.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsSuccess.png"></image>-->
 				</view>
 				<!--  审核通过-->
 				<view class="status-title-box" v-if="status == 6">
@@ -31,14 +31,14 @@
 						<text class="status">审核不通过</text>
 						<!-- <text class="label" v-if="deliveryfalse">2020年4月24日 22:00:00</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsSuccess.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsSuccess.png"></image>-->
 				</view>
         <!--  审核中-->
         <view class="status-title-box" v-if="status == 7">
           <view class="l">
             <text class="status">退货中</text>
           </view>
-<!--          <image class='r' src="../../static/images/afterSaleDetailsFalse.png"></image>-->
+<!--          <image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
         </view>
 				<!--  退货中-->
 				<view class="status-title-box" v-if="status == 3">
@@ -46,7 +46,7 @@
 						<text class="status">退货中</text>
 						<!-- <text class="label">2020年4月24日 22:00:00</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsFalse.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
 				</view>
 				<!--  退货完成拒绝退款-->
 				<view class="status-title-box" v-if="status == 8">
@@ -54,7 +54,7 @@
 						<text class="status">退货完成，拒绝退款</text>
 						<!-- <text class="label">2020年4月24日 22:00:00</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsFalse.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
 				</view>
 				<!--  退款成功-->
 				<view class="status-title-box" v-if="status == 4">
@@ -62,7 +62,7 @@
 						<text class="status">已退款</text>
 						<!-- <text class="label" v-if="deliveryfalse">2020年4月24日 22:00:00</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsSuccess.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsSuccess.png"></image>-->
 				</view>
 				<!-- 退款中 -->
 				<view class="status-title-box" v-if="status == 2">
@@ -70,7 +70,7 @@
 						<text class="status">退款中</text>
 						<!-- <text class="label" v-if="deliveryfalse">2020年4月24日 22:00:00</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsSuccess.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsSuccess.png"></image>-->
 				</view>
 				<!-- 退款失败 -->
 				<view class="status-title-box" v-if='status == 5'>
@@ -78,7 +78,7 @@
 						<text class="status">退款失败</text>
 						<!-- <text class="label" v-if="deliveryfalse">还剩1天22时30分</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsTime.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsTime.png"></image>-->
 				</view>
 				<!-- 退款关闭 -->
 				<view class="status-title-box" v-if='status == 9'>
@@ -86,7 +86,7 @@
 						<text class="status">退货关闭</text>
 						<!-- <text class="label" v-if="deliveryfalse">还剩1天22时30分</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsTime.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsTime.png"></image>-->
 				</view>
 			</view>
 
@@ -98,7 +98,7 @@
 			    <view class="address-box">
 			      <view>商家已同意退货申请，请尽早发货。</view>
 			      <view class="address-info">
-			        <image src="../../static/images/expressSiteIcon.png" class="address-img"></image>
+			        <image src="https://ceres.zkthink.com/static/images/expressSiteIcon.png" class="address-img"></image>
 			        <view class="address-info-r">
 			          <view class="item">
 			            <text><text class="title">收货人</text>：</text>

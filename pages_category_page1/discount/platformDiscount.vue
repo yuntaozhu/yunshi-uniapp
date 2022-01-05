@@ -23,8 +23,8 @@
         <view class="r">
           <view class="arrowUp" :class="{activeUp: type == 1}"></view>
           <view class="arrowDown" :class="{activeDown: type == 2}"></view>
-          <!--          <image src="../../static/images/arrowSortUp.png" v-if="type == 1" class="arrow-img padd-t"></image>-->
-          <!--          <image src="../../static/images/arrowSortDown.png" v-if="type == 2" class="arrow-img padd-b"></image>-->
+          <!--          <image src="https://ceres.zkthink.com/static/images/arrowSortUp.png" v-if="type == 1" class="arrow-img padd-t"></image>-->
+          <!--          <image src="https://ceres.zkthink.com/static/images/arrowSortDown.png" v-if="type == 2" class="arrow-img padd-b"></image>-->
         </view>
       </view>
       <view class="nav-item-sort" @click="sortTap(3)">
@@ -32,8 +32,8 @@
         <view class="r">
           <view class="arrowUp" :class="{activeUp: volume == 1}"></view>
           <view class="arrowDown" :class="{activeDown: volume == 2}"></view>
-          <!--          <image src="../../static/images/arrowSortUp.png" v-if="volume == 1" class="arrow-img padd-t"></image>-->
-          <!--          <image src="../../static/images/arrowSortDown.png" v-if="volume == 2" class="arrow-img padd-b"></image>-->
+          <!--          <image src="https://ceres.zkthink.com/static/images/arrowSortUp.png" v-if="volume == 1" class="arrow-img padd-t"></image>-->
+          <!--          <image src="https://ceres.zkthink.com/static/images/arrowSortDown.png" v-if="volume == 2" class="arrow-img padd-b"></image>-->
         </view>
       </view>
     </view>
@@ -50,7 +50,7 @@
           <view class="price">
             <view class="currentPrice flex-row-plus flex-items-plus font-color-FF7800">
               <view class="iconBox">
-                <image src="../../static/images/discountListIcon.png"></image>
+                <image src="https://ceres.zkthink.com/static/images/discountListIcon.png"></image>
               </view>
               <view class="flex-row-plus flex-items priceInfo">
                 <label class="fs24">￥</label>
@@ -67,7 +67,7 @@
         </view>
       </view>
       <view v-if="ifEmpty" class="emptyOrder-box flex-items-plus flex-column">
-        <image class="emptyOrder-img" src="../../static/img/bgnull.png"></image>
+        <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
         <label class="font-color-999 fs26 mar-top-30">暂无活动商品～</label>
       </view>
     </view>
@@ -324,7 +324,7 @@ page {
           height: 99rpx;
           line-height: 91rpx;
           text-align: center;
-          background: url("../../static/images/discountText.png") no-repeat center center;
+          background: url("https://ceres.zkthink.com/static/images/discountText.png") no-repeat center center;
           font-size: 28rpx;
           color: #FFFFFF;
           background-size: contain;

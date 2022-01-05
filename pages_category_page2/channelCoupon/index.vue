@@ -9,7 +9,7 @@
       <view class="info">
         <view class="price-box">
           <view class="icon">
-            <img class="icon-img" src="../../static/img/channelCoupon/icon-coupon.png" alt="" mode="widthFix"/>
+            <img class="icon-img" src="https://ceres.zkthink.com/static/img/channelCoupon/icon-coupon.png" alt="" mode="widthFix"/>
           </view>
           <label class="price">¥{{channelCouponData.price}}</label>
           <label class="original-price">¥{{channelCouponData.originalPrice}}</label>
@@ -34,7 +34,7 @@
     </view>
     <div class="pro-list" v-if="productList && productList.length > 0">
       <div class="title">
-        <img class="title-img" src="../../static/img/channelCoupon/img-title.png" alt="商品推荐" mode="widthFix"/>
+        <img class="title-img" src="https://ceres.zkthink.com/static/img/channelCoupon/img-title.png" alt="商品推荐" mode="widthFix"/>
       </div>
       <div class="product-list">
         <div class="product-list-box" >
@@ -55,12 +55,12 @@
                   <label class="buy-count">{{item.users?item.users: 0}}人付款</label>
                 </div>
                 <div class="price-warp">
-                  <img class="iconImg" v-if="item.activityType == 1" src="../../static/images/groupBuyIcon.png">
-                  <img class="iconImg" v-if="item.activityType == 2" src="../../static/images/spikeIcon.png">
-                  <img class="iconImg" v-if="item.activityType == 4" src="../../static/images/spikeIcon.png">
-                  <img class="iconImg" v-if="item.activityType == 3" src="../../static/images/discountListIcon.png">
-                  <img class="iconImg" v-if="item.activityType == 5" src="../../static/images/discountListIcon.png">
-                  <img class="iconImg" v-if="item.activityType == 8" src="../../static/images/memberCenterIcon.png">
+                  <img class="iconImg" v-if="item.activityType == 1" src="https://ceres.zkthink.com/static/images/groupBuyIcon.png">
+                  <img class="iconImg" v-if="item.activityType == 2" src="https://ceres.zkthink.com/static/images/spikeIcon.png">
+                  <img class="iconImg" v-if="item.activityType == 4" src="https://ceres.zkthink.com/static/images/spikeIcon.png">
+                  <img class="iconImg" v-if="item.activityType == 3" src="https://ceres.zkthink.com/static/images/discountListIcon.png">
+                  <img class="iconImg" v-if="item.activityType == 5" src="https://ceres.zkthink.com/static/images/discountListIcon.png">
+                  <img class="iconImg" v-if="item.activityType == 8" src="https://ceres.zkthink.com/static/images/memberCenterIcon.png">
                   <div class="price">
                     ¥ {{item.price}}
                   </div>
@@ -252,7 +252,7 @@ export default {
     .coupon{
       margin: 32rpx 20rpx;
       height: 140rpx;
-      background: #333333 url("../../static/img/channelCoupon/border-coupon.png") no-repeat right center / auto 140rpx;
+      background: #333333 url("https://ceres.zkthink.com/static/img/channelCoupon/border-coupon.png") no-repeat right center / auto 140rpx;
       display: flex;
       .price{
         position: relative;

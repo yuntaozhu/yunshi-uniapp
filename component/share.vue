@@ -9,20 +9,20 @@
 						<!-- #ifndef MP -->
 						<!-- #ifndef APP -->
 						<view class="li" @click="share('weixin')">
-							<image class="icon" src="../static/images/weixin2x.png"></image>
+							<image class="icon" src="../static/images/share/weixin2x.png"></image>
 							<label class="label">微信</label>
 						</view>
 						<view class="li" @click="share('qq')">
-							<image class="icon" src="../static/images/qq2x.png"></image>
+							<image class="icon" src="../static/images/share/qq2x.png"></image>
 							<label class="label">QQ</label>
 						</view>
 						<view class="li" @click="share('weibo')">
-							<image class="icon" src="../static/images/weibo2x.png"></image>
+							<image class="icon" src="../static/images/share/weibo2x.png"></image>
 							<label class="label">微博</label>
 						</view>
 						<!-- #endif -->
 						<view class="li" @click="share('lianjie')">
-							<image class="icon" src="../static/images/lianjie.png"></image>
+							<image class="icon" src="../static/images/share/lianjie.png"></image>
 							<label class="label">链接</label>
 						</view>
 						<!-- #endif -->
@@ -181,7 +181,7 @@
 		.btn-close{
 			background-color: #fff;
 			padding: 30rpx 0;
-			font-size: 26px;
+			font-size: 26rpx;
 			color: #333;
 		}
 	}

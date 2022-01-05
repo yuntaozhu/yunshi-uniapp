@@ -1,15 +1,15 @@
 <template>
 	<view class="content">
 		<!-- 我的 -->
-		<image class="top-bg" src="../../../static/img/user/topBg.png"></image>
+		<image class="top-bg" src="https://ceres.zkthink.com/static/img/user/topBg.png"></image>
 		<view class="page-content">
 			<view class="user-info-box" @click="gologin" v-if="JSON.stringify(item) =='{}' ">
-				<image class="user-image" src="../../../static/img/user/morentouxiang.png" mode="widthFix"></image>
+				<image class="user-image" src="https://ceres.zkthink.com/static/img/user/morentouxiang.png" mode="widthFix"></image>
 				<view class="user-info">
 					<view class="user-logoin-title">点击登录</view>
 					<view class="user-logoin-lable">登录后享受更多权益~</view>
 				</view>
-				<image class="user-info-right" src="../../../static/img/user/back.png"></image>
+				<image class="user-info-right" src="https://ceres.zkthink.com/static/img/user/back.png"></image>
 				<view class="notice">
 					<view class="messNum" v-if="useritem.notRead>0">{{useritem.notRead}}</view>
 				</view>
@@ -17,7 +17,7 @@
 			<view class="user-info-box" v-else>
 				<image class="user-image" @click="goinfo" v-if="useritem.headImage" :src="useritem.headImage"
 					mode="widthFix" style="border-radius: 50%;"></image>
-				<image class="user-image" v-else src="../../../static/img/user/morentouxiang.png" mode="widthFix">
+				<image class="user-image" v-else src="https://ceres.zkthink.com/static/img/user/morentouxiang.png" mode="widthFix">
 				</image>
 				<view class="user-info">
 					<view class="user-logoin-title" v-if="useritem.name">{{useritem.name}}</view>
@@ -33,7 +33,7 @@
 			</view>
 			<view class="order-box">
 				<view class="order-item" @click="orderTap(1)">
-					<image class="order-item-image" src="../../../static/img/user/daifukuan1.png" mode="widthFix">
+					<image class="order-item-image" src="https://ceres.zkthink.com/static/img/user/daifukuan1.png" mode="widthFix">
 					</image>
 					<view class="order-item-text">待付款</view>
 					<view class="quan" v-if="useritem.waitPayOrderCount>0">
@@ -41,7 +41,7 @@
 					</view>
 				</view>
 				<view class="order-item" @click="orderTap(2)">
-					<image class="order-item-image" src="../../../static/img/user/daifahuo1.png" mode="widthFix">
+					<image class="order-item-image" src="https://ceres.zkthink.com/static/img/user/daifahuo1.png" mode="widthFix">
 					</image>
 					<view class="order-item-text">待发货</view>
 					<view class="quan" v-if="useritem.waitSendOrderCount>0">
@@ -50,7 +50,7 @@
 
 				</view>
 				<view class="order-item" @click="orderTap(3)">
-					<image class="order-item-image" src="../../../static/img/user/daishouhuo.png" mode="widthFix">
+					<image class="order-item-image" src="https://ceres.zkthink.com/static/img/user/daishouhuo.png" mode="widthFix">
 					</image>
 					<view class="order-item-text">待收货</view>
 					<view class="quan" v-if="useritem.waitReceiveOrderCount>0">
@@ -59,99 +59,99 @@
 
 				</view>
 				<view class="order-item" @click="orderTap(0)">
-					<image class="order-item-image" src="../../../static/img/user/dingdan.png" mode="widthFix"></image>
+					<image class="order-item-image" src="https://ceres.zkthink.com/static/img/user/dingdan.png" mode="widthFix"></image>
 					<view class="order-item-text">全部订单</view>
 				</view>
 			</view>
 			<!--			<view class="item-btn mt20" @click="toMessage">-->
-			<!--				<image class="item-btn-icon" src="../../../static/images/mymessageIcon.png" mode="widthFix"></image>-->
+			<!--				<image class="item-btn-icon" src="https://ceres.zkthink.com/static/images/mymessageIcon.png" mode="widthFix"></image>-->
 			<!--				<view class="item-btn-text flex-row-plus flex-items">-->
 			<!--					<label>消息中心</label>-->
 			<!--					<view class="messNum" v-if="useritem.notRead>0">{{useritem.notRead}}</view>-->
 			<!--				</view>-->
-			<!--				<image class="item-btn-right" src="../../../static/img/user/arrow.png" mode="widthFix"></image>-->
+			<!--				<image class="item-btn-right" src="https://ceres.zkthink.com/static/img/user/arrow.png" mode="widthFix"></image>-->
 			<!--			</view>-->
 			<view class="itemBox">
 				<view class="item-btn" @click="toCollection">
-					<image class="item-btn-icon" src="../../../static/img/user/mycollectionIcon.png" mode="widthFix">
+					<image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/mycollectionIcon.png" mode="widthFix">
 					</image>
 					<view class="item-btn-text">我的收藏</view>
 				</view>
 				<view class="item-btn" @click="toQuestion">
-					<image class="item-btn-icon" src="../../../static/img/user/myQuestionIcon.png" mode="widthFix">
+					<image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/myQuestionIcon.png" mode="widthFix">
 					</image>
 					<view class="item-btn-text">我的问答</view>
 				</view>
 				<view class="item-btn" @click="toFootprint">
-					<image class="item-btn-icon" src="../../../static/img/user/myfootprintIcon.png" mode="widthFix">
+					<image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/myfootprintIcon.png" mode="widthFix">
 					</image>
 					<view class="item-btn-text">浏览足迹</view>
 				</view>
 				<view class="item-btn" @click="gouserEvaluate">
-					<image class="item-btn-icon" src="../../../static/img/user/pingjia.png" mode="widthFix"></image>
+					<image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/pingjia.png" mode="widthFix"></image>
 					<view class="item-btn-text">我的评价</view>
 				</view>
 				<view class="item-btn" @click="memberAccountClick">
-					<image class="item-btn-icon" src="../../../static/img/user/account.png" mode="widthFix"></image>
+					<image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/account.png" mode="widthFix"></image>
 					<view class="item-btn-text">我的账户</view>
 				</view>
 				<view class="item-btn" @click="couponClick">
-					<image class="item-btn-icon" src="../../../static/img/user/kaquan.png" mode="widthFix"></image>
+					<image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/kaquan.png" mode="widthFix"></image>
 					<view class="item-btn-text">我的卡券</view>
 				</view>
 				<view class="item-btn" @click="godistribution">
-					<image class="item-btn-icon" src="../../../static/img/user/fenxiao.png" mode="widthFix"></image>
+					<image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/fenxiao.png" mode="widthFix"></image>
 					<view class="item-btn-text">分销中心</view>
 				</view>
 				<view class="item-btn" @click="applySettle">
-					<image class="item-btn-icon" src="../../../static/img/user/Settled.png" mode="widthFix"></image>
+					<image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/Settled.png" mode="widthFix"></image>
 					<view class="item-btn-text">商家入驻</view>
 				</view>
 			</view>
 			<view class="itemBox">
 				<view class="item-btn" @click="addressClick">
-					<image class="item-btn-icon" src="../../../static/img/user/dizhi1.png" mode="widthFix"></image>
+					<image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/dizhi1.png" mode="widthFix"></image>
 					<view class="item-btn-text">地址管理</view>
 				</view>
 				<view class="item-btn" @click="goafterSale">
-					<image class="item-btn-icon" src="../../../static/img/user/shouhou.png" mode="widthFix"></image>
+					<image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/shouhou.png" mode="widthFix"></image>
 					<view class="item-btn-text">我的售后</view>
 				</view>
 				<view class="item-btn" @click="goToMemberCenter">
-					<image class="item-btn-icon" src="../../../static/img/user/VIP.png" mode="widthFix"></image>
+					<image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/VIP.png" mode="widthFix"></image>
 					<view class="item-btn-text">会员中心</view>
 				</view>
 				<view class="item-btn" @click="goBankcard">
-					<image class="item-btn-icon" src="../../../static/img/user/kaquan.png" mode="widthFix"></image>
+					<image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/kaquan.png" mode="widthFix"></image>
 					<view class="item-btn-text">银行卡</view>
 				</view>
         <view class="item-btn" @click="goIntegral">
-          <image class="item-btn-icon" src="../../../static/img/user/myIntegral.png" mode="widthFix"></image>
+          <image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/myIntegral.png" mode="widthFix"></image>
           <view class="item-btn-text">我的积分</view>
         </view>
         <view class="item-btn" @click="goSign">
-          <image class="item-btn-icon" src="../../../static/img/user/signIcon.png" mode="widthFix"></image>
+          <image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/signIcon.png" mode="widthFix"></image>
           <view class="item-btn-text">签到</view>
         </view>
         <view class="item-btn" @click="goCouponList">
-          <image class="item-btn-icon" src="../../../static/img/user/userCouponIcon.png" mode="widthFix"></image>
+          <image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/userCouponIcon.png" mode="widthFix"></image>
           <view class="item-btn-text">优惠券</view>
         </view>
 				<!-- <view class="item-btn">
-						<image class="item-btn-icon" src="../../../static/img/user/service.png" mode="widthFix"></image>
+						<image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/service.png" mode="widthFix"></image>
 						<view class="item-btn-text">平台客服</view>
 					</view> -->
 				<button open-type="contact" class="item-btn btnNone">
-					<image class="item-btn-icon" src="../../../static/img/user/service.png" mode="widthFix"></image>
+					<image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/service.png" mode="widthFix"></image>
 					<view class="item-btn-text">平台客服</view>
 				</button>
 
 				<!-- <view class="item-btn" @click="toSuccess">
-          <image class="item-btn-icon" src="../../../static/img/user/userCouponIcon.png" mode="widthFix"></image>
+          <image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/userCouponIcon.png" mode="widthFix"></image>
           <view class="item-btn-text">成功测试</view>
         </view> -->
 <!--        <view class="item-btn" @click="goWxShop">-->
-<!--          <image class="item-btn-icon" src="../../../static/img/user/kaquan.png" mode="widthFix"></image>-->
+<!--          <image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/kaquan.png" mode="widthFix"></image>-->
 <!--          <view class="item-btn-text">测试</view>-->
 <!--        </view>-->
 			</view>
@@ -507,7 +507,7 @@
 					position: absolute;
 					top: 0;
 					right: 50rpx;
-					background: url("../../../static/images/notice.png") no-repeat center center;
+					background: url("https://ceres.zkthink.com/static/images/notice.png") no-repeat center center;
 					background-size: contain;
 
 					.messNum {

@@ -7,7 +7,7 @@
 			</swiper-item>
 		</swiper>
 <!--		<view class="flex-items-plus mar-top-20">-->
-<!--			<image class="choiceness" src="../../static/images/choiceness.png"></image>-->
+<!--			<image class="choiceness" src="https://ceres.zkthink.com/static/images/choiceness.png"></image>-->
 <!--		</view>-->
 		<view>
 			<!-- {{goodsList.productVOList}} -->
@@ -19,7 +19,7 @@
 					<image class="goodsImg" :src="item.imgs[0]"></image>
 					<view class="mar-left-30">
 						<view class="goodsName-box overflowNoDot">
-							<!-- <image class="img618-cion" src="../../static/images/618.png"></image> -->
+							<!-- <image class="img618-cion" src="https://ceres.zkthink.com/static/images/618.png"></image> -->
 							<label class="goodsName fs26 mar-left-20">{{item.productName}}</label>
 						</view>
 						<view class="priceBuyNum-box mar-top-20">
@@ -30,7 +30,7 @@
 						</view>
 						<view class="flex-display flex-sp-between flex-row mar-top-10 flex-items">
 							<label class="fs22 font-color-999">{{item.storeDTO.storeName}}</label>
-							<image class="arrowImg" src="../../static/img/user/arrow.png"></image>
+							<image class="arrowImg" src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
 						</view>
 					</view>
 				</view>
@@ -39,7 +39,7 @@
 
 		<!-- 为空 -->
 		<view v-else class="emptyOrder-box flex-items-plus flex-column">
-			<image class="emptyOrder-img" src="../../static/img/bgnull.png"></image>
+			<image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
 			<label class="font-color-999 fs26 mar-top-30">专题商品为空哦～</label>
 		</view>
 	</view>

@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<!-- 商品列表 -->
-		<view v-if="list.length>0">
+		<view>
 			<view v-for="(item, index) in list" :key="index" class="goodsDetails-box flex-display flex-column mar-left-30" @click="goodsDateils(item.shopId,item.productId,item.skuId)">
 				<view v-if="item.activityType == 0" class="goodsDetails flex-items-plus flex-row mar-top-30">
 					<image class="goodsImg" :src="item.image"></image>
@@ -17,7 +17,7 @@
 						</view>
 						<view class="flex-display flex-sp-between flex-row mar-top-10 flex-items">
 							<label class="fs22 font-color-999">{{item.shopName}}</label>
-							<image class="arrowImg" src="../../static/img/user/arrow.png"></image>
+							<image class="arrowImg" src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
 						</view>
 					</view>
 				</view>
@@ -42,7 +42,7 @@
 					  </view>
 					  <view class="flex-display flex-sp-between flex-row mar-top-10 flex-items">
 					  	<label class="fs22 font-color-999">{{item.shopName}}</label>
-					  	<image class="arrowImg" src="../../static/img/user/arrow.png"></image>
+					  	<image class="arrowImg" src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
 					  </view>
 				    </view>
 				  </view>
@@ -51,8 +51,8 @@
 		</view>
 
 		<!-- 搜索为空 -->
-		<view v-else class="emptyCart-box flex-items-plus flex-column">
-			<image class="emptyCart-img" src="../../static/images/searchEmpty.png"></image>
+		<view v-if="ifShow" class="emptyCart-box flex-items-plus flex-column">
+			<image class="emptyCart-img" src="https://ceres.zkthink.com/static/images/searchEmpty.png"></image>
 			<label class="font-color-999 fs26 mar-top-30">无可用商品</label>
 		</view>
 	</view>
@@ -69,7 +69,8 @@
         activityId: null,
         shopCouponId: null,
 				list:[],
-				loadingType:0
+				loadingType:0,
+        ifShow: false
 			}
 		},
 		onLoad(option) {
@@ -101,6 +102,9 @@
 						}
 						uni.hideLoading()
 						this.list = this.list.concat(res.data.list)
+            if (this.list.length === 0) {
+              this.ifShow = true
+            }
 					}).catch(res => {
 						uni.hideLoading()
 					})

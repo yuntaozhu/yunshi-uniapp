@@ -9,10 +9,10 @@
 							<view class="top-l" @click="goShop(item.shopId)">
 								<image :src="item.shopLogo" class="shop-img"></image>
 								<text class="shop-name">{{item.shopName}}</text>
-								<image src="../../static/images/arrowRight.png" class="arrow-img"></image>
+								<image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="arrow-img"></image>
 							</view>
 							<view class="top-r">
-								<image src="../../static/images/afterSaleTuikuan.png" class="order-status-img"></image>
+								<image src="https://ceres.zkthink.com/static/images/afterSaleTuikuan.png" class="order-status-img"></image>
 								<text class="order-status">{{item.afterType==1?'退款':'退货'}}</text>
 							</view>
 						</view>
@@ -72,7 +72,7 @@
 					</view>
 				</view>
 				<view v-if="ifEmpty" class="emptyCart-box flex-items-plus flex-column">
-					<image class="emptyCart-img" src="../../static/img/bgnull.png"></image>
+					<image class="emptyCart-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
 					<label class="font-color-999 fs26 mar-top-30">暂无售后记录~</label>
 				</view>
 			</view>

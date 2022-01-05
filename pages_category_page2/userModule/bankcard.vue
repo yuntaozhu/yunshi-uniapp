@@ -16,7 +16,7 @@
 			</view>
 		</view>
 		<view v-if="ifEmpty" class="emptyBankcard-box">
-			<image class="emptyBankcard" src="../../static/img/bgnull.png"></image>
+			<image class="emptyBankcard" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
 			<label>你还没有添加银行卡哦～</label>
 		</view>
 		<view class="addBankcard-box">
@@ -115,7 +115,7 @@
 <style lang="scss">
 	.container{
 		.bankcardList {
-      background: url("../../static/images/addBankBg.png") no-repeat left top;
+      background: url("https://ceres.zkthink.com/static/images/addBankBg.png") no-repeat left top;
       background-size: contain;
 			display: block;
 			padding-bottom: 85px;
@@ -157,7 +157,7 @@
 			.bankcard-detail {
 				width: 100%;
 				height: 334rpx;
-				background: url("../../static/images/accountBg.png") no-repeat left top;
+				background: url("https://ceres.zkthink.com/static/images/accountBg.png") no-repeat left top;
         background-size: contain;
         border-radius: 18rpx;
 				.bankname {

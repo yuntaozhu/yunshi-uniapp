@@ -653,26 +653,26 @@
 		"selectedColor": "#333333",
 		"list": [{
 				"pagePath": "pages/tabbar/index/index",
-				"iconPath": "static/img/tabbar/home.png",
-				"selectedIconPath": "static/img/tabbar/homeactive.png",
+				"iconPath": "static/images/tabbar/home.png",
+				"selectedIconPath": "static/images/tabbar/homeactive.png",
 				"text": "首页"
 			},
 			{
 				"pagePath": "pages/tabbar/category/index",
-				"iconPath": "static/img/tabbar/fenlei.png",
-				"selectedIconPath": "static/img/tabbar/fenleiactive.png",
+				"iconPath": "static/images/tabbar/fenlei.png",
+				"selectedIconPath": "static/images/tabbar/fenleiactive.png",
 				"text": "分类"
 			},
 			{
 				"pagePath": "pages/tabbar/cart/index",
-				"iconPath": "static/img/tabbar/gouwuche.png",
-				"selectedIconPath": "static/img/tabbar/gouwucheactive.png",
+				"iconPath": "static/images/tabbar/gouwuche.png",
+				"selectedIconPath": "static/images/tabbar/gouwucheactive.png",
 				"text": "购物车"
 			},
 			{
 				"pagePath": "pages/tabbar/user/index",
-				"iconPath": "static/img/tabbar/wode.png",
-				"selectedIconPath": "static/img/tabbar/wodeactive.png",
+				"iconPath": "static/images/tabbar/wode.png",
+				"selectedIconPath": "static/images/tabbar/wodeactive.png",
 				"text": "我的",
 				"navigationBarBackgroundColor": "#333333",
 				"backgroundColor": "#333333",

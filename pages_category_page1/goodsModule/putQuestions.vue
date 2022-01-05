@@ -15,8 +15,8 @@
       </view>
       <view class="anonymous">
 		  <view class="flex-row-plus flex-items" @click="changeCheck">
-			 <image mode="aspectFill" v-if="anonymous == true" src="../../static/images/selectActive.png" class="cart-select-img"></image>
-			 <image mode="aspectFill" v-else src="../../static/images/selectEmpty.png" class="cart-select-img"></image>
+			 <image mode="aspectFill" v-if="anonymous == true" src="https://ceres.zkthink.com/static/images/selectActive.png" class="cart-select-img"></image>
+			 <image mode="aspectFill" v-else src="https://ceres.zkthink.com/static/images/selectEmpty.png" class="cart-select-img"></image>
 			 <label>匿名提问</label>
 		  </view>
       </view>

@@ -8,7 +8,7 @@
 			/>
 		</view>
     <view v-else class="emptyCart-box">
-      <image class="emptyCart-img" src="@/static/images/collectEmpty.png"></image>
+      <image class="emptyCart-img" src="https://ceres.zkthink.com/static/images/collectEmpty.png"></image>
       <label class="text font-color-999 fs26 mar-top-30">暂无直播~</label>
     </view>
 	</view>

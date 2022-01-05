@@ -4,7 +4,7 @@
 		<view class="flex-items-plus flex-row search">
       <view class="searchBg">
         <view class="searchImg-box flex-items-plus">
-          <image class="searchImg" src="../../static/img/searchImg.png"></image>
+          <image class="searchImg" src="https://ceres.zkthink.com/static/img/searchImg.png"></image>
           <input class="search-box" v-model="keyWord" placeholder-class="searchboxPlace" placeholder="请输入您想要的宝贝" />
         </view>
         <label class="mar-left-40 fs28" @click="searchList(1)">搜索</label>
@@ -43,12 +43,12 @@
                 <view class="numText" v-if="item.total !=0 && item.activityType !== 0">限量{{item.total}}件</view>
               </view>
 					  <view class="flex-row-plus flex-item mar-top-30">
-              <image class="iconImg" v-if="item.activityType == 1" src="../../static/images/groupBuyIcon.png"></image>
-              <image class="iconImg" v-if="item.activityType == 2" src="../../static/images/spikeIcon.png"></image>
-              <image class="iconImg" v-if="item.activityType == 4" src="../../static/images/spikeIcon.png"></image>
-              <image class="iconImg" v-if="item.activityType == 3" src="../../static/images/discountListIcon.png"></image>
-              <image class="iconImg" v-if="item.activityType == 5" src="../../static/images/discountListIcon.png"></image>
-              <image class="iconImg" v-if="item.activityType == 9" src="../../static/images/memberCenterIcon.png"></image>
+              <image class="iconImg" v-if="item.activityType == 1" src="https://ceres.zkthink.com/static/images/groupBuyIcon.png"></image>
+              <image class="iconImg" v-if="item.activityType == 2" src="https://ceres.zkthink.com/static/images/spikeIcon.png"></image>
+              <image class="iconImg" v-if="item.activityType == 4" src="https://ceres.zkthink.com/static/images/spikeIcon.png"></image>
+              <image class="iconImg" v-if="item.activityType == 3" src="https://ceres.zkthink.com/static/images/discountListIcon.png"></image>
+              <image class="iconImg" v-if="item.activityType == 5" src="https://ceres.zkthink.com/static/images/discountListIcon.png"></image>
+              <image class="iconImg" v-if="item.activityType == 9" src="https://ceres.zkthink.com/static/images/memberCenterIcon.png"></image>
 							<view class="font-color-C83732 flex-row-plus">
 								<b>￥</b>
 								<label class="fs28">{{item.price}}</label>
@@ -66,13 +66,13 @@
 
 		<!-- 搜索为空 -->
 		<view v-if="ifEmpty" class="emptyCart-box flex-items-plus flex-column">
-			<image class="emptyCart-img" src="../../static/images/searchEmpty.png"></image>
+			<image class="emptyCart-img" src="https://ceres.zkthink.com/static/images/searchEmpty.png"></image>
 			<label class="font-color-999 fs26 mar-top-30">搜索不到你要找的宝贝呢</label>
 			<label class="font-color-999 fs26 mar-top-10">换个词试试吧～</label>
 		</view>
 
 		<view class="reachBottom" v-if="topLeft > 400 && list.length > 0">
-			<image class="reach-icon" src="@/static/img/reachBottom.png" mode="widthFix"></image>
+			<image class="reach-icon" src="https://ceres.zkthink.com/static/img/reachBottom.png" mode="widthFix"></image>
 			<text class="reach-text">这里到底了哦~~</text>
 		</view>
 	</view>

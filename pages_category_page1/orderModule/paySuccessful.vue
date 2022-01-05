@@ -2,7 +2,7 @@
   <view class="payCourteous">
     <view class="resultCard">
       <view class="imgBox">
-        <image src="../../static/images/payIcon.png"></image>
+        <image src="https://ceres.zkthink.com/static/images/payIcon.png"></image>
       </view>
       <view class="successful">支付成功</view>
       <view class="btnBox fs28 font-color-333">
@@ -11,7 +11,7 @@
       </view>
       <view class="orderPolite" v-if="orderPolite.growth || orderPolite.couponList">
         <view class="politeImgBox">
-          <image src="../../static/images/politeIcon.png"></image>
+          <image src="https://ceres.zkthink.com/static/images/politeIcon.png"></image>
         </view>
         <view class="rightInfo">
           <view class="growthBox"

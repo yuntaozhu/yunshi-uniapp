@@ -4,11 +4,11 @@
 		<view>
 			<view class="flex-items-plus flex-row mar-top-20">
 				<view class="searchImg-box flex-items-plus">
-					<image class="searchImg" src="../../../static/img/searchImg.png"></image>
+					<image class="searchImg" src="https://ceres.zkthink.com/static/img/searchImg.png"></image>
 					<input class="search-box" v-model="keyWord" placeholder-class="searchboxPlace"
 						placeholder="请输入您想要的宝贝" />
 					<image class="searchClose-icon" @click="searchTextDel"
-						src="../../../static/img/index/searchClose_icon.png"></image>
+						src="https://ceres.zkthink.com/static/img/index/searchClose_icon.png"></image>
 				</view>
 				<view class="mar-left-40 fs26" @click="getList">搜索</view>
 			</view>
@@ -19,9 +19,9 @@
 			<view class="boxTitle mar-leftgetList-30" v-if="hotSearchList.length>0">
 				<label class="fs30 font-color-999 fs-weight-300">热门搜索</label>
 				<image class="seeIcon hotSearchListSee-icon" v-if="isSee" @click="changeHotSearchListIsSee"
-					src="../../../static/img/see.png"></image>
+					src="https://ceres.zkthink.com/static/img/see.png"></image>
 				<image class="seeIcon hotSearchListNotSee-icon" v-else @click="changeHotSearchListIsSee"
-					src="../../../static/img/notSee.png"></image>
+					src="https://ceres.zkthink.com/static/img/notSee.png"></image>
 			</view>
 			<view>
 				<view class="flex-wrap-1 flex-row" v-if="isSee">
@@ -39,7 +39,7 @@
 		<view class="historyBox tipsBox">
 			<view class="boxTitle mar-leftgetList-30" v-if="historyList.length>0">
 				<label class="fs30 font-color-999 fs-weight-300 ">历史搜索</label>
-				<image class="historyDel-icon" @click="historyDelAll" src="../../../static/img/index/historyDel_icon.png">
+				<image class="historyDel-icon" @click="historyDelAll" src="https://ceres.zkthink.com/static/img/index/historyDel_icon.png">
 				</image>
 			</view>
 			<view class="historySear-box flex-wrap-1 flex-row">
@@ -52,7 +52,7 @@
 					<label class="font-color-DDD fs22 pad-topbot-10 text-align">|</label>
 					<view class="historyIconBox" @click="historyDelOne(item.searchId)">
 						<image class="historySearDel-icon text-align"
-							src="../../../static/img/index/historySearDel_icon.png"></image>
+							src="https://ceres.zkthink.com/static/img/index/historySearDel_icon.png"></image>
 					</view>
 				</view>
 			</view>

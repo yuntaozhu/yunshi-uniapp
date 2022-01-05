@@ -6,10 +6,10 @@
 					<!-- 关闭按钮 -->
 					<view class="guanbiView">
             <!-- #ifdef MP-WEIXIN -->
-            <img @click="showcos" src="@../../static/img/guanbi.png" class="guanbi" style="width:30px;height:30px;" mode="widthFix"></img>
+            <img @click="showcos" src="https://ceres.zkthink.com/static/img/guanbi.png" class="guanbi" style="width:30px;height:30px;" mode="widthFix"></img>
             <!-- #endif -->
             <!-- #ifdef H5 || APP-PLUS -->
-            <image @click="showcos" src="@../../static/img/guanbi.png" class="guanbi" style="width:30px;height:30px;" mode="widthFix"></image>
+            <image @click="showcos" src="https://ceres.zkthink.com/static/img/guanbi.png" class="guanbi" style="width:30px;height:30px;" mode="widthFix"></image>
             <!-- #endif -->
 					</view>
 					<!-- 内容 -->
@@ -32,10 +32,10 @@
 				<view class="shareBox" :class="{'width100':noMp}" hover-class="btn-click" @click="WXfenx">
 					<view style="flex: 1;text-align: center;display: flex;">
 						<view style="margin-left: 120rpx;" v-if="noMp">
-							<image src="../../static/img/album.png" mode="widthFix"></image>
+							<image src="https://ceres.zkthink.com/static/img/album.png" mode="widthFix"></image>
 						</view>
 						<view style="margin-left: 35%;" v-else>
-							<image src="../../static/img/album.png" mode="widthFix"></image>
+							<image src="https://ceres.zkthink.com/static/img/album.png" mode="widthFix"></image>
 						</view>
 						<view style="margin-left: 10rpx;font-size: 28rpx;color: #333333">保存到本地</view>
 					</view>
@@ -43,7 +43,7 @@
 				<view class="linkBtnBox" hover-class="btn-click" @click="FZlianj" v-if="noMp">
 					<view style="flex: 1;text-align: center;display: flex;">
 						<view class="linkBox">
-							<image src="../../static/img/lianjie.png" mode="widthFix"></image>
+							<image src="https://ceres.zkthink.com/static/img/lianjie.png" mode="widthFix"></image>
 						</view>
 						<view style="margin-left: 10rpx;">
 							复制链接

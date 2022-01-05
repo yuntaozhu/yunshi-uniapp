@@ -56,7 +56,7 @@
       <view class="signInBox">
         <view class="signItem flex-items flex-sp-between" v-for="(item, index) of integralRecord" :key="index">
           <view class="leftBox flex-items">
-            <image src="../../static/images/signIcon1.png"></image>
+            <image src="https://ceres.zkthink.com/static/images/signIcon1.png"></image>
             <view class="leftInfo">
               <label class="fs28 font-color-333">{{item.recordContent}}</label>
               <view class="fs24 font-color-999">{{item.createTime}}</view>
@@ -65,7 +65,7 @@
           <view class="rightBtn">{{item.recordType === 1 ? '+' : '-'}}{{item.credit}}</view>
         </view>
         <view class="emptyCart-box flex-items-plus flex-column" v-if="integralRecord.length === 0">
-          <image class="emptyCart-img" src="../../static/images/searchEmpty.png"></image>
+          <image class="emptyCart-img" src="https://ceres.zkthink.com/static/images/searchEmpty.png"></image>
           <label class="font-color-999 fs26 mar-top-30">暂无记录~</label>
         </view>
       </view>
@@ -94,7 +94,7 @@
           </view>
         </view>
         <view class="emptyCart-box flex-items-plus flex-column" v-if="creditCouponList.length === 0">
-          <image class="emptyCart-img" src="../../static/images/searchEmpty.png"></image>
+          <image class="emptyCart-img" src="https://ceres.zkthink.com/static/images/searchEmpty.png"></image>
           <label class="font-color-999 fs26 mar-top-30">暂无优惠券~</label>
         </view>
       </view>
@@ -113,7 +113,7 @@
           </view>
         </view>
         <view v-if="isConvertible" @click="isConvertible = false" class="cancelDel">
-          <image src="../../static/images/cancelClose.png" mode=""></image>
+          <image src="https://ceres.zkthink.com/static/images/cancelClose.png" mode=""></image>
         </view>
       </view>
     </tui-modal>
@@ -243,7 +243,7 @@ page {
 }
 .memberCenter {
   border-top: 2rpx solid #4b4b4b;
-  background: url("../../static/images/addBankBg.png") no-repeat left top;
+  background: url("https://ceres.zkthink.com/static/images/addBankBg.png") no-repeat left top;
   background-size: contain;
   min-height: 800rpx;
   padding: 0 20rpx;
@@ -264,7 +264,7 @@ page {
     .memberBoxTop {
       position: relative;
       .memberTopPos{
-        //background: url("../../static/images/integralBg.png") no-repeat left top;
+        //background: url("https://ceres.zkthink.com/static/images/integralBg.png") no-repeat left top;
         background-size: cover;
         height: 302rpx;
         border-radius: 24rpx;
@@ -310,7 +310,7 @@ page {
     padding: 0 20rpx;
     .signLeft {
       .signIcon {
-        background: url("../../static/images/signIcon.png") no-repeat center left;
+        background: url("https://ceres.zkthink.com/static/images/signIcon.png") no-repeat center left;
         background-size: contain;
         height: 120rpx;
         width: 96rpx;
@@ -339,22 +339,22 @@ page {
         margin-right: 15rpx;
       }
       .detailIcon {
-        background: url("../../static/images/detailIcon.png") no-repeat center center;
+        background: url("https://ceres.zkthink.com/static/images/detailIcon.png") no-repeat center center;
         background-size: contain;
       }
       .exchangeIcon {
-        background: url("../../static/images/exchangeIcon.png") no-repeat center center;
+        background: url("https://ceres.zkthink.com/static/images/exchangeIcon.png") no-repeat center center;
         background-size: contain;
       }
     }
     .active {
       background: #333333;
       .detailIcon {
-        background: url("../../static/images/detailIcon1.png") no-repeat center center;
+        background: url("https://ceres.zkthink.com/static/images/detailIcon1.png") no-repeat center center;
         background-size: contain;
       }
       .exchangeIcon {
-        background: url("../../static/images/exchangeIcon1.png") no-repeat center center;
+        background: url("https://ceres.zkthink.com/static/images/exchangeIcon1.png") no-repeat center center;
         background-size: contain;
       }
       text {
@@ -410,7 +410,7 @@ page {
             color: #FDFED6;
             width: 300rpx;
             height: 146rpx;
-            background: url('../../static/images/exchangeItem.png') no-repeat left top;
+            background: url('https://ceres.zkthink.com/static/images/exchangeItem.png') no-repeat left top;
             background-size: contain;
             padding: 30rpx 25rpx;
           }

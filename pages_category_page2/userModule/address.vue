@@ -19,14 +19,14 @@
 			</view>
 		</view>
 		<view v-if="ifEmpty" class="emptyAddress-box">
-			<image class="emptyAddress" src="../../static/img/noAddress.png"></image>
+			<image class="emptyAddress" src="https://ceres.zkthink.com/static/img/noAddress.png"></image>
 			<text>你还没有添加地址哦～</text>
 		</view>
     <!-- #ifdef MP-WEIXIN -->
     <view class="wxAddressNBox">
       <view class="flex-items btnBox flex-sp-between">
         <view class="wxAddress btn flex-items flex-center" @click="wxAddFn">
-          <image src="../../static/images/weixin2x.png"></image>
+          <image src="https://ceres.zkthink.com/static/images/weixin2x.png"></image>
           <text>微信导入</text>
         </view>
         <view class="addAddressBtn btn" @click="addAddressClick">添加新地址</view>
@@ -305,7 +305,7 @@
       width: 50rpx;
       height: 50rpx;
       display: block;
-      background: url("../../static/images/addEdit.png") no-repeat center center;
+      background: url("https://ceres.zkthink.com/static/images/addEdit.png") no-repeat center center;
       background-size: contain;
     }
 	}

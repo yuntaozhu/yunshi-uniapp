@@ -23,7 +23,7 @@
 					<view class="evaluate-content flex-items flex-row flex-sp-between">
 						<view class="flex-items">
 							<image class="user-headSmallImg" v-if="item.headImage" :src="item.headImage"></image>
-							<image class="user-headSmallImg" src="../../static/images/storeLogo.png" v-else></image>
+							<image class="user-headSmallImg" src="https://ceres.zkthink.com/static/images/storeLogo.png" v-else></image>
               <view class="skuValue">
                 <label class="fs28" v-if="item.name">{{item.name}}</label>
                 <label class="fs28" v-else>匿名</label>
@@ -63,9 +63,9 @@
           <view class="flex-items flex-row mar-top-30 flex-sp-between">
             <view class="font-color-999 fs22">{{item.createTime}}</view>
             <view class="praise-box flex-items flex-row">
-              <image class="praise-icon" @click.stop="zanTap(index,item.commentId,0)" src="../../static/images/praiseActiveIcon.png"
+              <image class="praise-icon" @click.stop="zanTap(index,item.commentId,0)" src="https://ceres.zkthink.com/static/images/praiseActiveIcon.png"
                      v-if="item.ifLike"></image>
-              <image class="praise-icon" @click.stop="zanTap(index,item.commentId,1)" src="../../static/images/addPraiseIcon.png"
+              <image class="praise-icon" @click.stop="zanTap(index,item.commentId,1)" src="https://ceres.zkthink.com/static/images/addPraiseIcon.png"
                      v-else></image>
               <label class="mar-left-10">{{item.likes}}</label>
             </view>
@@ -73,7 +73,7 @@
 				</view>
 			</template>
 			<view v-if="evaluateEmpty" class="emptyOrder-box flex-items-plus flex-column">
-				<image class="emptyOrder-img" src="../../static/img/bgnull.png"></image>
+				<image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
 				<label class="font-color-999 fs26 mar-top-30">你还没有评论哦～</label>
 			</view>
 		</view>
@@ -87,7 +87,7 @@
 				<view class="evaluate-content flex-column" @click="commentDetails(index)" >
 					<view class="flex-items">
 						<image class="user-headSmallImg" v-if="item.headImage" :src="item.headImage"></image>
-						<image class="user-headSmallImg" src="../../static/images/storeLogo.png" v-else></image>
+						<image class="user-headSmallImg" src="https://ceres.zkthink.com/static/images/storeLogo.png" v-else></image>
 						<label class="fs28 mar-left-20" v-if="item.name">{{item.name}}</label>
 						<label class="fs28 mar-left-20" v-else>匿名</label>
 					</view>
@@ -113,9 +113,9 @@
 					<view class="flex-items flex-row mar-top-30 flex-sp-between">
             <view class="font-color-999 fs22">{{item.createTime}}</view>
 						<view class="praise-box flex-items flex-row">
-							<image class="praise-icon" @click.stop="zanTap(index,item.commentId,0)" src="../../static/images/praiseActiveIcon.png"
+							<image class="praise-icon" @click.stop="zanTap(index,item.commentId,0)" src="https://ceres.zkthink.com/static/images/praiseActiveIcon.png"
 							 v-if="item.ifLike"></image>
-							<image class="praise-icon" @click.stop="zanTap(index,item.commentId,1)" src="../../static/images/praiseIcon.png"
+							<image class="praise-icon" @click.stop="zanTap(index,item.commentId,1)" src="https://ceres.zkthink.com/static/images/praiseIcon.png"
 							 v-else></image>
 							<label class="mar-left-10">{{item.likes}}</label>
 						</view>
@@ -124,7 +124,7 @@
 			</view>
 			</template>
 			<view v-if="evaluateEmpty" class="emptyOrder-box flex-items-plus flex-column">
-				<image class="emptyOrder-img" src="../../static/img/bgnull.png"></image>
+				<image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
 				<label class="font-color-999 fs26 mar-top-30">你还没有评论哦～</label>
 			</view>
 		</view>

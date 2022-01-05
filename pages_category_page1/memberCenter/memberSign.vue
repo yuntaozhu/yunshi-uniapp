@@ -32,13 +32,13 @@
 			<view class="signDateList">
 				<view class="signItem" v-for="(item, index) of recordList" :key="item.signinId">
 					<view class="topIcon">
-						<image src="../../static/img/member/signIcon.png"></image>
+						<image src="https://ceres.zkthink.com/static/img/member/signIcon.png"></image>
 					</view>
 					<view class="dateInfo">{{ index + 1 }}天</view>
 				</view>
 				<view class="signItem" v-for="index of noSign" :key="index">
 					<view class="topIcon">
-						<image src="../../static/img/member/signIcon2.png"></image>
+						<image src="https://ceres.zkthink.com/static/img/member/signIcon2.png"></image>
 					</view>
 					<!-- #ifdef MP-WEIXIN -->
 					<view class="dateInfo">{{recordList.length+index+1}}天</view>
@@ -186,7 +186,7 @@
 
 	.memberCenter {
 		border-top: 2rpx solid #4b4b4b;
-		background: url("../../static/img/member/memberSignBg.png") no-repeat left top;
+		background: url("https://ceres.zkthink.com/static/img/member/memberSignBg.png") no-repeat left top;
 		background-size: contain;
 		min-height: 900rpx;
 		padding: 0 20rpx;

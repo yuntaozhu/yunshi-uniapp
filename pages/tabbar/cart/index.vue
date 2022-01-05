@@ -4,7 +4,7 @@
     <view v-if="dataList.length !== 0">
       <view class="cart-bg">
         <view class="cart-num-box">
-          <image src="../../../static/images/logoTop.png"></image>
+          <image src="https://ceres.zkthink.com/static/images/logoTop.png"></image>
           <text class="btn-box" @click="btnTypeClick(1)" v-if="btnType == 0">管理</text>
           <text class="btn-box" @click="btnTypeClick(0)" v-if="btnType == 1">完成</text>
         </view>
@@ -16,24 +16,24 @@
         <view class="itemBox" v-for="(item, index) in dataList" :key="item.shopId">
           <view class="item" v-if="item.skus.length !== 0">
             <view class="shop-box">
-              <image mode="aspectFill" v-if="item.selected === 1" src="../../../static/images/selectActive.png" class="cart-select-img" @click.stop="updateShopSel(index,0)"></image>
-              <image mode="aspectFill" v-else src="../../../static/images/selectEmpty.png" class="cart-select-img" @click.stop="updateShopSel(index,1)"></image>
+              <image mode="aspectFill" v-if="item.selected === 1" src="https://ceres.zkthink.com/static/images/selectActive.png" class="cart-select-img" @click.stop="updateShopSel(index,0)"></image>
+              <image mode="aspectFill" v-else src="https://ceres.zkthink.com/static/images/selectEmpty.png" class="cart-select-img" @click.stop="updateShopSel(index,1)"></image>
               <view class="shop-name-box" @click="goStore(index)">
-                <image src="../../../static/images/orderStoreIcon.png" class="shop-img"></image>
+                <image src="https://ceres.zkthink.com/static/images/orderStoreIcon.png" class="shop-img"></image>
                 <text class="shop-name">{{item.shopName}}</text>
-                <image src="../../../static/images/arrowRight.png" class="arrow-right-img"></image>
+                <image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="arrow-right-img"></image>
               </view>
             </view>
             <view class="rulesBox flex-items" v-if="item.currentRules.number">
-              <image class="mar-right-20" src="../../../static/images/zuheIcon.png"></image>
+              <image class="mar-right-20" src="https://ceres.zkthink.com/static/images/zuheIcon.png"></image>
               <view class="fs24 font-color-C83732">已满足【{{item.currentRules.price}}元任选{{item.currentRules.number}}件】！</view>
             </view>
             <view v-for="(skuItem, cIndex) in dataList[index].skus" class="product-list-box">
               <view class="pro-item" @click="goodsDateils(item.shopId,skuItem.productId,skuItem.skuId)">
                 <image mode="aspectFill" v-if="skuItem.selected == 1"
-                       src="../../../static/images/selectActive.png"
+                       src="https://ceres.zkthink.com/static/images/selectActive.png"
                        @click.stop="cartItemSel(index,cIndex,0)" class="cart-select-img"></image>
-                <image mode="aspectFill" v-else src="../../../static/images/selectEmpty.png"
+                <image mode="aspectFill" v-else src="https://ceres.zkthink.com/static/images/selectEmpty.png"
                        @click.stop="cartItemSel(index,cIndex,1)" class="cart-select-img"></image>
                 <view class="pro-r">
                   <image :src="skuItem.image" class="pro-img"></image>
@@ -115,9 +115,9 @@
           <!-- #endif -->
           <view class="cart-bottom">
             <view class="left">
-              <image mode="aspectFill" v-if="isAllCheck" src="../../../static/images/selectActive.png"
+              <image mode="aspectFill" v-if="isAllCheck" src="https://ceres.zkthink.com/static/images/selectActive.png"
                      class="cart-select-img" @click="allSel(0)"></image>
-              <image mode="aspectFill" v-else src="../../../static/images/selectEmpty.png"
+              <image mode="aspectFill" v-else src="https://ceres.zkthink.com/static/images/selectEmpty.png"
                      class="cart-select-img" @click="allSel(1)"></image>
               <text>全选</text>
             </view>
@@ -136,7 +136,7 @@
       </view>
     <!-- 购物车为空 -->
     <view v-if="isEmpty" class="emptyCart-box flex-items-plus flex-column">
-      <image class="emptyCart-img" src="../../../static/images/cartEmpty.png"></image>
+      <image class="emptyCart-img" src="https://ceres.zkthink.com/static/images/cartEmpty.png"></image>
       <label class="font-color-999 fs26 mar-top-30">你的购物车还没有宝贝哦</label>
       <label class="font-color-999 fs26 mar-top-10">快去首页选一个吧～</label>
       <view class="goToShopping" @click="goToShopping">去购物</view>
@@ -1290,8 +1290,9 @@ export default {
 
 		.cart-bottom-box-h5 {
 			position: fixed;
-			bottom: 100rpx;
+			bottom: 90rpx;
 			width: 100%;
+      z-index: 99;
 		}
 
 		.cart-bottom-box-app {

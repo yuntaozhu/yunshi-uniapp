@@ -3,7 +3,7 @@
     <view class="group-warp">
       <view class="title">
         <label>
-          <image class="title-img" src="../../static/images/combinationIcon.png" alt="组合销售" mode="widthFix"></image>
+          <image class="title-img" src="https://ceres.zkthink.com/static/images/combinationIcon.png" alt="组合销售" mode="widthFix"></image>
         </label>
         <view class="price-text">
           组合价：¥{{composePrice}}
@@ -308,7 +308,7 @@ export default {
       addCart.push(shopObj)
       uni.setStorageSync('skuItemDTOList', addCart)
       uni.navigateTo({
-        url: '../../pages_category_page1/orderModule/orderConfirm?type=2'
+        url: '../../pages_category_page1/orderModule/orderConfirm?type=1'
       })
     },
     getselectedAttrVal(item){
@@ -434,7 +434,7 @@ export default {
           margin: 0 auto;
           line-height: 50upx;
           border: 2upx solid #E4E5E6;
-          background: url("../../static/images/arrow-suk-select.png") no-repeat right center / 60upx 60upx;
+          background: url("https://ceres.zkthink.com/static/images/arrow-suk-select.png") no-repeat right center / 60upx 60upx;
           .text{
             font-size: 24upx;
             color: #999;

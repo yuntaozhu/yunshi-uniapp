@@ -20,8 +20,8 @@
           <view class="addInfo">
             <view class="price">￥{{item.price}}</view>
             <view class="selectBtn" @click.stop="showRuleBox(item, index)">
-              <image src="../../static/images/cart1.png" v-if="item.selected === 0"></image>
-              <image v-else src="../../static/images/cart2.png"></image>
+              <image src="https://ceres.zkthink.com/static/images/cart1.png" v-if="item.selected === 0"></image>
+              <image v-else src="https://ceres.zkthink.com/static/images/cart2.png"></image>
             </view>
           </view>
         </view>
@@ -372,7 +372,7 @@ page {
         height: 86rpx;
         line-height: 86rpx;
         text-align: center;
-        background: url("../../static/images/combinationBg.png") no-repeat center center;
+        background: url("https://ceres.zkthink.com/static/images/combinationBg.png") no-repeat center center;
         background-size: contain;
         overflow: hidden;
       }

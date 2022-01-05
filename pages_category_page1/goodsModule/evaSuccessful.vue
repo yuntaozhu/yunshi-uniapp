@@ -2,7 +2,7 @@
   <view class="payCourteous">
     <view class="evaBox">
       <view class="imgBox">
-        <image src="../../static/images/payIcon.png"></image>
+        <image src="https://ceres.zkthink.com/static/images/payIcon.png"></image>
       </view>
       <view class="successful">评价成功</view>
       <view class="btnBox fs28 font-color-333">

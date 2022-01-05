@@ -26,18 +26,18 @@
           <view class="l">货物状态</view>
           <view class="r-box" v-model="ReturnMoneyQuery.goodsState" v-if="ReturnMoneyQuery.goodsState == 0">
             <text>未收到货</text>
-            <image src="../../static/images/arrowRight.png" class="r"></image>
+            <image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="r"></image>
           </view>
           <view class="r-box" v-model="ReturnMoneyQuery.goodsState" v-if="ReturnMoneyQuery.goodsState == 1">
             <text>已收到货</text>
-            <image src="../../static/images/arrowRight.png" class="r"></image>
+            <image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="r"></image>
           </view>
         </view>
         <view class="item" @click="openReasonSelect">
           <view class="l">退款原因</view>
           <view class="r-box">
             <text v-model="ReturnMoneyQuery.returnReason">{{liyoutext}}</text>
-            <image src="../../static/images/arrowRight.png" class="r"></image>
+            <image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="r"></image>
           </view>
         </view>
       </view>
@@ -86,13 +86,13 @@
           <view class="item-box">
             <view class="item" @click="ReturnMoneyQuery.goodsState = 0">
               <text class="status-select-title">未收到货</text>
-              <image mode="aspectFill" src="../../static/images/selectActive.png" v-if="ReturnMoneyQuery.goodsState == 0" class="status-select-img"></image>
-              <image mode="aspectFill" src="../../static/images/selectEmpty.png" v-else class="status-select-img"></image>
+              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/selectActive.png" v-if="ReturnMoneyQuery.goodsState == 0" class="status-select-img"></image>
+              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/selectEmpty.png" v-else class="status-select-img"></image>
             </view>
             <view class="item" @click="ReturnMoneyQuery.goodsState = 1">
               <text class="status-select-title">已收到货</text>
-              <image mode="aspectFill" src="../../static/images/selectActive.png" v-if="ReturnMoneyQuery.goodsState == 1" class="status-select-img"></image>
-              <image mode="aspectFill" src="../../static/images/selectEmpty.png" v-else class="status-select-img"></image>
+              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/selectActive.png" v-if="ReturnMoneyQuery.goodsState == 1" class="status-select-img"></image>
+              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/selectEmpty.png" v-else class="status-select-img"></image>
             </view>
           </view>
           <view class="status-btn" @click="closeStatusSelect">确定</view>
@@ -108,8 +108,8 @@
           <view class="item-box">
             <view class="item" @click="returnReasonTap(item,index)" v-for="(item,index) in liyouData" :key="index">
               <text class="status-select-title">{{item}}</text>
-              <image mode="aspectFill" src="../../static/images/selectActive.png" v-if="ReturnMoneyQuery.returnReason == index" class="status-select-img"></image>
-              <image mode="aspectFill" src="../../static/images/selectEmpty.png" v-else class="status-select-img"></image>
+              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/selectActive.png" v-if="ReturnMoneyQuery.returnReason == index" class="status-select-img"></image>
+              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/selectEmpty.png" v-else class="status-select-img"></image>
             </view>
           </view>
           <view class="status-btn" @click="closeReasonSelect">确定</view>

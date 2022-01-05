@@ -32,7 +32,7 @@
       </view>
     </view>
     <view v-else class="emptyCart-box flex-items-plus flex-column">
-        <image class="emptyCart-img" src="@/static/img/bgnull.png" mode="widthFix" />
+        <image class="emptyCart-img" src="https://ceres.zkthink.com/static/img/bgnull.png" mode="widthFix" />
         <label class="font-color-999 fs26 mar-top-30">这里空空如也~</label>
     </view>
   </view>

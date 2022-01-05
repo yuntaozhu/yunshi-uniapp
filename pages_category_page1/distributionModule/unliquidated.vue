@@ -36,8 +36,8 @@
                   </view>
                 </view>
                 <view>
-                  <image  v-if="item.ifOpen  == false" class="arrow-down" src="../../static/images/arrowDownIcon.png"></image>
-                  <image  v-if="item.ifOpen  == true" class="arrow-down" src="../../static/images/arrowUpIcon.png"></image>
+                  <image  v-if="item.ifOpen  == false" class="arrow-down" src="https://ceres.zkthink.com/static/images/arrowDownIcon.png"></image>
+                  <image  v-if="item.ifOpen  == true" class="arrow-down" src="https://ceres.zkthink.com/static/images/arrowUpIcon.png"></image>
                 </view>
               </view>
               <view v-if="item.ifOpen  == true">
@@ -53,7 +53,7 @@
           </view>
         </view>
         <view v-else class="emptyCart-box flex-items-plus flex-column">
-          <image class="emptyCart-img" src="../../static/img/bgnull.png"></image>
+          <image class="emptyCart-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
           <label class="font-color-999 fs26 mar-top-30">这里空空如也~</label>
         </view>
       </view>
@@ -69,8 +69,8 @@
                   </view>
                 </view>
                 <view>
-                  <image v-if="item.ifOpen  == false" class="arrow-down" src="../../static/images/arrowDownIcon.png"></image>
-                  <image v-if="item.ifOpen  == true" class="arrow-down" src="../../static/images/arrowUpIcon.png"></image>
+                  <image v-if="item.ifOpen  == false" class="arrow-down" src="https://ceres.zkthink.com/static/images/arrowDownIcon.png"></image>
+                  <image v-if="item.ifOpen  == true" class="arrow-down" src="https://ceres.zkthink.com/static/images/arrowUpIcon.png"></image>
                 </view>
               </view>
               <view v-if="item.ifOpen  == true">
@@ -89,7 +89,7 @@
           </view>
         </view>
         <view v-else class="emptyCart-box flex-items-plus flex-column">
-          <image class="emptyCart-img" src="../../static/img/bgnull.png"></image>
+          <image class="emptyCart-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
           <label class="font-color-999 fs26 mar-top-30">这里空空如也~</label>
         </view>
       </view>
@@ -240,7 +240,7 @@ page {
 	.unliquidated-topBackImg {
 		width: 100%;
 		height: 360rpx;
-		background: url(../../static/images/unliquidatedBg.png) no-repeat;
+		background: url(https://ceres.zkthink.com/static/images/unliquidatedBg.png) no-repeat;
 		background-size: 100%;
     margin-top: 30rpx;
 		.totalAward-content {

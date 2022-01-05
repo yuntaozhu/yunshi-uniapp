@@ -3,7 +3,7 @@
   <view v-if="ifShow">
     <view class="content">
       <view class="address-box" @click="addAddressTap">
-        <image src="../../static/images/orderAddress.png" class="address-img"></image>
+        <image src="https://ceres.zkthink.com/static/images/orderAddress.png" class="address-img"></image>
         <!-- 有地址的 -->
         <view class="address-r" v-if="userAddressInfo.receiveName">
           <view class="address-name-box">
@@ -18,15 +18,15 @@
         <view class="address-r" v-else>
           <text>你还没有收货地址哦，点击这里添加</text>
         </view>
-        <image src="../../static/images/greyArrow.png" class="arrow-right-img"></image>
+        <image src="https://ceres.zkthink.com/static/images/greyArrow.png" class="arrow-right-img"></image>
       </view>
       <view class="order-list-box">
         <view class="item" v-for="(item, sIndex) in settlement.shops" :key="item.shopId">
           <view class="order-list-top">
             <view class="top-l">
-              <image src="../../static/images/orderStoreIcon.png" class="shop-img"></image>
+              <image src="https://ceres.zkthink.com/static/images/orderStoreIcon.png" class="shop-img"></image>
               <text class="shop-name">{{item.shopName}}</text>
-              <image src="../../static/images/greyArrow.png" class="arrow-img"></image>
+              <image src="https://ceres.zkthink.com/static/images/greyArrow.png" class="arrow-img"></image>
             </view>
           </view>
           <view class="order-info-box">
@@ -68,11 +68,11 @@
               <view class="discount-info-box flex-items">
                 <view class="discount-info2" v-if="item.currentCoupon && item.currentCoupon.couponType == 1">-￥{{item.currentCoupon.reduceMoney}}</view>
                 <view class="discount-info2" v-if="item.currentCoupon && item.currentCoupon.couponType == 2">{{item.currentCoupon.reduceMoney}}折券</view>
-                <image class="discount-img" src="../../static/images/arrowRight.png"></image>
+                <image class="discount-img" src="https://ceres.zkthink.com/static/images/arrowRight.png"></image>
               </view>
               <!--							<view class="discount-info-box flex-items" v-else>-->
               <!--								<view class="discount-info1"></view>-->
-              <!--								<image class="discount-img" src="../../static/images/arrowRight.png"></image>-->
+              <!--								<image class="discount-img" src="https://ceres.zkthink.com/static/images/arrowRight.png"></image>-->
               <!--							</view>-->
             </view>
             <view class="order-total-box">
@@ -94,7 +94,7 @@
           </view>
           <view class="discount-info1" v-else-if="couponsList.length<1">无</view>
           <view class="discount-info1" v-else>不使用</view>
-          <image class="discount-img" src="../../static/images/arrowRight.png"></image>
+          <image class="discount-img" src="https://ceres.zkthink.com/static/images/arrowRight.png"></image>
         </view>
       </view>
 <!--      积分支付-->
@@ -112,7 +112,7 @@
         <radio-group @change="payTypeChange">
           <view class="pay-type-radio" v-if="showWechatPayType">
             <view class="pay-type-img">
-              <image class="pay-type-img-inner" src="../../static/images/wechat_pay.png" mode="widthFix"/>
+              <image class="pay-type-img-inner" src="https://ceres.zkthink.com/static/images/wechat_pay.png" mode="widthFix"/>
             </view>
             <label class="pay-type-label">微信支付</label>
             <radio class="pay-type-radio-item" style="transform:scale(0.7)" value="1" :checked="paymentMode == 1"/>
@@ -126,7 +126,7 @@
           </view>
           <view class="pay-type-radio" v-if="showHuabeiPayType">
             <view class="pay-type-img">
-              <image class="pay-type-img-inner" src="../../static/images/huabei.png" mode="widthFix"/>
+              <image class="pay-type-img-inner" src="https://ceres.zkthink.com/static/images/huabei.png" mode="widthFix"/>
             </view>
             <label class="pay-type-label">花呗分期</label>
             <radio class="pay-type-radio-item" style="transform:scale(0.7)" value="3" :checked="paymentMode == 3"/>
@@ -136,7 +136,7 @@
                 <label class="fenqi-charge-fee">手续费 ￥{{chargeFee|clip2Decimal}}</label>
               </view>
               <label class="fenqi-amount">分期总额 ￥{{ (totalprice - reduceMoney) | clip2Decimal }}</label>
-              <img class="fenqi-modal" src="../../static/images/arrowRight.png"/>
+              <img class="fenqi-modal" src="https://ceres.zkthink.com/static/images/arrowRight.png"/>
             </view>
           </view>
         </radio-group>
@@ -169,7 +169,7 @@
              close-icon-size="20">
       <view class="activity-box" style="height: 1000rpx;">
         <view class="title-box">
-          <image class="close-btn" @click="onDiscountClose" src="../../static/images/close.png"></image>
+          <image class="close-btn" @click="onDiscountClose" src="https://ceres.zkthink.com/static/images/close.png"></image>
         </view>
         <view class="activity-coupon-box">
           <scroll-view scroll-y="true" style="height: 900rpx;">
@@ -177,15 +177,19 @@
               <view v-if="usableListLength">
                 <view class="label-lingqu">可用优惠券列表</view>
                 <view class="couponBox">
-                  <view class="coupon-item" v-for="(usableItem, index) in settlement.coupons" :key="index" @click="couponItemTap(index,usableItem)">
+                  <view class="coupon-item"
+                    v-for="(usableItem, index) in settlement.coupons"
+                    :key="index"
+                    @click="couponItemTap(index,usableItem)"
+                  >
                     <view class="money-box" v-if="usableItem.couponType == 1">￥{{usableItem.reduceMoney}}</view>
                     <view class="money-box" v-else>{{usableItem.reduceMoney}}折券</view>
                     <view class="info-box">
                       <view class="date font-color-999" style="font-size:22upx;  margin-top: 20upx;">{{getDate(usableItem.startTime.replace(/-/g, '.'))}}-{{getDate(usableItem.endTime.replace(/-/g, '.'))}}</view>
                       <view class="info font-color-999">满{{usableItem.fullMoney}}元可用</view>
                     </view>
-                    <image class="check-img" src="../../static/images/selectActive.png" v-if="couponCheckedindex == index"></image>
-                    <image class="check-img" src="../../static/images/selectEmpty.png" v-else></image>
+                    <image class="check-img" src="https://ceres.zkthink.com/static/images/selectActive.png" v-if="couponCheckedindex == index"></image>
+                    <image class="check-img" src="https://ceres.zkthink.com/static/images/selectEmpty.png" v-else></image>
                   </view>
                 </view>
               </view>
@@ -198,7 +202,7 @@
              close-icon-size="20">
       <view class="activity-box">
         <view class="title-box">
-          <image class="close-btn" @click="onshopClose" src="../../static/images/close.png"></image>
+          <image class="close-btn" @click="onshopClose" src="https://ceres.zkthink.com/static/images/close.png"></image>
         </view>
         <view class="activity-coupon-box">
           <scroll-view scroll-y="true" style="height: 900rpx;">
@@ -213,8 +217,8 @@
                     <view class="info-box">
                       <view class="info font-color-999">满{{sItem.fullMoney}}元可用</view>
                     </view>
-                    <image class="check-img" src="../../static/images/selectActive.png" v-if="selectCouponIdList.indexOf(sItem.id) >= 0"></image>
-                    <image class="check-img" src="../../static/images/selectEmpty.png" v-else></image>
+                    <image class="check-img" src="https://ceres.zkthink.com/static/images/selectActive.png" v-if="selectCouponIdList.indexOf(sItem.id) >= 0"></image>
+                    <image class="check-img" src="https://ceres.zkthink.com/static/images/selectEmpty.png" v-else></image>
                   </view>
                 </view>
               </view>
@@ -368,6 +372,14 @@ export default {
     this.back();
     return true
   },
+  filters: {
+    clip2Decimal(value) {
+      if (value === undefined || value === null) {
+        return "0.00"
+      }
+      return (parseInt(value * 100) / 100).toFixed(2)
+    }
+  },
   methods: {
     getQuery(){
       NET.request(API.Query,{
@@ -516,8 +528,7 @@ export default {
     },
     // 平台优惠券选择
     couponItemTap(index, usableItem) {
-      console.log(this.selectShopCoupon[0], 'testpintai')
-      if (this.selectShopCoupon.length) {
+      if (this.selectShopCoupon.length) { // 判断商家卷情况
         if (this.selectShopCoupon[0].ifAdd === 0) {
           uni.showToast({
             title: '不可与商家券券叠加使用！',
@@ -540,8 +551,8 @@ export default {
         this.getTotal(usableItem)
       } else {
         //console.log(usableItem.reduceMoney, 'item')
-        let moneySum = 0
-        let shopslen = this.settlement.shops.length
+        let moneySum = 0 // 订单总价
+        let shopslen = this.settlement.shops.length // 结算页店铺数量
         for (let i = 0; i < shopslen; i++) {
           moneySum += this.settlement.shops[i].total
         }
@@ -693,16 +704,16 @@ export default {
       }
       if (item) {
         console.log(this.discountPrice, 'discountPrice', allNum, 'allNum', this.totalprice, 'totalprice', this.reduceMoney, 'reduceMoney')
-        if (item.couponType === 1 && this.totalprice - this.reduceMoney > 0) {
+        if (item.couponType === 1 && this.totalprice - this.reduceMoney > 0) { // 满减
           this.discountPrice = allNum - this.totalprice + this.reduceMoney
           this.totalprice = allNum - this.discountPrice
-        } else if (item.couponType === 2 && this.reduceMoney > 0) {
-          console.log(121212)
+        } else if (item.couponType === 2 && this.reduceMoney > 0) { // 折扣
           this.discountPrice = allNum - this.totalprice * (this.reduceMoney / 10)
-          this.totalprice = allNum
+          this.totalprice = allNum - this.discountPrice
         } else {
           this.discountPrice = allNum
         }
+        console.log('discountPrice', this.discountPrice, 'reduceMoney', this.reduceMoney)
       }
       // 积分支付计算
       var skuCreditMap = Object.keys(this.settlement.skuCreditMap);
@@ -746,13 +757,13 @@ export default {
         this.chargeFee = ((this.totalprice - this.reduceMoney) * (this.huabeiFeerateList[index] / 100)).toFixed(2)
       }
     },
+    // 展示平台端优惠卷
     showDiscount() {
       // let shopifAdd = 1
       // if(this.settlement.shops[this.shopIndex].shopCoupons.length>0){
       // 	shopifAdd = this.settlement.shops[this.shopIndex].shopCoupons[this.shopCouIndex].ifAdd
       // }
       if (this.settlement.coupons.length > 0) {
-        let ifAdd = 0
         //console.log(this.selectShopCoupon, 'selectShopCoupon')
         for (let i = 0; i < this.selectShopCoupon.length; i++) {
           if (this.selectShopCoupon[i].ifAdd == 0) {
@@ -1217,14 +1228,6 @@ export default {
       this.showHuabeiPayType = true
 	    this.paymentMode = 2
       // #endif
-    }
-  },
-  filters: {
-    clip2Decimal(value) {
-      if (value === undefined || value === null) {
-        return "0.00"
-      }
-      return (parseInt(value * 100) / 100).toFixed(2)
     }
   }
 }
@@ -1878,7 +1881,7 @@ page {
 .coupon-item {
   width: 48%;
   height: 291rpx;
-  background: url("../../static/images/couponsIcon.png") no-repeat center top;
+  background: url("https://ceres.zkthink.com/static/images/couponsIcon.png") no-repeat center top;
   margin-top: 20upx;
   color: #C5AA7B;
   flex-shrink: 0;

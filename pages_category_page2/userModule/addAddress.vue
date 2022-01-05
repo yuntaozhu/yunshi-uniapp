@@ -4,7 +4,7 @@
     <!-- #ifdef MP-WEIXIN -->
 <!--    <view class="wxAddress flex-items flex-end" v-if="type == 1">-->
 <!--      <view class="wxBtnBox flex-items" @click="addAddressWx">-->
-<!--        <image class="" src="../../static/images/withdraw.png"></image>-->
+<!--        <image class="" src="https://ceres.zkthink.com/static/images/withdraw.png"></image>-->
 <!--      </view>-->
 <!--    </view>-->
     <!-- #endif -->
@@ -21,7 +21,7 @@
 <!--					<city-select v-model="locationShowFalg" @city-change="cityChange"></city-select>-->
           <u-picker-cere mode="region" v-model="locationShowFalg" @confirm="cityChange" :default-region='addressData.defaultRegion' title="所在地"></u-picker-cere>
 					<text v-model="addressData.ssqText">{{addressData.ssqText}}</text>
-					<image class="arrow mar-left-20" src="../../static/images/greyArrow.png"></image>
+					<image class="arrow mar-left-20" src="https://ceres.zkthink.com/static/images/greyArrow.png"></image>
 				</view>
 			</view>
 			<view class="detailAddress-box">
@@ -33,7 +33,7 @@
 				<view class="fs28 addressTag">地址标签</view>
 				<view class="flex-items">
 					<text v-model="tag">{{tag}}</text>
-					<image class="arrow mar-left-20" src="../../static/images/greyArrow.png"></image>
+					<image class="arrow mar-left-20" src="https://ceres.zkthink.com/static/images/greyArrow.png"></image>
 				</view>
 			</view>
 			<view class="defaultState-box flex-row-plus flex-sp-between flex-items">

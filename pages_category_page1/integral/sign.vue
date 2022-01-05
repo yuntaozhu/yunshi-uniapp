@@ -131,7 +131,7 @@ export default {
         'POST')
         .then(res => {
           uni.hideLoading()
-
+          that.ifShow = true
           that.signList = res.data
 
           // 初始日期
@@ -139,7 +139,7 @@ export default {
 
           // 今天日期
           if (that.currentMonth === selectMonth) {
-            console.log('currentMoth === selectMonth', that.currentMoth === selectMonth)
+            console.log('currentMoth === selectMonth', that.currentMonth === selectMonth)
             that.continuousNum = that.signList[that.signList.length - 1].continueDay || 0;
             that.lastDay = that.signList[that.signList.length - 1].createTime.substring(0,10);
             console.log('this.lastDay', that.lastDay)
@@ -147,7 +147,6 @@ export default {
 
           // 今天周几
           that.weeked = that.weekArr[new Date().getDay()];
-
           // 签到功能
           if (that.type !== 'calendar') {
             for (let i in that.dayArr) {
@@ -166,7 +165,6 @@ export default {
               }
             }
           }
-          this.ifShow = true
       }).catch(res => {})
     },
     signDate(event) {

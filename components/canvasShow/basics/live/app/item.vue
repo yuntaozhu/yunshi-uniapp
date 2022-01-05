@@ -55,7 +55,7 @@
         <view class="user-name">{{ liveData.anchorNickName }}</view>
       </view>
       <view class="count-down" v-if="liveStatus === 102">
-        <image v-if="isLate" class="img" src="@/static/img/live/live-late.png"/>
+        <image v-if="isLate" class="img" src="@/static/images/live/live-late.png"/>
         <view class="text">{{ liveTimeTitle }}</view>
         <view v-if="!isLate" class="time">
           <view class="time-item">{{times[0]}}</view>

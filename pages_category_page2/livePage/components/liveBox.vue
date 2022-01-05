@@ -4,7 +4,7 @@
       <image class="cover-img" :src="liveData.feedsImg" />
       <view class="status">
         <view class="status-state">
-          <image class="img" src="../../../static/img/live/icon-live-num.png" />直播中
+          <image class="img" src="https://ceres.zkthink.com/static/img/live/icon-live-num.png" />直播中
         </view>
         <!-- <view class="status-num">1000人</view> -->
       </view>
@@ -49,7 +49,7 @@
         <view class="user-name">{{ liveData.anchorNickName }}</view>
       </view>
       <view class="count-down" v-if="liveStatus === 102">
-        <image v-if="isLate" class="img" src="@/static/img/live/live-late.png"/>
+        <image v-if="isLate" class="img" src="../../../static/images/live/live-late.png"/>
         <view class="text">{{ liveTimeTitle }}</view>
         <view v-if="!isLate" class="time">
           <view class="time-item">{{times[0]}}</view>

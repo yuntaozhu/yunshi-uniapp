@@ -9,7 +9,7 @@
 				<view class="wid function-box">
 					<view class="finishbox" @click="finishClick" v-if="allCheckShow">完成</view>
 					<view v-else class="flex-row-plus editicon-box flex-items fs28" @click="editClick">
-						<image class="editicon" src="../../static/images/collectionEditicon.png"></image>
+						<image class="editicon" src="https://ceres.zkthink.com/static/images/collectionEditicon.png"></image>
 						<text class="mar-left-10">编辑</text>
 					</view>
 				</view>
@@ -22,8 +22,8 @@
 						<view class="flex-item itemBox" @click="goQuestionDetails(item.productId,item.problemId)">
 							<view class="item u-border-bottom wid flex-row-plus flex-items">
 								<view v-show="allCheckShow">
-									<image mode="aspectFill" v-if="item.selected == 1" @click.stop="problemItemSel(index,0)" src="../../static/images/selectActive.png" class="cart-select-img"></image>
-									<image mode="aspectFill" v-else @click.stop="problemItemSel(index,1)" src="../../static/images/selectEmpty.png" class="cart-select-img"></image>
+									<image mode="aspectFill" v-if="item.selected == 1" @click.stop="problemItemSel(index,0)" src="https://ceres.zkthink.com/static/images/selectActive.png" class="cart-select-img"></image>
+									<image mode="aspectFill" v-else @click.stop="problemItemSel(index,1)" src="https://ceres.zkthink.com/static/images/selectEmpty.png" class="cart-select-img"></image>
 								</view>
 <!--								<image class="product-img" mode="aspectFill" :src="item.image" />-->
 								<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
@@ -45,8 +45,8 @@
 				</view>
 				<view v-show="allCheckShow" class="allcheck-box flex-row-plus flex-sp-between flex-items">
 					<view class="left">
-						<image mode="aspectFill" v-if="isAllProblemCheck" src="../../static/images/selectActive.png" class="cart-select-img" @click="allProblemSel(0)"></image>
-						<image mode="aspectFill" v-else src="../../static/images/selectEmpty.png" class="cart-select-img" @click="allProblemSel(1)"></image>
+						<image mode="aspectFill" v-if="isAllProblemCheck" src="https://ceres.zkthink.com/static/images/selectActive.png" class="cart-select-img" @click="allProblemSel(0)"></image>
+						<image mode="aspectFill" v-else src="https://ceres.zkthink.com/static/images/selectEmpty.png" class="cart-select-img" @click="allProblemSel(1)"></image>
 						<text>全选</text>
 					</view>
 					<view class="right">
@@ -56,7 +56,7 @@
 				<view v-if="allCheckShow" class="pad-bot-140"></view>
 			</view>
 			<view v-if="ifEmpty" class="mar-top-60 empty-box">
-				<image class="question-empty" src="../../static/img/bgnull.png"></image>
+				<image class="question-empty" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
 				<view class="tohome-box flex-items-plus">暂无提问内容</view>
 			</view>
 		</view>
@@ -64,7 +64,7 @@
 			<view>
 				<view class="finishbox" @click="finishClick" v-if="allCheckShow">完成</view>
 				<view v-else class="flex-row-plus editicon-box flex-items fs28" @click="editClick">
-					<image class="editicon" src="../../static/images/collectionEditicon.png"></image>
+					<image class="editicon" src="https://ceres.zkthink.com/static/images/collectionEditicon.png"></image>
 					<text class="mar-left-10">编辑</text>
 				</view>
 				<view class="swipe-box">
@@ -77,8 +77,8 @@
 							<view class="wid" style="border-radius: 50%;">
 								<view class="flex-items-plus flex-row wid">
 									<view v-show="allCheckShow">
-										<image mode="aspectFill" v-if="item.selected == 1" @click.stop="answerItemSel(index,0)" src="../../static/images/selectActive.png" class="cart-select-img"></image>
-										<image mode="aspectFill" v-else @click.stop="answerItemSel(index,1)" src="../../static/images/selectEmpty.png" class="cart-select-img"></image>
+										<image mode="aspectFill" v-if="item.selected == 1" @click.stop="answerItemSel(index,0)" src="https://ceres.zkthink.com/static/images/selectActive.png" class="cart-select-img"></image>
+										<image mode="aspectFill" v-else @click.stop="answerItemSel(index,1)" src="https://ceres.zkthink.com/static/images/selectEmpty.png" class="cart-select-img"></image>
 									</view>
 <!--									<image class="product-img" mode="aspectFill" :src="item.image" />-->
 									<view class="title-wrap replynum-box wid">
@@ -94,7 +94,7 @@
                       </view>
                       <view class="qAarrow mar-top-30 flex-items">
                         <text class="fs24 font-color-C5AA7B">共{{item.count}}个回答</text>
-                        <image class="item-btn-right" src="../../static/img/user/arrow.png" mode="widthFix"></image>
+                        <image class="item-btn-right" src="https://ceres.zkthink.com/static/img/user/arrow.png" mode="widthFix"></image>
                       </view>
 										</view>
 									</view>
@@ -106,8 +106,8 @@
 				</view>
 				<view v-show="allCheckShow" class="allcheck-box flex-row-plus flex-sp-between flex-items">
 					<view class="left">
-						<image mode="aspectFill" v-if="isAllAnswerCheck" src="../../static/images/selectActive.png" class="cart-select-img" @click="allAnswerSel(0)"></image>
-						<image mode="aspectFill" v-else src="../../static/images/selectEmpty.png" class="cart-select-img" @click="allAnswerSel(1)"></image>
+						<image mode="aspectFill" v-if="isAllAnswerCheck" src="https://ceres.zkthink.com/static/images/selectActive.png" class="cart-select-img" @click="allAnswerSel(0)"></image>
+						<image mode="aspectFill" v-else src="https://ceres.zkthink.com/static/images/selectEmpty.png" class="cart-select-img" @click="allAnswerSel(1)"></image>
 						<text>全选</text>
 					</view>
 					<view class="right">
@@ -117,7 +117,7 @@
 				<view v-if="allCheckShow" class="pad-bot-140"></view>
 			</view>
 			<view v-if="ifEmpty" class="mar-top-60 empty-box">
-				<image class="question-empty" src="../../static/img/bgnull.png"></image>
+				<image class="question-empty" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
 				<view class="tohome-box flex-items-plus">暂无问答内容</view>
 			</view>
 		</view>
@@ -130,7 +130,7 @@
 				</view>
 			</view>
 			<view class="cancel-but" @click="cancelClick">
-				<image src="../../static/images/cancelClose.png" mode=""></image>
+				<image src="https://ceres.zkthink.com/static/images/cancelClose.png" mode=""></image>
 			</view>
 		</u-popup> -->
 		<!-- 删除确认弹窗 -->
@@ -147,7 +147,7 @@
 				</view>
 			</view>
 			<view @click="cancelClick" class="cancelDel">
-				<image src="../../static/images/cancelClose.png" mode=""></image>
+				<image src="https://ceres.zkthink.com/static/images/cancelClose.png" mode=""></image>
 			</view>
 		</tui-modal>
 	</view>
@@ -700,7 +700,7 @@ page{background-color: #F7F7F7;}
     width: 60rpx;
     height: 60rpx;
     display: block;
-    background: url("../../static/images/delIcon.png") no-repeat center center;
+    background: url("https://ceres.zkthink.com/static/images/delIcon.png") no-repeat center center;
     background-size: contain;
   }
   .swipe-box /deep/ .u-swipe-action {

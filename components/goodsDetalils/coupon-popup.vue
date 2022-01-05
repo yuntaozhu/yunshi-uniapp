@@ -1,6 +1,6 @@
 <template>
   <view class="coupon-popup" :class="showActivity && 'show'" >
-	<view class="mask" @click="closePopup"></view>  
+	<view class="mask" @click="closePopup"></view>
     <view class="couponShow-box" id="popupInner">
         <view class="tabsbox">
             <u-tabs
@@ -15,76 +15,80 @@
               @change="activeTypeActive"
             ></u-tabs>
         </view>
-        <view v-if="activeTypeFlag === 0" class="couponShow">
+        <view v-show="activeTypeFlag === 0">
+          <view class="couponShow">
             <view class="title-box">
-                <image class="close-btn" @click="onActivityClose" src="../../static/images/close.png"></image>
+              <image class="close-btn" @click="onActivityClose" src="https://ceres.zkthink.com/static/images/close.png"></image>
             </view>
             <view class="shopCouponBox" :class="markTools.length === 0 && 'flex'">
-                <view class="list" v-if="markTools.length > 0">
-                    <view class="item"
+              <view class="list" v-if="markTools.length > 0">
+                <view class="item"
                       v-for="(item, index) in markTools"
                       :key="index"
                       :class="{received: item.state === 1}"
-                    >
-                        <view class="info-box">
-                            <view class="discoun" v-if="item.couponType == 1"><text style="font-size: 28rpx">￥</text>{{item.reduceMoney}}</view>
-                            <view class="discoun" v-if="item.couponType == 2">{{item.reduceMoney}}折</view>
-                            <view class="info-date">{{getDate(item.startTime)}}-{{getDate(item.endTime)}}</view>
-                            <view class="info-condition mar-top-30">{{item.content}}</view>
-                            <!--                  <view class="info-condition" v-if="item.couponType == 2">{{item.reduceMoney}}折优惠</view>-->
-                            <wx-send-coupon @success="success" v-if="item.state === 3" :couponList="[item]">
-                                <view class="use-btn mar-top-10"
-                                      v-if="item.state === 3">
-                                    立即领取
-                                </view>
-                            </wx-send-coupon>
-                            <view class="use-btn mar-top-10" v-if="item.state === 0">已领取</view>
-                            <view class="use-btn mar-top-10" v-if="item.state === 1">已使用</view>
-                        </view>
-                    </view>
+                >
+                  <view class="info-box">
+                    <view class="discoun" v-if="item.couponType == 1"><text style="font-size: 28rpx">￥</text>{{item.reduceMoney}}</view>
+                    <view class="discoun" v-if="item.couponType == 2">{{item.reduceMoney}}折</view>
+                    <view class="info-date">{{getDate(item.startTime)}}-{{getDate(item.endTime)}}</view>
+                    <view class="info-condition mar-top-30">{{item.content}}</view>
+                    <!--                  <view class="info-condition" v-if="item.couponType == 2">{{item.reduceMoney}}折优惠</view>-->
+                    <wx-send-coupon @success="success" v-if="item.state === 3" :couponList="[item]">
+                      <view class="use-btn mar-top-10"
+                            v-if="item.state === 3">
+                        立即领取
+                      </view>
+                    </wx-send-coupon>
+                    <view class="use-btn mar-top-10" v-if="item.state === 0">已领取</view>
+                    <view class="use-btn mar-top-10" v-if="item.state === 1">已使用</view>
+                  </view>
                 </view>
-                <view v-else class="emptyOrder-box flex-items-plus flex-column">
-                    <image class="emptyOrder-img" src="../../static/img/bgnull.png"></image>
-                    <label class="font-color-999 fs26 mar-top-30">你还没有优惠券哦～</label>
-                </view>
+              </view>
+              <view v-else class="emptyOrder-box flex-items-plus flex-column">
+                <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
+                <label class="font-color-999 fs26 mar-top-30">你还没有优惠券哦～</label>
+              </view>
             </view>
+          </view>
         </view>
-        <view v-if="activeTypeFlag === 1" class="couponShow">
+        <view v-show="activeTypeFlag === 1">
+          <view class="couponShow">
             <view class="title-box">
-                <image class="close-btn" @click="onActivityClose" src="../../static/images/close.png"></image>
+              <image class="close-btn" @click="onActivityClose" src="https://ceres.zkthink.com/static/images/close.png"></image>
             </view>
             <view class="shopCouponBox" :class="shopMarkTools.length === 0 && 'flex'">
-                <view class="list" v-if="shopMarkTools.length > 0">
-                    <view
-                      class="item"
-                      v-for="(item, index) in shopMarkTools"
-                      :key="index"
-                      :class="{received: item.state === 1}"
-                    >
-                        <view class="info-box">
-                            <view class="discoun" v-if="item.couponType === 1"><text
-                                    style="font-size: 28rpx">￥</text>{{item.reduceMoney}}</view>
-                            <view class="discoun" v-if="item.couponType === 2">{{item.reduceMoney}}折</view>
-                            <view class="info-date">{{getDate(item.startTime)}}-{{getDate(item.endTime)}}</view>
-                            <view class="info-condition" v-if="item.couponType === 1">
-                                满{{item.fullMoney}}元减{{item.reduceMoney}}元</view>
-                            <view class="info-condition" v-if="item.couponType === 2">{{item.reduceMoney}}折优惠
-                            </view>
-                            <view class="use-btn" @click="receiveTap(item,1)" v-if="item.state === 3">立即领取
-                            </view>
-                            <view class="use-btn" v-if="item.state === 0">已领取</view>
-                        </view>
+              <view class="list" v-if="shopMarkTools.length > 0">
+                <view
+                    class="item"
+                    v-for="(item, index) in shopMarkTools"
+                    :key="index"
+                    :class="{received: item.state === 1}"
+                >
+                  <view class="info-box">
+                    <view class="discoun" v-if="item.couponType === 1"><text
+                        style="font-size: 28rpx">￥</text>{{item.reduceMoney}}</view>
+                    <view class="discoun" v-if="item.couponType === 2">{{item.reduceMoney}}折</view>
+                    <view class="info-date">{{getDate(item.startTime)}}-{{getDate(item.endTime)}}</view>
+                    <view class="info-condition" v-if="item.couponType === 1">
+                      满{{item.fullMoney}}元减{{item.reduceMoney}}元</view>
+                    <view class="info-condition" v-if="item.couponType === 2">{{item.reduceMoney}}折优惠
                     </view>
+                    <view class="use-btn" @click="receiveTap(item,1)" v-if="item.state === 3">立即领取
+                    </view>
+                    <view class="use-btn" v-if="item.state === 0">已领取</view>
+                  </view>
                 </view>
-                <view v-else class="emptyOrder-box flex-items-plus flex-column">
-                    <image class="emptyOrder-img" src="../../static/img/bgnull.png"></image>
-                    <label class="font-color-999 fs26 mar-top-30">你还没有优惠券哦～</label>
-                </view>
+              </view>
+              <view v-else class="emptyOrder-box flex-items-plus flex-column">
+                <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
+                <label class="font-color-999 fs26 mar-top-30">你还没有优惠券哦～</label>
+              </view>
             </view>
+          </view>
         </view>
         <view class="receive-success" v-if="isShowSuccess">
             <view class="success-box">
-                <image class="success-img" src="../../static/images/success_tu.png"></image>
+                <image class="success-img" src="https://ceres.zkthink.com/static/images/success_tu.png"></image>
                 <view class="text">领取成功</view>
             </view>
         </view>
@@ -225,6 +229,10 @@ export default {
 		z-index:1001;
 	}
     .couponShow-box{
+      .couponShow {
+        height: 1000rpx;
+        z-index: 333;
+      }
         width: 100%;
         height: auto;
         /*transform: translate3d(0px, 100%, 0px);*/

@@ -1,7 +1,7 @@
 <template>
   <view class="spikeListBox">
     <view class="spikeBg">
-      <image src="../../static/images/spikelLogo.png"></image>
+      <image src="https://ceres.zkthink.com/static/images/spikelLogo.png"></image>
     </view>
     <view class="tabs-nav-warp spikeNav">
       <scroll-view class="tabs-nav" scroll-x="true">
@@ -29,7 +29,7 @@
           <view class="price">
             <view class="currentPrice flex-items font-color-FF7800">
 				<view class="iconBox flex-items">
-          <image src="../../static/images/spikeIcon.png"></image>
+          <image src="https://ceres.zkthink.com/static/images/spikeIcon.png"></image>
         </view>
 				<view class="flex-row-plus flex-items priceInfo">
 					<label class="fs24">￥</label>

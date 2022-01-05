@@ -18,8 +18,8 @@
                 <label class="orderId-box font-color-999">手机号：{{item.distributorPhone}}</label>
               </view>
             </view>
-            <image v-if="item.ifOpen == false" class="arrow-down" src="../../static/images/arrowDownIcon.png"></image>
-            <image v-if="item.ifOpen == true" class="arrow-down" src="../../static/images/arrowUpIcon.png"></image>
+            <image v-if="item.ifOpen == false" class="arrow-down" src="https://ceres.zkthink.com/static/images/arrowDownIcon.png"></image>
+            <image v-if="item.ifOpen == true" class="arrow-down" src="https://ceres.zkthink.com/static/images/arrowUpIcon.png"></image>
           </view>
           <view v-if="item.ifOpen == true">
             <view class="flex-row-plus flex-itdistributionOrderems mar-top-30 flex-sp-between">
@@ -31,7 +31,7 @@
       </view>
     </view>
     <view v-else class="emptyCart-box flex-items-plus flex-column">
-      <image class="emptyCart-img" src="../../static/img/bgnull.png"></image>
+      <image class="emptyCart-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
       <label class="font-color-999 fs26 mar-top-30 font-color-999">这里空空如也~</label>
     </view>
 	</view>
@@ -119,7 +119,7 @@ page {
     .topBg {
       width: 100%;
       height: 196upx;
-      background: url("../../static/images/totalPersonnelTopBackImg.png") no-repeat;
+      background: url("https://ceres.zkthink.com/static/images/totalPersonnelTopBackImg.png") no-repeat;
       margin-top: 50rpx;
       text-align: center;
     }

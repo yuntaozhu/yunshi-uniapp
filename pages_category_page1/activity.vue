@@ -23,7 +23,7 @@
 							{{item.shopName}}
 						</view>
 						<view>
-							<image class="rightIcon" src="../static/images/arrowRight.png" mode="aspectFill"></image>
+							<image class="rightIcon" src="https://ceres.zkthink.com/images/arrowRight.png" mode="aspectFill"></image>
 						</view>
 					</view>
 				</view>

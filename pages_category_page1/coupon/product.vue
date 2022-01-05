@@ -2,7 +2,7 @@
   <view class="couponProduct">
     <view class="productList">
       <view class="couponTit flex-items">
-        <image src="../../static/images/counponTitIcon.png"></image>
+        <image src="https://ceres.zkthink.com/static/images/counponTitIcon.png"></image>
         <text class="fs24 font-color-C83732" v-if="currentCoupon.discountMode === 1">以下商品使用满{{currentCoupon.fullMoney}}元减{{currentCoupon.reduceMoney}}元的优惠券</text>
         <text class="fs24 font-color-C83732" v-else>以下商品使用满{{currentCoupon.fullMoney}}打{{currentCoupon.reduceMoney}}折</text>
       </view>
@@ -21,7 +21,7 @@
           </view>
         </view>
         <view v-if="ifEmpty" class="emptyOrder-box flex-items-plus flex-column">
-          <image class="emptyOrder-img" src="../../static/img/bgnull.png"></image>
+          <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
           <label class="font-color-999 fs26 mar-top-30">暂无可用商品～</label>
         </view>
       </view>

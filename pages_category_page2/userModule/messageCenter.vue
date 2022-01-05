@@ -16,14 +16,14 @@
 						<view class="messageType">
 							<view v-if="item.noticeType == 1" class="messageTypeL">
 								<view class="iconBox">
-									<image src="../../static/images/notice.png" alt=""></image>
+									<image src="https://ceres.zkthink.com/static/images/notice.png" alt=""></image>
 									<view class="redBox" v-if="item.ifRead ===0"></view>
 								</view>
 								<span>订单消息</span>
 							</view>
 							<view v-else class="messageTypeL">
 								<view class="iconBox">
-									<image src="../../static/images/notice.png" alt=""></image>
+									<image src="https://ceres.zkthink.com/static/images/notice.png" alt=""></image>
 								</view>
 								<span>系统公告</span>
 							</view>
@@ -41,7 +41,7 @@
 			</u-swipe-action>
 		</view>
 		<view v-if="ifEmpty" class="mar-top-60 empty-box">
-			<image class="question-empty" src="../../static/img/bgnull.png"></image>
+			<image class="question-empty" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
 			<view class="tohome-box flex-items-plus">暂无消息</view>
 		</view>
 	</view>
@@ -333,13 +333,11 @@
 					}
 				}
 				.messageInfo {
-					width: 680upx;
-					word-wrap: break-word;
+					width: 670upx;
+					display: block;
 					overflow: hidden;
-					text-overflow: ellipsis;
-					display: -webkit-box;
-					-webkit-line-clamp: 2;
-					-webkit-box-orient: vertical;
+					text-overflow:ellipsis;
+					white-space: nowrap;
 					margin: 20upx 40upx 20upx;
 					img {
 						width: 100%;
@@ -368,7 +366,7 @@
 					display: block;
 					width: 28upx;
 					height: 28upx;
-					background: url("../../static/images/arrowRight.png") no-repeat center center;
+					background: url("https://ceres.zkthink.com/static/images/arrowRight.png") no-repeat center center;
 					background-size: contain;
 				}
 			}

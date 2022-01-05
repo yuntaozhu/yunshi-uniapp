@@ -9,7 +9,7 @@
 			</swiper>
 		</view>
 		<view class="share-box flex-items-plus" @click="clickShare">
-			<image class="share-img" src="../../static/images/shareBut.png"></image>
+			<image class="share-img" src="https://ceres.zkthink.com/static/images/shareBut.png"></image>
 			<label class="fs24 mar-left-5">分享</label>
 		</view>
 		<view class="goodgDes-box flex-start flex-column">
@@ -26,7 +26,7 @@
 			<view v-else class="seckill-box">
         <view class="flex-items flex-sp-between" v-if="selectedSku.activityType === 9">
           <view class="vipImg flex-items">
-            <image class="vip-icon" src="../../static/images/vipDetail.png" mode=""></image>
+            <image class="vip-icon" src="https://ceres.zkthink.com/static/images/vipDetail.png" mode=""></image>
           </view>
           <view class="flex-row-plus flex-items-plus mar-left-30 mar-top-10">
             <label class="fs30 font-color-FFF">¥</label>
@@ -37,11 +37,11 @@
 				<view v-else class="flex-items flex-row flex-sp-between">
 					<view class="flex-column-plus">
 						<image v-if="[2,4].includes(selectedSku.activityType)" class="seckill-icon"
-							src="../../static/images/seckillicon.png" mode=""></image>
+							src="https://ceres.zkthink.com/static/images/seckillicon.png" mode=""></image>
 						<image v-if="[3,5].includes(selectedSku.activityType)" class="discount-icon"
-							src="../../static/images/discounticon.png" mode=""></image>
+							src="https://ceres.zkthink.com/static/images/discounticon.png" mode=""></image>
 						<image v-if="selectedSku.activityType === 1" class="spell-icon"
-							src="../../static/images/spellicon.png" mode=""></image>
+							src="https://ceres.zkthink.com/static/images/spellicon.png" mode=""></image>
 						<view class="flex-row-plus flex-items mar-top-10">
 							<label class="fs30 font-color-FFF">¥</label>
 							<label class="fs42 mar-left-5 font-color-FFF">{{selectedSku.price || 0}}</label>
@@ -72,8 +72,8 @@
 				</view>
 				<view class="collectBox" @click="collectProduct">
 					<image v-if="productData.ifCollect === 1" class="store-icon"
-						src="../../static/images/shoucangActive1.png"></image>
-					<image v-else class="store-icon" src="../../static/images/shoucang2x.png"></image>
+						src="https://ceres.zkthink.com/static/images/shoucangActive1.png"></image>
+					<image v-else class="store-icon" src="https://ceres.zkthink.com/static/images/shoucang2x.png"></image>
 					<label class="fs22">收藏</label>
 				</view>
 			</view>
@@ -86,14 +86,14 @@
 					</view>
 					<view class="flex-items">
 						<label class="fs24 font-color-C5AA7B">领券</label>
-						<image class="coupon-arrow" src="../../static/img/user/arrow.png"></image>
+						<image class="coupon-arrow" src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
 					</view>
 				</view>
 			</view>
 		</view>
 		<view class="express-box flex-items flex-row fs24">
       <label class="fs24 font-color-999 mar-right-20">发货</label>
-      <image src="../../static/images/mapIcon.png" v-if="productData.receive && productData.receive.receiveAdress"></image>
+      <image src="https://ceres.zkthink.com/static/images/mapIcon.png" v-if="productData.receive && productData.receive.receiveAdress"></image>
       <label class="mar-left-10 mapName mar-right-30" v-if="productData.receive && productData.receive.receiveAdress">{{productData.receive.receiveAdress}}</label>
 			<label>快递：¥ {{productData.logisticsPrice || 0}}</label>
 		</view>
@@ -105,7 +105,7 @@
             <view class="mar-right-10" v-for="(item, index) of currentSuk" :key="index">{{item.skuText}}</view>
           </view>
 				</view>
-				<image class="arrow-icon" src="../../static/img/user/arrow.png"></image>
+				<image class="arrow-icon" src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
 			</view>
 		</view>
     <!--结合销售-->
@@ -118,7 +118,7 @@
 				<view class="allMoreBox">
 					<view v-if="topThreeCollageOrders.length > 0" class="allMore" @click="openAllBuy">查看全部</view>
 					<view v-else class="allMore" @click="openAllBuyTwo">查看全部</view>
-					<image class="evaluateAllArrow-icon mar-left-10" src="../../static/img/user/arrow.png"></image>
+					<image class="evaluateAllArrow-icon mar-left-10" src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
 				</view>
 			</view>
 			<view class="groupBuy" v-for="(Gitem, index) in topThreeCollageOrders" :key="index">
@@ -186,15 +186,15 @@
 				</view>
 				<view class="like-box">
 					<image class="like-img" @click="zanTap(index, commentItem.commentId,0)"
-						src="../../static/images/praiseActiveIcon.png" v-if="commentItem.ifLike === 1"></image>
+						src="https://ceres.zkthink.com/static/images/praiseActiveIcon.png" v-if="commentItem.ifLike === 1"></image>
 					<image class="like-img" @click="zanTap(index, commentItem.commentId,1)"
-						src="../../static/images/praiseIcon.png" v-else></image>
+						src="https://ceres.zkthink.com/static/images/praiseIcon.png" v-else></image>
 					<view class="like-num">{{commentItem.likes}}</view>
 				</view>
 			</view>
 			<view class="moreBox" v-if="commentListLength>0" @click="commentAll">
 				<label class="fs24">查看全部</label>
-				<image class="evaluateAllArrow-icon mar-left-10" src="../../static/img/user/arrow.png"></image>
+				<image class="evaluateAllArrow-icon mar-left-10" src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
 			</view>
 		</view>
 		<!--    评价END-->
@@ -232,7 +232,7 @@
 				</view>
         <view class="moreBox" v-if="problemsListLength>0" @click="seeAllQa">
           <label class="fs24">查看全部</label>
-          <image class="evaluateAllArrow-icon mar-left-10" src="../../static/img/user/arrow.png"></image>
+          <image class="evaluateAllArrow-icon mar-left-10" src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
         </view>
 			</view>
 		</view>
@@ -267,18 +267,18 @@
 			<view class="buygoodsBut-box flex-row-plus" :style="{'height':(isIphone === true? 160:130)+'rpx'}">
 				<view class="btns_container">
 					<view class="btns flex-column-plus" @click="goStore">
-						<image class="store-icon" src="../../static/images/storeIcon.png"></image>
+						<image class="store-icon" src="https://ceres.zkthink.com/static/images/storeIcon.png"></image>
 						<label class="fs22">店铺</label>
 					</view>
 					<!-- #ifdef MP-WEIXIN -->
 					<view v-if="hasService" class="btns flex-column-plus mar-left-10" @click="flyToService">
-						<image class="store-icon" src="../../static/images/service-product-detail.png"></image>
+						<image class="store-icon" src="https://ceres.zkthink.com/static/images/service-product-detail.png"></image>
 						<label class="fs22">客服</label>
 					</view>
 					<!-- #endif -->
 					<view class="btns flex-column-plus mar-left-10 flex-items Cart" @click="goshopCart">
 						<view class="cartAllNum" v-if="allCartNum>0">{{allCartNum}}</view>
-						<image class="store-icon" src="../../static/images/gouwuche.png"></image>
+						<image class="store-icon" src="https://ceres.zkthink.com/static/images/gouwuche.png"></image>
 						<label class="fs22">购物车</label>
 					</view>
 				</view>
@@ -300,7 +300,7 @@
 		<view class="returnTopService-box">
 			<view class="returnTop-box flex-items-plus flex-column" @click="top"
 				:style="{'display':(returnTopFlag===true? 'flex':'none')}">
-				<image class="returnTopImg" src="../../static/images/backTop.png"></image>
+				<image class="returnTopImg" src="https://ceres.zkthink.com/static/images/backTop.png"></image>
 			</view>
 		</view>
 		<!-- 商品详情 -->
@@ -1412,7 +1412,7 @@ export default {
 			})
 		},
 		getServiceUrl() {
-			if (this.isLoading) { return }
+			if (this.isLoading || !this.shopId || this.shopId === 'null') { return }
 			const shopids = uni.getStorageSync('service_shopids') || []
 			const corpIds = uni.getStorageSync('service_corpIds') || []
 			const urls = uni.getStorageSync('service_urls') || []
@@ -1759,7 +1759,7 @@ export default {
 						content: '';
 						width: 60rpx;
 						height: 60rpx;
-						background: url("../../static/images/arrow.png") no-repeat center center;
+						background: url("https://ceres.zkthink.com/static/images/arrow.png") no-repeat center center;
 						background-size: contain;
 						display: block;
 						position: absolute;
@@ -1946,7 +1946,7 @@ export default {
 					content: '';
 					width: 60rpx;
 					height: 60rpx;
-					background: url("../../static/images/arrow.png") no-repeat center center;
+					background: url("https://ceres.zkthink.com/static/images/arrow.png") no-repeat center center;
 					background-size: contain;
 					display: block;
 					position: absolute;
@@ -2137,7 +2137,7 @@ export default {
 					width: 36upx;
 					height: 36upx;
 					display: block;
-					background: url("../../static/images/serviceImg.png") no-repeat center center;
+					background: url("https://ceres.zkthink.com/static/images/serviceImg.png") no-repeat center center;
 					background-size: contain;
 				}
 			}
@@ -2350,15 +2350,12 @@ export default {
 		}
 
 		.couponShow-box {
-
 			.couponShow {
 				z-index: 333;
-				height: 1000upx;
-
+				height: 1000rpx;
 				.couponTitle-box {
 					width: 100%;
 				}
-
 				.coupon-title-active {
 					color: #FF7700;
 					border-bottom: 2upx solid #FF7700;
@@ -2387,7 +2384,6 @@ export default {
 					}
 				}
 			}
-
 		}
 
 		.succeedShow-box {
@@ -2626,7 +2622,7 @@ export default {
 
 	.seckill-box {
 		width: 100%;
-		background: url("../../static/images/storeTop_Img.png") no-repeat left top;
+		background: url("https://ceres.zkthink.com/static/images/storeTop_Img.png") no-repeat left top;
 		padding: 35rpx 30rpx;
 
 		.seckill-icon {

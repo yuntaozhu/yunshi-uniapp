@@ -13,7 +13,7 @@
 							<view class="top-l" @click.stop="goShop(item.shopId)">
 								<image :src="item.shopLogo" class="shop-img"></image>
 								<text class="shop-name">{{item.shopName}}</text>
-								<image src="../../static/images/arrowRight.png" class="arrow-img"></image>
+								<image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="arrow-img"></image>
 							</view>
 							<!--订单状态： 退款中 交易关闭 待付款 待发货 待收货 已完成-->
 							<view class="order-status" v-if='item.state==1'>待付款</view>
@@ -78,7 +78,7 @@
 					</view>
 				</view>
 				<view v-if="ifEmpty" class="emptyOrder-box flex-items-plus flex-column">
-					<image class="emptyOrder-img" src="../../static/images/emptyOrderImg.png"></image>
+					<image class="emptyOrder-img" src="https://ceres.zkthink.com/static/images/emptyOrderImg.png"></image>
 					<label class="font-color-999 fs26 mar-top-30">你还没有订单哦～</label>
 				</view>
 			</view>
@@ -97,7 +97,7 @@
 					</view>
 					<view class="pay-type-radio">
 						<view class="pay-type-img">
-							<img class="pay-type-img-inner" src="../../static/images/huabei.png" />
+							<img class="pay-type-img-inner" src="https://ceres.zkthink.com/static/images/huabei.png" />
 						</view>
 						<label class="pay-type-label">花呗分期</label>
 						<radio class="pay-type-radio-item" style="transform:scale(0.7)" :disabled="totalPrice < 0.03"
@@ -855,7 +855,7 @@
 			.delIcon {
 				width: 40rpx;
 				height: 40rpx;
-				background: url("../../static/images/delListOrder.png") no-repeat center center;
+				background: url("https://ceres.zkthink.com/static/images/delListOrder.png") no-repeat center center;
 				background-size: contain;
 			}
 		}

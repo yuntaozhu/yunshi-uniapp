@@ -4,7 +4,7 @@
 			<view class="wid function-box">
 				<view class="finishbox" @click="finishClick" v-if="allCheckShow">完成</view>
 				<view v-else class="flex-row-plus editicon-box flex-items fs28" @click="editClick">
-					<image class="editicon" src="../../static/images/collectionEditicon.png"></image>
+					<image class="editicon" src="https://ceres.zkthink.com/static/images/collectionEditicon.png"></image>
 					<label class="mar-left-10">编辑</label>
 				</view>
 			</view>
@@ -17,8 +17,8 @@
             <view class="itemBox">
               <view @click.stop="toGoodsDetails(item.productId,item.shopId,item.skuId)" class="item wid flex-display">
                 <view v-show="allCheckShow" class="selectIconBox">
-                  <image v-if="item.selected == 1" @click.stop="footItemSel(index,findex,0)" src="../../static/images/selectActive.png" class="cart-select-img"></image>
-                  <image v-else @click.stop="footItemSel(index,findex,1)" src="../../static/images/selectEmpty.png" class="cart-select-img"></image>
+                  <image v-if="item.selected == 1" @click.stop="footItemSel(index,findex,0)" src="https://ceres.zkthink.com/static/images/selectActive.png" class="cart-select-img"></image>
+                  <image v-else @click.stop="footItemSel(index,findex,1)" src="https://ceres.zkthink.com/static/images/selectEmpty.png" class="cart-select-img"></image>
                 </view>
                 <image class="product-img" mode="aspectFill" :src="item.image" />
                 <!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
@@ -36,8 +36,8 @@
 			</view>
 			<view v-show="allCheckShow" class="allcheck-box flex-row-plus flex-sp-between flex-items">
 				<view class="left">
-					<image v-if="isAllCheck" src="../../static/images/selectActive.png" class="cart-select-img" @click="allSel(0)"></image>
-					<image v-else src="../../static/images/selectEmpty.png" class="cart-select-img" @click="allSel(1)"></image>
+					<image v-if="isAllCheck" src="https://ceres.zkthink.com/static/images/selectActive.png" class="cart-select-img" @click="allSel(0)"></image>
+					<image v-else src="https://ceres.zkthink.com/static/images/selectEmpty.png" class="cart-select-img" @click="allSel(1)"></image>
 					<text>全选</text>
 				</view>
 				<view class="right">
@@ -47,7 +47,7 @@
 			<view v-if="allCheckShow" class="pad-bot-140"></view>
 		</view>
 		<view v-else class="mar-top-60 empty-box" @click="goToIndex">
-			<image class="footprint-empty" src="../../static/img/bgnull.png"></image>
+			<image class="footprint-empty" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
 			<view class="tohome-box flex-items-plus">去首页逛逛</view>
 		</view>
 	</view>
@@ -390,7 +390,7 @@ page {
    width: 60rpx;
    height: 60rpx;
    display: block;
-   background: url("../../static/images/delIcon.png") no-repeat center center;
+   background: url("https://ceres.zkthink.com/static/images/delIcon.png") no-repeat center center;
    background-size: contain;
  }
 </style>

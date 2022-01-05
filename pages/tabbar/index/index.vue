@@ -3,22 +3,22 @@
     <!-- #ifdef MP-WEIXIN -->
     <view class="header weiXinBox" :style="{'padding-top': topHeight + 'px'}">
       <view class="topBox" :style="{'height': height + 'px'}">
-        <image class="logo" src="@/static/assets/img/logo.png" mode="widthFix"></image>
+        <image class="logo" src="https://ceres.zkthink.com/static/assets/img/logo.png" mode="widthFix"></image>
       </view>
     </view>
     <view class="wxBtnBg" :style="{'padding-top': (topHeight + height + 10) + 'px'}">
       <view class="weiXinBoxBtn" @click="searchPro">
-        <image class="search-icon" src="@/static/images/searchImg.png" mode="widthFix"></image>
+        <image class="search-icon" src="https://ceres.zkthink.com/static/images/searchImg.png" mode="widthFix"></image>
         <text>请输入您想要的宝贝</text>
       </view>
     </view>
     <!-- #endif -->
     <!-- #ifdef H5 || APP-PLUS -->
     <view class="header">
-      <view class="topBox">
-        <image class="logo" src="@/static/assets/img/logo.png" mode="widthFix"></image>
+      <view class="topBox topWap">
+        <image class="logo" src="https://ceres.zkthink.com/static/assets/img/logo.png" mode="widthFix"></image>
         <view class="search-btn" @click="searchPro">
-          <image class="search-icon" src="@/static/img/search.png" mode="widthFix"></image>
+          <image class="search-icon" src="https://ceres.zkthink.com/static/img/search.png" mode="widthFix"></image>
         </view>
       </view>
     </view>
@@ -28,7 +28,7 @@
 		<category-show v-else :categoryid="categoryid"></category-show>
     <ad-window ref="adWindow" :triggerCondition="1"></ad-window>
 		<view class="reachBottom" v-if="topLeft > 400">
-			<image class="reach-icon" src="@/static/img/reachBottom.png" mode="widthFix"></image>
+			<image class="reach-icon" src="https://ceres.zkthink.com/static/img/reachBottom.png" mode="widthFix"></image>
 			<text class="reach-text">这里到底了哦~~</text>
 		</view>
 	</div>
@@ -214,6 +214,12 @@
     color: #000000;
     font-size: 38rpx;
     font-weight: bold;
+  }
+}
+.topWap {
+  padding-top: 60rpx;
+  .logo {
+    margin-top: 0 !important;
   }
 }
 .terminal2 {}

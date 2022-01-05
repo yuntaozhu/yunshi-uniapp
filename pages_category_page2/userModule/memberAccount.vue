@@ -12,9 +12,9 @@
     </view>
 		<view class="balance-operation">
 			<view class="item-btn" @click="memberAccountWithdraw">
-				<image class="item-btn-icon" src="../../static/images/withdraw.png" mode="widthFix"></image>
+				<image class="item-btn-icon" src="https://ceres.zkthink.com/static/images/withdraw.png" mode="widthFix"></image>
 				<view class="item-btn-text">提现</view>
-				<image class="item-btn-right" src="../../static/images/greyArrow.png" mode="widthFix"></image>
+				<image class="item-btn-right" src="https://ceres.zkthink.com/static/images/greyArrow.png" mode="widthFix"></image>
 			</view>
 		</view>
 	</view>
@@ -84,14 +84,14 @@ page {
 		.balance{
 			display: block;
 			height: 400rpx;
-			background: url("../../static/images/bankBg.png") no-repeat left top;
+			background: url("https://ceres.zkthink.com/static/images/bankBg.png") no-repeat left top;
       background-size: cover;
 			text-align:center;
       padding: 100rpx 20rpx 0 20rpx;
 		}
     .balanceInfo {
       width: 712rpx;
-      background: url("../../static/images/accountBg.png") no-repeat left top;
+      background: url("https://ceres.zkthink.com/static/images/accountBg.png") no-repeat left top;
       height: 342rpx;
       background-size: cover;
       margin: -300rpx auto 0 auto;

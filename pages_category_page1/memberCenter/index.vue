@@ -49,7 +49,7 @@
         <view class="signItem flex-items flex-sp-between">
           <view class="itemLeft flex-items">
             <view class="leftIcon">
-              <image src="../../static/img/member/memberList2.png"></image>
+              <image src="https://ceres.zkthink.com/static/img/member/memberList2.png"></image>
             </view>
             <view class="leftInfo">
               <label class="fs28 font-color-333">购物</label>
@@ -129,7 +129,7 @@ page {
 }
   .memberCenter {
     border-top: 2rpx solid #4b4b4b;
-    background: url("../../static/images/addBankBg.png") no-repeat left top;
+    background: url("https://ceres.zkthink.com/static/images/addBankBg.png") no-repeat left top;
     background-size: contain;
     min-height: 800rpx;
     padding: 0 20rpx;
@@ -199,7 +199,7 @@ page {
         .equityTit {
           color: #FFEBC4;
           font-size: 28rpx;
-          background: url("../../static/images/quityBg.png") no-repeat center center;
+          background: url("https://ceres.zkthink.com/static/images/quityBg.png") no-repeat center center;
           background-size: contain;
           width: 90%;
           margin: 0 auto;

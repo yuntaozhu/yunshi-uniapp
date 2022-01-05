@@ -24,7 +24,7 @@
           </view>
           <view class="exchangeBtnBox flex-column flex-end">
             <view class="exchangeBtn fs24 font-color-FFF" v-if="item.state === 0">已领取</view>
-            <wx-send-coupon v-else @success="getCouponList" :couponList="[item]">
+            <wx-send-coupon v-else @success="success" :couponList="[item]">
               <view class="exchangeBtn fs24 font-color-FFF">{{item.ifCredit?'立即兑换':'立即领取'}}</view>
             </wx-send-coupon>
           </view>
@@ -34,7 +34,7 @@
     </view>
     <!-- 触底 -->
     <view class="reachBottom" v-if="topLeft > 400 && couponList.length>0">
-      <image class="reach-icon" src="@/static/img/reachBottom.png" mode="widthFix"></image>
+      <image class="reach-icon" src="https://ceres.zkthink.com/static/img/reachBottom.png" mode="widthFix"></image>
       <text class="reach-text">这里到底了哦~~</text>
     </view>
   </view>
@@ -98,6 +98,10 @@ export default {
       uni.navigateTo({
         url: `../coupon/product?id=${item.couponId}`
       })
+    },
+    success(){
+      this.page = 1
+      this.getCouponList()
     }
   }
 }
@@ -114,7 +118,7 @@ page {
       margin-top: 40rpx;
       padding: 25rpx 35rpx;
       overflow: hidden;
-      background-image: url("../../static/images/borderIcon.png");
+      background-image: url("https://ceres.zkthink.com/static/images/borderIcon.png");
       background-repeat: no-repeat;
       background-size: contain;
       background-position: right top;

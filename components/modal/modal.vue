@@ -13,7 +13,7 @@
 			</view>
 			<view v-else>
 				<view class="flex-end-plus" @tap="handleClickCancel">
-					<!-- <image class="img" src="../../static/close@3x.png" mode=""></image> -->
+					<!-- <image class="img" src="https://ceres.zkthink.com/static/close@3x.png" mode=""></image> -->
 				</view>
 				<slot></slot>
 			</view>

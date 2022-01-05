@@ -8,7 +8,7 @@
 				<view class="fs28 addressTag">银行卡</view>
 				<view>
 					<label v-model="cardNum">{{cardNum}}</label>
-					<image class="arrow mar-left-20" src="../../static/img/user/arrow.png"></image>
+					<image class="arrow mar-left-20" src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
 				</view>
 			</view>
 			<view class="apply-box">

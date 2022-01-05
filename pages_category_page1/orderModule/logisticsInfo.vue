@@ -15,7 +15,7 @@
 			</view>
 		</view>
 		<view v-else class="emptyOrder-box flex-items-plus flex-column">
-			<image class="emptyOrder-img" src="../../static/img/bgnull.png"></image>
+			<image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
 			<label class="font-color-999 fs26 mar-top-30">你还没有物流信息哦～</label>
 		</view>
 	</view>

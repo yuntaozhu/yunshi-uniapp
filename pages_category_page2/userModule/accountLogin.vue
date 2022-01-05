@@ -2,11 +2,11 @@
 	<!-- 登录 -->
 	<view class="container flex-items-plus flex-column">
 		<view class="login-logoBox">
-			<image class="login-logo" src="../../static/images/loginLogo.png"></image>
+			<image class="login-logo" src="https://ceres.zkthink.com/static/images/loginLogo.png"></image>
 		</view>
 		<view class="iphoneNum-box flex-row-plus flex-items">
 			<view style="margin-right: 30rpx">
-        <image class="loginIcon" src="../../static/images/phone.png"></image>
+        <image class="loginIcon" src="https://ceres.zkthink.com/static/images/phone.png"></image>
 			</view>
 			<view>
 				<input v-model="loginQuery.account" placeholder-class="iphoneNum-input" type="number"
@@ -16,7 +16,7 @@
 		<view class="flex-row-plus mar-top-20">
 			<view class="code-box">
 				<view style="margin-right: 30rpx">
-          <image class="loginIcon" src="../../static/images/code.png"></image>
+          <image class="loginIcon" src="https://ceres.zkthink.com/static/images/code.png"></image>
 				</view>
 				<view>
 					<input v-model="loginQuery.code" placeholder-class="codeNum-input" placeholder="请输入验证码" />

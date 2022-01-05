@@ -1,7 +1,7 @@
 <template>
  <view class="groupBuy">
    <view class="groupBuyBg">
-     <image src="../../static/images/groupBuyLogo.png"></image>
+     <image src="https://ceres.zkthink.com/static/images/groupBuyLogo.png"></image>
    </view>
 	 <view class="countdown" v-if="shopShowType == false">
 	   距结束<view class="endDate"><span>{{hou}}</span><i>:</i><span>{{min}}</span><i>:</i><span>{{sec}}</span></view>
@@ -44,7 +44,7 @@
          <view class="price">
            <view class="currentPrice flex-row-plus flex-items-plus font-color-FF7800">
              <view class="iconBox">
-               <image src="../../static/images/groupBuyIcon.png"></image>
+               <image src="https://ceres.zkthink.com/static/images/groupBuyIcon.png"></image>
              </view>
              <view class="flex-row-plus flex-items priceInfo">
                <label class="fs24">￥</label>
@@ -61,7 +61,7 @@
        </view>
      </view>
      <view v-if="ifEmpty" class="emptyOrder-box flex-items-plus flex-column">
-       <image class="emptyOrder-img" src="../../static/img/bgnull.png"></image>
+       <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
        <label class="font-color-999 fs26 mar-top-30">暂无活动商品～</label>
      </view>
    </view>

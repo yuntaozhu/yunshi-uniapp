@@ -191,7 +191,7 @@
 		.topBackImg {
 			width: 100%;
 			height: 260upx;
-			background: url(../../static/images/storeTop_Img.png) no-repeat;
+			background: url(https://ceres.zkthink.com/static/images/storeTop_Img.png) no-repeat;
 			background-size: 100% 260upx;
 
 			.content {

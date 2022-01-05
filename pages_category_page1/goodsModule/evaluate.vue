@@ -254,7 +254,7 @@
   content: '';
   height: 71rpx;
   width: 71rpx;
-  background: url("../../static/images/addImg.png") no-repeat center center;
+  background: url("https://ceres.zkthink.com/static/images/addImg.png") no-repeat center center;
   display: block;
   background-size: contain;
 }

@@ -7,7 +7,7 @@
 					<view class="l">物流公司</view>
 					<view class="r-box">
 						<text>{{SendReturnQuery.logisticsName}}</text>
-						<image src="../../static/images/arrowRight.png" class="r"></image>
+						<image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="r"></image>
 					</view>
 				</view>
 
@@ -561,7 +561,7 @@
   content: '';
   height: 71rpx;
   width: 71rpx;
-  background: url("../../static/images/addImg.png") no-repeat center center;
+  background: url("https://ceres.zkthink.com/static/images/addImg.png") no-repeat center center;
   display: block;
   background-size: contain;
 }

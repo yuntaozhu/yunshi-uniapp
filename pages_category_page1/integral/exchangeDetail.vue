@@ -54,9 +54,13 @@
         </view>
       </view>
     </view>
-    <view class="exchangeBtnBg flex-items">
-      <view class="exchangeBtn" @click.stop="receiveCoupon">立即兑换</view>
-    </view>
+
+      <wx-send-coupon @success="success" :couponList="[currentCoupon]" :isExchange="true">
+        <view class="exchangeBtnBg flex-items">
+          <view class="exchangeBtn">立即兑换</view>
+        </view>
+      </wx-send-coupon>
+
     <!-- 签到弹窗 -->
     <tui-modal :show="exchangeTips" :custom="true" :fadein="true">
       <view class="Put-box1">
@@ -80,9 +84,11 @@
 import tuiModal from "@/components/modal/modal";
 import NET from "../../utils/request";
 import API from "../../config/api";
+import WxSendCoupon from "../../components/wx/wxSendCoupon";
 export default {
   name: "exchangeDetail",
   components: {
+    WxSendCoupon,
     tuiModal
   },
   data() {
@@ -167,6 +173,12 @@ export default {
       uni.navigateTo({
         url: '/pages_category_page1/goodsModule/goodsDetails?shopId='+shopId + '&productId='+productId +'&skuId='+skuId
       })
+    },
+    success(){
+      uni.showToast({
+        title: '兑换成功',
+        icon:"success"
+      })
     }
   }
 }
@@ -180,12 +192,12 @@ page {
   padding-bottom: 200rpx;
   background: #F8F8F8;
  .topBg {
-   background: url("../../static/images/addBankBg.png") no-repeat left top;
+   background: url("https://ceres.zkthink.com/static/images/addBankBg.png") no-repeat left top;
    background-size: contain;
    height: 350rpx;
    padding: 40rpx 20rpx 0 20rpx;
    .exchangeCoupon {
-     background: url("../../static/images/exchagneCoupon.png") no-repeat left top;
+     background: url("https://ceres.zkthink.com/static/images/exchagneCoupon.png") no-repeat left top;
      background-size: contain;
      height: 302rpx;
      border-radius: 16rpx;
@@ -261,7 +273,7 @@ page {
     }
   }
   .exchangeBtnBg {
-    width: 100%;
+    width: 750rpx;
     height: 164rpx;
     background: #FFFFFF;
     box-shadow: 0 -1rpx 0rpx rgba(197, 202, 207, 0.5);

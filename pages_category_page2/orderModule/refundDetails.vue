@@ -8,7 +8,7 @@
 						<text class="status">审核中</text>
 						<!-- <text class="label" v-if="deliveryfalse">还剩1天22时30分</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsTime.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsTime.png"></image>-->
 				</view>
 				<!--  审核通过-->
 				<view class="status-title-box" v-if="status == 10">
@@ -16,7 +16,7 @@
 						<text class="status">审核通过</text>
 						<!-- <text class="label" v-if="deliveryfalse">2020年4月24日 22:00:00</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsSuccess.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsSuccess.png"></image>-->
 				</view>
 				<!--  审核不通过-->
 				<view class="status-title-box" v-if="status == 6">
@@ -24,7 +24,7 @@
 						<text class="status">审核不通过</text>
 						<!-- <text class="label" v-if="deliveryfalse">2020年4月24日 22:00:00</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsSuccess.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsSuccess.png"></image>-->
 				</view>
         <view class="reason" v-if="status == 6">原因: {{ itemlist.reason }}</view>
 				<!--  退款中-->
@@ -33,14 +33,14 @@
 						<text class="status">退款中</text>
 						<!-- <text class="label">2020年4月24日 22:00:00</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsFalse.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
 				</view>
         <!--  退款中-->
         <view class="status-title-box" v-if="status == 7">
           <view class="l">
             <text class="status">评审中</text>
           </view>
-<!--          <image class='r' src="../../static/images/afterSaleDetailsFalse.png"></image>-->
+<!--          <image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
         </view>
 				<!--  退货完成待退款-->
 				<view class="status-title-box" v-if="status == 4">
@@ -48,7 +48,7 @@
 						<text class="status">退款成功</text>
 						<!-- <text class="label">2020年4月24日 22:00:00</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsFalse.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
 				</view>
 				<!--  退货完成拒绝退款-->
 				<view class="status-title-box" v-if="status == 5">
@@ -56,7 +56,7 @@
 						<text class="status">退款失败</text>
 						<!-- <text class="label">2020年4月24日 22:00:00</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsFalse.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
 				</view>
 				<!--  退款成功-->
 				<view class="status-title-box" v-if="status == 9">
@@ -64,7 +64,7 @@
 						<text class="status">撤销申请</text>
 						<!-- <text class="label" v-if="deliveryfalse">2020年4月24日 22:00:00</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/afterSaleDetailsSuccess.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsSuccess.png"></image>-->
 				</view>
 
 			</view>
@@ -268,7 +268,7 @@ page {
 .order-details-status {
   width: 100%;
   height: 302upx;
-  background: url("../../static/images/refundBg.png") no-repeat left top;
+  background: url("https://ceres.zkthink.com/static/images/refundBg.png") no-repeat left top;
   background-size: contain;
 }
 

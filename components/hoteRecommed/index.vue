@@ -1,7 +1,7 @@
 <template>
   <view class="hotTemplate" v-if="productList.length">
     <view class="evaluateIcon flex-items">
-      <image src="@/static/images/evaluateIcon.png"></image>
+      <image src="https://ceres.zkthink.com/static/images/evaluateIcon.png"></image>
       <text>热门推荐</text>
     </view>
     <view class="recommendList">

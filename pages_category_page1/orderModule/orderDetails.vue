@@ -9,7 +9,7 @@
 						<text class="status">等待买家付款</text>
 						<text class="label">剩{{hou}}小时{{min}}分{{sec}}秒自动关闭</text>
 					</view>
-<!--					<image class='r' src="../../static/images/orderDaifukuan.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaifukuan.png"></image>-->
 				</view>
 				<!--  待发货-->
 				<view class="status-title-box" v-else-if='dataList.state==2'>
@@ -17,7 +17,7 @@
 						<text class="status">等待卖家发货</text>
 						<text class="label">付款后2-5个工作日发货</text>
 					</view>
-<!--					<image class='r' src="../../static/images/orderDaifahuo.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaifahuo.png"></image>-->
 				</view>
 				<!--  待收货-->
 				<view class="status-title-box" v-else-if='dataList.state==3'>
@@ -25,7 +25,7 @@
 						<text class="status">卖家已发货</text>
 						<!-- <text class="label">还剩5天21小时自动确认</text> -->
 					</view>
-<!--					<image class='r' src="../../static/images/orderDaishouhuo.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaishouhuo.png"></image>-->
 				</view>
 				<!-- 已完成 -->
 				<view class="status-title-box" v-else-if='dataList.state==4'>
@@ -33,7 +33,7 @@
 						<text class="status">交易成功</text>
 						<text class="label">感谢您的使用</text>
 					</view>
-<!--					<image class='r' src="../../static/images/orderDaipingjia.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaipingjia.png"></image>-->
 				</view>
 				<!--  拼团失败-->
 				<view class="status-title-box" v-else-if='dataList.state==5 && dataList.collageId != 0'>
@@ -42,7 +42,7 @@
 						<text class="label">剩余时间 00:00:00</text>
 					</view>
 					<view class="clusterback">
-<!--						<image class='r' src="../../static/images/staycluster.png"></image>-->
+<!--						<image class='r' src="https://ceres.zkthink.com/static/images/staycluster.png"></image>-->
 					</view>
 				</view>
 				<!-- 交易关闭-->
@@ -62,13 +62,13 @@
 						<text class="status">待成团</text>
 						<text class="label">剩余时间{{hou}}小时{{min}}分{{sec}}秒</text>
 					</view>
-<!--					<image class='r' src="../../static/images/clusterloss.png"></image>-->
+<!--					<image class='r' src="https://ceres.zkthink.com/static/images/clusterloss.png"></image>-->
 				</view>
 
 			</view>
 			<view class="order-details-info-box">
 				<view class="address-box">
-					<image src="../../static/images/orderAddress.png" class="address-img"></image>
+					<image src="https://ceres.zkthink.com/static/images/orderAddress.png" class="address-img"></image>
 					<view class="address-r">
 						<view class="address-name-box">
 							<text>{{dataList.receiveName}}</text>
@@ -78,19 +78,19 @@
 							<text>{{dataList.receiveAdress}} {{dataList.address}}</text>
 						</view>
 					</view>
-					<image src="../../static/images/arrowRight.png" v-if="false" class="arrow-right-img"></image>
+					<image src="https://ceres.zkthink.com/static/images/arrowRight.png" v-if="false" class="arrow-right-img"></image>
 				</view>
 
 				<view class="order-list-box">
 					<view class="item">
 						<view class="order-list-top">
 							<view class="top-l" @click="goShop(dataList.shopId)">
-								<image src="../../static/images/orderStoreIcon.png" class="shop-img"></image>
+								<image src="https://ceres.zkthink.com/static/images/orderStoreIcon.png" class="shop-img"></image>
 								<text class="shop-name">{{dataList.shopName}}</text>
-								<image src="../../static/images/arrowRight.png" class="arrow-img"></image>
+								<image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="arrow-img"></image>
 							</view>
 							<view class="toService" @click="openService">
-								<image src="../../static/images/serviceImg-order-detail.png"  class="service-img" ></image>
+								<image src="https://ceres.zkthink.com/static/images/serviceImg-order-detail.png"  class="service-img" ></image>
 								<text>联系客服</text>
 							</view>
 						</view>
@@ -236,9 +236,9 @@
 						<text class="line"></text>
 						<text>物流信息</text>
 					</view>
-					<image mode="aspectFill" src="../../static/images/arrowDown.png" class="arrow-down-img"
+					<image mode="aspectFill" src="https://ceres.zkthink.com/static/images/arrowDown.png" class="arrow-down-img"
 						style="transform:rotate(180deg);" v-if="isShowWuLiu == true"></image>
-					<image mode="aspectFill" src="../../static/images/arrowDown.png" class="arrow-down-img" v-else>
+					<image mode="aspectFill" src="https://ceres.zkthink.com/static/images/arrowDown.png" class="arrow-down-img" v-else>
 					</image>
 				</view>
 			</view>
@@ -248,7 +248,7 @@
 					<uni-steps :options="steps" direction="column" :active="0"></uni-steps>
 				</view>
 				<view v-else class="emptyOrder-box flex-items-plus flex-column">
-					<image class="emptyOrder-img" src="../../static/img/bgnull.png"></image>
+					<image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
 					<label class="font-color-999 fs26 mar-top-30">这里空空如也～</label>
 				</view>
 			</view>
@@ -287,7 +287,7 @@
 					</view>
 					<view class="pay-type-radio">
 						<view class="pay-type-img">
-							<img class="pay-type-img-inner" src="../../static/images/huabei.png" />
+							<img class="pay-type-img-inner" src="https://ceres.zkthink.com/static/images/huabei.png" />
 						</view>
 						<label class="pay-type-label">花呗分期</label>
 						<radio class="pay-type-radio-item" style="transform:scale(0.7)" :disabled="totalPrice < 0.03"
@@ -1073,7 +1073,7 @@
 				})
 			},
 			openService() {
-				if (this.isLoading) { return }
+				if (this.isLoading || !this.shopId || this.shopId === 'null') { return }
 				const shopids = uni.getStorageSync('service_shopids') || []
 				const corpIds = uni.getStorageSync('service_corpIds') || []
 				const urls = uni.getStorageSync('service_urls') || []

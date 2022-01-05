@@ -54,6 +54,10 @@
                 type: Array,
                 default: ()=>[]
             },
+            isExchange: {
+                type: Boolean,
+                default: false
+            }
             // 卡券无法加询问
             // isConfirm: {
             //     type: Boolean,
@@ -97,34 +101,46 @@
                 if(this.successList.length > 0){
                     const res = uni.getStorageSync('storage_key'),token = res.token;
                     if (token) {
-                        if (this.couponList.length === 1 && this.couponList[0].ifCredit) {
-                            // 单个积分兑换的卡券去积分中心兑
-                            uni.navigateTo({
-                                url: `../integral/exchangeDetail?data=${JSON.stringify(this.couponList[0])}`
+                        if(this.isExchange){
+                            // 积分兑换
+                            let paramsData = {
+                                couponId: this.couponList[0].couponId,
+                                source: 3
+                            }
+                            NET.request(API.exchangeCoupon, paramsData, 'POST').then(res => {
+                                this.$emit('success')
                             })
+
                         } else {
-                            let params = []
-                            this.successList.forEach(item=>{
-                                params.push({
-                                    couponId: item.couponId,
-                                    couponCode: item.couponCode,
-                                    source: 1
+                            if (this.couponList.length === 1 && this.couponList[0].ifCredit) {
+                                // 单个积分兑换的卡券去积分中心兑
+                                uni.navigateTo({
+                                    url: `../integral/exchangeDetail?data=${JSON.stringify(this.couponList[0])}`
                                 })
-                            })
-                            // 领取优惠卷
-                            NET.request(API.takeBatchCoupon, params, 'POST').then(res => {
-                                if (res.code === '200') {
-                                    this.$emit('success')
-                                    this.$emit('closeAd')
-                                }
-                            }).catch(res => {
-                                if(res.data.code !== '200'){
-                                    uni.showToast({
-                                        title:res.data.message,
-                                        icon:"none"
+                            } else {
+                                let params = []
+                                this.successList.forEach(item=>{
+                                    params.push({
+                                        couponId: item.couponId,
+                                        couponCode: item.couponCode,
+                                        source: 1
                                     })
-                                }
-                            })
+                                })
+                                // 领取优惠卷
+                                NET.request(API.takeBatchCoupon, params, 'POST').then(res => {
+                                    if (res.code === '200') {
+                                        this.$emit('success')
+                                        this.$emit('closeAd')
+                                    }
+                                }).catch(res => {
+                                    if(res.data.code !== '200'){
+                                        uni.showToast({
+                                            title:res.data.message,
+                                            icon:"none"
+                                        })
+                                    }
+                                })
+                            }
                         }
                     } else {
                         uni.showToast({

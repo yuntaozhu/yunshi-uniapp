@@ -17,13 +17,13 @@
 				</view>
 			</view>
       <view v-if="ifEmpty" class="emptyOrder-box flex-items-plus flex-column">
-        <image class="emptyOrder-img" src="../../static/img/bgnull.png"></image>
+        <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
         <label class="font-color-999 fs26 mar-top-30">你还没有优惠券哦～</label>
       </view>
 		</view>
 		<!-- 触底 -->
     <view class="reachBottom" v-if="topLeft > 400 && list.length > 0">
-			<image class="reach-icon" src="@/static/img/reachBottom.png" mode="widthFix"></image>
+			<image class="reach-icon" src="https://ceres.zkthink.com/static/img/reachBottom.png" mode="widthFix"></image>
 			<text class="reach-text">这里到底了哦~~</text>
 		</view>
 	</view>
@@ -102,7 +102,7 @@
 .item {
   width: 50%;
   height: 291rpx;
-  background: url("../../static/images/couponsIcon.png") no-repeat center top;
+  background: url("https://ceres.zkthink.com/static/images/couponsIcon.png") no-repeat center top;
   border-radius: 10rpx;
   margin-top: 20rpx;
   display: flex;

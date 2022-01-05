@@ -1,7 +1,7 @@
 <template>
 	<view class="inviteSpell-con">
     <view class="grouped">
-      <view class="fs32 font-color-FFF">等待成团</view>
+      <view class="fs32 font-color-FFF">{{remainPerson !== 0?'等待成团':'已成团'}}</view>
       <view class="fs26 number">{{inviteSpell.person}}人团</view>
     </view>
     <view class="topBox">
@@ -19,7 +19,7 @@
               </view>
             </view>
 <!--            <view class="mar-top-20">-->
-<!--              <image class="issueregiment" src="../../static/images/issueregiment.png"></image>-->
+<!--              <image class="issueregiment" src="https://ceres.zkthink.com/static/images/issueregiment.png"></image>-->
 <!--            </view>-->
           </view>
         </view>
@@ -37,10 +37,14 @@
             <view class="replenish-icon flex-items-plus mar-left-20">?</view>
           </view>
         </view>
-        <view class="mar-top-50 font-color-333">还差<label class="font-color-C5AA7B">{{remainPerson}}</label>人成团，距结束还剩{{hou}}:{{min}}:{{sec}}</view>
-        <view v-if="type == 1" @click="shareClick" class="offered-but font-color-FFF flex-items-plus mar-top-60">邀请好友拼单</view>
-        <view v-if="type == 0" @click="getOffered" class="offered-but font-color-FFF flex-items-plus mar-top-60">立即参团</view>
-        <view v-if="type == 1" @click="goinvitePoster" class="poster-but flex-items-plus mar-top-40">生成邀请海报</view>
+		  <view v-if="remainPerson !== 0">
+			  <view class="mar-top-50 font-color-333">还差<label class="font-color-C5AA7B">{{remainPerson}}</label>人成团，距结束还剩{{hou}}:{{min}}:{{sec}}</view>
+			  <view v-if="type == 1" @click="shareClick" class="offered-but font-color-FFF flex-items-plus mar-top-60">邀请好友拼单</view>
+			  <view v-if="type == 0" @click="getOffered" class="offered-but font-color-FFF flex-items-plus mar-top-60">立即参团</view>
+			  <view v-if="type == 1" @click="goinvitePoster" class="poster-but flex-items-plus mar-top-40">生成邀请海报</view>
+		  </view>
+
+
       </view>
 		</view>
 		<view class="spellrule flex-items-plus flex-column mar-top-20">
@@ -146,6 +150,7 @@
 				shopId:0,
 				attrList: [],
 				productDetail:{},
+				userInfo: {},
 				url:'',
 				shareTitle: ''
 			};
@@ -190,42 +195,47 @@
 			    clearTimeout(this.timeOut)
 			}
 		},
+		onShow(){
+            //判断是否登录
+			let item = {}
+			if(uni.getStorageSync('storage_key')){
+				item = uni.getStorageSync('storage_key');
+			}
+			if(JSON.stringify(item) == '{}'){
+				let data = {
+					collageId : this.collageId,
+					orderId : this.orderId,
+					productId : this.productId,
+					skuId : this.skuId,
+					type : this.type,
+				}
+				uni.setStorageSync("inviteSpell",data)
+				// uni.navigateTo({
+				// 	url:'../../pages_category_page2/userModule/accountLogin?inviteSpell=1'
+				// })
+			}else{
+				this.userInfo = uni.getStorageSync('storage_userInfo')
+			}
+			this.getInviteSpell()
+		},
 		onLoad(options) {
+			console.log(options,'options')
 			this.isIphone = getApp().globalData.isIphone;
 			this.collageId = parseInt(options.collageId)
 			this.orderId = parseInt(options.orderId)
 			this.productId = parseInt(options.productId)
 			this.skuId = parseInt(options.skuId)
-			this.type = parseInt(options.type)
+			// this.type = parseInt(options.type)
 			this.shopGroupWorkId = parseInt(options.shopGroupWorkId)
-			this.getInviteSpell()
+
 			this.getProductSku()
 			this.queryProductDetail()
 			this.url = '/pages_category_page1/goodsModule/inviteSpell?collageId='
-					+ this.collageId +'&orderId='+ this.orderId+'&type=0'+'&productId='+this.productId+'&skuId='+this.skuId+'&shopGroupWorkId='+this.shopGroupWorkId
+					+ this.collageId +'&orderId='+ this.orderId+'&productId='+this.productId+'&skuId='+this.skuId+'&shopGroupWorkId='+this.shopGroupWorkId
 		},
 		methods:{
 			getOffered(){
-				//判断是否登录
-				let item = {}
-				if(uni.getStorageSync('storage_key')){
-					item = uni.getStorageSync('storage_key');
-				}
-				if(JSON.stringify(item) == '{}'){
-					let data = {
-						collageId : this.collageId,
-						orderId : this.orderId,
-						productId : this.productId,
-						skuId : this.skuId,
-						type : this.type,
-					}
-					uni.setStorageSync("inviteSpell",data)
-					uni.navigateTo({
-						url:'../../pages_category_page2/userModule/accountLogin?inviteSpell=1'
-					})
-				}else{
-					this.goosDetailshowFlag = true
-				}
+
 			},
 			//拼团下单
 			getGroupSettlement(type){
@@ -380,7 +390,7 @@
 			},
 			getInviteSpell(){
 				uni.showLoading({
-          mask: true,
+                  mask: true,
 				  title: '加载中...',
 				})
 				NET.request(API.getInviteSpell, {
@@ -388,6 +398,12 @@
 					orderId: this.orderId
 				}, 'POST').then(res => {
 					this.inviteSpell = res.data
+					this.type = 0
+					this.inviteSpell.personList.forEach(item=>{
+						if(item.name === this.userInfo.name){
+							this.type = 1
+						}
+					})
 					this.personLen = res.data.personList.length
 					this.remainPerson = res.data.person - this.personLen
 					this.dateformat(res.data.time)
@@ -465,7 +481,7 @@ page{background-color: #F7F7F7;}
 	flex-direction: column;
 }
 .inviteSpell-con{
-  background: url("../../static/images/pintuanbg.png") no-repeat left top;
+  background: url("https://ceres.zkthink.com/static/images/pintuanbg.png") no-repeat left top;
   background-size: contain;
   .grouped {
     text-align: center;

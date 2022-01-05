@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="header">
-			<image class="logo" src="@/static/assets/img/logo.png" mode="widthFix"></image>
+			<image class="logo" src="https://ceres.zkthink.com//assets/img/logo.png" mode="widthFix"></image>
 		</view>
 		<view class="content">
 			<!-- 分类中心 -->
@@ -13,9 +13,9 @@
 			<scroll-view scroll-with-animation scroll-y class="right-aside">
 				<view v-for="item in slist" :key="item.classifyId" class="s-list">
 			<view class="classBox flex-items-plus">
-			  <image class="emptyOrder-img" src="../../../static/images/classRight.png"></image>
+			  <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/images/classRight.png"></image>
 			  <text class="s-item">{{item.classifyName}}</text>
-			  <image class="emptyOrder-img" src="../../../static/images/classLeft.png"></image>
+			  <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/images/classLeft.png"></image>
 			</view>
 					<view class="t-list">
 						<view @click="navToList(item.classifyId, titem.classifyId)" class="t-item" v-for="titem in item.childs" :key="titem.classifyId">
@@ -26,7 +26,7 @@
 				</view>
 			</scroll-view>
 			<view v-if="ifEmpty" class="emptyOrder-box flex-items-plus flex-column">
-				<image class="emptyOrder-img" src="../../../static/img/bgnull.png"></image>
+				<image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
 				<label class="font-color-999 fs26 mar-top-30">该分类没有商品～</label>
 			</view>
 		</view>
