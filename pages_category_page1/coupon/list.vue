@@ -101,6 +101,7 @@ export default {
     },
     success(){
       this.page = 1
+      this.couponList = []
       this.getCouponList()
     }
   }

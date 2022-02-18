@@ -44,7 +44,7 @@
 										</view>
 									</view>
 								</view>
-								<view class="total-price-box">总价¥{{item.orderPrice}},优惠¥{{item.discountPrice}}
+								<view class="total-price-box">总价¥{{(item.orderPrice + item.logisticsPrice).toFixed(2)}},优惠¥{{item.discountPrice}}
 									<block v-if="item.price > 0">
 										，实付¥{{item.price}}
 									</block>
@@ -479,15 +479,27 @@
 				this.alipayInfo = submitResult
 				// #endif
 				// #ifdef MP-WEIXIN
+				let that = this
 				NET.request(API.gotoPay, submitResult, 'POST').then(res => {
 					uni.requestPayment({
-						privider: 'wxpay',
+						provider: 'wxpay',
 						timeStamp: res.data.timeStamp,
 						nonceStr: res.data.nonceStr,
 						package: res.data.package,
 						signType: res.data.signType,
 						paySign: res.data.paySign,
 						success: function(payRes) {
+							console.log(that.orderId,'this.orderId')
+							console.log(item.collageId,'item.collageId')
+							if(item.collageId){
+								let param = {
+								  orderId:that.orderId,
+								  collageId:item.collageId
+								}
+								NET.request(API.paySuccess, param, 'POST').then(res => {
+									console.log(res,'支付成功')					 
+								})
+							}
 							uni.showToast({
 								icon: 'none',
 								title: '支付成功'

@@ -28,7 +28,7 @@
 					</view>
 				</view>
 				<view class="notice" @click="toMessage">
-					<view class="messNum" v-if="useritem.notRead>0">{{useritem.notRead}}</view>
+					<view class="messNum" v-if="useritem.notRead>0">{{useritem.notRead > 99 ? '99+' : useritem.notRead}}</view>
 				</view>
 			</view>
 			<view class="order-box">

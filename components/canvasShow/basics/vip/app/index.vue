@@ -12,11 +12,11 @@
       </div>
       <div>
         <div v-if="productData.length > 2">
-          <swiper class="swiper vip-list" :indicator-dots="false" :autoplay="true" @change="swiperChange">
+          <swiper class="swiper vip-list" :circular="true" :indicator-dots="false" :autoplay="true" @change="swiperChange">
             <swiper-item class="vip-item-warp" v-for="(itemJ,indexJ) in listTemp" :key="indexJ">
               <div class="vip-item"  v-for="(item,index) in itemJ" :key="index"  @click="jumpProductDetail(item)">
                 <div class="vip-item-img">
-                  <image v-show="item.image" class="img" :src="item.image">
+                  <image v-show="item.image" class="img" :src="item.image"></image>
                 </div>
                 <div class="vip-item-info">
                   <h3 class="name">

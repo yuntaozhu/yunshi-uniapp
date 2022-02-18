@@ -18,16 +18,16 @@
               </view>
               <view class="integralInfo flex-items flex-sp-between mar-top-20">
                 <view class="itemBox">
-                  <view class="integraNum fs36 font-color-333">{{ memberData.totalCredit }}</view>
-                  <view class="fs24 font-color-666">累计积分</view>
+                  <view class="integraNum fs32 font-color-333 fs-weight-400">{{ memberData.totalCredit }}</view>
+                  <view class="fs24 font-color-333 fs-weight-400">累计积分</view>
                 </view>
                 <view class="itemBox">
-                  <view class="integraNum fs36 font-color-333">{{ memberData.totalCredit - memberData.credit }}</view>
-                  <view class="fs24 font-color-666">累计消费</view>
+                  <view class="integraNum fs32 font-color-333 fs-weight-400">{{ memberData.totalCredit - memberData.credit }}</view>
+                  <view class="fs24 font-color-333 fs-weight-400">累计消费</view>
                 </view>
                 <view class="itemBox">
-                  <view class="integraNum fs36 font-color-333">{{ memberData.credit }}</view>
-                  <view class="fs24 font-color-666">剩余积分</view>
+                  <view class="integraNum fs32 font-color-333 fs-weight-400">{{ memberData.credit }}</view>
+                  <view class="fs24 font-color-333 fs-weight-400">剩余积分</view>
                 </view>
               </view>
             </view>
@@ -292,7 +292,7 @@ page {
     .nameBox {
       margin-left: 20rpx;
       .name {
-        color: #71521B;
+        color: #333333;
         margin-right: 30rpx;
       }
       .level {

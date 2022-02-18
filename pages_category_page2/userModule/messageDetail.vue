@@ -22,9 +22,12 @@
 				htmlData: []
 			}
 		},
+		onShow() {
+			this.getNotice()
+		},
 		onLoad(options) {
 			this.onlyid = options.noticeId
-      this.getNotice()
+            this.getNotice()
 		},
 		methods: {
 			formatRichText(html) {
@@ -71,8 +74,10 @@
         NET.request(API.readNotice, {
           noticeId: this.onlyid
         }, 'POST').then(res => {
+			uni.hideLoading()
           this.gitMassageDateils()
         }).catch(res => {
+			uni.hideLoading()
           uni.showToast({
             title: '失败',
             icon: "none"

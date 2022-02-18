@@ -129,8 +129,13 @@
                                 // 领取优惠卷
                                 NET.request(API.takeBatchCoupon, params, 'POST').then(res => {
                                     if (res.code === '200') {
+                                      uni.showToast({
+                                        title:'领取成功',
+                                      })
                                         this.$emit('success')
-                                        this.$emit('closeAd')
+                                        if(!this.cParams){
+                                            this.$emit('closeAd')
+                                        }
                                     }
                                 }).catch(res => {
                                     if(res.data.code !== '200'){
@@ -261,6 +266,7 @@
             // 用户确认领券事件
             userconfirm(e){
                 console.log('用户确认领券', e)
+                this.$emit('closeAd')
             }
         }
     }

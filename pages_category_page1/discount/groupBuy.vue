@@ -102,6 +102,9 @@ export default {
 			this.shopId = 0
 			this.shopGroupWorkId = 0
 		}
+		
+	},
+	onShow() {
 		this.getGroupBuylist()
 	},
 	onReachBottom(){
@@ -178,6 +181,7 @@ export default {
 		},
 		getGroupBuylist(){
       uni.showLoading({
+        mask: true,
         title: '加载中...',
       })
       let param = {

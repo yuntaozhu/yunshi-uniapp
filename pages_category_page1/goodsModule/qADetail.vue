@@ -1,5 +1,5 @@
 <template>
-  <view class="qaBox">
+  <view class="qaBox" v-if="ifShow">
     <view class="qaTopInfo">
       <view class="qaTopInfoBox" @click="goGoodsDetails">
         <image :src="detailList.image"></image>
@@ -51,11 +51,12 @@ export default {
   	  productId:'',
   	  images:'',
   	  productName:'',
-	  problemsData:{},
-	  answerText:"",
-	  answerslength:0,
-	  num:0,
-	  isIphone: false,
+	    problemsData:{},
+	    answerText:"",
+	    answerslength:0,
+	    num:0,
+	    isIphone: false,
+      ifShow: false
     }
   },
   onLoad(options) {
@@ -79,6 +80,7 @@ export default {
 			productId:this.problemsData.productId,
 		},'GET').then(res => {
 	  		this.detailList = res.data
+        this.ifShow = true
 			this.answerslength = this.detailList.answers.length
 			uni.removeStorageSync('seeAllFnData')
 	  	}).catch(res => {

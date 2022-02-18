@@ -44,7 +44,7 @@
           </view>
           <view class="selectRight flex-items">
             <view class="selectNum">{{number}}件商品</view>
-            <view class="totalPrice">合计：<text>￥{{total}}</text></view>
+            <view class="totalPrice">合计：<text>￥{{total.toFixed(2)}}</text></view>
           </view>
         </view>
         <view class="afterBtnBox flex-items flex-sp-between">

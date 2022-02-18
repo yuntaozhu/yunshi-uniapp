@@ -41,7 +41,10 @@ export default {
       page: 1,
       pageSize: 10,
       loadingType: 0,
-      currentCoupon: {},
+      currentCoupon: {
+		  fullMoney:0,
+		  reduceMoney:0
+	  },
       cid: 0,
       ifEmpty: false
     }

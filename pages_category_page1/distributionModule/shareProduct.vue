@@ -5,25 +5,21 @@
 				<view class="rect" @tap.stop>
 					<!-- 关闭按钮 -->
 					<view class="guanbiView">
-            <!-- #ifdef MP-WEIXIN -->
-            <img @click="showcos" src="https://ceres.zkthink.com/static/img/guanbi.png" class="guanbi" style="width:30px;height:30px;" mode="widthFix"></img>
-            <!-- #endif -->
-            <!-- #ifdef H5 || APP-PLUS -->
-            <image @click="showcos" src="https://ceres.zkthink.com/static/img/guanbi.png" class="guanbi" style="width:30px;height:30px;" mode="widthFix"></image>
-            <!-- #endif -->
+						<!-- #ifdef MP-WEIXIN -->
+						<img @click="showcos" src="https://ceres.zkthink.com/static/img/guanbi.png" class="guanbi"
+							style="width:30px;height:30px;" mode="widthFix"></img>
+						<!-- #endif -->
+						<!-- #ifdef H5 || APP-PLUS -->
+						<image @click="showcos" src="https://ceres.zkthink.com/static/img/guanbi.png" class="guanbi"
+							style="width:30px;height:30px;" mode="widthFix"></image>
+						<!-- #endif -->
 					</view>
 					<!-- 内容 -->
 					<view class="imgBox">
-						<view
-							v-if="shareType==1"
-							class="boxInner imgBoxShop"
-							:style="{'backgroundImage':'url(' + erweima + ')'}"
-						></view>
-						<view
-							v-else
-							class="boxInner imgBoxProduct"
-							:style="{'backgroundImage':'url(' + erweima + ')'}"
-						></view>
+						<view v-if="shareType==1" class="boxInner imgBoxShop"
+							:style="{'backgroundImage':'url(' + erweima + ')'}"></view>
+						<view v-else class="boxInner imgBoxProduct" :style="{'backgroundImage':'url(' + erweima + ')'}">
+						</view>
 					</view>
 					<!-- 分享 -->
 				</view>
@@ -79,7 +75,7 @@
 				productId: null,
 				noMp: false,
 				shareType: 1,
-				isIphone:false
+				isIphone: false
 			}
 		},
 		onLoad: function(options) {
@@ -110,12 +106,42 @@
 					delta: 1
 				})
 			},
+
 			// 保存图片到本地
 			WXfenx() {
-				// #ifdef MP-WEIXIN || MP-ALIPAY
+				// #ifdef APP-PLUS || MP-WEIXIN || MP-ALIPAY 
 				uni.showLoading({
-					title:'图片保存中...'
+					title: '图片保存中...'
 				})
+				// #endif	
+				
+				// #ifdef APP-PLUS
+				uni.downloadFile({
+					url: this.erweima,
+					success: (res) => {
+						if (res.statusCode === 200) {
+							uni.saveImageToPhotosAlbum({
+								filePath: res.tempFilePath,
+								success: function() {
+									uni.hideLoading()
+									uni.showToast({
+										title: "保存成功",
+									});
+								},
+								fail: function() {
+									uni.hideLoading()
+									uni.showToast({
+										title: "保存失败",
+										icon: "none"
+									});
+								}
+							});
+						}
+					}
+				})
+				// #endif	
+				
+				// #ifdef MP-WEIXIN || MP-ALIPAY 
 				uni.getImageInfo({
 					src: this.erweima,
 					success: function(image) {
@@ -134,12 +160,18 @@
 									content: '请确认是否已开启授权',
 									confirmText: '开启授权',
 									success(res) {
-										if (res.confirm) {
+										if (res
+											.confirm
+										) {
 											uni.openSetting({
-												success(settingdata) {
-													if (settingdata.authSetting[
+												success(
+													settingdata
+												) {
+													if (settingdata
+														.authSetting[
 															"scope.writePhotosAlbum"
-														]) {
+														]
+													) {
 														uni.showToast({
 															title: '授权成功，请重试哦~',
 															icon: "none"
@@ -158,16 +190,19 @@
 							},
 						});
 					},
-					fail() {}
+					fail(err) {
+						console.log(err, 'err报错999')
+					}
 				});
 				// #endif
-				// #ifdef H5
+				// #ifdef H5 
 				var oA = document.createElement('a');
 				oA.download = ''; // 设置下载的文件名，默认是’下载’
 				oA.href = this.erweima;
 				document.body.appendChild(oA);
 				oA.click();
-				oA.remove(); // 下载之后把创建的元素删除
+				oA
+					.remove(); // 下载之后把创建的元素删除
 				// #endif
 			},
 			// 复制链接

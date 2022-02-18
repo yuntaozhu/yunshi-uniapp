@@ -276,13 +276,11 @@ export default {
           }
           .answerBtn {
             width: 130upx;
-            height: 44upx;
-            line-height: 44upx;
-            background: #FFFFFF;
-            border: 1px solid #FF7800;
-            border-radius: 22upx;
+            height: 50upx;
+            line-height: 50upx;
+            background: #C5AA7B;
             text-align: center;
-            color: #C5AA7B;
+            color: #FFFFFF;
             font-size: 24upx;
           }
         }

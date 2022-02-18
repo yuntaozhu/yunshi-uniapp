@@ -13,6 +13,9 @@ export default {
         if (options && options.path === 'pages_category_page1/distributionModule/recruit' && options.query) {
             this.globalData.distributeRecruitItem = options.query
         }
+        if (options && options.path === 'pages_category_page1/goodsModule/inviteSpell' && options.query) {
+            this.globalData.inviteSpellShareItem = options.query
+        }
 		//判断设备是否为 iPhone
 		const self = this
 		uni.getSystemInfo({
@@ -86,6 +89,7 @@ export default {
 	.fs-bold{font-weight: bold;}
 	.fs-weight-300{font-weight: 300;}
 	.fs-weight-200{font-weight: 200;}
+	.fs-weight-400{font-weight: 400;}
 
 
 	.flex-display{display: flex;}

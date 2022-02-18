@@ -48,6 +48,7 @@
               <image class="iconImg" v-if="item.activityType == 4" src="https://ceres.zkthink.com/static/images/spikeIcon.png"></image>
               <image class="iconImg" v-if="item.activityType == 3" src="https://ceres.zkthink.com/static/images/discountListIcon.png"></image>
               <image class="iconImg" v-if="item.activityType == 5" src="https://ceres.zkthink.com/static/images/discountListIcon.png"></image>
+			  <image class="iconImg" v-if="item.activityType == 8" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png"></image>
               <image class="iconImg" v-if="item.activityType == 9" src="https://ceres.zkthink.com/static/images/memberCenterIcon.png"></image>
 							<view class="font-color-C83732 flex-row-plus">
 								<b>￥</b>
@@ -71,7 +72,7 @@
 			<label class="font-color-999 fs26 mar-top-10">换个词试试吧～</label>
 		</view>
 
-		<view class="reachBottom" v-if="topLeft > 400 && list.length > 0">
+		<view class="reachBottom" v-if="noMoreData && !ifEmpty">
 			<image class="reach-icon" src="https://ceres.zkthink.com/static/img/reachBottom.png" mode="widthFix"></image>
 			<text class="reach-text">这里到底了哦~~</text>
 		</view>
@@ -96,7 +97,9 @@
         type:1,//价格排序条件
         volume:1,//销量排序条件
 				topLeft: 0,
-        ifEmpty: false
+        ifEmpty: false,
+        noMoreData: false,
+        total: 0
 			}
 		},
 		onLoad(option) {
@@ -116,11 +119,14 @@
 				this.searchList(0)
 			}
 		},
-		onPageScroll(e) {
-			this.topLeft = e.scrollTop
-		},
+		// onPageScroll(e) {
+		// 	this.topLeft = e.scrollTop
+		// },
 		methods: {
       sortTap(index){
+        this.loadingType = 0
+        this.noMoreData = false
+        this.total = 0
         this.page = 1
         this.list = []
         if(index == 1){
@@ -141,7 +147,8 @@
 			},
 			searchList(type){
         uni.showLoading({
-				      title: '加载中...',
+          mask: true,
+          title: '加载中...',
 				})
 				if(type == 1){
 					this.list = []
@@ -158,8 +165,11 @@
 					}, 'GET').then(res => {
 						uni.hideLoading()
 						this.list = this.list.concat(res.data.list)
-            if (this.list.length === 0) {
-              this.ifEmpty = true
+            this.total = res.data.total
+			this.ifEmpty = this.list.length === 0
+            if (this.total === this.list.length) {
+              this.noMoreData = true
+              this.loadingType = 1
             }
 					}).catch(res => {
 						uni.hideLoading()
@@ -174,8 +184,11 @@
 					}, 'GET').then(res => {
 						uni.hideLoading()
 						this.list = this.list.concat(res.data.list)
-            if (this.list.length === 0) {
-              this.ifEmpty = true
+            this.total = res.data.total
+			this.ifEmpty = this.list.length === 0
+            if (this.total === this.list.length) {
+              this.noMoreData = true
+              this.loadingType = 1
             }
 					}).catch(res => {
 						uni.hideLoading()
@@ -220,6 +233,8 @@ input{padding-left: 80upx;}
     padding: 20rpx;
     background: #FFFFFF;
     border-top: 2rpx solid #F3F4F5;
+	  position: relative;
+	  z-index: 2;
   }
   .searchImg-box {
     position: relative;

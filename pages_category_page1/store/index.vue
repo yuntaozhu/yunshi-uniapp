@@ -5,7 +5,7 @@
 			<view class="shop-top" :style="{'padding-top': topHeight + 'px'}">
 				<image src="https://ceres.zkthink.com/static/images/back_img04.png" class="back" @click="back"></image>
         <view class="search-btn" @click="searchPro">
-          <image class="search-icon" src="https://ceres.zkthink.com/images/searchImg1.png" mode="widthFix"></image>
+          <image class="search-icon" src="https://ceres.zkthink.com/static/img/searchImg.png" mode="widthFix"></image>
           <text class="fs24 font-color-999 mar-left-10">请输入您想要的宝贝</text>
         </view>
 			</view>
@@ -176,11 +176,14 @@
 			canvasPage
 		},
 		onLoad(options) {
-            // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
+      // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
       let menuButtonInfo = uni.getMenuButtonBoundingClientRect()
       this.topHeight = menuButtonInfo.top
       console.log(this.topHeight, menuButtonInfo.top, 'fsfsfsfs')
-            // #endif
+      // #endif
+      // #ifdef APP
+      this.topHeight = 50
+      // #endif
       this.isIphone = getApp().globalData.isIphone;
 			if (getApp().globalData.shopShareItem) {
 				const item = getApp().globalData.shopShareItem
@@ -947,11 +950,11 @@ page {
 	width: 428rpx;
 	background: rgba(255, 255, 255, 0.1);
 	.search-icon {
-	  width: 50rpx;
-	  height: 50rpx;
-	   margin-left: 10rpx;
+	  width: 44rpx;
+	  height: 44rpx;
+    margin-left: 10rpx;
+    margin-top: 8rpx;
 	}
-
 	.search-word {
 	  font-size: 26rpx;
 	  font-weight: 400;
@@ -959,6 +962,11 @@ page {
 	  margin-left: 10rpx;
 	}
 }
+// #ifdef H5 || APP-PLUS
+.search-btn {
+  width: 100%;
+}
+// #endif
 // #ifdef MP-ALIPAY
 .back {
 	width: 25rpx;

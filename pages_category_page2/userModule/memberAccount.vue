@@ -1,6 +1,6 @@
 <!-- 我的账户 -->
 <template>
-	<view class="container">
+	<view class="container" v-if="ifShow">
 		<view class="balance">
 		</view>
     <view class="balanceInfo">
@@ -26,7 +26,8 @@
 	export default {
 		data() {
 			return {
-				accountInfo:[]
+				accountInfo:[],
+        ifShow: false
 			}
 		},
 		onShow() {
@@ -47,7 +48,13 @@
 			},
 			getBalance(){
 				const _ = this
+        uni.showLoading({
+          mask: true,
+          title: '加载中...'
+        })
 				NET.request(API.GetDistributor,{},"GET").then(res => {
+          uni.hideLoading()
+          this.ifShow = true
 					_.accountInfo = res.data
 				}).catch(res => {
 

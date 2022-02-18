@@ -87,6 +87,7 @@
 			},
 			//一级分类点击
 			tabtap(item,index){
+        this.ifEmpty = false
 				if(this.currentIndex == index){
 					return;
 				}

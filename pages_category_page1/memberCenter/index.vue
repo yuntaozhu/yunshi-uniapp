@@ -1,37 +1,60 @@
 <template>
   <view class="memberCenter" v-if="isShow">
-    <view class="memberBox">
-      <view class="posBox">
-        <view class="memberBoxTop">
-          <view class="memberTopPos">
-            <view class="memberTopBg" :style="{backgroundImage:'url('+levelInfo.memberLevelBackground+')'}">
-              <view class="avatarBox">
-                <image :src="memberData.headImage"></image>
-              </view>
-              <view class="nameBox flex-display">
-                <view class="name fs36">{{memberData.name}}</view>
-                <view class="level">
-                  <image :src="levelInfo.memberLevelIcon"></image>
-                </view>
-              </view>
-              <view class="growing">
-                <view class="growingValue flex-items">
-                  <label class="fs24 font-color-71521B">会员成长值</label>
-                  <label class="fs28 font-color-71521B mar-left-20">{{memberData.growth}}/{{memberData.nextLevelGrowth}}</label>
-                </view>
-                <view class="progressBar">
-                  <view style="width: 100%">
-                    <progress activeColor="#FFEBC4" :percent="getPercent(memberData.notRead, memberData.nextLevelGrowth)" active stroke-width="5" />
+    <view class="memberBg" :style="{backgroundImage:'url('+memberListData[activeIndex].memberLevelBackground+')', 'padding-top': paddingTop + 'px'}">
+      <view class="member-top" :style="{'top': topHeight + 'px'}">
+        <view class="memberTopInfo">
+          <view class="backBox">
+            <image src="https://ceres.zkthink.com/static/images/back_img04.png" class="back" @click="back"></image>
+          </view>
+          <view class="memberTit fs30 font-color-FFF">会员中心</view>
+        </view>
+      </view>
+      <view class="memberBox">
+        <view class="posBox">
+          <view class="memberBoxTop">
+            <view class="memberTopPos">
+              <swiper class="swiper pro-box" next-margin="30rpx" previous-margin="30rpx" :current="activeIndex" :indicator-dots="false" :autoplay="false" @change="swiperChange">
+                <swiper-item class="pro-item-warp" v-for="(item, index) in memberListData" :key="index" >
+                  <view class='box'>
+                    <view class="memberTopBg" :style="{backgroundImage:'url('+item.memberLevelBackground+')'}">
+                      <view class="flex-display flex-sp-between">
+                        <view class="nameBox">
+                          <view class="name fs36">{{memberData.name}}</view>
+                          <view class="level">
+                            <image :src="item.memberLevelIcon"></image>
+                          </view>
+                        </view>
+                        <view class="avatarBox">
+                          <image :src="memberData.headImage"></image>
+                        </view>
+                      </view>
+                      <view class="growing">
+                        <view class="growingValue flex-display flex-sp-between">
+                          <label class="fs24 fs-weight-400 font-color-333">当前会员成长值 {{memberData.growth}}</label>
+                          <label class="fs24 fs-weight-400 font-color-333 mar-left-20" v-if="nextGrowth !== 0 && nextGrowth !== item.growth">{{nextGrowth}}</label>
+                        </view>
+                        <view class="progressBar" v-if="memberData.growth < nextGrowth">
+                          <view style="width: 100%">
+                            <progress activeColor="#FFEBC4" :percent="getPercent(memberData.growth, nextGrowth)" active stroke-width="2" />
+                          </view>
+                        </view>
+                        <view class="currentName" v-else>
+                          以超越该等级
+                        </view>
+                        <!--                      <view class="flex-display flex-sp-between">-->
+                        <!--                        <label class="fs24 font-color-71521B">{{memberData.memberLevelName}}</label>-->
+                        <!--                        <label class="fs24 font-color-71521B">{{memberData.nextLevelName}}</label>-->
+                        <!--                      </view>-->
+                      </view>
+                    </view>
                   </view>
-                </view>
-                <view class="flex-display flex-sp-between">
-                  <label class="fs24 font-color-71521B">{{memberData.memberLevelName}}</label>
-                  <label class="fs24 font-color-71521B">{{memberData.nextLevelName}}</label>
-                </view>
-              </view>
+                </swiper-item>
+              </swiper>
             </view>
           </view>
         </view>
+      </view>
+      <view class="equity">
         <view class="equityBox">
           <view class="equityTit">我的权益</view>
           <view class="equityList">
@@ -42,21 +65,23 @@
           </view>
         </view>
       </view>
-    </view>
-    <view class="signInList">
-      <view class="signTit fs30 font-color-333">快速成长</view>
-      <view class="signInBox">
-        <view class="signItem flex-items flex-sp-between">
-          <view class="itemLeft flex-items">
-            <view class="leftIcon">
-              <image src="https://ceres.zkthink.com/static/img/member/memberList2.png"></image>
-            </view>
-            <view class="leftInfo">
-              <label class="fs28 font-color-333">购物</label>
-              <view class="fs24 font-color-999">购买商品获取相应成长值</view>
+      <view class="signIn">
+        <view class="signInList">
+          <view class="signTit fs30 font-color-333">快速成长</view>
+          <view class="signInBox">
+            <view class="signItem flex-items flex-sp-between">
+              <view class="itemLeft flex-items">
+                <view class="leftIcon">
+                  <image src="https://ceres.zkthink.com/static/img/member/memberList2.png"></image>
+                </view>
+                <view class="leftInfo">
+                  <label class="fs28 font-color-333">购物</label>
+                  <view class="fs24 font-color-999">购买商品获取相应成长值</view>
+                </view>
+              </view>
+              <view class="rightBtn" @click="goToShopping">去购物</view>
             </view>
           </view>
-          <view class="rightBtn" @click="goToShopping">去购物</view>
         </view>
       </view>
     </view>
@@ -73,16 +98,68 @@ export default {
       memberData: {},
       equityList: [],
       levelInfo: {},
-      isShow: false
+      isShow: false,
+      memberListData: [],
+      nextGrowth: 0,
+      activeIndex: 0,
+      topHeight: 10,
+      paddingTop: 50
     }
   },
   onLoad() {
-    this.getMemberShipList()
+    // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
+    let menuButtonInfo = uni.getMenuButtonBoundingClientRect()
+    this.topHeight = menuButtonInfo.top
+    this.paddingTop = this.paddingTop + this.topHeight
+    // #endif
+    // #ifdef APP
+    this.topHeight = 50
+    this.paddingTop = 100
+    // #endif
+	
+	// 定时器防止app一开始进入时页面混乱问题
+	setTimeout(()=>{
+	  this.getMemberShipList()
+	},200)
     this.memberData = uni.getStorageSync('storage_userInfo');
-    console.log(this.memberData, 'sfsdfs')
     this.getMemberByMemberLevel()
+    this.getMemberList()
   },
   methods: {
+    swiperChange(item) {
+      console.log(item.detail.current, 'index')
+      this.activeIndex = item.detail.current
+      console.log(typeof this.activeIndex, typeof (this.memberListData.length - 1))
+      let num = 0
+      num = this.activeIndex + 1
+      if (num === this.memberListData.length) {
+        this.nextGrowth = this.memberListData[this.activeIndex].growth
+      } else {
+        console.log('caonima ')
+        this.nextGrowth = this.memberListData[this.activeIndex + 1].growth
+      }
+      this.equityList = this.memberListData[this.activeIndex].membershipList
+    },
+    getMemberList() {
+      NET.request(API.memberList, {
+      }, 'GET').then(res => {
+        this.memberListData = res.data
+        this.memberListData.forEach((item, index) => {
+          if (item.memberLevelId === this.memberData.memberLevelId) {
+            this.activeIndex = index
+            let num = 0
+            num = this.activeIndex + 1
+            if (num === this.memberListData.length) {
+              this.nextGrowth = this.memberListData[this.activeIndex].growth
+            } else {
+              this.nextGrowth = this.memberListData[this.activeIndex + 1].growth
+            }
+            this.equityList = this.memberListData[this.activeIndex].membershipList
+          }
+        })
+      }).catch(res => {
+      })
+    },
     getMemberShipList() {
       // 获取会员信息
       uni.showLoading({
@@ -92,8 +169,8 @@ export default {
       NET.request(API.getMemberShipList, {
       }, 'GET').then(res => {
         uni.hideLoading()
-        this.isShow = true
         this.equityList = res.data
+		this.isShow = true
       }).catch(res => {
       })
     },
@@ -118,52 +195,59 @@ export default {
         uni.setStorageSync('storage_levelInfo', this.levelInfo);
       }).catch(res => {
       })
+    },
+    // 返回上一级
+    back() {
+      uni.navigateBack()
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-page {
-  background: #F8F8F8;
-}
   .memberCenter {
-    border-top: 2rpx solid #4b4b4b;
-    background: url("https://ceres.zkthink.com/static/images/addBankBg.png") no-repeat left top;
     background-size: contain;
     min-height: 800rpx;
-    padding: 0 20rpx;
+    .memberBg {
+      background-repeat: no-repeat;
+      padding-top: 50rpx;
+    }
     .memberBox {
-      min-height: 550rpx;
-      margin-top: 180rpx;
       width: 100%;
-      background: #523e3a;
+      //background: #523e3a;
       border-radius: 25rpx;
       background-size: contain;
       position: relative;
       box-sizing: border-box;
-      .posBox {
-        position: absolute;
-        width: 100%;
-        left: 0;
-        top: -80rpx;
-      }
       .memberBoxTop {
-        padding: 0 20rpx;
         position: relative;
+        .memberTopPos {
+          overflow: hidden;
+          .pro-box {
+            height: 300rpx;
+          }
+          .swiper {
+            .box {
+              height: 300rpx;
+              padding: 4rpx 10rpx;
+            }
+          }
+        }
         .memberTopBg {
           background-size: cover;
           background-repeat: no-repeat;
-          height: 302rpx;
-        }
-        .memberTopBg {
-          padding: 0 20rpx;
+          border-radius: 30rpx;
+          padding: 40rpx 30rpx 30rpx 30rpx;
+          box-shadow: 0 0 5rpx rgba(90,90,90,.5);
+          height: 290rpx;
+          .currentName {
+            font-size: 26rpx;
+            margin-top: 50rpx;
+            color: #71521B;
+          }
         }
       }
       .avatarBox {
-        position: absolute;
-        top: -60rpx;
-        left: 50rpx;
         image {
           width: 110rpx;
           height: 110rpx;
@@ -172,10 +256,10 @@ page {
         }
       }
       .nameBox {
-        padding-top: 90rpx;
         .name {
-          color: #71521B;
+          color: #333333;
           margin-right: 30rpx;
+          margin-bottom: 10rpx;
         }
         .level {
           image {
@@ -185,32 +269,40 @@ page {
         }
       }
       .growing {
+        .growingValue {
+          margin-top: 30rpx;
+        }
         .progressBar {
+          height: 20rpx;
           width: 100%;
           margin: 20rpx 0;
         }
       }
+    }
+    .equity {
+      border-radius: 25rpx 25rpx 0 0;
+      padding: 30rpx;
+      background: #F8F8F8;
+      margin-top: 50rpx;
       .equityBox {
-        text-align: center;
-        background: #332a21;
+        background: #FFFFFF;
         min-height: 326rpx;
-        border-radius: 0 0 25rpx 25rpx;
-        padding-top: 50rpx;
+        border-radius: 20rpx;
+        padding: 10rpx 30rpx 30rpx 30rpx;
         .equityTit {
-          color: #FFEBC4;
-          font-size: 28rpx;
-          background: url("https://ceres.zkthink.com/static/images/quityBg.png") no-repeat center center;
-          background-size: contain;
-          width: 90%;
-          margin: 0 auto;
+          font-weight: bold;
+          height: 92rpx;
+          line-height: 92rpx;
         }
         .equityList {
+          border-top: 2rpx solid #F3F4F5;
           display: flex;
           flex-flow: wrap;
-          margin-top: 30rpx;
+          padding-top: 30rpx;
+          text-align: center;
           .equityItem {
             width: 25%;
-            color: #FFEBC4;
+            color: #666666;
             image {
               width: 92rpx;
               height: 92rpx;
@@ -219,44 +311,75 @@ page {
         }
       }
     }
-    .signInList {
-      background: #FFFFFF;
-      border-radius: 20rpx;
-      padding: 30rpx;
-      .signTit {
-        font-weight: bold;
-        height: 92rpx;
-        line-height: 92rpx;
-      }
-      .signInBox {
-        .signItem {
-          border-top: 2rpx solid #F3F4F5;
-          padding: 30rpx 0;
-          .itemLeft {
-            image {
-              width: 92rpx;
-              height: 92rpx;
-              margin-right: 30rpx;
+    .signIn {
+      padding: 0 30rpx 30rpx 30rpx;
+      background: #F8F8F8;
+      .signInList {
+        background: #FFFFFF;
+        border-radius: 20rpx;
+        padding: 0 30rpx 30rpx 30rpx;
+        .signTit {
+          font-weight: bold;
+          height: 92rpx;
+          line-height: 92rpx;
+        }
+        .signInBox {
+          .signItem {
+            border-top: 2rpx solid #F3F4F5;
+            padding: 30rpx 0;
+            .itemLeft {
+              image {
+                width: 92rpx;
+                height: 92rpx;
+                margin-right: 30rpx;
+              }
             }
           }
+          .rightBtn {
+            width: 160rpx;
+            height: 58rpx;
+            line-height: 58rpx;
+            background: #333333;
+            border-radius: 10rpx;
+            color: #FFEBC4;
+            text-align: center;
+          }
         }
-        .rightBtn {
-          width: 160rpx;
-          height: 58rpx;
-          line-height: 58rpx;
-          background: #333333;
-          border-radius: 10rpx;
-          color: #FFEBC4;
-          text-align: center;
+      }
+    }
+    .member-top {
+      width: 100%;
+      position: fixed;
+      z-index: 99;
+      left: 0;
+      .memberTopInfo {
+        position: relative;
+        width: 100%;
+        height: 60rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .backBox {
+        position: absolute;
+        left: 10rpx;
+        top: 0rpx;
+        .back {
+          width: 50rpx;
+          height: 50rpx;
+          padding: 0rpx 10rpx;
         }
       }
     }
   }
 </style>
-<style scoped>
+<style>
+page {
+  background: #F8F8F8;
+}
 .progressBar /deep/ .uni-progress-bar {
-  background-color: #C3A670 !important;
-  height: 8rpx !important;
+  background-color: rgb(235, 235, 235, 0.6) !important;
+  height: 5rpx !important;
   border-radius: 22rpx;
 }
 .progressBar /deep/ .uni-progress-bar .uni-progress-inner-bar {

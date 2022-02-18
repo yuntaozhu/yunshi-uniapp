@@ -69,11 +69,13 @@
         ifEmpty: false
 			}
 		},
-		onShow() {
-			this.page = 1
-			this.messageList = []
-			this.getAllMessage()
-			this.GetUser()
+    onShow() {
+      this.page = 1
+      this.messageList = []
+      this.getAllMessage()
+      this.GetUser()
+    },
+		onLoad() {
 		},
 		onReachBottom() {
 			if (this.loadingType == 1) {
@@ -88,7 +90,7 @@
 				NET.request(API.GetUser, {}, 'GET').then(res => {
 					this.num = res.data.notRead
 				}).catch(res => {
-			
+
 				})
 			},
 			parseText(html) {
@@ -123,8 +125,7 @@
 					'page': this.page,
 					'pageSize': this.pageSize
 				}, 'GET').then(res => {
-
-					uni.hideLoading()
+          uni.hideLoading()
 					if (res.data.length == 0) {
 						this.loadingType = 1
 						this.page = this.page

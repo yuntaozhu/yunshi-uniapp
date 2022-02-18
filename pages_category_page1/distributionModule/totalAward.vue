@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view v-if="ifShow">
 		<view class="totalAward-topBackImg flex-items flex-column">
 			<view class="totalAward-content flex-column font-color-FFF">
 				<view class="flex-column-plus flex-items mar-top-40">
@@ -88,7 +88,6 @@
 						</view>
 					</view>
 				</view>
-
 			</view>
 			<view v-else class="emptyCart-box flex-items-plus flex-column">
 				<image class="emptyCart-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
@@ -132,7 +131,9 @@
 				loadingType:0,
 				loadingType1:0,
 				ZSalesOrderDatalist:[],
-				JSalesOrderDatalist:[]
+				JSalesOrderDatalist:[],
+        ifShow: false,
+        ifEmpty: false
 			}
 		},
 		onLoad: function(optins) {
@@ -180,6 +181,7 @@
 					this.ZSalesOrderDatalist = this.ZSalesOrderDatalist.concat(res.data.page.list)
 					this.ZSalesOrderData = res.data
 					this.ZStotallength = this.ZSalesOrderData.page.total
+          this.ifShow = true
 				}).catch(res => {
 					uni.hideLoading()
 				})

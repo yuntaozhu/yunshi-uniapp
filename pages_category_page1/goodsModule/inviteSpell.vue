@@ -43,8 +43,6 @@
 			  <view v-if="type == 0" @click="getOffered" class="offered-but font-color-FFF flex-items-plus mar-top-60">立即参团</view>
 			  <view v-if="type == 1" @click="goinvitePoster" class="poster-but flex-items-plus mar-top-40">生成邀请海报</view>
 		  </view>
-
-
       </view>
 		</view>
 		<view class="spellrule flex-items-plus flex-column mar-top-20">
@@ -97,7 +95,7 @@
 						<label class="add" @click="numAdd">+</label>
 					</view>
 				</view>
-				<view class="goosDetailbut-box flex-items-plus" :style="{'padding-bottom':(isIphone===true? 50:20)+'upx'}">
+				<view class="goosDetailbut-box flex-items-plus" :style="{'padding-bottom':(isIphone===true? 50:20)+'rpx'}">
 					<view class="joinbuyBut" @click="getGroupSettlement(2)">确定</view>
 				</view>
 			</view>
@@ -133,7 +131,7 @@
 				min: "00",
 				sec: "00",
 				timeOut:undefined,
-				goosDetailshowFlag:false,
+				goosDetailshowFlag: false,
 				productId:0,
 				skuId:0,
 				shopGroupWorkId:0,
@@ -221,13 +219,21 @@
 		onLoad(options) {
 			console.log(options,'options')
 			this.isIphone = getApp().globalData.isIphone;
-			this.collageId = parseInt(options.collageId)
-			this.orderId = parseInt(options.orderId)
-			this.productId = parseInt(options.productId)
-			this.skuId = parseInt(options.skuId)
-			// this.type = parseInt(options.type)
-			this.shopGroupWorkId = parseInt(options.shopGroupWorkId)
-
+			let item = getApp().globalData.inviteSpellShareItem
+			if (item) {
+				this.collageId = parseInt(item.collageId)
+				this.orderId = parseInt(item.orderId)
+				this.productId = parseInt(item.productId)
+				this.skuId = parseInt(item.skuId)
+				this.shopGroupWorkId = parseInt(item.shopGroupWorkId)
+				getApp().globalData.inviteSpellShareItem = undefined
+			} else {
+				this.collageId = parseInt(options.collageId)
+				this.orderId = parseInt(options.orderId)
+				this.productId = parseInt(options.productId)
+				this.skuId = parseInt(options.skuId)
+				this.shopGroupWorkId = parseInt(options.shopGroupWorkId)
+			}
 			this.getProductSku()
 			this.queryProductDetail()
 			this.url = '/pages_category_page1/goodsModule/inviteSpell?collageId='
@@ -235,10 +241,11 @@
 		},
 		methods:{
 			getOffered(){
-
+        this.goosDetailshowFlag = true
 			},
 			//拼团下单
 			getGroupSettlement(type){
+        uni.removeStorageSync("skuItemDTOList")
 				let data={}
 				data= {
 					collageId:this.collageId,

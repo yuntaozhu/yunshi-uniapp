@@ -1,6 +1,6 @@
 <template>
   <view class="goodRecommend">
-    <view class="product-list" v-if="productList.length>0">
+    <view class="product-list">
       <view class="product-list-box" >
         <view class="product-list-item-warp" v-for="(item,index) in productList" :key="index">
           <view class="product-list-item">
@@ -18,20 +18,36 @@
                 </view>
                 <view class="buy-count">{{item.users?item.users: 0}}人付款</view>
               </view>
-              <view class="price-warp">
-                <view class="price">
+              <div class="price-warp">
+                <!-- #ifdef MP-WEIXIN -->
+                <img class="iconImg" v-if="item.activityType == 1" src="../canvasShow/static/images/groupBuyIcon.png">
+                <img class="iconImg" v-if="item.activityType == 2" src="../canvasShow/static/images/spikeIcon.png">
+                <img class="iconImg" v-if="item.activityType == 4" src="../canvasShow/static/images/spikeIcon.png">
+                <img class="iconImg" v-if="item.activityType == 3" src="../canvasShow/static/images/discountListIcon.png">
+                <img class="iconImg" v-if="item.activityType == 5" src="../canvasShow/static/images/discountListIcon.png">
+                <img class="iconImg" v-if="item.activityType == 8" src="../canvasShow/static/images/memberCenterIcon.png">
+                <!-- #endif -->
+                <!-- #ifdef H5 || APP-PLUS -->
+                <image class="iconImg" v-if="item.activityType == 1" src="../canvasShow/static/images/groupBuyIcon.png"></image>
+                <image class="iconImg" v-if="item.activityType == 2" src="../canvasShow/static/images/spikeIcon.png"></image>
+                <image class="iconImg" v-if="item.activityType == 4" src="../canvasShow/static/images/spikeIcon.png"></image>
+                <image class="iconImg" v-if="item.activityType == 3" src="../canvasShow/static/images/discountListIcon.png"></image>
+                <image class="iconImg" v-if="item.activityType == 5" src="../canvasShow/static/images/discountListIcon.png"></image>
+                <image class="iconImg" v-if="item.activityType == 8" src="../canvasShow/static/images/memberCenterIcon.png"></image>
+                <!-- #endif -->
+                <div class="price">
                   ¥ {{item.price}}
-                </view>
-                <view class="original-price">
+                </div>
+                <div class="original-price">
                   ¥ {{item.originalPrice}}
-                </view>
-              </view>
+                </div>
+              </div>
             </view>
           </view>
         </view>
       </view>
     </view>
-    <view v-else class="emptyCart-box flex-items-plus flex-column">
+    <view v-if="ifShow" class="emptyCart-box flex-items-plus flex-column">
         <image class="emptyCart-img" src="https://ceres.zkthink.com/static/img/bgnull.png" mode="widthFix" />
         <label class="font-color-999 fs26 mar-top-30">这里空空如也~</label>
     </view>
@@ -55,7 +71,8 @@ name: "categoryShow",
       page:1,
       pageSize:10,
       total: 0,
-      productList: []
+      productList: [],
+      ifShow: false
     }
   },
   mounted () {
@@ -74,6 +91,9 @@ name: "categoryShow",
       }, 'GET').then(res => {
         this.productList = res.data.list
         uni.hideLoading()
+        if (this.productList.length === 0) {
+          this.ifShow = true
+        }
       }).catch(res => {
         uni.hideLoading()
       })
@@ -95,6 +115,7 @@ name: "categoryShow",
   watch: {
     'categoryid': {
       handler(newVal, oldVal) {
+        this.ifShow = false
         this.getData()
       },
       deep: true
@@ -201,6 +222,11 @@ name: "categoryShow",
         display: flex;
         align-items: baseline;
         line-height: 56upx;
+        .iconImg {
+          width: 58rpx;
+          height: 36rpx;
+          margin-right: 10rpx;
+        }
         .price{
           color: #C83732;
           font-size: 40upx;

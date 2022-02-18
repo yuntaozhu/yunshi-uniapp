@@ -1,13 +1,13 @@
 <template>
 	<view class="live-list-page">
-		<view class="live-list" v-if="roomList.length">
+		<view class="live-list">
 			<LiveBox class="live-item"
 				v-for="item in roomList"
 				:key="item.roomid"
 				:liveData="item"
 			/>
 		</view>
-    <view v-else class="emptyCart-box">
+    <view v-if="ifShow" class="emptyCart-box">
       <image class="emptyCart-img" src="https://ceres.zkthink.com/static/images/collectEmpty.png"></image>
       <label class="text font-color-999 fs26 mar-top-30">暂无直播~</label>
     </view>
@@ -30,7 +30,8 @@ export default {
 				pageSize: 10,
 			},
 			isLoading: false,
-			roomList: []
+			roomList: [],
+      ifShow: false
 		}
 	},
 	onLoad() {
@@ -48,6 +49,9 @@ export default {
 			NET.request(API.LiveRoomes, this.page, 'get').then(res => {
 				if (this.page.page === 1) { // 第一次查询
 					this.roomList = res.data.list
+          if (this.roomList.length === 0) {
+            this.ifShow = true
+          }
 				} else { // 下拉继续查询
 					this.roomList = this.roomList.concat(res.data.list)
 				}

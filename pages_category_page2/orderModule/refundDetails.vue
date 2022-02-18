@@ -1,7 +1,7 @@
 <!-- 退货详情 -->
 <template>
-	<view>
-		<view class="">
+	<view v-if="ifShow">
+		<view>
 			<view class="order-details-status">
 				<view class="status-title-box" v-if='status == 1'>
 					<view class="l">
@@ -163,12 +163,12 @@
     <u-popup v-model="intervention" mode="center" border-radius="14" close-icon-pos="top-right"
              close-icon-size="20">
       <view class="interventionBox">
-        <view class="intTit">申请平台介入</view>
-        <textarea class="textarea-text" v-model="reason" placeholder-style="color:#BBBBBB" placeholder="请输入介入原因"/>
-        <view class="btnBox">
-          <button @click="interventionFn" class="primary">确定</button>
-          <button @click="closeInterventionFn">取消</button>
-        </view>
+        <view class="intTit">你已申请平台介入正在审核中...</view>
+<!--        <textarea class="textarea-text" v-model="reason" placeholder-style="color:#BBBBBB" placeholder="请输入介入原因"/>-->
+<!--        <view class="btnBox">-->
+<!--          <button @click="interventionFn" class="primary">确定</button>-->
+<!--          <button @click="closeInterventionFn">取消</button>-->
+<!--        </view>-->
       </view>
     </u-popup>
 	</view>
@@ -185,12 +185,12 @@
 				status:0,
 				deliveryfalse:false,
 				ReturnDetailData:[],
-        reason: '',
         images: '',
         intervention: false,
         interventionText: '',
         afterId: '',
-        orderId: ''
+        orderId: '',
+        ifShow: false
 			}
 		},
 		onLoad(options){
@@ -205,6 +205,7 @@
 				},'GET').then(res => {
 					this.status = res.data.afterState
 					this.itemlist = res.data
+          this.ifShow = true
 				}).catch(res => {
 
 				})
@@ -230,27 +231,8 @@
       },
       // 平台介入
       platform (afterId, orderId) {
-        this.intervention = true
-        this.afterId = afterId
-        this.orderId = orderId
-      },
-      interventionFn() {
-        uni.showLoading({
-          title:'正在申请介入...'
-        })
-        NET.request(API.platform, {
-          afterId: this.afterId,
-          orderId: this.orderId,
-          image: this.images,
-          reason: this.reason
-        }, 'POST').then(res => {
-          uni.hideLoading()
-          this.intervention = false
-          uni.showToast({
-            title:'申请成功',
-          })
-        }).catch(res => {
-          uni.hideLoading()
+        uni.navigateTo({
+          url:`../../pages_category_page1/orderModule/Intervene?afterId=${afterId}&orderId=${orderId}`
         })
       },
       closeInterventionFn() {

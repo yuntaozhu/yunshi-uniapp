@@ -15,7 +15,7 @@
             <view class="fs48 font-color-C83732 flex-items">
               <view class="mar-right-20">{{currentCoupon.credit||0}}积分</view>
               <view class="remaining fs24 font-color-C83732">
-                还剩{{currentCoupon.stockNumber - currentCoupon.takeCount||0}}件
+                还剩{{currentCoupon.stockNumber||0}}件
               </view>
             </view>
             <view class="fs32 font-color-333" v-if="currentCoupon.fullMoney !== 0">满{{currentCoupon.fullMoney}}{{currentCoupon.couponType === 1 ? '减' : '打'}}{{currentCoupon.reduceMoney}}{{currentCoupon.couponType === 1 ? '元' : '折'}}券</view>
@@ -154,11 +154,11 @@ export default {
           title: '兑换成功',
           icon:"success"
         })
-        // setTimeout(() => {
-        //   uni.navigateTo({
-        //     url: '/pages_category_page1/integral/index?tabActive=2'
-        //   })
-        // }, 2000)
+        setTimeout(() => {
+          uni.navigateTo({
+            url: '/pages_category_page1/integral/index?tabActive=2'
+          })
+        }, 1500)
       }).catch(res => {
         if(res.code !== '200'){
           uni.showToast({
@@ -179,6 +179,11 @@ export default {
         title: '兑换成功',
         icon:"success"
       })
+      setTimeout(() => {
+        uni.navigateTo({
+          url: '/pages_category_page1/integral/index?tabActive=2'
+        })
+      }, 1500)
     }
   }
 }

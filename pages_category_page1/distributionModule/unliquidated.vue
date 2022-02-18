@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view v-if="ifShow">
 		<view class="unliquidated-topBackImg flex-items flex-column">
 			<view class="totalAward-content flex-column font-color-FFF">
 				<view class="flex-items-plus  mar-top-60">
@@ -130,7 +130,8 @@
 				loadingType:0,
 				loadingType1:0,
 				ZSalesOrderDatalist:[],
-				JSalesOrderDatalist:[]
+				JSalesOrderDatalist:[],
+        ifShow: false
 			}
 
 		},
@@ -178,6 +179,7 @@
 					this.ZSalesOrderDatalist = this.ZSalesOrderDatalist.concat(res.data.page.list)
 					this.ZSalesOrderData = res.data
 					this.ZStotallength = this.ZSalesOrderData.page.total
+          this.ifShow = true
 				}).catch(res => {
 					uni.hideLoading()
 				})

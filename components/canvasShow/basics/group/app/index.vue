@@ -13,7 +13,7 @@
          <a v-show="componentContent.showMore" class="btn-all a-link" @click="jumpGroupWorks(productData)">更多<i class="iconfont icon-arrow-right"></i></a>
        </div>
        <div>
-       <swiper class="swiper pro-box" :indicator-dots="false" :autoplay="true" :display-multiple-items="3" @change="swiperChange">
+       <swiper class="swiper pro-box" :circular="true" :indicator-dots="false" :autoplay="true" :display-multiple-items="3" @change="swiperChange">
          <swiper-item class="swiper-slide pro-item-warp" v-for="(item,index) in productData.products" :key="index" @click="jumpProductDetail(item)">
           <div class="pro-item-inner">
             <div class="pro-item">
@@ -31,8 +31,10 @@
             </div>
           </div>
          </swiper-item>
+         <!-- #ifdef MP-WEIXIN -->
          <swiper-item v-if="productData.products.length" class="swiper-slide pro-item-warp" v-for="item in (3 - productData.products.length)">
          </swiper-item>
+         <!-- #endif -->
        </swiper>
          <view class="swiper-dots" v-if="productData.products && productData.products.length > 3">
            <text class="dot" :class="index - swiperCurrent <= 2 && index - swiperCurrent >=0  && 'dot-active'" v-for="(dot, index) in productData.products.length"
@@ -80,6 +82,7 @@ export default {
       padding: 40upx 0 25upx 20upx;
       .title-img{
         width: 189upx;
+          height: 34rpx;
       }
       .btn-all{
         position: absolute;

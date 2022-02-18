@@ -28,7 +28,10 @@
             <text class="text">有效期</text>
             <text class="val">{{channelCouponData.startTime.slice(0,10)}} - {{channelCouponData.endTime.slice(0,10)}}</text>
           </view>
-          <view class="btn" @click="receiveCoupon(channelCouponData)">立即领取</view>
+          <view v-if="channelCouponData.state === 3" class="btn" @click="receiveCoupon(channelCouponData)">立即领取</view>
+          <view v-if="channelCouponData.state === 0" class="btn">已领取</view>
+          <view v-if="channelCouponData.state === 1" class="btn">已使用</view>
+          <view v-if="channelCouponData.state === 2" class="btn">已过期</view>
         </view>
       </view>
     </view>

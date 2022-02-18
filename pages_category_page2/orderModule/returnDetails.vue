@@ -90,12 +90,12 @@
 				</view>
 			</view>
 
-			<view class="order-details-info-box mt20" v-if='status == 1'>
-				<view class="order-details-price">
+			<view class="order-details-info-box mt20">
+				<view class="order-details-price" v-if='status == 1'>
 					<text>退款总金额</text>
 					<text class="price-box"><text class="fuhao">￥</text>{{itemlist.price}}</text>
 				</view>
-			    <view class="address-box">
+			    <view class="address-box" v-if='status == 10'>
 			      <view>商家已同意退货申请，请尽早发货。</view>
 			      <view class="address-info">
 			        <image src="https://ceres.zkthink.com/static/images/expressSiteIcon.png" class="address-img"></image>

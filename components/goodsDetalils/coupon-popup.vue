@@ -117,6 +117,10 @@ export default {
         },
         setTop: {
           type: Number,
+          default: 0,
+        },
+        currentActive: {
+          type: Number,
           default: 0
         }
     },
@@ -124,7 +128,7 @@ export default {
         return {
             showActivity: false,
             isShowSuccess: false,
-            activeTypeFlag: 0,
+            activeTypeFlag: this.currentActive,
             activeTypeList: [{
                 name: '平台活动'
             }, {

@@ -91,7 +91,7 @@ export default {
       selectIndex:0,
       sortIndex: 1,
       isFixed: false,
-        boxFixedTop: 0,
+      boxFixedTop: 0,
     }
   },
   onPageScroll(res) {
@@ -117,7 +117,10 @@ export default {
       this.shopId = 0
       this.shopDiscountId = 0
     }
-    this.getMemberList()
+    
+  },
+  onShow() {
+  	this.getMemberList()
   },
   onReachBottom(){
     if(this.loadingType == 1){
@@ -194,6 +197,10 @@ export default {
       })
     },
     getMemberList(){
+      uni.showLoading({
+        mask: true,
+        title: '加载中...',
+      })
       let param = ''
       const storageKey = uni.getStorageSync('storage_key');
       if(storageKey){
@@ -209,10 +216,7 @@ export default {
           param.volume = this.volume
         }
         NET.request(API.getMemberProducts,param,'GET').then(res => {
-          // if(this.shopShowType == false){
-          //   this.dateformat(res.data.time)
-          //   this.countDown()
-          // }
+          uni.hideLoading()
           if(res.data.list.length == 0){
             this.loadingType = 1
           }else{
@@ -466,7 +470,7 @@ page {
   background-color: #333;
   &.is-fixed{
     position: fixed;
-    top: 44rpx;
+    top: 70rpx;
     left: 0;
     width: 100%;
     z-index: 999;

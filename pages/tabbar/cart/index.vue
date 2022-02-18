@@ -588,7 +588,7 @@ export default {
 					let item = this.dataList[i].skus[j]
 					this.allNum += item.number
 					if (item.selected == 1) {
-						this.checkNum++
+						this.checkNum = this.checkNum + item.number
 						this.checkMoney += parseFloat(item.price * item.number)
 					} else {
 						if (this.isAllCheck) {
@@ -1290,15 +1290,16 @@ export default {
 
 		.cart-bottom-box-h5 {
 			position: fixed;
-			bottom: 90rpx;
+			bottom: 74rpx;
 			width: 100%;
-      z-index: 99;
+            z-index: 99;
 		}
 
 		.cart-bottom-box-app {
 			position: fixed;
 			bottom: 0rpx;
 			width: 100%;
+			z-index: 99;
 		}
 
 		.cart-bottom {

@@ -76,6 +76,10 @@
 			},
 			// 微信登录
 			GetUserInfo() {
+        uni.showLoading({
+          title: '正在加载...',
+          mask: true
+        });
 				const that = this
 				// // #ifdef APP-PLUS
 				// uni.login({
@@ -114,6 +118,7 @@
 				uni.login({
 					provider: 'weixin',
 					success: (res2) => {
+            uni.hideLoading()
 						that.WXloginQuery.code = res2.code
 					},
 					fail: () => {

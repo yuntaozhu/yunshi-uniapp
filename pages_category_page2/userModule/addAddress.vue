@@ -95,7 +95,7 @@ const API = require('../../config/api')
 				ssqText:'',
 				address:'',
 				tag:'',
-				ifDefault:false,
+				ifDefault: 0,
 				province:'',
 				city:'',
 				area:'',
@@ -139,7 +139,7 @@ const API = require('../../config/api')
               this.addressTagIndex = i
             }
           }
-          this.ifDefault = this.editAddress.defult
+          this.ifDefault = this.editAddress.ifDefault
           this.addressData.defaultRegion = this.ssqText.split("-")
           this.addressData.province = this.defaultRegion[0]
           this.addressData.city = this.defaultRegion[1]
@@ -228,7 +228,7 @@ const API = require('../../config/api')
 						receiveAdress: this.addressData.ssqText,
 						address:this.addressData.address,
 						label:this.tag,
-						defult:this.ifDefault
+            ifDefault:this.ifDefault ? 1 : 0
 					},'POST').then(res => {
 						uni.navigateBack({
 							delta: 1

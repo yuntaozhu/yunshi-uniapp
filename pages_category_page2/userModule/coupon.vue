@@ -109,7 +109,7 @@
   flex-direction: row;
   position: relative;
   background-size: contain;
-  padding: 0 60rpx;
+  padding: 0 56rpx;
   margin-bottom: 30rpx;
 }
 

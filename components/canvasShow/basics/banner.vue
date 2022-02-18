@@ -1,6 +1,6 @@
 <template>
   <div class="banner" :class="'terminal' + terminal">
-    <swiper class="swiper" :indicator-dots="false" :autoplay="true" :style="{'height':bannerHeight + 'rpx'}" @change="swiperChange">
+    <swiper class="swiper" :circular="true" :indicator-dots="false" :autoplay="true" :style="{'height':bannerHeight + 'rpx'}" @change="swiperChange">
       <swiper-item class="banner-item" v-for="(item,index) in bannerList" :key="index" :style="{backgroundImage: 'url('+ item.bannerUrl +')'}"  @click="jumpLink(item.linkObj)">
 <!--        <div class="a-link" @click="jumpLink(item.linkObj)"><img class="img" :src="item.bannerUrl" v-show="item.bannerUrl" mode="widthFix"></div>-->
       </swiper-item>

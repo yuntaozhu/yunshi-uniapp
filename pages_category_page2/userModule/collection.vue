@@ -1,72 +1,64 @@
 <template>
 	<view class="collection-box">
 		<view class="tabsbox">
-			<u-tabs
-				:list="collectionTypeList"
-				bar-width="60"
-				:bold="false"
-				active-color="#333333"
-				inactive-color="#CCCCCC"
-				:is-scroll="false"
-				:current="collectionTypeFlag"
-				@change="collectionTypeActive"
-			></u-tabs>
+			<u-tabs :list="collectionTypeList" bar-width="60" :bold="false" active-color="#333333"
+				inactive-color="#CCCCCC" :is-scroll="false" :current="collectionTypeFlag"
+				@change="collectionTypeActive"></u-tabs>
 		</view>
 		<view v-if="collectionTypeFlag == 0">
 			<view v-if="productCollect.length>0">
 				<view class="wid function-box">
 					<view class="finishbox" @click="finishClick" v-if="allCheckShow">完成</view>
 					<view v-else class="flex-row-plus editicon-box flex-items fs28" @click="editClick">
-						<image class="editicon" src="https://ceres.zkthink.com/static/images/collectionEditicon.png"></image>
+						<image class="editicon" src="https://ceres.zkthink.com/static/images/collectionEditicon.png">
+						</image>
 						<text class="mar-left-10">编辑</text>
 					</view>
 				</view>
 				<view class="swipe-box">
-          <view class="actionBox"
-						v-for="(item, index) in productCollect"
-						:key="item.collectId"
-						:index="index"
-					>
-            <u-swipe-action
-							ref="actionSwipe"
-							:show="item.show"
-							@open="productOpen(index)"
-							@click.stop="productActionClick"
-							:options="options"
-						>
-						<!-- :disabled="allCheckShow" -->
-              <view class="flex-item" @click.stop="toGoodsDetails(item.productId,item.shopId,item.skuId)">
-                <view class="item wid flex-row-plus flex-display">
-                  <view class="flex-items selctBtn" v-show="allCheckShow">
-                    <image mode="aspectFill" v-if="item.selected == 1"
-                           @click.stop="productItemSel(index,0)" src="https://ceres.zkthink.com/static/images/selectActive.png"
-                           class="cart-select-img"></image>
-                    <image mode="aspectFill" v-else @click.stop="productItemSel(index,1)"
-                           src="https://ceres.zkthink.com/static/images/selectEmpty.png" class="cart-select-img"></image>
-                  </view>
-                  <view class="infoCent flex-items">
-                    <image class="product-img" mode="aspectFill" :src="item.image" />
-                    <!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
-                    <view class="title-wrap mar-left-20 priceBox">
-                      <text class="title u-line-2 fs28 font-color-333">{{ item.productName }}</text>
-                      <view class="flex-items">
-												<image v-if="item.activityType" class="iconImg mar-right-10" :src="imgs[item.activityType]"></image>
-                        <text class="fs40 font-color-C83732">¥</text>
-                        <text class="fs40 font-color-C83732 mar-right-20">{{item.price}}</text>
-                        <text class="font-color-CCC discountsPriceLine fs24">¥{{item.originalPrice}}</text>
-                      </view>
-                    </view>
-                  </view>
-                </view>
-              </view>
-            </u-swipe-action>
-          </view>
+					<view class="actionBox" v-for="(item, index) in productCollect" :key="item.collectId"
+						:index="index">
+						<u-swipe-action ref="actionSwipe" :show="item.show" @open="productOpen(index)"
+							@click="productActionClick" :options="options">
+							<!-- :disabled="allCheckShow" -->
+							<view class="flex-item" @click.stop="toGoodsDetails(item.productId,item.shopId,item.skuId)">
+								<view class="item wid flex-row-plus flex-display">
+									<view class="flex-items selctBtn" v-show="allCheckShow">
+										<image mode="aspectFill" v-if="item.selected == 1"
+											@click.stop="productItemSel(index,0)"
+											src="https://ceres.zkthink.com/static/images/selectActive.png"
+											class="cart-select-img"></image>
+										<image mode="aspectFill" v-else @click.stop="productItemSel(index,1)"
+											src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+											class="cart-select-img"></image>
+									</view>
+									<view class="infoCent flex-items">
+										<image class="product-img" mode="aspectFill" :src="item.image" />
+										<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
+										<view class="title-wrap mar-left-20 priceBox">
+											<text
+												class="title u-line-2 fs28 font-color-333">{{ item.productName }}</text>
+											<view class="flex-items">
+												<image v-if="item.activityType" class="iconImg mar-right-10"
+													:src="imgs[item.activityType]"></image>
+												<text class="fs40 font-color-C83732">¥</text>
+												<text class="fs40 font-color-C83732 mar-right-20">{{item.price}}</text>
+												<text
+													class="font-color-CCC discountsPriceLine fs24">¥{{item.originalPrice}}</text>
+											</view>
+										</view>
+									</view>
+								</view>
+							</view>
+						</u-swipe-action>
+					</view>
 				</view>
 				<view v-if="allCheckShow" class="pad-bot-140"></view>
 				<view v-show="allCheckShow" class="allcheck-box flex-row-plus flex-sp-between flex-items">
 					<view class="left">
-						<image mode="aspectFill" v-if="isAllProCheck" src="https://ceres.zkthink.com/static/images/selectActive.png"
-							class="cart-select-img" @click="allProductSel(0)"></image>
+						<image mode="aspectFill" v-if="isAllProCheck"
+							src="https://ceres.zkthink.com/static/images/selectActive.png" class="cart-select-img"
+							@click="allProductSel(0)"></image>
 						<image mode="aspectFill" v-else src="https://ceres.zkthink.com/static/images/selectEmpty.png"
 							class="cart-select-img" @click="allProductSel(1)"></image>
 						<text>全选</text>
@@ -86,59 +78,56 @@
 			<view v-if="storeCollect.length>0">
 				<view class="finishbox" @click="finishClick" v-if="allCheckShow">完成</view>
 				<view v-else class="flex-row-plus editicon-box flex-items fs28" @click="editClick">
-					<image class="editicon" src="https://ceres.zkthink.com/static/images/collectionEditicon.png"></image>
+					<image class="editicon" src="https://ceres.zkthink.com/static/images/collectionEditicon.png">
+					</image>
 					<text class="mar-left-10">编辑</text>
 				</view>
 				<view class="swipe-box swipeBox">
-          <view
-						class="shopBox"
-						v-for="(item, index) in storeCollect"
-						:key="item.collectId"
-						:index="index"
-					>
-            <u-swipe-action
-							:show="item.show"
-							:options="options"
-							@click.stop="storeActionClick(index)"
-							@open="storeOpen(index)"
-						>
-              <view class="item wid flex-row-plus flex-display">
-                <view v-show="allCheckShow" class="selctBtn flex-items">
-                  <image mode="aspectFill" v-if="item.selected == 1"
-                         @click.stop="storeItemSel(index,0)"
-                         src="https://ceres.zkthink.com/static/images/selectActive.png" class="cart-select-img"></image>
-                  <image mode="aspectFill" v-else @click.stop="storeItemSel(index,1)"
-                         src="https://ceres.zkthink.com/static/images/selectEmpty.png" class="cart-select-img"></image>
-                </view>
-                <view class="infoCent">
-                  <view class="flex-row-plus flex-sp-between flex-items-plus wid">
-                    <view class="flex-items-plus flex-row pad-topbot-10">
-                      <image class="head-img" mode="aspectFill" :src="item.shopLogo" />
-                      <!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
-                      <view class="title-wrap mar-left-20">
-                        <text class="title u-line-2 shopName">{{ item.shopName }}</text>
-                        <text class="font-color-CCC fs24">{{item.person}}人关注</text>
-                      </view>
-                    </view>
-                    <view class="toStore flex-items-plus fs24" @click="toStoreClick(item.shopId)">
-                      进入店铺
-                      <image src="https://ceres.zkthink.com/static/images/arrowR.png"></image>
-                    </view>
-                  </view>
-                  <view class="shopImgBox">
-                    <view class="itemImgBox" v-for="(sItem, sIndex) of item.productList" :key="sIndex" @click.stop="goodsDateils(sItem.shopId,sItem.productId,sItem.skuId)">
-                      <image :src="sItem.image"></image>
-                    </view>
-                  </view>
-                </view>
-              </view>
-            </u-swipe-action>
-          </view>
+					<view class="shopBox" v-for="(item, index) in storeCollect" :key="item.collectId" :index="index">
+						<u-swipe-action :show="item.show" :options="options" @click="storeActionClick(index)"
+							@open="storeOpen(index)">
+							<view class="item wid flex-row-plus flex-display">
+								<view v-show="allCheckShow" class="selctBtn flex-items">
+									<image mode="aspectFill" v-if="item.selected == 1"
+										@click.stop="storeItemSel(index,0)"
+										src="https://ceres.zkthink.com/static/images/selectActive.png"
+										class="cart-select-img"></image>
+									<image mode="aspectFill" v-else @click.stop="storeItemSel(index,1)"
+										src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+										class="cart-select-img"></image>
+								</view>
+								<view class="infoCent">
+									<view class="flex-row-plus flex-sp-between flex-items-plus wid">
+										<view class="flex-items-plus flex-row pad-topbot-10">
+											<image class="head-img" mode="aspectFill" :src="item.shopLogo" />
+											<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
+											<view class="title-wrap mar-left-20">
+												<text class="title u-line-2 shopName">{{ item.shopName }}</text>
+												<text class="font-color-CCC fs24">{{item.person}}人关注</text>
+											</view>
+										</view>
+										<view class="toStore flex-items-plus fs24" @click="toStoreClick(item.shopId)">
+											进入店铺
+											<image src="https://ceres.zkthink.com/static/images/arrowR.png"></image>
+										</view>
+									</view>
+									<view class="shopImgBox"  v-if="item.productList.length>0">
+										<view class="itemImgBox" v-for="(sItem, sIndex) of item.productList"
+											:key="sIndex"
+											@click.stop="goodsDateils(sItem.shopId,sItem.productId,sItem.skuId)">
+											<image :src="sItem.image"></image>
+										</view>
+									</view>
+								</view>
+							</view>
+						</u-swipe-action>
+					</view>
 				</view>
 				<view v-show="allCheckShow" class="allcheck-box flex-row-plus flex-sp-between flex-items">
 					<view class="left">
-						<image mode="aspectFill" v-if="isAllStoreCheck" src="https://ceres.zkthink.com/static/images/selectActive.png"
-							class="cart-select-img" @click="allStoreSel(0)"></image>
+						<image mode="aspectFill" v-if="isAllStoreCheck"
+							src="https://ceres.zkthink.com/static/images/selectActive.png" class="cart-select-img"
+							@click="allStoreSel(0)"></image>
 						<image mode="aspectFill" v-else src="https://ceres.zkthink.com/static/images/selectEmpty.png"
 							class="cart-select-img" @click="allStoreSel(1)"></image>
 						<text>全选</text>
@@ -226,10 +215,10 @@
 				proCollectShow: false,
 				cardModal: false,
 				paoductDelSubmit: false,
-				shopDelSubmit:false,
-        ids: null,
-        currentIndex: null,
-        currentType: null
+				shopDelSubmit: false,
+				ids: null,
+				currentIndex: null,
+				currentType: null
 			};
 		},
 		onLoad() {
@@ -262,19 +251,19 @@
 						isShowProoductDelSubmit = true
 					}
 				})
-				if(isShowProoductDelSubmit === true){
+				if (isShowProoductDelSubmit === true) {
 					this.cardModal = true
 					this.paoductDelSubmit = true
 					this.shopDelSubmit = false
-				}else{
+				} else {
 					this.$u.toast(`请先选择要删除的收藏宝贝！`);
 				}
 			},
 			paoductDel() {
-        if (this.currentType === 1) {
-          this.cancelCollect(this.ids)
-          this.productCollect.splice(this.currentIndex, 1);
-        } else {
+				if (this.currentType === 1) {
+					this.cancelCollect(this.ids)
+					this.productCollect.splice(this.currentIndex, 1);
+				} else {
 					let ids = []
 					this.productCollect.forEach((value, index) => {
 						if (value.selected == 1) {
@@ -287,7 +276,7 @@
 						this.productCollect = []
 						this.cardModal = false
 						this.$u.toast(`删除成功`);
-            this.productPage = 1
+						this.productPage = 1
 						this.getProductCollect()
 					}).catch(res => {
 						this.cardModal = false
@@ -295,7 +284,7 @@
 					})
 				}
 			},
-			showCardModalshopDel(){
+			showCardModalshopDel() {
 				let isShowShopDelSubmit = false
 				// 店铺
 				this.storeCollect.forEach((value, index) => {
@@ -303,39 +292,39 @@
 						isShowShopDelSubmit = true
 					}
 				})
-				if(isShowShopDelSubmit === true ){
+				if (isShowShopDelSubmit === true) {
 					this.cardModal = true
 					this.shopDelSubmit = true
 					this.paoductDelSubmit = false
-				}else{
+				} else {
 					this.$u.toast(`请先选择要删除的收藏店铺！`);
 				}
 			},
 			shopDel() {
-        if (this.currentType === 2) {
-          this.cancelCollect(this.ids)
-          this.storeCollect.splice(this.currentIndex, 1);
-        } else {
-          console.log('删除')
-          let ids = []
-          this.storeCollect.forEach((value, index) => {
-            if (value.selected == 1) {
-              ids.push(value.collectId)
-            }
-          })
-          NET.request(API.deleteCollect, {
-            ids: ids
-          }, 'POST').then(res => {
-            this.storeCollect = []
-            this.cardModal = false
-            this.$u.toast(`删除成功`);
-            this.storePage = 1
-            this.getStoreCollect()
-          }).catch(res => {
-            this.cardModal = false
-            this.$u.toast(`删除失败`);
-          })
-        }
+				if (this.currentType === 2) {
+					this.cancelCollect(this.ids)
+					this.storeCollect.splice(this.currentIndex, 1);
+				} else {
+					console.log('删除')
+					let ids = []
+					this.storeCollect.forEach((value, index) => {
+						if (value.selected == 1) {
+							ids.push(value.collectId)
+						}
+					})
+					NET.request(API.deleteCollect, {
+						ids: ids
+					}, 'POST').then(res => {
+						this.storeCollect = []
+						this.cardModal = false
+						this.$u.toast(`删除成功`);
+						this.storePage = 1
+						this.getStoreCollect()
+					}).catch(res => {
+						this.cardModal = false
+						this.$u.toast(`删除失败`);
+					})
+				}
 			},
 			//去店铺
 			toStoreClick(storeId) {
@@ -366,11 +355,11 @@
 			},
 			storeClick(index, index1) {
 				if (index1 == 0) {
-          this.cardModal = true
-          this.shopDelSubmit = true
+					this.cardModal = true
+					this.shopDelSubmit = true
 					this.ids = this.storeCollect[index].collectId
-          this.currentIndex = index
-          this.currentType = 2
+					this.currentIndex = index
+					this.currentType = 2
 				}
 			},
 			// 如果打开一个的时候，不需要关闭其他，则无需实现本方法
@@ -388,6 +377,7 @@
 			},
 			// 打开删除层
 			productActionClick() {
+				console.log('打开')
 				this.cardModal = true
 				this.paoductDelSubmit = true
 				this.shopDelSubmit = false
@@ -462,16 +452,16 @@
 			},
 			//收藏商品查询
 			getProductCollect() {
-        uni.showLoading({
-          mask: true,
-          title: '加载中...'
-        })
+				uni.showLoading({
+					mask: true,
+					title: '加载中...'
+				})
 				NET.request(API.getProductCollect, {
 						page: this.productPage,
 						pageSize: this.productPageSize
 					},
 					'GET').then(res => {
-          uni.hideLoading()
+					uni.hideLoading()
 					if (res.data.list.length == 0) {
 						this.proCollectShow = true
 						this.proloadingType = 1
@@ -493,16 +483,16 @@
 			},
 			//收藏店铺查询
 			getStoreCollect() {
-        uni.showLoading({
-          mask: true,
-          title: '加载中...'
-        })
+				uni.showLoading({
+					mask: true,
+					title: '加载中...'
+				})
 				NET.request(API.getStoreCollect, {
 						page: this.storePage,
 						pageSize: this.storePageSize
 					},
 					'GET').then(res => {
-          uni.hideLoading()
+					uni.hideLoading()
 					if (res.data.list.length == 0) {
 						this.storeCollectShow = true
 						this.storeloadingType = 1
@@ -525,14 +515,14 @@
 				NET.request(API.cancelCollect, {
 					ids: [ids]
 				}, 'POST').then(res => {
-          this.$u.toast(`删除成功`);
-          this.cardModal = false
-          this.currentType = null
-          this.currentIndex  = null
-          this.ids = null
+					this.$u.toast(`删除成功`);
+					this.cardModal = false
+					this.currentType = null
+					this.currentIndex = null
+					this.ids = null
 					if (res.code == "200") {
-            this.productCollect = []
-            this.storeCollect = []
+						this.productCollect = []
+						this.storeCollect = []
 						this.getStoreCollect()
 						this.getProductCollect()
 					} else {
@@ -545,12 +535,13 @@
 					})
 				})
 			},
-      //商品详情
-      goodsDateils(shopId,productId,skuId){
-        uni.navigateTo({
-          url: '/pages_category_page1/goodsModule/goodsDetails?shopId='+shopId + '&productId='+productId +'&skuId='+skuId
-        })
-      }
+			//商品详情
+			goodsDateils(shopId, productId, skuId) {
+				uni.navigateTo({
+					url: '/pages_category_page1/goodsModule/goodsDetails?shopId=' + shopId + '&productId=' +
+						productId + '&skuId=' + skuId
+				})
+			}
 		}
 	}
 </script>
@@ -606,35 +597,43 @@
 		}
 
 		.swipe-box {
-      padding: 0 20rpx;
-      .actionBox {
-        margin-bottom: 20rpx;
-      }
+			padding: 0 20rpx;
+
+			.actionBox {
+				margin-bottom: 20rpx;
+			}
+
 			.item {
 				display: flex;
-        .infoCent {
-          padding: 20rpx;
-        }
-        .selctBtn {
-          background: #F7F7F7;
-        }
+
+				.infoCent {
+					padding: 20rpx;
+				}
+
+				.selctBtn {
+					background: #F7F7F7;
+				}
 			}
-      .shopImgBox {
-        display: flex;
-        justify-content: end;
-        margin-left: 90rpx;
-        padding-bottom: 20rpx;
-        margin-top: 20rpx;
-        .itemImgBox {
-          margin-right: 15rpx;
-          margin-left: 5rpx;
-          image {
-            width: 120rpx;
-            height: 120rpx;
-            border: 2rpx solid #F3F4F5;
-          }
-        }
-      }
+
+			.shopImgBox {
+				display: flex;
+				justify-content: end;
+				margin-left: 90rpx;
+				padding-bottom: 20rpx;
+				margin-top: 20rpx;
+
+				.itemImgBox {
+					margin-right: 15rpx;
+					margin-left: 5rpx;
+
+					image {
+						width: 120rpx;
+						height: 120rpx;
+						border: 2rpx solid #F3F4F5;
+					}
+				}
+			}
+
 			.product-img {
 				width: 220rpx;
 				flex: 0 0 220rpx;
@@ -652,16 +651,18 @@
 				text-align: left;
 				font-size: 28rpx;
 				color: $u-content-color;
-        height: 165rpx;
-        padding-right: 20rpx;
+				height: 165rpx;
+				padding-right: 20rpx;
 			}
-      .shopName {
-        height: auto;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        width: 340rpx;
-      }
+
+			.shopName {
+				height: auto;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				width: 340rpx;
+			}
+
 			.cart-select-img {
 				width: 40upx;
 				height: 40upx;
@@ -670,20 +671,23 @@
 			}
 
 			.toStore {
+				width: 100px;
 				color: #FFEBC4;
 				padding: 0rpx 20rpx;
 				height: 52rpx;
 				background: #333333;
 				margin-right: 15rpx;
+
 				image {
 					width: 10rpx;
 					height: 18rpx;
 					margin-left: 10rpx;
 				}
 			}
-      .shopBox {
-        margin-bottom: 20rpx;
-      }
+
+			.shopBox {
+				margin-bottom: 20rpx;
+			}
 		}
 
 		.allcheck-box {
@@ -746,27 +750,31 @@
 			position: absolute;
 			bottom: -50px;
 			left: 45%;
+
 			image {
 				width: 60upx;
 				height: 60upx;
 			}
 		}
 	}
-  .priceBox {
-    .iconImg {
-      width: 58rpx;
-      height: 36rpx;
-      margin-right: 10rpx;
-    }
-  }
+
+	.priceBox {
+		.iconImg {
+			width: 58rpx;
+			height: 36rpx;
+			margin-right: 10rpx;
+		}
+	}
 </style>
 <style scoped>
 	.tabsbox /deep/ #u-tab-item-0 {
 		position: relative;
 	}
-  .tabsbox /deep/ .u-tab-bar {
-    background-color: #c5aa7b !important;
-  }
+
+	.tabsbox /deep/ .u-tab-bar {
+		background-color: #c5aa7b !important;
+	}
+
 	.tabsbox /deep/ #u-tab-item-0::before {
 		content: '';
 		width: 2rpx;
@@ -793,7 +801,7 @@
 	}
 </style>
 <style>
-page {
-  background-color: #F7F7F7;
-}
+	page {
+		background-color: #F7F7F7;
+	}
 </style>

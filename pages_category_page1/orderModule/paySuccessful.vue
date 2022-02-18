@@ -1,5 +1,8 @@
 <template>
   <view class="payCourteous">
+    <view class="payTitBox flex-items flex-center" :style="{'padding-top': topHeight + 'px'}">
+      <view class="payTit fs30">支付成功</view>
+    </view>
     <view class="resultCard">
       <view class="imgBox">
         <image src="https://ceres.zkthink.com/static/images/payIcon.png"></image>
@@ -18,10 +21,9 @@
             v-if="orderPolite.credit">
             恭喜获得额外积分<text class="growth">{{ orderPolite.credit }}</text>
           </view>
-		  <view class="growthBox"
-            v-if="orderPolite.growth">
-            恭喜获得额外会员成长值<text class="growth">{{ orderPolite.growth }}</text>
-          </view>
+		  <view class="growthBox" v-if="orderPolite.growth">
+        恭喜获得额外会员成长值<text class="growth">{{ orderPolite.growth }}</text>
+      </view>
           <view class="couponBox"
             v-for="(item, index) of orderPolite.couponList"
             :key="index"
@@ -54,8 +56,15 @@ export default {
   data() {
     return {
       orderId: null,
-      orderPolite: {}
+      orderPolite: {},
+      topHeight: 0
     }
+  },
+  onShow() {
+    // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
+    let menuButtonInfo = uni.getMenuButtonBoundingClientRect()
+    this.topHeight = menuButtonInfo.top + 10
+    // #endif
   },
   onLoad(option) {
     this.orderId = option.orderId
@@ -95,6 +104,15 @@ export default {
 
 <style lang="scss" scoped>
 .payCourteous {
+  .payTitBox {
+    height: 100rpx;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: #FFFFFF;
+    z-index: 99;
+  }
   .resultCard{
     padding: 200rpx 0 50rpx 0;
     .imgBox {

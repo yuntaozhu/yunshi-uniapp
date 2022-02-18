@@ -223,7 +223,13 @@
 					type:0
 				},
 				"GET").then(res => {
+					// #ifndef MP-WEIXIN
 					this.qrcode = res.data.qrcode
+					// #endif
+					// #ifdef MP-WEIXIN
+					this.qrcode = res.data.xcxQrcode
+					// #endif
+					console.log(this.qrcode, 'this.qrcode')
 					this.getCanvas()
 					this.loadingQrcode = false
 				}).catch(res => {

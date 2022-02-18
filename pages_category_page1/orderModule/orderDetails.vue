@@ -1,15 +1,21 @@
 <!-- 订单详情 -->
 <template>
-	<view>
-		<view class="content" style="padding-bottom::200upx;">
+	<view v-if="ifShow">
+		<view class="content" style="padding-bottom:200upx;">
 			<view class="order-details-status">
 				<!--  待付款-->
 				<view class="status-title-box" v-if='dataList.state==1'>
 					<view class="l">
 						<text class="status">等待买家付款</text>
-						<text class="label">剩{{hou}}小时{{min}}分{{sec}}秒自动关闭</text>
+						<!-- <text class="label">剩{{hou}}小时{{min}}分{{sec}}秒自动关闭</text> -->
+						<view style="color: #FFFFFF; margin-top: 20rpx;">
+							<text>剩 </text>
+							<u-count-down :timestamp="remainingTime" fontSize="24rpx" :separator="zh" separatorColor="#FFFFFF"
+							separatorSize="24rpx"></u-count-down>
+							<text>自动关闭</text>
+						</view>
 					</view>
-<!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaifukuan.png"></image>-->
+					<!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaifukuan.png"></image>-->
 				</view>
 				<!--  待发货-->
 				<view class="status-title-box" v-else-if='dataList.state==2'>
@@ -17,7 +23,7 @@
 						<text class="status">等待卖家发货</text>
 						<text class="label">付款后2-5个工作日发货</text>
 					</view>
-<!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaifahuo.png"></image>-->
+					<!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaifahuo.png"></image>-->
 				</view>
 				<!--  待收货-->
 				<view class="status-title-box" v-else-if='dataList.state==3'>
@@ -25,7 +31,7 @@
 						<text class="status">卖家已发货</text>
 						<!-- <text class="label">还剩5天21小时自动确认</text> -->
 					</view>
-<!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaishouhuo.png"></image>-->
+					<!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaishouhuo.png"></image>-->
 				</view>
 				<!-- 已完成 -->
 				<view class="status-title-box" v-else-if='dataList.state==4'>
@@ -33,7 +39,7 @@
 						<text class="status">交易成功</text>
 						<text class="label">感谢您的使用</text>
 					</view>
-<!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaipingjia.png"></image>-->
+					<!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaipingjia.png"></image>-->
 				</view>
 				<!--  拼团失败-->
 				<view class="status-title-box" v-else-if='dataList.state==5 && dataList.collageId != 0'>
@@ -42,7 +48,7 @@
 						<text class="label">剩余时间 00:00:00</text>
 					</view>
 					<view class="clusterback">
-<!--						<image class='r' src="https://ceres.zkthink.com/static/images/staycluster.png"></image>-->
+						<!--						<image class='r' src="https://ceres.zkthink.com/static/images/staycluster.png"></image>-->
 					</view>
 				</view>
 				<!-- 交易关闭-->
@@ -60,9 +66,14 @@
 				<view class="status-title-box" v-else-if='dataList.state==6'>
 					<view class="l">
 						<text class="status">待成团</text>
-						<text class="label">剩余时间{{hou}}小时{{min}}分{{sec}}秒</text>
+						<!-- <text class="label">剩余时间{{hou}}小时{{min}}分{{sec}}秒</text> -->
+						<view style="color: #FFFFFF; margin-top: 20rpx;">
+							<text>剩余时间</text>
+							<u-count-down :timestamp="remainingTime" fontSize="24rpx" :separator="zh" separatorColor="#FFFFFF"
+							separatorSize="24rpx"></u-count-down>
+						</view>
 					</view>
-<!--					<image class='r' src="https://ceres.zkthink.com/static/images/clusterloss.png"></image>-->
+					<!--					<image class='r' src="https://ceres.zkthink.com/static/images/clusterloss.png"></image>-->
 				</view>
 
 			</view>
@@ -78,26 +89,30 @@
 							<text>{{dataList.receiveAdress}} {{dataList.address}}</text>
 						</view>
 					</view>
-					<image src="https://ceres.zkthink.com/static/images/arrowRight.png" v-if="false" class="arrow-right-img"></image>
+					<image src="https://ceres.zkthink.com/static/images/arrowRight.png" v-if="false"
+						class="arrow-right-img"></image>
 				</view>
 
 				<view class="order-list-box">
 					<view class="item">
 						<view class="order-list-top">
 							<view class="top-l" @click="goShop(dataList.shopId)">
-								<image src="https://ceres.zkthink.com/static/images/orderStoreIcon.png" class="shop-img"></image>
+								<image src="https://ceres.zkthink.com/static/images/orderStoreIcon.png"
+									class="shop-img"></image>
 								<text class="shop-name">{{dataList.shopName}}</text>
-								<image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="arrow-img"></image>
+								<image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="arrow-img">
+								</image>
 							</view>
 							<view class="toService" @click="openService">
-								<image src="https://ceres.zkthink.com/static/images/serviceImg-order-detail.png"  class="service-img" ></image>
+								<image src="https://ceres.zkthink.com/static/images/serviceImg-order-detail.png"
+									class="service-img"></image>
 								<text>联系客服</text>
 							</view>
 						</view>
 						<view class="order-info-box">
 							<view class="order-info">
-								<view class="order-info-item" v-for="proItem in dataList.skus"
-									:key="proItem.productId" @click="goodsItemTap(proItem.productId,proItem.skuId)">
+								<view class="order-info-item" v-for="proItem in dataList.skus" :key="proItem.productId"
+									@click="goodsItemTap(proItem.productId,proItem.skuId)">
 									<image :src="proItem.image" class="product-img"></image>
 									<view class="info-box">
 										<text class="product-name">{{proItem.productName}}</text>
@@ -110,11 +125,11 @@
 											<view class="product-num">x {{proItem.number}}</view>
 										</view>
 										<view class="price-sku-box">
-											<view class="price-box">
-												<view class="product-price1">实付：<text
-														class="fuhao">￥</text>{{proItem.price}}</view>
-												<!-- <view class="product-price2">价格：<text class="fuhao">￥</text>{{proItem.price}}</view> -->
-											</view>
+											<!--											<view class="price-box">-->
+											<!--												<view class="product-price1">实付：<text-->
+											<!--														class="fuhao">￥</text>{{proItem.price}}</view>-->
+											<!--												&lt;!&ndash; <view class="product-price2">价格：<text class="fuhao">￥</text>{{proItem.price}}</view> &ndash;&gt;-->
+											<!--											</view>-->
 
 											<view
 												v-if="(dataList.state === 3 || dataList.state === 4) && proItem.afterState == 0 && !proItem.returnType">
@@ -229,31 +244,32 @@
 				</view>
 			</view>
 
-      <view  v-if='dataList.state==3 || dataList.state==4'>
-			<view class="order-details-information mt20">
-				<view class="order-title-box" @click="wuLiuTap">
-					<view class="order-title padd-l">
-						<text class="line"></text>
-						<text>物流信息</text>
+			<view v-if='dataList.state==3 || dataList.state==4'>
+				<view class="order-details-information mt20">
+					<view class="order-title-box" @click="wuLiuTap">
+						<view class="order-title padd-l">
+							<text class="line"></text>
+							<text>物流信息</text>
+						</view>
+						<image mode="aspectFill" src="https://ceres.zkthink.com/static/images/arrowDown.png"
+							class="arrow-down-img" style="transform:rotate(180deg);" v-if="isShowWuLiu == true"></image>
+						<image mode="aspectFill" src="https://ceres.zkthink.com/static/images/arrowDown.png"
+							class="arrow-down-img" v-else>
+						</image>
 					</view>
-					<image mode="aspectFill" src="https://ceres.zkthink.com/static/images/arrowDown.png" class="arrow-down-img"
-						style="transform:rotate(180deg);" v-if="isShowWuLiu == true"></image>
-					<image mode="aspectFill" src="https://ceres.zkthink.com/static/images/arrowDown.png" class="arrow-down-img" v-else>
-					</image>
 				</view>
-			</view>
-			<!-- 暂无物流 -->
-			<view v-if="isShowWuLiu">
-				<view v-if="steps.length>0" class="logistics">
-					<uni-steps :options="steps" direction="column" :active="0"></uni-steps>
-				</view>
-				<view v-else class="emptyOrder-box flex-items-plus flex-column">
-					<image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
-					<label class="font-color-999 fs26 mar-top-30">这里空空如也～</label>
+				<!-- 暂无物流 -->
+				<view v-if="isShowWuLiu">
+					<view v-if="steps.length>0" class="logistics">
+						<uni-steps :options="steps" direction="column" :active="0"></uni-steps>
+					</view>
+					<view v-else class="emptyOrder-box flex-items-plus flex-column">
+						<image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
+						<label class="font-color-999 fs26 mar-top-30">这里空空如也～</label>
+					</view>
 				</view>
 			</view>
 		</view>
-    </view>
 
 		<!-- 待付款 待发货 待收货 已完成 退款成功 -->
 		<view class="order-details-btn" style="padding-top:30upx;"
@@ -340,7 +356,11 @@
 </template>
 
 <script>
+	import UCountDown from "../../uview-ui/components/u-count-down/u-count-down";
 	import ClipboardJS from "clipboard";
+	import {
+		hidden
+	} from "../../utils/hidden";
 	// #ifdef H5
 	var jweixin = require('jweixin-module')
 	// #endif
@@ -352,16 +372,17 @@
 	export default {
 		components: {
 			uniSteps,
+			UCountDown,
 		},
 		data() {
 			return {
 				canApplyIntervention: false,
 				dataList: {
-					orderFormid:null,
-					createTime:null,
-					orderPrice:0,
-					logisticsPrice:0,
-					discountPrice:0
+					orderFormid: null,
+					createTime: null,
+					orderPrice: 0,
+					logisticsPrice: 0,
+					discountPrice: 0
 				},
 				orderId: 0,
 				active: 0,
@@ -371,7 +392,7 @@
 				min: "00",
 				sec: "00",
 				timeOut: undefined,
-				Orderrefundlist: [],
+				orderRefundList: [],
 				item: {},
 				isIphone: false,
 				noticeId: 0,
@@ -390,7 +411,9 @@
 				// 客服
 				serviceURL: '',
 				corpId: '',
-				isLoading: false
+				isLoading: false,
+				ifShow: false,
+				remainingTime:null, //倒计时剩余时间
 			}
 		},
 		onLoad(options) {
@@ -412,6 +435,9 @@
 			}
 		},
 		onBackPress(e) {
+			if (e.from === 'backbutton') {
+				this.go(-1)
+			}
 			if (e.from === 'navigateBack') {
 				return false;
 			}
@@ -486,6 +512,8 @@
 					let data = res.data
 					this.dateformat(res.data.time)
 					this.dataList = data
+					this.dataList.receivePhone = hidden(this.dataList.receivePhone, 3, 4)
+					this.ifShow = true
 					console.log(this.dataList)
 					console.log(dataList.collageDetail.length, 888)
 					this.getShippingTrace(this.dataList.express, this.dataList.deliverFormid)
@@ -517,6 +545,7 @@
 				this.hou = hr
 				this.min = min
 				this.sec = sec
+				this.remainingTime = second
 			},
 			countDown() {
 				let timeOut = setTimeout(() => {
@@ -589,7 +618,7 @@
 			},
 			doDel() {
 				uni.showLoading({
-          mask: true,
+					mask: true,
 					title: '提交中...',
 				})
 				NET.request(API.DelOrder, {
@@ -658,7 +687,7 @@
 			},
 			doCancel() {
 				uni.showLoading({
-          mask: true,
+					mask: true,
 					title: '提交中...',
 				})
 				NET.request(API.CancelOrder, {
@@ -683,7 +712,7 @@
 				// #endif
 				// #ifndef MP-ALIPAY
 				uni.showLoading({
-          mask: true,
+					mask: true,
 					title: '订单提交中...',
 				})
 				// #endif
@@ -698,24 +727,24 @@
 				// if (ua.match(/MicroMessenger/i) == "micromessenger") {
 				// 	this.payRequest(submitResult)
 				// } else {
-					NET.request(API.gotoH5Pay, submitResult, 'POST').then(res => {
-						//console.dir(res)
-						location.replace(res.data.mwebUrl)
-						// window.location.replace(url)
-					}).catch(err => {
-						this.submitActive = true
-						uni.hideLoading()
-						uni.showToast({
-							title: '支付失败',
-							icon: 'none'
-						})
+				NET.request(API.gotoH5Pay, submitResult, 'POST').then(res => {
+					//console.dir(res)
+					location.replace(res.data.mwebUrl)
+					// window.location.replace(url)
+				}).catch(err => {
+					this.submitActive = true
+					uni.hideLoading()
+					uni.showToast({
+						title: '支付失败',
+						icon: 'none'
 					})
+				})
 				// }
 				// #endif
 				// #ifdef MP-WEIXIN
 				NET.request(API.gotoPay, submitResult, 'POST').then(res => {
 					uni.requestPayment({
-						privider: 'wxpay',
+						provider: 'wxpay',
 						timeStamp: res.data.timeStamp,
 						nonceStr: res.data.nonceStr,
 						package: res.data.package,
@@ -796,7 +825,7 @@
 			// 继续付款
 			continuePay() {
 				uni.showLoading({
-          mask: true,
+					mask: true,
 					title: '加载中...',
 				})
 				const payInfo = Object.assign({}, this.alipayInfo, {
@@ -959,19 +988,19 @@
 				NET.request(API.Orderrefund, {
 					orderId: this.orderId,
 				}, 'GET').then(res => {
-					this.Orderrefundlist = res.data
+					this.orderRefundList = res.data
 				}).catch(res => {})
 			},
 			//申请退款
 			applyMoneyAllTap() {
-				if (this.Orderrefundlist.length == 0) {
+				if (this.orderRefundList.length === 0) {
 					uni.showToast({
 						title: '您所有商品已经申请退款，请勿重复申请',
 						icon: 'none'
 					})
 					return
 				}
-				uni.setStorageSync('afterSaleApplyRefund', this.Orderrefundlist)
+				uni.setStorageSync('afterSaleApplyRefund', this.orderRefundList)
 				uni.navigateTo({
 					url: `afterSaleApplyRefund?orderId=${this.orderId}&sellPriceitem=${this.dataList.price}`,
 				})
@@ -1073,7 +1102,9 @@
 				})
 			},
 			openService() {
-				if (this.isLoading || !this.shopId || this.shopId === 'null') { return }
+				if (this.isLoading || !this.shopId || this.shopId === 'null') {
+					return
+				}
 				const shopids = uni.getStorageSync('service_shopids') || []
 				const corpIds = uni.getStorageSync('service_corpIds') || []
 				const urls = uni.getStorageSync('service_urls') || []
@@ -1115,7 +1146,9 @@
 				}
 			},
 			flyToService() {
-				if (!this.serviceURL || !this.corpId) { return }
+				if (!this.serviceURL || !this.corpId) {
+					return
+				}
 				// 获取店铺id、客服链接
 				const extInfo = { // 客服信息
 					url: this.serviceURL // 客服链接
@@ -1163,7 +1196,7 @@
 		justify-content: center;
 		padding: 40upx 30upx 0;
 		box-sizing: border-box;
-    text-align: center;
+		text-align: center;
 	}
 
 	.status-title-box2 {
@@ -1253,19 +1286,22 @@
 
 	.order-list-box {
 		margin-top: 20upx;
-		.toService{
+
+		.toService {
 			line-height: 40rpx;
 			padding: 0 8rpx;
 			border: 1rpx solid #FAF6ED;
 			cursor: pointer;
 			display: flex;
 			align-items: center;
-			.service-img{
+
+			.service-img {
 				width: 60upx;
 				height: 60upx;
 				margin-right: 12rpx;
 			}
-			text{
+
+			text {
 				line-height: 40rpx;
 			}
 		}
@@ -1444,7 +1480,7 @@
 
 	.order-total-box .way-color {
 		color: #333333;
-    font-size: 32rpx;
+		font-size: 32rpx;
 	}
 
 	.order-details-information {
@@ -1521,12 +1557,12 @@
 		text-align: center;
 		line-height: 100upx;
 		box-sizing: border-box;
-    margin-right: 10rpx;
+		margin-right: 10rpx;
 	}
 
 	.order-details-btn .btn-r {
 		width: 50%;
-    margin-left: 10rpx;
+		margin-left: 10rpx;
 	}
 
 	.mt20 {

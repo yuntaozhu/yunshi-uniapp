@@ -1,6 +1,6 @@
 <template>
   <div class="notice-list" :class="'terminal'+terminal" :style="{backgroundColor:componentContent.bgColor}">
-    <swiper class="swiper-wrapper" :indicator-dots="false" :autoplay="true" :vertical="true">
+    <swiper class="swiper-wrapper" :circular="true" :indicator-dots="false" :autoplay="true" :vertical="true">
       <swiper-item class="swiper-slide" v-for="(item,index) in noticesList" :key="index">
         <div class="a-link" @click="jumpNoticeDetail(item)" :style="{color:componentContent.titColor}"><span>{{item.noticeTitle}}</span></div>
       </swiper-item>
@@ -53,6 +53,7 @@ export default {
 .notice-list{
   height: 60upx;
   line-height: 60upx;
+  overflow: hidden;
   .a-link{
     // display: block;
     cursor: pointer;

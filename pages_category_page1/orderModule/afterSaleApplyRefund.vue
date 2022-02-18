@@ -21,6 +21,17 @@
         </view>
       </view>
       <view class="afterSale-select-box">
+        <view class="item" @click="refundType">
+          <view class="l">退款类型</view>
+          <view class="r-box" v-model="afterType" v-if="afterType == 1">
+            <text>仅退款</text>
+            <image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="r"></image>
+          </view>
+          <view class="r-box" v-model="afterType" v-if="afterType == 2">
+            <text>退货退款</text>
+            <image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="r"></image>
+          </view>
+        </view>
         <view class="item" @click="openStatusSelect">
           <view class="l">货物状态</view>
           <view class="r-box" v-model="ReturnMoneyQuery.goodsState" v-if="ReturnMoneyQuery.goodsState == 0">
@@ -78,6 +89,26 @@
     </view>
 
     <!-- 货物状态弹框 -->
+    <u-popup v-model="refundTypeShow" mode="bottom" border-radius="14">
+      <view class="alert-box">
+        <view class="afterSale-status-box">
+          <view class="status-title">退款类型</view>
+          <view class="item-box">
+            <view class="item" @click="afterType = 1">
+              <text class="status-select-title">仅退款</text>
+              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/selectActive.png" v-if="afterType == 1" class="status-select-img"></image>
+              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/selectEmpty.png" v-else class="status-select-img"></image>
+            </view>
+            <view class="item" @click="afterType = 2">
+              <text class="status-select-title">退货退款</text>
+              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/selectActive.png" v-if="afterType == 2" class="status-select-img"></image>
+              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/selectEmpty.png" v-else class="status-select-img"></image>
+            </view>
+          </view>
+          <view class="status-btn" @click="closeAfterSelect">确定</view>
+        </view>
+      </view>
+    </u-popup>
     <u-popup v-model="cargoStatusShowFalg" mode="bottom" border-radius="14">
       <view class="alert-box">
         <view class="afterSale-status-box">
@@ -125,6 +156,7 @@ export default {
     return {
       returnImgsList: 1,
       cargoStatusShowFalg: false,
+      refundTypeShow: false,
       reasonShowFalg: false,
       returnReasonIndex: 1,
       list: [],
@@ -149,6 +181,8 @@ export default {
       afterRefund:'',
       orderId:0,
       isIphone: false,
+      commentImgs: '',
+      afterType: 1
     }
   },
   onReady() {
@@ -156,11 +190,11 @@ export default {
     this.fileList = this.$refs.uUpload.lists
   },
   onLoad(options) {
-    if(uni.getStorageSync('applyItem')){
+    if (uni.getStorageSync('applyItem')) {
       this.afterRefund = uni.getStorageSync('applyItem')
       this.list.push(this.afterRefund)
-    }else if(uni.getStorageSync('afterSaleApplyRefund')){
-      this.list= uni.getStorageSync('afterSaleApplyRefund')
+    } else if (uni.getStorageSync('afterSaleApplyRefund')) {
+      this.list = uni.getStorageSync('afterSaleApplyRefund')
       console.log(this.list, 'list')
     }
     this.orderId = parseInt(options.orderId)
@@ -168,8 +202,9 @@ export default {
     this.headerToken.Authorization = res.token
     console.log(this.list, 'list')
     this.list.forEach(el => {
-      this.sellPriceitem = this.sellPriceitem + el.number*el.price
+      this.sellPriceitem = this.sellPriceitem + (el.number*el.price) + el.logisticsPrice
     })
+    this.sellPriceitem = this.sellPriceitem.toFixed(2)
     // this.sellPriceitem = options.sellPriceitem
     this.getReasonEnums()
     uni.removeStorageSync('applyItem')
@@ -177,6 +212,7 @@ export default {
   },
   methods: {
     confirmTap() {
+      console.log(this.fileList, 'commentImgs')
       if(this.fileList.length>0){
         this.commentImgsFlag = true
         for(let i=0;i<this.fileList.length;i++){
@@ -223,7 +259,7 @@ export default {
         // }
         NET.request(API.ApplyReturnMoney, {
           orderId:this.orderId,
-          afterType:1,
+          afterType: this.afterType,
           goodsState:this.ReturnMoneyQuery.goodsState,
           price: this.sellPriceitem,
           returnReason:this.liyoutext,
@@ -260,11 +296,17 @@ export default {
     openStatusSelect() {
       this.cargoStatusShowFalg = true
     },
+    refundType() {
+      this.refundTypeShow = true
+    },
     openReasonSelect() {
       this.reasonShowFalg = true
     },
     closeStatusSelect() {
       this.cargoStatusShowFalg = false
+    },
+    closeAfterSelect() {
+      this.refundTypeShow = false
     },
     closeReasonSelect() {
       this.reasonShowFalg = false

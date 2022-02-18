@@ -42,6 +42,7 @@
 </template>
 
 <script>
+  import {hidden} from "../../utils/hidden";
 	const NET = require('../../utils/request')
 	const API = require('../../config/api')
 	export default {
@@ -121,6 +122,9 @@
 						this.addresList.list[i].username1 = this.addresList.list[i].receiveName.slice(0,1)
 					}
 					this.addresListlist = this.addresListlist.concat(res.data.list)
+          this.addresListlist.forEach((item) => {
+            item.receivePhone = hidden(item.receivePhone, 3, 4)
+          })
           if (this.addresList.length === 0) {
             this.ifEmpty = true
           }

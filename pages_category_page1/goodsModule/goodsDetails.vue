@@ -23,6 +23,7 @@
 				</view>
 				<label class="fs24 font-color-999">{{productData.users || 0}}人付款</label>
 			</view>
+			<!-- <view v-else-if="selectedSku.activityType === 8" class="sceneMarketingBox"></view> -->
 			<view v-else class="seckill-box">
         <view class="flex-items flex-sp-between" v-if="selectedSku.activityType === 9">
           <view class="vipImg flex-items">
@@ -320,7 +321,7 @@
 				</view>
 				<view class="color-box flex-column-plus">
 					<view v-for="(attritem,index) in productData.names" :key="index">
-						<label class="fs26 font-color-333">{{attritem.skuName}}</label>
+						<label class="fs26 font-color-333" v-if="attritem.nameCode">{{attritem.skuName}}</label>
 						<view class="colorName-box">
 							<view class="pad-bot-30" v-for="(attrRes, resIndex) in attritem.values" :key="resIndex">
 								<view class="colorName"
@@ -400,6 +401,7 @@
 			:markTools="markTools"
 			:shopMarkTools="shopMarkTools"
 			:setTop="topLeft"
+      :currentActive="currentActive"
 		></coupon-popup>
 		<!-- 拼单弹框 -->
 		<u-popup class="popupDiscount" v-model="showGroupBuyList" mode="center" border-radius="14"
@@ -528,7 +530,8 @@ export default {
 			markTools: [], //平台优惠券
 			shopMarkTools: [], //店铺优惠券
       ifShow: false,
-			topLeft: 0
+			topLeft: 0,
+      currentActive: 0
 		}
 	},
 	computed:{
@@ -560,6 +563,7 @@ export default {
 			this.salesId = parseInt(item.salesId)
 			getApp().globalData.productShareItem = undefined
 		} else {
+      console.log(options, '001001')
 			this.shopId = parseInt(options.shopId)
 			this.productId = options.productId
 			this.paramSkuId = options.skuId
@@ -926,8 +930,8 @@ export default {
 		selectBySkuId(skuId) {
 			if (skuId) {
 				let mapinfo = this.productData.map
-        console.log(mapinfo,'mapinfo',skuId)
 				for (var key in mapinfo) {
+          console.log(skuId, mapinfo[key].skuId, 'test')
 					if (parseInt(mapinfo[key].skuId) === parseInt(skuId)) {
 						this.selectedSku = mapinfo[key]
 						// 选中sku对应的规格
@@ -940,8 +944,8 @@ export default {
                   let obj = {
                     skuText: ''
                   }
-                  if (attr.values[index].skuValue === '单款项') {
-                    obj.skuText = '单款项'
+                  if (attr.values[index].valueCode === '单款项') {
+                    obj.skuText = attr.values[index].skuValue
                     this.currentSuk.push(obj)
                     break
                   } else {
@@ -978,8 +982,8 @@ export default {
                   let obj = {
                     skuText: ''
                   }
-                  if (attr.values[index].skuValue === '单款项') {
-                    obj.skuText = '单款项'
+                  if (attr.values[index].valueCode === '单款项') {
+                    obj.skuText = attr.values[index].skuValue
                     this.currentSuk.push(obj)
                     break
                   } else {
@@ -1072,12 +1076,12 @@ export default {
 
 				this.markTools = res.data.markTools //平台优惠券
 				this.shopMarkTools = res.data.shopMarkTools //店铺优惠券
-				this.activeTypeFlag = this.markTools.length ===0 && this.shopMarkTools.length > 0 ? 1:0
+				this.currentActive = this.markTools.length ===0 && this.shopMarkTools.length > 0 ? 1:0
 				//如果是单款式商品，需要特殊处理productData.names
 				const mapKeys = Object.keys(this.productData.map)
 				if (mapKeys.length === 1 && mapKeys[0] === '单款项') {
 					this.productData.names[0].values.push({
-						skuValue: '单款项',
+						skuValue: this.productData.names[0].skuName,
 						valueCode: '单款项'
 					})
 				}
@@ -2618,7 +2622,12 @@ export default {
 		margin-left: 30upx;
 	}
 
-
+    .sceneMarketingBox{
+		width: 100%;
+		background: url("https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/5f85fe4782e34c10b15b04f76c571d12_sceneMarketingDetailsIcon.png"
+) no-repeat left top;
+		padding: 35rpx 30rpx;
+	}
 
 	.seckill-box {
 		width: 100%;

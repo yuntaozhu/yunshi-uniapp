@@ -167,6 +167,7 @@
 			},
 			// 分销订单
 			godistributionOrder(){
+				console.log('点击分销订单')
 				uni.navigateTo({
 					url: `distributionOrder?shopId=${this.item.shopId}&distributorId=${this.item.distributorId}`
 				});

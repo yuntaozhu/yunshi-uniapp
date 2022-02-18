@@ -35,26 +35,13 @@ export default {
       formData:{'folderId': -1},
       headerToken:{Authorization:''},
       productImage:'',
-      type:0
+      afterId: 0,
+      orderId: 0
     }
   },
   onLoad(options) {
-    this.type = options.type;
-    if(options.type == 1){
-      this.addCommentVOList = uni.getStorageSync('addCommentVOList');
-      this.orderProductVO = this.addCommentVOList.skus[0]
-      this.productImage = this.orderProductVO.image
-    }else{
-      this.addCommentVOList = uni.getStorageSync('addCommentVOList');
-      this.orderProductVO = this.addCommentVOList
-      this.productImage = this.orderProductVO.productImage
-    }
-    if(options.commentId){
-      this.commentId = options.commentId
-    }
-    uni.removeStorageSync('addCommentVOList')
-    const res = uni.getStorageSync('storage_key');
-    this.headerToken.Authorization = res.token
+    this.afterId = options.afterId;
+    this.orderId = options.orderId;
   },
   onReady() {
     this.fileList = this.$refs.uUpload.lists
@@ -66,47 +53,40 @@ export default {
           title: '请先说点什么吧',
           icon: 'none'
         })
-        return
+        return false
       }
-      uni.showLoading({
-        mask: true,
-        title: '提交中...',
-      })
       if(this.fileList.length>0){
         this.commentImgsFlag = true
         for(let i=0;i<this.fileList.length;i++){
           this.commentImgs += this.fileList[i].response.data.url+','
         }
-      }
-      let data = []
-      if(this.type == 1){
-        data = [{
-          commentId:this.commentId,
-          image:this.commentImgs,
-          comment:this.commentText
-        }]
-      }else if(this.type == 2){
-        data = [{
-          commentId:this.addCommentVOList.commentId,
-          image:this.commentImgs,
-          comment:this.commentText
-        }]
-      }
-      NET.request(API.AdditionalComment,{params:data} , 'POST').then(res => {
-        uni.hideLoading()
+      } else {
         uni.showToast({
-          title: '介入成功',
+          title:'请上传举证图片',
+        })
+        return false
+      }
+      uni.showLoading({
+        title:'正在申请介入...'
+      })
+      NET.request(API.platform, {
+        afterId: this.afterId,
+        orderId: this.orderId,
+        image: this.commentImgs,
+        reason: this.commentText
+      }, 'POST').then(res => {
+        uni.hideLoading()
+        this.intervention = false
+        uni.showToast({
+          title:'申请成功',
         })
         setTimeout(() => {
-          uni.redirectTo({
-            url: 'userEvaluate'
+          uni.navigateTo({
+            url:`../../pages_category_page2/orderModule/afterSale`
           })
-        }, 1500);
+        }, 2000)
       }).catch(res => {
         uni.hideLoading()
-        uni.showToast({
-          title: res.message,
-        })
       })
     }
   }

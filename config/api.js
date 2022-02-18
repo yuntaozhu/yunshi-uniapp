@@ -1,8 +1,9 @@
-// const DOMAIN_PREFIX = 'http://localhost:9007'
+// const DOMAIN_PREFIX = 'http://itxzz.top'
 const DOMAIN_PREFIX = 'https://ceres.zkthink.com'
 // https://ceresdev.zkthink.com
 // #ifndef H5
 const WX_API_BASE = DOMAIN_PREFIX + '/api' // app
+// const WX_API_BASE = DOMAIN_PREFIX  // app
 // const WX_API_BASE = 'http://3j073r3905.qicp.vip:29544'
 // #endif
 
@@ -90,6 +91,8 @@ module.exports = {
 	GetShopBanner: WX_API_BASE + '/shop/getShopBanner', //  查询店铺banner
 	getShopIndex: WX_API_BASE + '/shop/getIndex', // 查询店铺首页
 	AddBusinessBuyerUser: WX_API_BASE + '/shop/addBusinessBuyerUser', // 成为商家的客户
+	getShopSeckillIndex: WX_API_BASE + '/seckill/getIndex', // 查询店铺秒杀
+	// http://127.0.0.1:9007/seckill/getIndex?shopSeckillId=78&page=1&pageSize=10
 
 	//用户银行卡相关接口
 	QueryBankcardList: WX_API_BASE + '/bank/getAll', //  查询用户所有银行卡
@@ -108,6 +111,7 @@ module.exports = {
 	ShippingTrace: WX_API_BASE + '/order/getDilevery', //  物流信息查询
 	payOrder: WX_API_BASE + '/order/pay', //  支付成功业务处理接口
 	gotoPay: WX_API_BASE + '/order/gotoPay', //  小程序支付
+	paySuccess: WX_API_BASE + 'order/paySuccess', //  小程序支付成功
 	gotoAppPay: WX_API_BASE + '/order/gotoAppPay', //  APP立即支付
 	gotoH5Pay: WX_API_BASE + '/order/gotoH5Pay', //  H5支付
 	ConfirmReceive: WX_API_BASE + '/order/confirm', //  确认收货
@@ -215,6 +219,7 @@ module.exports = {
 
 	// 会员专区
 	getMemberProducts: WX_API_BASE + '/canvas/getMemberProducts', //查询会员商品数据
+	memberList: WX_API_BASE + '/member/getAllMemberLevelInfo', //查询会员所有等级
 
 	// 会员中心
 	getMemberShipList: WX_API_BASE + '/member/getMemberShipList', //会员权益查询

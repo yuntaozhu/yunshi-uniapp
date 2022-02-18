@@ -115,8 +115,11 @@ export default {
 		// }
     console.log(options.discountId, 'discountId---')
     this.discountId = options.discountId
-    this.getDiscountInfo()
-		this.getDiscountList()
+    
+	},
+	onShow() {
+		this.getDiscountInfo()
+			this.getDiscountList()
 	},
 	onReachBottom(){
 		if(this.loadingType == 1){

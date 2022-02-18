@@ -92,6 +92,10 @@
 				})
 			},
 			fenxiang(item) {
+				// #ifdef APP-PLUS
+				var system = 1
+				// #endif
+				
 				// #ifdef H5
 				var system = 3
 				// #endif
@@ -105,7 +109,7 @@
 				// #endif
 
 				uni.showLoading({
-          mask: true,
+                  mask: true,
 				  title: '请稍候...'
 				})
 				NET.request(API.getSharePic, {

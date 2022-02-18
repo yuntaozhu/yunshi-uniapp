@@ -9,7 +9,7 @@
       <!-- #endif -->
     </div>
     <div v-if="componentContent.arrangeType == '横向滑动' && productData.products.length > 2" class="product-list">
-      <swiper ref="mySwiper" class="swiper product-list-box" :indicator-dots="false" :autoplay="true" :display-multiple-items="2" @change="swiperChange">
+      <swiper ref="mySwiper" class="swiper product-list-box" :circular="true" :indicator-dots="false" :autoplay="true" :display-multiple-items="2" @change="swiperChange">
         <swiper-item class="swiper-slide product-list-item-warp" v-for="(item,index) in productData.products.slice(0, 10)" :key="index" @click="jumpProductDetail(item)">
           <div class="product-list-item">
           <div class="product-list-img">

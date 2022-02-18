@@ -26,7 +26,6 @@
             <view class="top-l">
               <image src="https://ceres.zkthink.com/static/images/orderStoreIcon.png" class="shop-img"></image>
               <text class="shop-name">{{item.shopName}}</text>
-              <image src="https://ceres.zkthink.com/static/images/greyArrow.png" class="arrow-img"></image>
             </view>
           </view>
           <view class="order-info-box">
@@ -66,8 +65,8 @@
             <view class="discount-item1" v-if="item.shopCoupons.length>0" @click="showShopCoupons(item,sIndex)">
               <view class="discount-label">店铺优惠</view>
               <view class="discount-info-box flex-items">
-                <view class="discount-info2" v-if="item.currentCoupon && item.currentCoupon.couponType == 1">-￥{{item.currentCoupon.reduceMoney}}</view>
-                <view class="discount-info2" v-if="item.currentCoupon && item.currentCoupon.couponType == 2">{{item.currentCoupon.reduceMoney}}折券</view>
+                <view class="discount-info2" v-if="item.currentCoupon && item.currentCoupon.couponType === 1">-￥{{item.currentCoupon.reduceMoney}}</view>
+                <view class="discount-info2" v-if="item.currentCoupon && item.currentCoupon.couponType === 2">{{item.currentCoupon.reduceMoney}}折券</view>
                 <image class="discount-img" src="https://ceres.zkthink.com/static/images/arrowRight.png"></image>
               </view>
               <!--							<view class="discount-info-box flex-items" v-else>-->
@@ -78,7 +77,7 @@
             <view class="order-total-box">
               <text class="total-num">共{{item.number}}件</text>
               <text class="total-num ml10">总计</text>
-              <text class="total-price ml10" v-if="item.totalNum > 0">¥{{parseFloat(item.totalNum).toFixed(2)}}</text>
+              <text class="total-price ml10" v-if="item.totalNum > 0">¥{{(parseFloat(item.totalNum) + parseFloat(item.distribution.distributionPrice)).toFixed(2)}}</text>
               <text class="total-price ml10" v-else>¥0.00</text>
             </view>
           </view>
@@ -89,8 +88,8 @@
         <view class="discount-label">平台优惠</view>
         <view class="discount-info-box flex-items">
           <view class="discount-info2" v-if="promotionInfoDTO.couponId">
-            <text v-if="promotionInfoDTO.couponType === 2">{{ reduceMoney }}折</text>
-            <text v-else> -￥{{reduceMoney}}</text>
+            <text v-if="promotionInfoDTO.couponType === 2">{{ promotionInfoDTO.reduceMoney }}折</text>
+            <text v-else> -￥{{ promotionInfoDTO.reduceMoney | clip2Decimal }}</text>
           </view>
           <view class="discount-info1" v-else-if="couponsList.length<1">无</view>
           <view class="discount-info1" v-else>不使用</view>
@@ -98,9 +97,9 @@
         </view>
       </view>
 <!--      积分支付-->
-      <view class="integralPayBox" v-if="settlement.creditDeductLimit !== 0 && totalprice > orderCreditThreshold && integralNum !== 0">
+      <view class="integralPayBox" v-if="integralShow">
         <view class="integralBg">
-          <view class="integralTit fs26">可用{{integralNum}}积分抵扣{{integralPrice}}元</view>
+          <view class="integralTit fs26">可用{{integralNum}}积分抵扣{{integralPrice.toFixed(2)}}元</view>
           <view class="maxIntegral">
             <checkbox-group @change="changeIntegral" style="width: 50rpx">
               <checkbox style="transform:scale(0.7);" class="integralCheckbox" color="#C5AA7B" value="1" :checked="selectIntegral"/>
@@ -135,7 +134,7 @@
                 <label class="fenqi-wenzi">花呗分期</label>
                 <label class="fenqi-charge-fee">手续费 ￥{{chargeFee|clip2Decimal}}</label>
               </view>
-              <label class="fenqi-amount">分期总额 ￥{{ (totalprice - reduceMoney) | clip2Decimal }}</label>
+              <label class="fenqi-amount">分期总额 ￥{{ totalPrice | clip2Decimal }}</label>
               <img class="fenqi-modal" src="https://ceres.zkthink.com/static/images/arrowRight.png"/>
             </view>
           </view>
@@ -156,7 +155,7 @@
       <view class="flex-items flex-sp-between">
         <text class="num-box">共{{totalCount}}件</text>
         <view>
-          <text class="total">合计：</text><text v-if="totalprice>0" class="price">¥{{ totalprice.toFixed(2) }}</text><text v-else class="price">¥0.00</text>
+          <text class="total">合计：</text><text v-if="totalPrice>0" class="price">¥{{ totalPrice.toFixed(2) }}</text><text v-else class="price">¥0.00</text>
         </view>
       </view>
       <!-- active 当有地址时按钮加上active选中的样式-->
@@ -182,13 +181,13 @@
                     :key="index"
                     @click="couponItemTap(index,usableItem)"
                   >
-                    <view class="money-box" v-if="usableItem.couponType == 1">￥{{usableItem.reduceMoney}}</view>
+                    <view class="money-box" v-if="usableItem.couponType === 1">￥{{usableItem.reduceMoney}}</view>
                     <view class="money-box" v-else>{{usableItem.reduceMoney}}折券</view>
                     <view class="info-box">
                       <view class="date font-color-999" style="font-size:22upx;  margin-top: 20upx;">{{getDate(usableItem.startTime.replace(/-/g, '.'))}}-{{getDate(usableItem.endTime.replace(/-/g, '.'))}}</view>
                       <view class="info font-color-999">满{{usableItem.fullMoney}}元可用</view>
                     </view>
-                    <image class="check-img" src="https://ceres.zkthink.com/static/images/selectActive.png" v-if="couponCheckedindex == index"></image>
+                    <image class="check-img" src="https://ceres.zkthink.com/static/images/selectActive.png" v-if="usableItem.checked"></image>
                     <image class="check-img" src="https://ceres.zkthink.com/static/images/selectEmpty.png" v-else></image>
                   </view>
                 </view>
@@ -211,13 +210,13 @@
                 <view class="label-lingqu">可用优惠券列表</view>
                 <view class="couponBox">
                   <view class="coupon-item" v-for="(sItem, index) in shopCouponslist.shopCoupons" :key="sItem.id" @click="shopCouponItemTap(index,sItem)">
-                    <view class="money-box" v-if="sItem.couponType == 1">￥{{sItem.reduceMoney}}</view>
+                    <view class="money-box" v-if="sItem.couponType === 1">￥{{sItem.reduceMoney}}</view>
                     <view class="money-box" v-else>{{sItem.reduceMoney}}折券</view>
                     <view class="date font-color-999" style="font-size:22upx;  margin-top: 10upx;">{{getDate(sItem.startTime.replace(/-/g, '.'))}}-{{getDate(sItem.endTime.replace(/-/g, '.'))}}</view>
                     <view class="info-box">
                       <view class="info font-color-999">满{{sItem.fullMoney}}元可用</view>
                     </view>
-                    <image class="check-img" src="https://ceres.zkthink.com/static/images/selectActive.png" v-if="selectCouponIdList.indexOf(sItem.id) >= 0"></image>
+                    <image class="check-img" src="https://ceres.zkthink.com/static/images/selectActive.png" v-if="sItem.checked"></image>
                     <image class="check-img" src="https://ceres.zkthink.com/static/images/selectEmpty.png" v-else></image>
                   </view>
                 </view>
@@ -256,7 +255,7 @@
       </view>
       <view class="huabei-confirm">
         <view class="fenqi-total-amount">
-          <label class="fenqi-all">分期总额 ￥{{ (totalprice - reduceMoney)|clip2Decimal }}</label>
+          <label class="fenqi-all">分期总额 ￥{{ (totalPrice - reduceMoney)|clip2Decimal }}</label>
           <label class="charge-fee-all">手续费 ￥{{ chargeFee|clip2Decimal }}</label>
         </view>
         <view class="fenqi-confirm">
@@ -268,6 +267,7 @@
 </template>
 
 <script>
+import {hidden} from "../../utils/hidden";
 const NET = require('../../utils/request')
 const API = require('../../config/api')
 // #ifdef H5
@@ -288,18 +288,15 @@ export default {
       shopCouponslist: [],
       promotionInfoDTO: {
         couponId: 0,
-        ifAdd: 1
+        ifAdd: 1,
+        reduceMoney: 0
       },
       shopInfoDTO: {},
       reduceMoney: 0,
-      couponCheckedindex: null,
-      shopcouponCheckedindex: -1,
       submitActive: true,
       distributionPrice: 0, //运费
-      totalprice: 0, //合计
+      totalPrice: 0, //合计
       receiveId: '',
-      couponCheckedType: false,
-      shopCouponCheckedType: true,
       totalCount: 0,
       skuItemList: {},
       shopGroupWorkId: 0,
@@ -311,9 +308,7 @@ export default {
       shopIndex: 0,
       shopCheckedType: true,
       discountPrice: 0,
-      shopCouponIdinfo: 0,
       selectShopCoupon: [], // 已选择店铺优惠券
-      selectCouponIdList: [], // 已选店铺优惠券ID
       chargeFee: 0,  //花呗分期手续费，如果是商户支付手续费，则为0，否则默认计算3期手续费
       huabeiDetail: true,
       showHuabeiPopup: false,
@@ -330,15 +325,17 @@ export default {
       couponType: 0,
       selectIntegral: true,
       integralNum: 0,
-      skuCreditAmountMap: {},
       ifShow: false,
       integralRatio: 0, // 积分兑换比例
-      userTotalCredit: 0,
       integralPrice: 0, // 总积分可减多少元
-      orderCreditThreshold: 0 // 满多少元可以抵扣
+      orderCreditThreshold: 0, // 满多少元可以抵扣
+      integralShow: false, // 显示隐藏积分
+      checkedPlatformCoupon: undefined,
+	  oneClickSubmit:true, //只提交订单一次
     }
   },
   onLoad(options) {
+    this.getQuery()
     this.type = options.type
     if (options.receiveId) {
       this.receiveId = options.receiveId
@@ -346,24 +343,23 @@ export default {
     this.decidePayType()
   },
   onShow() {
-    this.getQuery()
-    if (uni.getStorageSync("skuItemDTOList") != "") {
-      this.skuItemDTOList = uni.getStorageSync('skuItemDTOList')
-      //console.log(this.skuItemDTOList, 66666)
-      if (this.skuItemDTOList[0].shopDiscountId > 0) {
-        this.sumitType = 4
-      } else if (this.skuItemDTOList[0].shopSeckillId > 0) {
-        this.sumitType = 3
-      }
-      this.getSettlement(false)
-    } else if (uni.getStorageSync("skuItemList") != "") {
-      this.skuItemList = uni.getStorageSync("skuItemList")
-      //console.log(this.skuItemList, 999)
-      this.shopGroupWorkId = this.skuItemList.shopGroupWorkId
-      this.sumitType = this.skuItemList.type
-      this.collageId = this.skuItemList.collageId
-      this.getSettlement(true)
-    }
+  	if (uni.getStorageSync("skuItemDTOList") != "") {
+  	  this.skuItemDTOList = uni.getStorageSync('skuItemDTOList')
+  	  //console.log(this.skuItemDTOList, 66666)
+  	  if (this.skuItemDTOList[0].shopDiscountId > 0) {
+  	    this.sumitType = 4
+  	  } else if (this.skuItemDTOList[0].shopSeckillId > 0) {
+  	    this.sumitType = 3
+  	  }
+  	  this.getSettlement(false)
+  	} else if (uni.getStorageSync("skuItemList") != "") {
+  	  this.skuItemList = uni.getStorageSync("skuItemList")
+  	  //console.log(this.skuItemList, 999)
+  	  this.shopGroupWorkId = this.skuItemList.shopGroupWorkId
+  	  this.sumitType = this.skuItemList.type
+  	  this.collageId = this.skuItemList.collageId
+  	  this.getSettlement(true)
+  	}
   },
   onBackPress(e) {
     if (e.from === 'navigateBack') {
@@ -387,18 +383,17 @@ export default {
       }, 'GET').then(res => {
         this.integralRatio = parseFloat(res.data.dictDescribe)
       }).catch(res => {
-
+        console.log('平台端未配置积分兑换比例(1积分抵扣多少金额)')
       })
     },
     // 积分价格计算
     changeIntegral() {
       this.selectIntegral = !this.selectIntegral
       if (this.selectIntegral) {
-        this.totalprice = this.totalprice - this.integralPrice
+        this.totalPrice = this.totalPrice - this.integralPrice
       } else {
-        this.totalprice = this.totalprice + this.integralPrice
+        this.totalPrice = this.totalPrice + this.integralPrice
       }
-      console.log(this.selectIntegral, 'test')
     },
     back() {
       if (this.type == 2 || this.type) {
@@ -416,6 +411,7 @@ export default {
       uni.showLoading({
         title: '加载中...',
       })
+	  this.ifShow = true
       let _url = '',
           _data = ''
       // 是否是拼团
@@ -430,89 +426,62 @@ export default {
           receiveId: this.receiveId
         }
       }
-      //console.log(_data, '_data')
       NET.request(_url, _data, 'POST').then(res => {
         uni.hideLoading()
         this.settlement = res.data
         this.couponsList = res.data.coupons
         this.huabeiChargeType = res.data.huabeiChargeType
-        if (this.huabeiChargeType == 2) {
+        if (this.huabeiChargeType === 2) {
           this.huabeiFeerateList = res.data.huabeiFeerateList
         } else {
           this.huabeiFeerateList = [0, 0, 0]
         }
         let shopLen = this.settlement.shops.length
-        let shoptotal = 0,
-            skuTotalNum = 0,
-            skutotal = 0,
-            isskutotal = 0,
-            isskuTotalNum = 0,
-            skustotal = 0;
-        this.settlement.shops.forEach((value, index) => {
+        this.settlement.shops.forEach((value) => {
           value['totalNum'] = value.total
+          value['pricing'] = 0
         })
+        // 初始化平台券选中状态
+        if (this.settlement.coupons.length > 0) {
+          this.settlement.coupons.forEach((item) => {
+            item.checked = false
+          })
+        }
+        // 默认选中商家的第一张优惠券
         for (let s = 0; s < shopLen; s++) {
-          this.settlement.shops[s].skus.forEach((item, index) => {
+          const curShop = this.settlement.shops[s]
+          curShop.skus.forEach((item) => {
             item['skuTotalNum'] = item.total
           })
-          this.settlement.shops[s].totalNum += this.settlement.shops[s].distribution.distributionPrice
-          //console.log(this.settlement.shops[s].total, '11111')
-          if (this.settlement.shops[s].shopCoupons.length > 0) {
-            if (this.settlement.shops[s].shopCoupons[0].couponType == 1) {
-              // 满减 拿到第一张符合的券
-              let _shopCoupons = this.settlement.shops[s].shopCoupons,
-                  curCoupon = ''
-              for (let i = 0; i < _shopCoupons.length; i++) {
-                console.log(this.settlement.shops[s].totalNum, 'totalNum')
-                if (this.settlement.shops[s].totalNum > this.settlement.shops[s].shopCoupons[i].reduceMoney) {
-                  this.settlement.shops[s].totalNum = this.settlement.shops[s].totalNum - this.settlement.shops[s].shopCoupons[i].reduceMoney
-                  this.settlement.shops[s]['currentCoupon'] = this.settlement.shops[s].shopCoupons[i]
-                  this.shopCouponIdinfo = this.settlement.shops[s].shopCoupons[i].id
-                  this.selectShopCoupon.push(this.settlement.shops[s].shopCoupons[i])
-                  this.selectCouponIdList.push(this.settlement.shops[s].shopCoupons[i].id)
-                  break
-                }
-              }
+          if (curShop.shopCoupons.length > 0) {
+            curShop.shopCoupons.forEach((item) => {
+              item.checked = false
+            })
+            const firstShopCoupon = curShop.shopCoupons[0];
+            let useCoupon = this.useShopCoupon(s, 0)
+            if (useCoupon) {
+              firstShopCoupon.checked = true
+              this.selectShopCoupon.push(firstShopCoupon)
+              curShop['currentCoupon'] = firstShopCoupon
             } else {
-              // 折扣 默认第一张券
-              let skuLen = this.settlement.shops[s].skus.length
-              for (let k = 0; k < skuLen; k++) {
-                let idsLen = this.settlement.shops[s].shopCoupons[0].ids.length
-                for (let i = 0; i < idsLen; i++) {
-                  if (this.settlement.shops[s].skus[k].productId == this.settlement.shops[s].shopCoupons[0].ids[i]) {
-                    skustotal = this.settlement.shops[s].skus[k].total * (this.settlement.shops[s].shopCoupons[0].reduceMoney /
-                        10)
-                    console.log(skustotal, 'skustotal')
-                    this.settlement.shops[s].skus[k].skuTotalNum = skustotal
-                  }
-                }
-                shoptotal += this.settlement.shops[s].skus[k].skuTotalNum
-                this.settlement.shops[s].totalNum = shoptotal.toFixed(2)
-              }
-              // this.settlement.shops[s].total = shoptotal.toFixed(2)
-              this.selectShopCoupon.push(this.settlement.shops[s].shopCoupons[0])
-              this.selectCouponIdList.push(this.settlement.shops[s].shopCoupons[0].id)
-              this.settlement.shops[s]['currentCoupon'] = this.settlement.shops[s].shopCoupons[0]
-              if (this.settlement.shops[0].shopCoupons && this.settlement.shops[0].shopCoupons.length > 0) {
-                this.shopCouponIdinfo = this.settlement.shops[0].shopCoupons[0].id
-              }
+              curShop.totalNum = curShop.total
             }
           }
         }
         if (uni.getStorageSync('receiveItem')) {
-          //console.log(22222)
           let receiveItem = uni.getStorageSync('receiveItem')
           this.userAddressInfo = receiveItem
           this.receiveId = receiveItem.receiveId
+          this.userAddressInfo.receivePhone = hidden(this.userAddressInfo.receivePhone, 3, 4)
         } else if (res.data.receive) {
           this.receiveId = res.data.receive.receiveId
           this.userAddressInfo = res.data.receive
+          this.userAddressInfo.receivePhone = hidden(this.userAddressInfo.receivePhone, 3, 4)
         }
         uni.removeStorageSync('receiveItem')
         this.usableListLength = res.data.coupons.length
-        //console.log(this.selectCouponIdList, 'selectCouponIdList')
         this.getTotal()
-        this.ifShow = true
+        
       }).catch(res => {
         uni.hideLoading()
       })
@@ -528,35 +497,37 @@ export default {
     },
     // 平台优惠券选择
     couponItemTap(index, usableItem) {
-      if (this.selectShopCoupon.length) { // 判断商家卷情况
-        if (this.selectShopCoupon[0].ifAdd === 0) {
-          uni.showToast({
-            title: '不可与商家券券叠加使用！',
-            icon: 'none'
-          })
-          return false
-        }
+      if (!usableItem.checked && this.selectShopCoupon.length) { // 判断商家券情况
+        uni.showToast({
+          title: '不可与商家券券叠加使用！',
+          icon: 'none'
+        })
+        return false
       }
-      if (this.couponCheckedindex === index) {
+      // 已选中的情况下取消选中
+      if (usableItem.checked) {
         let promotionInfoDTO = {}
         if (usableItem.couponId) {
           promotionInfoDTO['couponId'] = 0
           promotionInfoDTO['ifAdd'] = 1
+          promotionInfoDTO['reduceMoney'] = 0
         }
         this.promotionInfoDTO = promotionInfoDTO
-        this.reduceMoney = 0
-        this.couponCheckedindex = null
-        this.couponCheckedType = false
+        usableItem.checked = false
         this.isShowDiscount = false
-        this.getTotal(usableItem)
+        this.checkedPlatformCoupon = undefined
+        this.getTotal()
       } else {
-        //console.log(usableItem.reduceMoney, 'item')
-        let moneySum = 0 // 订单总价
-        let shopslen = this.settlement.shops.length // 结算页店铺数量
-        for (let i = 0; i < shopslen; i++) {
-          moneySum += this.settlement.shops[i].total
+        // 先把所有已选中的平台优惠券改为未选中
+        this.settlement.coupons.forEach((item) => {
+          item.checked = false
+        })
+        let shopSumPrice = 0 // 订单总价
+        let shopsLen = this.settlement.shops.length // 结算页店铺数量
+        for (let i = 0; i < shopsLen; i++) {
+          shopSumPrice += this.settlement.shops[i].totalNum
         }
-        if (usableItem.reduceMoney >= moneySum && usableItem.couponType !== 2) {
+        if (usableItem.couponType === 1 && usableItem.reduceMoney >= shopSumPrice) {
           uni.showToast({
             title: '不可使用大于等于合计金额的优惠劵！',
             icon: 'none'
@@ -568,45 +539,27 @@ export default {
           promotionInfoDTO['couponId'] = usableItem.couponId
           promotionInfoDTO['ifAdd'] = usableItem.ifAdd
           promotionInfoDTO['couponType'] = usableItem.couponType
+          promotionInfoDTO['reduceMoney'] = usableItem.reduceMoney
         }
         this.promotionInfoDTO = promotionInfoDTO
-        this.reduceMoney = usableItem.reduceMoney
-        // this.couponType = usableItem.couponType
-        this.couponCheckedindex = index
-        this.couponCheckedType = true
         this.isShowDiscount = false
-        this.getTotal(usableItem)
+        this.checkedPlatformCoupon = usableItem
+        this.getTotal()
+        // 选中优惠券
+        usableItem.checked = true
       }
     },
     // 店铺优惠券选择
     shopCouponItemTap(index, sItem) {
       // 取消选择优惠券
-      console.log(this.selectShopCoupon, sItem, 'Youhui')
-      for (let i = 0; i < this.selectShopCoupon.length; i++) {
-        // let skusTotal = 0
-        // this.settlement.shops[this.shopIndex].skus.forEach((value, index) => {
-        //   //console.log(value.totalNum, 'total')
-        //   skusTotal += value.totalNum
-        // })
-        // if (this.settlement.shops[this.shopIndex].distribution.distributionPrice > 0) {
-        //   skusTotal += this.settlement.shops[this.shopIndex].distribution.distributionPrice
-        // }
-        // this.settlement.shops[this.shopIndex].total = skusTotal
+      if (sItem.checked) {
+        sItem.checked = false
         this.settlement.shops[this.shopIndex].totalNum = this.settlement.shops[this.shopIndex].total
         this.settlement.shops[this.shopIndex].currentCoupon = {}
-        this.shopcouponCheckedindex = 99999999
-        this.shopCouponCheckedType = false
         this.isShopCoupons = false
-        this.settlement.shops[this.shopIndex].currentCoupon.shopCouponId = 0
-        this.getTotal(sItem)
-        if (this.selectShopCoupon[i].id === sItem.id) {
-          //console.log(666)
-          this.selectCouponIdList.splice(i, 1)
-          this.selectShopCoupon.splice(i, 1)
-          return false
-        }
-        this.selectCouponIdList.splice(i, 1)
-        this.selectShopCoupon.splice(i, 1)
+        this.selectShopCoupon = []
+        this.getTotal()
+        return false
       }
       if (sItem.couponType === 1 && this.settlement.shops[this.shopIndex].total < sItem.reduceMoney) {
         uni.showToast({
@@ -614,157 +567,260 @@ export default {
           icon: 'none'
         })
       } else {
-        console.log('fsdfsdfsdfdss')
-        console.log(this.totalprice, 'total')
         // 选择优惠券
-        if (this.selectCouponIdList.indexOf(sItem.id) === -1) {
-          if (this.promotionInfoDTO.couponId !== 0) {
-            if (sItem.ifAdd == 0) {
-              uni.showToast({
-                title: '此券不可与平台券叠加！',
-                icon: 'none'
-              })
-              return false
-            }
-          }
-          if (sItem.couponType == 1) {
-            //console.log(sItem.reduceMoney, this.totalprice, this.reduceMoney, 'test111')
-            if (sItem.reduceMoney >= (this.totalprice - this.reduceMoney)) {
-              //console.log(2)
-              uni.showToast({
-                title: '优惠券优惠金额不能大于等于合计金额！',
-                icon: 'none'
-              })
-              return false
-            }
-          }
-          console.log(this.settlement.shops[this.shopIndex].currentCoupon, '优惠券')
-          for (let i = 0; i < this.selectShopCoupon.length; i++) {
-            if (this.selectShopCoupon[i].id === this.settlement.shops[this.shopIndex].currentCoupon.id) {
-              this.selectCouponIdList.splice(i, 1)
-              this.selectShopCoupon.splice(i, 1)
-            }
-          }
-          this.shopcouponCheckedindex = index
-          this.shopCouponCheckedType = true
-          this.isShopCoupons = false
-          this.shopCouponIdinfo = sItem.id
-          this.settlement.shops[this.shopIndex].currentCoupon = sItem
-          this.selectCouponIdList.push(sItem.id)
-          this.selectShopCoupon.push(sItem)
-          let shoptotal = 0
-          let skustotal = 0
-          let sum = 0
-          // this.settlement.shops[this.shopIndex].skus.forEach((value, index) => {
-          //   //console.log(value.totalNum, 'total')
-          //   sum += value.totalNum
-          // })
-          // if (this.settlement.shops[this.shopIndex].distribution.distributionPrice > 0) {
-          //   sum += this.settlement.shops[this.shopIndex].distribution.distributionPrice
-          // }
-          // this.settlement.shops[this.shopIndex].total = sum
-          this.shopCouIndex = index
-          //console.log(this.shopIndex, this.shopCouIndex)
-          if (sItem.couponType == 1) {
-            this.settlement.shops[this.shopIndex].totalNum = this.settlement.shops[this.shopIndex].total - sItem.reduceMoney
-            //console.log(this.settlement.shops[this.shopIndex].total, 's1')
-          } else {
-            let skuLen = this.settlement.shops[this.shopIndex].skus.length
-            console.log(skuLen, 121200000)
-            for (let k = 0; k < skuLen; k++) {
-              let idsLen = this.settlement.shops[this.shopIndex].shopCoupons[this.shopCouIndex].ids.length
-              for (let i = 0; i < idsLen; i++) {
-                if (this.settlement.shops[this.shopIndex].skus[k].productId === this.settlement.shops[this.shopIndex].shopCoupons[this.shopCouIndex].ids[i]) {
-                  console.log(this.settlement.shops[this.shopIndex].skus[k].total, 'fssdfdsfdsf')
-                  skustotal = this.settlement.shops[this.shopIndex].skus[k].total * (this.settlement.shops[this.shopIndex].shopCoupons[
-                      this.shopCouIndex].reduceMoney / 10)
-                  this.settlement.shops[this.shopIndex].skus[k].skuTotalNum = skustotal
-                }
-              }
-              shoptotal += this.settlement.shops[this.shopIndex].skus[k].skuTotalNum
-              this.settlement.shops[this.shopIndex].totalNum = parseFloat(shoptotal.toFixed(2))
-              console.log(this.settlement.shops[this.shopIndex].skuTotalNum, 'shoptotal22')
-            }
-          }
-          this.getTotal(sItem)
+        if (this.promotionInfoDTO.couponId !== 0) {
+          uni.showToast({
+            title: '此券不可与平台券叠加！',
+            icon: 'none'
+          })
+          return false
         }
+        if (sItem.couponType === 1) {
+          if (sItem.reduceMoney >= this.settlement.shops[this.shopIndex].total) {
+            uni.showToast({
+              title: '优惠券优惠金额不能大于等于合计金额！',
+              icon: 'none'
+            })
+            return false
+          }
+        }
+
+        this.isShopCoupons = false
+        this.shopCouIndex = index
+        let useCoupon = this.useShopCoupon(this.shopIndex, this.shopCouIndex)
+        if (useCoupon) {
+          // 确认使用当前点击的商家券，先将所有的商家券取消选中
+          for (let i = 0; i < this.selectShopCoupon.length; i++) {
+            this.selectShopCoupon[i].checked = false
+          }
+          this.selectShopCoupon = []
+
+          sItem.checked = true
+          this.settlement.shops[this.shopIndex].currentCoupon = sItem
+          this.selectShopCoupon.push(sItem)
+        } else {
+          this.settlement.shops[this.shopIndex].totalNum = this.settlement.shops[this.shopIndex].total
+        }
+        this.getTotal()
       }
     },
-    getTotal(item) {
-      this.totalprice = 0
+    useShopCoupon(shopIndex, couponIndex) {
+      const curShop = this.settlement.shops[shopIndex]
+      curShop.totalNum = 0
+      let curCoupon = undefined
+      if (curShop.shopCoupons && curShop.shopCoupons.length > 0) {
+        curCoupon = curShop.shopCoupons[couponIndex]
+      }
+      if (!curCoupon) {
+        return false
+      }
+      let useCoupon = false
+      if (curCoupon.couponType === 1) {
+        if (curShop.total > curCoupon.reduceMoney) {
+          curShop.totalNum = curShop.total - curCoupon.reduceMoney
+          useCoupon = true
+        }
+      } else {
+        let shopTotal = 0
+        let skuLen = curShop.skus.length
+        let priceCount = 0
+        let couponMatchPriceCount = 0
+        for (let k = 0; k < skuLen; k++) {
+          let idsLen = curCoupon.ids.length
+          // 定价捆绑的优惠额外处理
+          let priceId = curShop.skus[k].priceId
+          for (let i = 0; i < idsLen; i++) {
+            if (curShop.skus[k].productId === curCoupon.ids[i]) {
+              if (priceId > 0) {
+                couponMatchPriceCount++
+              } else {
+                curShop.skus[k].skuTotalNum = curShop.skus[k].total * (curCoupon.reduceMoney / 10)
+                useCoupon = true
+              }
+            }
+          }
+          if (priceId > 0) {
+            priceCount++;
+          } else {
+            shopTotal += curShop.skus[k].skuTotalNum
+            curShop.totalNum = parseFloat(shopTotal.toFixed(2))
+          }
+        }
+        if (couponMatchPriceCount >= priceCount && curShop.priceAfterDiscount >= curCoupon.fullMoney) {
+          let priceTotal = curShop.priceAfterDiscount * (curCoupon.reduceMoney / 10)
+          curShop.totalNum += priceTotal
+          useCoupon = true
+        }
+      }
+      return useCoupon
+    },
+    /**
+     * 计算总价，商家券的优惠计算，在调用本方法之前已经计算好在shops[].totalNum
+     */
+    getTotal() {
+      this.totalPrice = 0
       this.totalCount = 0
       this.integralPrice = 0
       this.integralNum = 0
-      let allNum = 0
-      let shopslen = this.settlement.shops.length
-      for (let i = 0; i < shopslen; i++) {
-        this.totalprice += parseFloat(this.settlement.shops[i].totalNum)
-        allNum += this.settlement.shops[i].totalNum
+      let shopSumPrice = 0
+      let shopsLen = this.settlement.shops.length
+
+      for (let i = 0; i < shopsLen; i++) {
+        this.totalPrice += parseFloat(this.settlement.shops[i].totalNum)
+        shopSumPrice += parseFloat(this.settlement.shops[i].totalNum)
         this.totalCount += this.settlement.shops[i].number
       }
-      if (item) {
-        console.log(this.discountPrice, 'discountPrice', allNum, 'allNum', this.totalprice, 'totalprice', this.reduceMoney, 'reduceMoney')
-        if (item.couponType === 1 && this.totalprice - this.reduceMoney > 0) { // 满减
-          this.discountPrice = allNum - this.totalprice + this.reduceMoney
-          this.totalprice = allNum - this.discountPrice
-        } else if (item.couponType === 2 && this.reduceMoney > 0) { // 折扣
-          this.discountPrice = allNum - this.totalprice * (this.reduceMoney / 10)
-          this.totalprice = allNum - this.discountPrice
-        } else {
-          this.discountPrice = allNum
+      if (this.checkedPlatformCoupon) {
+        if (this.checkedPlatformCoupon.couponType === 1 && this.totalPrice - this.checkedPlatformCoupon.reduceMoney > 0) { // 满减
+          this.totalPrice = shopSumPrice - this.checkedPlatformCoupon.reduceMoney
+        } else if (this.checkedPlatformCoupon.couponType === 2 && this.checkedPlatformCoupon.reduceMoney > 0) { // 折扣
+          this.totalPrice = shopSumPrice * this.checkedPlatformCoupon.reduceMoney / 10
         }
-        console.log('discountPrice', this.discountPrice, 'reduceMoney', this.reduceMoney)
       }
       // 积分支付计算
-      var skuCreditMap = Object.keys(this.settlement.skuCreditMap);
-      if(skuCreditMap.length > 0) {
-        let creditNum = {}
-        creditNum = this.settlement.skuCreditMap
-        this.orderCreditThreshold = this.settlement.orderCreditThreshold
-        this.userTotalCredit = this.settlement.userTotalCredit
-        for (let i in creditNum) {
-          console.log(creditNum[i], 'item')
-          this.integralNum += creditNum[i]
-        }
-        if (this.integralNum > this.settlement.creditDeductLimit) {
-          this.integralNum = this.settlement.creditDeductLimit
-        } else if (this.integralNum > this.userTotalCredit) {
-          this.integralNum = this.userTotalCredit
-        }
-        this.integralPrice = this.integralNum * this.integralRatio
-        // 总价减去积分金额
-        this.totalprice = this.totalprice - this.integralPrice
-      }
+      this.calcCredit()
+      // 加上每个商家的运费
+      this.settlement.shops.forEach((item) => {
+        this.totalPrice = this.totalPrice + item.distribution.distributionPrice
+      })
       this.recalcHuabei()
-      // console.log(this.totalprice - this.reduceMoney, 'dis')
+    },
+    calcCredit() {
+      let shopsLen = this.settlement.shops.length
+      const skuRemainMap = this.calcSkuRemainMap()
+      const skuCreditMap = this.settlement.skuCreditMap;
+      if(skuCreditMap && this.integralRatio > 0) {
+        this.orderCreditThreshold = this.settlement.orderCreditThreshold
+        let remainUserCredit = this.settlement.userTotalCredit
+        let remainTotalPrice = Math.round((this.totalPrice + Number.EPSILON) * 100) / 100
+        let remainDeductLimit = this.settlement.creditDeductLimit
+        // 只有订单金额达到阈值，并且用户还有剩余的积分，才能进行积分抵扣
+        if (this.totalPrice >= this.orderCreditThreshold && remainUserCredit > 0 && remainDeductLimit > 0) {
+          for (let i=0;i<shopsLen;i++) {
+            const curShop = this.settlement.shops[i]
+            let skuLen = curShop.skus.length
+            for (let j=0;j<skuLen;j++) {
+              const curSku = curShop.skus[j]
+              const skuId = curSku.skuId
+              if (skuCreditMap[skuId] > 0 && skuRemainMap[skuId] > 0 && remainUserCredit > 0 && remainTotalPrice > 0) {
+                // 抵扣之后，必须保证整个订单至少还有0.01元，可用于支付
+                if (remainTotalPrice - skuRemainMap[skuId] < 0.01) {
+                  skuRemainMap[skuId] -= 0.01
+                }
+                // 按照比例换算成需要多少积分抵扣(取整)
+                let finalSkuCredit = parseInt((skuRemainMap[skuId] / this.integralRatio).toString());
+                // 优先以商家配置的商品可抵扣积分为准
+                if (skuCreditMap[skuId] < finalSkuCredit) {
+                  finalSkuCredit = skuCreditMap[skuId]
+                }
+                // 不能超过用户剩余积分
+                if (remainUserCredit < finalSkuCredit) {
+                  finalSkuCredit = remainUserCredit
+                }
+                // 不能超过整个订单可抵扣积分
+                if (remainDeductLimit < finalSkuCredit) {
+                  finalSkuCredit = remainDeductLimit
+                }
+                curSku.cachedCredit = finalSkuCredit
+                this.integralNum += finalSkuCredit
+                remainUserCredit -= finalSkuCredit
+                remainDeductLimit -= finalSkuCredit
+                remainTotalPrice -= finalSkuCredit
+              }
+            }
+          }
+        }
+        //计算抵扣价格
+        if (this.integralNum !== 0) {
+          this.integralNum = parseInt(this.integralNum)
+          this.integralPrice = this.integralNum * this.integralRatio
+          if (this.integralNum !== 0) {
+            this.integralShow = true
+          }
+          if (this.selectIntegral) {
+            this.totalPrice = this.totalPrice - this.integralPrice
+          }
+        } else {
+          this.integralShow = false
+        }
+      }
+    },
+    /**
+     * 计算sku在整个运单价格中的剩余价值 1元的订单，打1折优惠之后，剩余价值就是0.1元
+     */
+    calcSkuRemainMap() {
+      let skuRemainMap = {}
+      let shopsLen = this.settlement.shops.length
+      const skuCreditMap = this.settlement.skuCreditMap
+      for (let i=0;i<shopsLen;i++) {
+        const curShop = this.settlement.shops[i]
+        let skuLen = curShop.skus.length
+        let checkedShopCoupon = undefined
+        curShop.shopCoupons.forEach((item) => {
+          if (item.checked) {
+            checkedShopCoupon = item
+          }
+        })
+        for (let j=0;j<skuLen;j++) {
+          const curSku = curShop.skus[j]
+          const skuId = curSku.skuId
+          // 不是定价捆绑，并且有配置可抵扣的积分，才有必要计算比例
+          if (!curSku.priceId > 0 && skuCreditMap[skuId] > 0) {
+            let remainSkuMoney = curSku.price * curSku.number
+            if (checkedShopCoupon) {
+              let skuShopPercent = remainSkuMoney / curShop.total
+              let curReduceMoney = 0
+              if (checkedShopCoupon.couponType === 1) {
+                curReduceMoney = checkedShopCoupon.reduceMoney * skuShopPercent
+              } else {
+                curReduceMoney = remainSkuMoney * (10 - checkedShopCoupon.reduceMoney) / 10
+              }
+              remainSkuMoney = remainSkuMoney - curReduceMoney
+            }
+            // 使用平台券
+            if (this.checkedPlatformCoupon && remainSkuMoney > 0) {
+              // 满减
+              if (this.checkedPlatformCoupon.couponType === 1) {
+                let skuTotalPercent = remainSkuMoney / this.totalPrice
+                remainSkuMoney -= this.checkedPlatformCoupon.reduceMoney * skuTotalPercent
+              }
+              // 折扣
+              else {
+                remainSkuMoney = remainSkuMoney * this.checkedPlatformCoupon.reduceMoney / 10
+              }
+            }
+            skuRemainMap[skuId] = remainSkuMoney
+          }
+        }
+      }
+      return skuRemainMap
     },
     recalcHuabei() {
-      if (this.paymentMode == 3) {
-        this.fenqiFeeList[0] = (this.totalprice - this.reduceMoney) * (1 + this.huabeiFeerateList[0] / 100) / 3
-        this.fenqiFeeList[1] = (this.totalprice - this.reduceMoney) * (1 + this.huabeiFeerateList[1] / 100) / 6
-        this.fenqiFeeList[2] = (this.totalprice - this.reduceMoney) * (1 + this.huabeiFeerateList[2] / 100) / 12
+      if (this.paymentMode === 3) {
+        this.fenqiFeeList[0] = this.totalPrice * (1 + this.huabeiFeerateList[0] / 100) / 3
+        this.fenqiFeeList[1] = this.totalPrice * (1 + this.huabeiFeerateList[1] / 100) / 6
+        this.fenqiFeeList[2] = this.totalPrice * (1 + this.huabeiFeerateList[2] / 100) / 12
 
-        this.chargeFeeList[0] = (this.totalprice - this.reduceMoney) * (this.huabeiFeerateList[0] / 100) / 3
-        this.chargeFeeList[1] = (this.totalprice - this.reduceMoney) * (this.huabeiFeerateList[1] / 100) / 6
-        this.chargeFeeList[2] = (this.totalprice - this.reduceMoney) * (this.huabeiFeerateList[2] / 100) / 12
+        this.chargeFeeList[0] = this.totalPrice * (this.huabeiFeerateList[0] / 100) / 3
+        this.chargeFeeList[1] = this.totalPrice * (this.huabeiFeerateList[1] / 100) / 6
+        this.chargeFeeList[2] = this.totalPrice * (this.huabeiFeerateList[2] / 100) / 12
 
         var index = 0;
-        if (this.huabeiPeriod == 6) {
+        if (this.huabeiPeriod === 6) {
           index = 1
-        } else if (this.huabeiPeriod == 12){
+        } else if (this.huabeiPeriod === 12){
           index = 2
         }
-        this.chargeFee = ((this.totalprice - this.reduceMoney) * (this.huabeiFeerateList[index] / 100)).toFixed(2)
+        this.chargeFee = (this.totalPrice * (this.huabeiFeerateList[index] / 100)).toFixed(2)
       }
     },
-    // 展示平台端优惠卷
+    // 展示平台端优惠券
     showDiscount() {
       // let shopifAdd = 1
       // if(this.settlement.shops[this.shopIndex].shopCoupons.length>0){
       // 	shopifAdd = this.settlement.shops[this.shopIndex].shopCoupons[this.shopCouIndex].ifAdd
       // }
       if (this.settlement.coupons.length > 0) {
-        //console.log(this.selectShopCoupon, 'selectShopCoupon')
         for (let i = 0; i < this.selectShopCoupon.length; i++) {
           if (this.selectShopCoupon[i].ifAdd == 0) {
             uni.showToast({
@@ -784,13 +840,11 @@ export default {
     },
     // 显示店铺优惠券
     showShopCoupons(item, sIndex) {
-      //console.log(item, 'item')
       if (item.shopCoupons.length > 0) {
         this.isShopCoupons = true
         this.shopCouponslist = item
         this.shopCouponsLength = item.shopCoupons.length
         this.shopIndex = sIndex
-        //console.log(this.selectCouponIdList.indexOf(item.shopCoupons[0].id), '测试')
       } else {
         uni.showToast({
           title: '暂无可用优惠券',
@@ -806,7 +860,7 @@ export default {
     },
     payTypeChange(event) {
       this.paymentMode = event.target.value;
-      if (this.paymentMode == 3) {
+      if (this.paymentMode === 3) {
         this.huabeiDetail = true
       } else {
         this.huabeiDetail = false
@@ -816,13 +870,12 @@ export default {
     huabeiPeriodChange(event) {
       this.huabeiPeriod = event.target.value
       var feeRate = this.huabeiFeerateList[2]
-      if (this.huabeiPeriod == 3) {
+      if (this.huabeiPeriod === 3) {
         feeRate = this.huabeiFeerateList[0]
-      } else if(this.huabeiPeriod == 6) {
+      } else if(this.huabeiPeriod === 6) {
         feeRate = this.huabeiFeerateList[1]
       }
-      //console.log('feeRate: ', feeRate)
-      this.chargeFee = ((this.totalprice - this.reduceMoney) * feeRate / 100).toFixed(2)
+      this.chargeFee = (this.totalPrice * feeRate / 100).toFixed(2)
     },
     showHuabeiDetail () {
       this.showHuabeiPopup = true
@@ -835,260 +888,271 @@ export default {
           icon: 'none'
         })
       } else {
-        if (this.userAddressInfo.receiveName) {
-          uni.showLoading({
-            mask: true,
-            title: '订单提交中...',
-          })
-          let couponIdinfo = 0
-          if (this.promotionInfoDTO.couponId) {
-            couponIdinfo = this.promotionInfoDTO.couponId
-          }
-          let price = 0
-          if (this.totalprice - this.reduceMoney > 0) {
-            price = this.totalprice - this.reduceMoney
-          } else {
-            price = 0
-          }
-          let data = {
-            shopDiscountId: null,
-            collageId: this.collageId,
-            type: this.sumitType,
-            shopGroupWorkId: null,
-            receiveId: this.receiveId,
-            couponId: couponIdinfo,
-            price: price,
-            remark: "",
-            shops: [],
-            discountPrice: this.discountPrice,
-            shopSeckillId: null
+		 
+	    if(this.oneClickSubmit){
+			this.oneClickSubmit = false
+			if (this.userAddressInfo.receiveName) {
+			  uni.showLoading({
+				mask: true,
+				title: '订单提交中...',
+			  })
+			  let couponIdinfo = 0
+			  if (this.promotionInfoDTO.couponId) {
+				couponIdinfo = this.promotionInfoDTO.couponId
+			  }
+			  let data = {
+				shopDiscountId: null,
+				collageId: this.collageId,
+				type: this.sumitType,
+				shopGroupWorkId: null,
+				receiveId: this.receiveId,
+				couponId: couponIdinfo,
+				price: this.totalPrice,
+				remark: "",
+				shops: [],
+				discountPrice: this.discountPrice,
+				shopSeckillId: null
+			  }
+			  if (this.shopGroupWorkId > 0) {
+				data.shopGroupWorkId = this.shopGroupWorkId
+			  }
+			  if (this.skuItemDTOList != '') {
+				if (this.skuItemDTOList[0].shopDiscountId > 0) {
+				  data.shopDiscountId = this.skuItemDTOList[0].shopDiscountId
+				} else if (this.skuItemDTOList[0].shopSeckillId > 0) {
+				  data.shopSeckillId = this.skuItemDTOList[0].shopSeckillId
+				}
+			  }
+			  let datashopslen = this.settlement.shops.length
+			  for (let n = 0; n < datashopslen; n++) {
+				let shopsobj = {}
+				shopsobj["shopId"] = this.settlement.shops[n].shopId
+				shopsobj["sceneId"] = this.settlement.shops[n].sceneId
+				shopsobj["distribution"] = {}
+				shopsobj["skus"] = []
+				if (this.settlement.shops[n].currentCoupon) {
+				  shopsobj["id"] = this.settlement.shops[n].currentCoupon.id
+				}
+				data.shops.push(shopsobj)
+				data.shops[n].distribution.distributionPrice = this.settlement.shops[n].distribution.distributionPrice
+				data.shops[n].distribution.distributionName = this.settlement.shops[n].distribution.distributionName
+				let dataskuslen = this.settlement.shops[n].skus.length
+				for (let m = 0; m < dataskuslen; m++) {
+				  let skusobj = {}
+				  const curSku = this.settlement.shops[n].skus[m]
+				  skusobj["skuId"] = curSku.skuId
+				  skusobj["number"] = curSku.number
+				  skusobj["ifLogistics"] = curSku.ifLogistics
+				  skusobj["selected"] = curSku.selected
+				  skusobj["platformSeckillId"] = curSku.platformSeckillId
+				  skusobj["platformDiscountId"] = curSku.platformDiscountId
+				  skusobj["shopSeckillId"] = curSku.shopSeckillId
+				  skusobj["shopDiscountId"] = curSku.shopDiscountId
+				  skusobj["sceneId"] = curSku.sceneId
+				  skusobj["priceId"] = curSku.priceId
+				  skusobj["useMember"] = curSku.useMember
+				  skusobj["composeId"] = curSku.composeId
+				  // 积分传参
+				  if (this.selectIntegral && curSku.cachedCredit) {
+					skusobj["useCredit"] = curSku.cachedCredit
+					skusobj["useCreditAmount"] = (curSku.cachedCredit * this.integralRatio).toFixed(2)
+				  }
+				  data.shops[n].skus.push(skusobj)
+				}
+			  }
+			  // #ifdef H5
+			  data.paymentMode = 1
+			  data.subPaymentMode = 3
+			  // #endif
 
-          }
-          if (this.shopGroupWorkId > 0) {
-            data.shopGroupWorkId = this.shopGroupWorkId
-          }
-          if (this.skuItemDTOList != '') {
-            if (this.skuItemDTOList[0].shopDiscountId > 0) {
-              data.shopDiscountId = this.skuItemDTOList[0].shopDiscountId
-            } else if (this.skuItemDTOList[0].shopSeckillId > 0) {
-              data.shopSeckillId = this.skuItemDTOList[0].shopSeckillId
+			  // #ifdef MP-WEIXIN
+			  data.paymentMode = 1
+			  data.subPaymentMode = 1
+			  // #endif
+
+			  // #ifdef APP-PLUS
+			  data.paymentMode = 1
+			  // #endif
+
+			  // #ifdef MP-ALIPAY
+			  data.paymentMode = 2
+			  data.subPaymentMode = 1
+			  // #endif
+
+			  uni.hideLoading()
+			  NET.request(API.PlaceOrder, data, 'POST').then(res => {	  
+				if(this.type == 2){
+					let carSkusData = data.shops
+					let skusArr = []
+					for(let i= 0; i<carSkusData.length; i++){
+						carSkusData[i].skus.map(item=>{
+							skusArr.push(item.skuId)
+						})
+					}
+					// 从购物车中点击结算时删除对应购物车商品
+					NET.request(API.DeleteCart, {
+						ids: skusArr
+					}, 'POST').then(res => {
+						console.log(res,'删除对应购物车商品')
+					}).catch(res => {})
+				}
+				let submitResult = res.data
+				that.orderId = res.data.orderId
+				//console.log(submitResult, '测试')
+				submitResult.type = 1
+				submitResult.paymentMode = data.paymentMode
+				// #ifdef H5
+				let ua = navigator.userAgent.toLowerCase();
+				if (ua.match(/MicroMessenger/i) == "micromessenger") {
+				this.payRequest(submitResult)
+				}else{
+				NET.request(API.gotoH5Pay, submitResult, 'POST').then(res => {
+					//console.dir(res)
+					location.replace(res.data.mwebUrl)
+					// window.location.replace(url)
+				  }).catch(err => {
+					this.submitActive = true
+					uni.hideLoading()
+					uni.showToast({
+					  title: '支付失败',
+					  icon: 'none'
+					})
+					uni.navigateTo({
+					  url: '../orderModule/index?type=1'
+					})
+				})
+				
+			   }
+				// #endif
+				// #ifdef MP-ALIPAY
+				submitResult.huabeiPeriod = this.huabeiPeriod
+				submitResult.paymentMode = this.paymentMode
+				this.aliPay(submitResult)
+				// #endif
+
+				// #ifdef MP-WEIXIN
+				NET.request(API.gotoPay, submitResult, 'POST').then(res => {
+				  console.dir(res)
+				  uni.requestPayment({
+					provider: 'wxpay',
+					timeStamp: res.data.timeStamp,
+					nonceStr: res.data.nonceStr,
+					package: res.data.package,
+					signType: res.data.signType,
+					paySign: res.data.paySign,
+					// success: function(payRes) {
+					success: function(payRes) {
+					  if(that.collageId){
+						  console.log(that.collageId,'that.collageId99999')
+					  	let param = {
+					  	  orderId:that.orderId,
+					  	  collageId:that.collageId
+					  	}
+					  	NET.request(API.paySuccess, param, 'POST').then(res => {
+					  		console.log(res,'支付成功')					 
+					  	})
+					  }
+					  uni.showToast({
+						icon: 'none',
+						title: '支付成功'
+					  })
+					  //console.log(submitResult.orderId, 'order Id')
+					  uni.navigateTo({
+						url: 'paySuccessful?orderId=' + submitResult.orderId
+					  })
+					},
+					fail: function(err) {
+						uni.showToast({
+							icon: 'none',
+							title: '支付取消'
+						})
+						uni.navigateTo({
+							url: '../orderModule/index?type=1'
+						})
+					}
+				 })
+				}).catch(err => {
+					uni.showToast({
+						title: '支付失败',
+						icon: 'none'
+					})
+					uni.navigateTo({
+						url: '../orderModule/index?type=1'
+					})
+				})
+				// #endif
+				// #ifdef APP-PLUS
+				//console.log(submitResult, 'app-submitResult')
+				NET.request(API.gotoAppPay, submitResult, 'POST').then(res => {
+				  let str = res.data.package
+				  var index = str.lastIndexOf("\=");
+				  str = str.substring(index+1,str.length);
+				  var obj = {
+					appid: res.data.appId,
+					noncestr: res.data.nonceStr,
+					package: 'Sign=WXPay',
+					prepayid: str,
+					timestamp: res.data.timeStamp,
+					sign: 'MD5',
+					partnerid: res.data.partnerId
+				  }
+				  //console.log(res.data, '111')
+				  //console.log(obj, '111')
+				  uni.requestPayment({
+					provider: 'wxpay',
+					orderInfo: obj,
+					success: function(payRes) {
+					  uni.showToast({
+						icon: 'none',
+						title: '支付成功'
+					  })
+					  uni.navigateTo({
+						url: 'paySuccessful?orderId=' + that.orderId
+					  })
+					},
+					fail: function(err) {
+					  //console.log(err)
+					  uni.showToast({
+						icon: 'none',
+						title: '支付取消'
+					  })
+					  uni.navigateTo({
+						url: '../orderModule/index?type=1'
+					  })
+					}
+				  })
+				}).catch(err => {
+				  uni.hideLoading()
+				  uni.showToast({
+					title: '支付失败',
+					icon: 'none'
+				  })
+				  uni.navigateTo({
+					url: '../orderModule/index?type=1'
+				  })
+				})
+				// #endif
+			  }).catch(res => {
+				uni.hideLoading()
+				this.oneClickSubmit = true
+				uni.showToast({
+				  title: '提交失败',
+				  icon: 'none'
+				})
+			  })
+			} else {
+			  uni.showToast({
+				icon: 'none',
+				title: '请选择收货地址'
+			  })
             }
-          }
-          let datashopslen = this.settlement.shops.length
-          for (let n = 0; n < datashopslen; n++) {
-            let shopsobj = {}
-            shopsobj["shopId"] = this.settlement.shops[n].shopId
-            shopsobj["sceneId"] = this.settlement.shops[n].sceneId
-            shopsobj["distribution"] = {}
-            shopsobj["skus"] = []
-            if (this.settlement.shops[n].currentCoupon) {
-              shopsobj["id"] = this.settlement.shops[n].currentCoupon.id
-            }
-            data.shops.push(shopsobj)
-            data.shops[n].distribution.distributionPrice = this.settlement.shops[n].distribution.distributionPrice
-            let dataskuslen = this.settlement.shops[n].skus.length
-            for (let m = 0; m < dataskuslen; m++) {
-              let skusobj = {}
-              skusobj["skuId"] = this.settlement.shops[n].skus[m].skuId
-              skusobj["number"] = this.settlement.shops[n].skus[m].number
-              skusobj["ifLogistics"] = this.settlement.shops[n].skus[m].ifLogistics
-              skusobj["selected"] = this.settlement.shops[n].skus[m].selected
-              skusobj["platformSeckillId"] = this.settlement.shops[n].skus[m].platformSeckillId
-              skusobj["platformDiscountId"] = this.settlement.shops[n].skus[m].platformDiscountId
-              skusobj["shopSeckillId"] = this.settlement.shops[n].skus[m].shopSeckillId
-              skusobj["shopDiscountId"] = this.settlement.shops[n].skus[m].shopDiscountId
-              skusobj["sceneId"] = this.settlement.shops[n].skus[m].sceneId
-              skusobj["priceId"] = this.settlement.shops[n].skus[m].priceId
-              skusobj["useMember"] = this.settlement.shops[n].skus[m].useMember
-              skusobj["composeId"] = this.settlement.shops[n].skus[m].composeId
-              // 积分传参
-              if (this.selectIntegral && this.settlement.creditDeductLimit !== 0 && this.totalprice > this.orderCreditThreshold && this.integralNum !== 0) {
-                let creditArr = this.settlement.skuCreditMap
-                for(let key in creditArr) {
-                  if (key == this.settlement.shops[n].skus[m].skuId) {
-                    if (this.settlement.shops[n].skus[m].ifCredit == 1) {
-                      if (this.integralNum !== 0) {
-                        if (this.settlement.shops[n].skus[m].creditLimit > this.integralNum) {
-                          skusobj["useCredit"] = this.integralNum
-                          skusobj["useCreditAmount"] = this.integralNum * this.integralRatio
-                          this.integralNum = 0
-                        } else {
-                          skusobj["useCredit"] = this.settlement.shops[n].skus[m].creditLimit
-                          skusobj["useCreditAmount"] = this.settlement.shops[n].skus[m].creditLimit * this.integralRatio
-                          this.integralNum = this.integralNum - this.settlement.shops[n].skus[m].creditLimit
-                        }
-                      } else {
-                        console.log('false')
-                        return false
-                      }
-                    }
-                  }
-                }
-              }
-              data.shops[n].skus.push(skusobj)
-            }
-          }
-          // #ifdef H5
-          data.paymentMode = 1
-          data.subPaymentMode = 3
-          // #endif
-
-          // #ifdef MP-WEIXIN
-          data.paymentMode = 1
-          data.subPaymentMode = 1
-          // #endif
-
-          // #ifdef APP-PLUS
-          data.paymentMode = 1
-          // #endif
-
-          // #ifdef MP-ALIPAY
-          data.paymentMode = 2
-          data.subPaymentMode = 1
-          // #endif
-
-          // uni.hideLoading()
-          console.log(this.settlement, '价格')
-          NET.request(API.PlaceOrder, data, 'POST').then(res => {
-            let submitResult = res.data
-            that.orderId = res.data.orderId
-            //console.log(submitResult, '测试')
-            submitResult.type = 1
-            submitResult.paymentMode = data.paymentMode
-            // #ifdef H5
-            let ua = navigator.userAgent.toLowerCase();
-            if (ua.match(/MicroMessenger/i) == "micromessenger") {
-            this.payRequest(submitResult)
-            }else{
-            NET.request(API.gotoH5Pay, submitResult, 'POST').then(res => {
-                //console.dir(res)
-                location.replace(res.data.mwebUrl)
-                // window.location.replace(url)
-              }).catch(err => {
-                this.submitActive = true
-                uni.hideLoading()
-                uni.showToast({
-                  title: '支付失败',
-                  icon: 'none'
-                })
-                uni.navigateTo({
-                  url: '../orderModule/index?type=1'
-                })
-              })
-           }
-            // #endif
-            // #ifdef MP-ALIPAY
-            submitResult.huabeiPeriod = this.huabeiPeriod
-            submitResult.paymentMode = this.paymentMode
-            this.aliPay(submitResult)
-            // #endif
-
-            // #ifdef MP-WEIXIN
-            NET.request(API.gotoPay, submitResult, 'POST').then(res => {
-              console.dir(res)
-              uni.requestPayment({
-                privider: 'wxpay',
-                timeStamp: res.data.timeStamp,
-                nonceStr: res.data.nonceStr,
-                package: res.data.package,
-                signType: res.data.signType,
-                paySign: res.data.paySign,
-                success: function(payRes) {
-                  uni.showToast({
-                    icon: 'none',
-                    title: '支付成功'
-                  })
-                  //console.log(submitResult.orderId, 'order Id')
-                  uni.navigateTo({
-                    url: 'paySuccessful?orderId=' + submitResult.orderId
-                  })
-                },
-                fail: function(err) {
-                  uni.showToast({
-                    icon: 'none',
-                    title: '支付取消'
-                  })
-                  uni.navigateTo({
-                    url: '../orderModule/index?type=1'
-                  })
-                }
-              })
-            }).catch(err => {
-              uni.hideLoading()
-              uni.showToast({
-                title: '支付失败',
-                icon: 'none'
-              })
-              uni.navigateTo({
-                url: '../orderModule/index?type=1'
-              })
-            })
-            // #endif
-            // #ifdef APP-PLUS
-            //console.log(submitResult, 'app-submitResult')
-            NET.request(API.gotoAppPay, submitResult, 'POST').then(res => {
-              let str = res.data.package
-              var index = str.lastIndexOf("\=");
-              str = str.substring(index+1,str.length);
-              var obj = {
-                appid: res.data.appId,
-                noncestr: res.data.nonceStr,
-                package: 'Sign=WXPay',
-                prepayid: str,
-                timestamp: res.data.timeStamp,
-                sign: 'MD5',
-                partnerid: res.data.partnerId
-              }
-              //console.log(res.data, '111')
-              //console.log(obj, '111')
-              uni.requestPayment({
-                provider: 'wxpay',
-                orderInfo: obj,
-                success: function(payRes) {
-                  uni.showToast({
-                    icon: 'none',
-                    title: '支付成功'
-                  })
-                  uni.navigateTo({
-                    url: 'paySuccessful?orderId=' + that.orderId
-                  })
-                },
-                fail: function(err) {
-                  //console.log(err)
-                  uni.showToast({
-                    icon: 'none',
-                    title: '支付取消'
-                  })
-                  uni.navigateTo({
-                    url: '../orderModule/index?type=1'
-                  })
-                }
-              })
-            }).catch(err => {
-              uni.hideLoading()
-              uni.showToast({
-                title: '支付失败',
-                icon: 'none'
-              })
-              uni.navigateTo({
-                url: '../orderModule/index?type=1'
-              })
-            })
-            // #endif
-          }).catch(res => {
-            uni.hideLoading()
-            uni.showToast({
-              title: '提交失败',
-              icon: 'none'
-            })
-          })
-        } else {
-          uni.showToast({
-            icon: 'none',
-            title: '请选择收货地址'
-          })
-        }
-      }
+        }else {
+			uni.showToast({
+				title:"已提交，请勿重新操作！",
+				icon:'none'
+			})
+		}
+	  }
     },
     // H5支付微信内置浏览器支付
     // #ifdef H5

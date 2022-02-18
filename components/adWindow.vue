@@ -8,18 +8,30 @@
 					<view class="coupon-list">
 						<scroll-view :scroll-top="0" class="scrollBox" scroll-y="true">
 							<view class="item" v-for="(item, index) in couponList" :key="index">
-								<view class="money">
-									<text class="num"
-										:class="[item.discountMode ===1?'num-minus':'num-discount']">{{ item.reduceMoney }}</text>
-									<text class="text">
-										满{{ item.fullMoney }}元可用
-									</text>
-								</view>
-								<view class="text">
-									<text>
-										{{item.activityName}}
-									</text>
-								</view>
+                <view class="leftBox borderBox">
+                  <view class="boxTop"></view>
+                  <view class="boxCent"></view>
+                  <view class="boxBottom"></view>
+                </view>
+                <view class="centerBox">
+                  <view class="money">
+                    <text class="num"
+                          :class="[item.discountMode ===1?'num-minus':'num-discount']">{{ item.reduceMoney }}</text>
+                    <text class="text">
+                      满{{ item.fullMoney }}元可用
+                    </text>
+                  </view>
+                  <view class="text">
+                    <text>
+                      {{item.activityName}}
+                    </text>
+                  </view>
+                </view>
+                <view class="rightBox borderBox">
+                  <view class="boxTop"></view>
+                  <view class="boxCent"></view>
+                  <view class="boxBottom"></view>
+                </view>
 							</view>
 						</scroll-view>
 					</view>
@@ -86,6 +98,7 @@
 				NET.request(API.GetAd, {
 					triggerCondition: this.triggerCondition
 				}, 'POST').then(res => {
+          console.log('123131321323')
 					if (res.data) {
 						this.adInfo = res.data[0]
 						if (this.adInfo.jumpContent) {
@@ -144,23 +157,25 @@
 			},
 			goRoll() {
 				this.visible = false
+				console.log(this.jumpContent,'this.jumpContent')
 				switch (this.adInfo.jumpType) {
 					case 1:
 						uni.navigateTo({
 							url: '/pages_category_page1/goodsModule/goodsDetails?shopId=' + this.jumpContent
-								.shopId + '&productId=' + this.jumpContent.productId + '&skuId=' + this.jumpContent
+								.shopId + '&productId=' + this.jumpContent.id + '&skuId=' + this.jumpContent
 								.skuId
 						})
 						break
 					case 2:
+						let _id = this.jumpContent.id[this.jumpContent.id.length - 1]
 						uni.navigateTo({
-							url: `/pages_category_page1/goodsModule/goodsList?category3Id=${this.jumpContent.id}`
+							url: `/pages_category_page1/goodsModule/goodsList?category3Id=${_id}`
 						})
 						break
 					case 4:
 						uni.navigateToMiniProgram({
 							appId: this.jumpContent.appId,
-							path: this.jumpContent.id,
+							path: this.jumpContent.link,
 							success(res) {
 								// 打开成功
 							}
@@ -184,13 +199,13 @@
 	right: 0;
 	bottom: 0;
 	z-index: 55;
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(0, 0, 0, 0.7);
 }
 
 
 .mask-coupon {
 	z-index: 9999;
-	background: rgba(39, 38, 39, .15);
+	/*background: rgba(39, 38, 39, .15);*/
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -205,9 +220,9 @@
 	.ad-boxs {
 		position: relative;
 		width: 100%;
-
+		text-align: center;
 		.img {
-			width: 100%;
+			width: 70%;
 		}
 	}
 	.btn-receive {
@@ -241,6 +256,11 @@
 .ad-coupons {
 	.ad-box-warp {
 		width: 510rpx;
+		.ad-boxs {
+			.img {
+				width: 100%;
+			}
+		}
 	}
 
 	.coupon-list {
@@ -257,38 +277,63 @@
 		.item {
 			width: 100%;
 			height: 140rpx;
-			background-color: #fff;
 			margin-top: 15rpx;
 			border-radius: 8rpx;
 			display: flex;
 			position: relative;
 			align-items: center;
-
+      overflow: hidden;
 			&:first-child {
 				margin-top: 0px;
 			}
-
-			&:before,
-			&:after {
-				content: '';
-				width: 32rpx;
-				height: 32rpx;
-				background: #000;
-				border-radius: 50%;
-				display: block;
-				position: absolute;
-				top: 50%;
-				margin-top: -16rpx;
-			}
-
-			&:before {
-				left: -16rpx;
-			}
-
-			&:after {
-				right: -16rpx;
-			}
-
+      .borderBox {
+        width: 32rpx;
+        height: 140rpx;
+        overflow: hidden;
+        .boxTop {
+          width: 32rpx;
+          height: 54rpx;
+          background: #FFFFFF;
+        }
+        .boxCent {
+          height: 36rpx;
+          overflow: hidden;
+          position: relative;
+          &:after {
+            content: '';
+            width: 32rpx;
+            height: 32rpx;
+            border-radius: 50%;
+            display: block;
+            position: absolute;
+            top: 50%;
+            margin-top: -47rpx;
+            left: -15rpx;
+            border: 32rpx solid #FFFFFF;
+          }
+        }
+        .boxBottom {
+          width: 32rpx;
+          height: 54rpx;
+          background: #FFFFFF;
+        }
+      }
+      .leftBox {
+        .boxCent {
+          &:after {
+            left: -50rpx;
+          }
+        }
+      }
+      .rightBox {
+      }
+      .centerBox {
+        display: flex;
+        align-items: center;
+        height: 140rpx;
+        background: #FFFFFF;
+        flex: 1;
+      }
 			.money {
 				width: 190rpx;
 				text-align: center;
