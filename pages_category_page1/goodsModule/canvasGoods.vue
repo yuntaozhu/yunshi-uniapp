@@ -78,7 +78,8 @@
                 <image class="iconImg" v-if="item.activityType == 4" src="https://ceres.zkthink.com/static/images/spikeIcon.png"></image>
                 <image class="iconImg" v-if="item.activityType == 3" src="https://ceres.zkthink.com/static/images/discountListIcon.png"></image>
                 <image class="iconImg" v-if="item.activityType == 5" src="https://ceres.zkthink.com/static/images/discountListIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 8" src="https://ceres.zkthink.com/static/images/memberCenterIcon.png"></image>
+				<image class="iconImg" v-if="item.activityType == 9" src="https://ceres.zkthink.com/static/images/memberCenterIcon.png"></image>
+                <image class="iconImg" v-if="item.activityType == 8" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png"></image>
                 <view class="font-color-C83732 flex-row-plus">
                   <b>￥</b>
                   <label class="fs28">{{item.price}}</label>

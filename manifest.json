@@ -1,6 +1,6 @@
 {
     "name" : "cereshop",
-    "appid" : "__UNI__B79F1D2",
+    "appid" : "__UNI__ECAA86F",
     "description" : "cereshop",
     "versionName" : "1.6.0",
     "versionCode" : 160,
@@ -18,7 +18,9 @@
         /* 5+App特有相关 */
         "modules" : {
             "Webview-x5" : {},
-            "VideoPlayer" : {}
+            "VideoPlayer" : {},
+            "Payment" : {},
+            "Share" : {}
         },
         /* 模块配置 */
         "distribute" : {
@@ -36,6 +38,7 @@
                     "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
                     "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
                     "<uses-permission android:name=\"android.permission.INTERNET\"/>",
+                    "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
                     "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
                     "<uses-permission android:name=\"android.permission.READ_CONTACTS\"/>",
                     "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
@@ -55,7 +58,7 @@
                 "ad" : {},
                 "payment" : {
                     "weixin" : {
-                        "__platform__" : [ "android" ],
+                        "__platform__" : [ "ios", "android" ],
                         "appid" : "wxec665c74647095aa",
                         "UniversalLinks" : ""
                     }
@@ -70,7 +73,8 @@
                         "appid" : "wxec665c74647095aa",
                         "UniversalLinks" : ""
                     }
-                }
+                },
+                "push" : {}
             },
             "splashscreen" : {
                 "androidStyle" : "common",

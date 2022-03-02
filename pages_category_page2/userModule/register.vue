@@ -7,17 +7,17 @@
 		<view>
 			<view class="iphoneNum-box flex-row-plus flex-items">
 				<view>
-          <image class="loginIcon" src="https://ceres.zkthink.com/static/images/phone.png"></image>
+					<image class="loginIcon" src="https://ceres.zkthink.com/static/images/phone.png"></image>
 				</view>
 				<view style="margin-left: 40rpx;">
 					<input v-model="phone" class="iphoneNum-inputbox" placeholder-class="iphoneNum-input" type="number"
-						placeholder="请输入您的手机号" />
+						maxlength="11" placeholder="请输入您的手机号" />
 				</view>
 			</view>
 			<view class="flex-row-plus mar-top-20">
 				<view class="code-box">
 					<view>
-            <image class="loginIcon" src="https://ceres.zkthink.com/static/images/code.png"></image>
+						<image class="loginIcon" src="https://ceres.zkthink.com/static/images/code.png"></image>
 					</view>
 					<view style="margin-left: 40rpx;">
 						<input v-model="RegisterQuery.code" class="codeNum-inputbox" placeholder-class="codeNum-input"
@@ -25,18 +25,23 @@
 					</view>
 				</view>
 				<view :class="disabled === true ? 'on' : ''" :disabled="disabled" class="getcode" @click="codede">
-					{{text}}</view>
+					{{text}}
+				</view>
 			</view>
-		</view>
-		<view class="mar-top-100">
-			<text class="font-color-999">注册即代表同意</text>
-			<text class="font-color-C5AA7B" @click="protocol">《cereshop》商城用户协议</text>
 		</view>
 		<view class="registerBut" @click="onregister">注册</view>
 		<view class="flex-row-plus mar-top-30">
 			<text class="font-color-C5AA7B">已有账号，</text>
 			<view class="font-color-C5AA7B" @click="gologin">去登录</view>
 		</view>
+		<view class="agreement">
+			<image v-if="!agreement" src="../../static/images/none.png" mode="" @click="agreement=true"></image>
+			<image v-else src="../../static/images/solid.png" mode="" @click="agreement=false"></image>
+			<text class="font-color-999">注册即代表同意</text>
+			<text class="font-color-C5AA7B" @click="protocol('app_user_agreement')">《APP用户服务协议》</text>和
+			<text class="font-color-C5AA7B" @click="protocol('app_privacy_agreement')">《APP个人隐私协议》</text>
+		</view>
+
 	</view>
 </template>
 
@@ -59,6 +64,7 @@
 					phone: "",
 					type: ""
 				},
+				agreement: false
 			}
 		},
 		mixins: [sendVerifyCode],
@@ -87,9 +93,15 @@
 						duration: 2000,
 						icon: 'none'
 					});
+				} else if(!this.agreement){
+					uni.showToast({
+						title: '请先阅读并同意《用户服务协议和个人隐私协议》',
+						duration: 2000,
+						icon: 'none'
+					});
 				} else {
 					uni.showLoading({
-            mask: true,
+						mask: true,
 						title: '正在注册...',
 						duration: 2000,
 					})
@@ -99,14 +111,21 @@
 						verificationCode: this.RegisterQuery.code,
 					}, 'POST').then(res => {
 						uni.hideLoading()
-            uni.showToast({
-              title: '注册成功！',
-              duration: 2000,
-              icon: 'none'
-            });
-						uni.navigateTo({
-							url: 'accountLogin'
-						})
+						uni.showToast({
+							title: '注册成功！',
+							duration: 2000,
+							icon: 'none'
+						});
+						const item = res.data
+						uni.setStorageSync('storage_key', item);
+						setTimeout(function() {
+							uni.switchTab({
+								url: '../../pages/tabbar/user/index'
+							})
+						}, 600)
+						// uni.navigateTo({
+						// 	url: 'accountLogin'
+						// })
 					}).catch(res => {
 						uni.showToast({
 							title: res.data.message,
@@ -184,20 +203,21 @@
 				})
 			},
 			// 多商户用户协议
-			protocol() {
+			protocol(type) {
 				uni.navigateTo({
-					url: 'protocol'
+					url: 'protocol?type=' + type
 				})
-			}
+			},
 		}
 	}
 </script>
 <style lang="scss" scoped>
 	.container {
 		background-color: #FFFFFF;
-		height: 100vh;
+
 		.login-logoBox {
 			margin: 100rpx 0;
+
 			.login-logo {
 				width: 200rpx;
 				height: 166rpx;
@@ -208,13 +228,16 @@
 			border-bottom: 1rpx solid #F3F4F5;
 			height: 100rpx;
 			width: 600rpx;
-      .loginIcon {
-        width: 40rpx;
-        height: 53rpx;
-      }
-			input{
+
+			.loginIcon {
+				width: 40rpx;
+				height: 53rpx;
+			}
+
+			input {
 				font-size: 28rpx;
 			}
+
 			.iphoneNum-input {
 				color: #999999;
 				font-size: 28rpx;
@@ -227,20 +250,23 @@
 		}
 
 		.code-box {
-      border-bottom: 1rpx solid #F3F4F5;
+			border-bottom: 1rpx solid #F3F4F5;
 			height: 100rpx;
 			width: 350rpx;
 			display: flex;
 			flex-direction: row;
 			justify-content: space-between;
 			align-items: center;
-      .loginIcon {
-        width: 44rpx;
-        height: 50rpx;
-      }
-			input{
+
+			.loginIcon {
+				width: 44rpx;
+				height: 50rpx;
+			}
+
+			input {
 				font-size: 28rpx;
 			}
+
 			.code-lab {
 				width: 200rpx;
 			}
@@ -290,6 +316,16 @@
 			text-align: center;
 			line-height: 88rpx;
 			margin-top: 140rpx;
+		}
+
+		.agreement {
+			margin: 100rpx 50rpx;
+			line-height: 50rpx;
+			image{
+				width: 34rpx;
+				height: 34rpx;
+				margin-right: 15upx;
+			}
 		}
 	}
 </style>

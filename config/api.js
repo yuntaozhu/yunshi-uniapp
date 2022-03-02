@@ -1,14 +1,15 @@
-// const DOMAIN_PREFIX = 'http://itxzz.top'
-const DOMAIN_PREFIX = 'https://ceres.zkthink.com'
+// const DOMAIN_PREFIX = 'http://127.0.0.1:9007'
+const DOMAIN_PREFIX = 'https://ceres.zkthink.com/api'
+
 // https://ceresdev.zkthink.com
 // #ifndef H5
-const WX_API_BASE = DOMAIN_PREFIX + '/api' // app
-// const WX_API_BASE = DOMAIN_PREFIX  // app
+const WX_API_BASE = DOMAIN_PREFIX // app
 // const WX_API_BASE = 'http://3j073r3905.qicp.vip:29544'
 // #endif
 
 // #ifdef H5
-const WX_API_BASE = '/api' // h5
+// const WX_API_BASE = '/api' // h5
+const WX_API_BASE = DOMAIN_PREFIX // app
 const TERMINAL = 2
 // #endif
 
@@ -34,6 +35,7 @@ module.exports = {
 	UpdateWxPhone: WX_API_BASE + '/app/updateWxPhone', //  获取微信手机号绑定
 	UpdateAliPhone: WX_API_BASE + '/app/updateAliPhone', //	获取支付宝小程序手机号绑定
 	WxAppLogin: WX_API_BASE + '/app/wxAppLogin', // APP微信登录
+	delUser: WX_API_BASE + '/user/delUser/',//账户注销
 
 
 	// 查询直播间列表
@@ -111,7 +113,7 @@ module.exports = {
 	ShippingTrace: WX_API_BASE + '/order/getDilevery', //  物流信息查询
 	payOrder: WX_API_BASE + '/order/pay', //  支付成功业务处理接口
 	gotoPay: WX_API_BASE + '/order/gotoPay', //  小程序支付
-	paySuccess: WX_API_BASE + 'order/paySuccess', //  小程序支付成功
+	paySuccess: WX_API_BASE + '/order/paySuccess', //  小程序支付成功
 	gotoAppPay: WX_API_BASE + '/order/gotoAppPay', //  APP立即支付
 	gotoH5Pay: WX_API_BASE + '/order/gotoH5Pay', //  H5支付
 	ConfirmReceive: WX_API_BASE + '/order/confirm', //  确认收货

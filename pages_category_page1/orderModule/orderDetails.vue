@@ -10,8 +10,8 @@
 						<!-- <text class="label">剩{{hou}}小时{{min}}分{{sec}}秒自动关闭</text> -->
 						<view style="color: #FFFFFF; margin-top: 20rpx;">
 							<text>剩 </text>
-							<u-count-down :timestamp="remainingTime" fontSize="24rpx" :separator="zh" separatorColor="#FFFFFF"
-							separatorSize="24rpx"></u-count-down>
+							<u-count-down :timestamp="remainingTime" fontSize="24rpx" :separator="zh"
+								separatorColor="#FFFFFF" separatorSize="24rpx"></u-count-down>
 							<text>自动关闭</text>
 						</view>
 					</view>
@@ -69,8 +69,8 @@
 						<!-- <text class="label">剩余时间{{hou}}小时{{min}}分{{sec}}秒</text> -->
 						<view style="color: #FFFFFF; margin-top: 20rpx;">
 							<text>剩余时间</text>
-							<u-count-down :timestamp="remainingTime" fontSize="24rpx" :separator="zh" separatorColor="#FFFFFF"
-							separatorSize="24rpx"></u-count-down>
+							<u-count-down :timestamp="remainingTime" fontSize="24rpx" :separator="zh"
+								separatorColor="#FFFFFF" separatorSize="24rpx"></u-count-down>
 						</view>
 					</view>
 					<!--					<image class='r' src="https://ceres.zkthink.com/static/images/clusterloss.png"></image>-->
@@ -407,13 +407,14 @@
 				huabeiChargeType: 1,
 				huabeiFeeRateList: [0, 0, 0],
 				alipayInfo: {},
+				isAllSelect: 1, //是否为拆单售后
 
 				// 客服
 				serviceURL: '',
 				corpId: '',
 				isLoading: false,
 				ifShow: false,
-				remainingTime:null, //倒计时剩余时间
+				remainingTime: null, //倒计时剩余时间
 			}
 		},
 		onLoad(options) {
@@ -646,9 +647,13 @@
 			},
 			//退款
 			applayItemTap(proItem) {
+				console.log(this.dataList.skus.length,'dataList99999')
+				if(this.dataList.skus.length>1){
+					this.isAllSelect = 0
+				}
 				uni.setStorageSync('applyItem', proItem)
 				uni.navigateTo({
-					url: 'afterSaleApplyRefund?orderId=' + this.orderId
+					url: 'afterSaleApplyRefund?orderId=' + this.orderId + '&isAllSelect=' + this.isAllSelect
 				})
 			},
 			//去退款详情
@@ -1002,7 +1007,7 @@
 				}
 				uni.setStorageSync('afterSaleApplyRefund', this.orderRefundList)
 				uni.navigateTo({
-					url: `afterSaleApplyRefund?orderId=${this.orderId}&sellPriceitem=${this.dataList.price}`,
+					url: `afterSaleApplyRefund?orderId=${this.orderId}&sellPriceitem=${this.dataList.price}&isAllSelect=1`,
 				})
 			},
 			confirmReceiptTap() {

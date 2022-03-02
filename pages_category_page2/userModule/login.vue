@@ -43,6 +43,7 @@
 			}
 		},
 		onLoad(options) {
+
 			// #ifndef MP
 			this.noMp = true
 			// #endif
@@ -52,12 +53,16 @@
 				uni.setStorageSync('last_page_options', pages[pages.length - 2].options);
 			}
 		},
-    onBackPress(){
-      uni.switchTab({
-        url: '../../pages/tabbar/index/index'
-      })
-      return true;
-    },
+		onShow() {
+			// 所有需要授权页面进登录页面取消loading
+			uni.hideLoading()
+		},
+		onBackPress() {
+			uni.switchTab({
+				url: '../../pages/tabbar/index/index'
+			})
+			return true;
+		},
 		methods: {
 			back() {
 				uni.switchTab({
@@ -76,10 +81,10 @@
 			},
 			// 微信登录
 			GetUserInfo() {
-        uni.showLoading({
-          title: '正在加载...',
-          mask: true
-        });
+				uni.showLoading({
+					title: '正在加载...',
+					mask: true
+				});
 				const that = this
 				// // #ifdef APP-PLUS
 				// uni.login({
@@ -118,7 +123,7 @@
 				uni.login({
 					provider: 'weixin',
 					success: (res2) => {
-            uni.hideLoading()
+						uni.hideLoading()
 						that.WXloginQuery.code = res2.code
 					},
 					fail: () => {
@@ -217,7 +222,8 @@
 					const last_page = uni.getStorageSync('last_page') || ''
 					if (last_page) {
 						const last_page_options = uni.getStorageSync('last_page_options') || ''
-						const str = JSON.stringify(last_page_options).replaceAll('{', '').replaceAll('}', '').replaceAll('"', '').replaceAll(':', '=').replaceAll(',', '&')
+						const str = JSON.stringify(last_page_options).replaceAll('{', '').replaceAll('}', '').replaceAll(
+							'"', '').replaceAll(':', '=').replaceAll(',', '&')
 						// 保留其他路由，需跳转2下 到最后登录页面
 						// uni.navigateBack({
 						//     delta: 1
@@ -257,14 +263,14 @@
 				if (shopId && salesId && shopId !== '' && salesId !== '') {
 					// 多次调用绑定方法，不提示任何信息即可
 					NET.request(API.BindSalesCustomer, {
-					  shopId: shopId,
-					  distributorId: salesId
+						shopId: shopId,
+						distributorId: salesId
 					}, 'POST').then(res => {
-					  uni.removeStorageSync('salesId');
-					  uni.removeStorageSync('shopId');
+						uni.removeStorageSync('salesId');
+						uni.removeStorageSync('shopId');
 					}).catch(err => {
-					  console.log('login bindSalesCustomer error')
-					  console.dir(err)
+						console.log('login bindSalesCustomer error')
+						console.dir(err)
 					})
 				}
 			}
@@ -329,7 +335,7 @@
 	}
 </style>
 <style scoped>
-.loginWxBut::after {
-  border-radius: 0 !important;
-}
+	.loginWxBut::after {
+		border-radius: 0 !important;
+	}
 </style>

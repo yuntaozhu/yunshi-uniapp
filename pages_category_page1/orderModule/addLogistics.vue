@@ -130,7 +130,7 @@
               icon:'success'
             })
 						uni.navigateTo({
-							url:'afterSale'
+							url:'../../pages_category_page2/orderModule/afterSale'
 						})
 					}
 				}).catch(res => {

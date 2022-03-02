@@ -597,6 +597,21 @@
 						"enablePullDownRefresh": false
 					}
 
+				},
+				{
+					"path": "userModule/unsubscribe",
+					"style": {
+						"navigationBarTitleText": "账户注销",
+						"navigationBarBackgroundColor": "#333333",
+						"backgroundColor": "#333333",
+						"navigationBarTextStyle": "white"
+					}
+				},
+				{
+					"path": "userModule/unsubscribeCode",
+					"style": {
+						"navigationBarTitleText": "注销账户手机认证"
+					}
 				}
 			]
 		}

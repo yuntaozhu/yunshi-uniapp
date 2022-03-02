@@ -13,10 +13,10 @@
 					<label class="mar-left-30">{{ditem.createTime}}</label>
 				</view>
         <view class="listItem" :index="index" v-for="(item, index) in ditem.products" :key="item.footprintId" @click="click(index,findex)">
-          <u-swipe-action :show="item.show" @open="open(index,findex)" :options="options">
+          <u-swipe-action :show="item.show" @open="open(index,findex)" @click="delFootProduction(index,findex)" :options="options">
             <view class="itemBox">
               <view @click.stop="toGoodsDetails(item.productId,item.shopId,item.skuId)" class="item wid flex-display">
-                <view v-show="allCheckShow" class="selectIconBox">
+                <view v-if="allCheckShow" class="selectIconBox">
                   <image v-if="item.selected == 1" @click.stop="footItemSel(index,findex,0)" src="https://ceres.zkthink.com/static/images/selectActive.png" class="cart-select-img"></image>
                   <image v-else @click.stop="footItemSel(index,findex,1)" src="https://ceres.zkthink.com/static/images/selectEmpty.png" class="cart-select-img"></image>
                 </view>
@@ -41,22 +41,42 @@
 					<text>全选</text>
 				</view>
 				<view class="right">
-					<view class="btn-delete" @click="footprintDel">删除</view>
+					<view class="btn-delete" @click="showCardModal">删除</view>
 				</view>
 			</view>
 			<view v-if="allCheckShow" class="pad-bot-140"></view>
 		</view>
-		<view v-else class="mar-top-60 empty-box" @click="goToIndex">
-			<image class="footprint-empty" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
+		<view v-else class="mar-top-100 empty-box" @click="goToIndex">
+			<image class="footprint-empty" src="https://datumstar.oss-cn-shenzhen.aliyuncs.com/dkyaemtmfwfxbvtuyyhi.png"></image>
 			<view class="tohome-box flex-items-plus">去首页逛逛</view>
 		</view>
+		
+		<!-- 删除确认弹窗 -->
+		<tui-modal :show="cardModal" :custom="true" :fadein="true">
+			<view class="Put-box1">
+				<view class="text-align fs34 fs-bold">
+					温馨提示
+				</view>
+				<view class="mar-top-40 text-align">
+					是否删除该浏览足迹？
+				</view>
+				<view class="btn submit" @click="footprintDel">确定</view>
+			</view>
+			<view v-if="cardModal" @click="cardModal = false" class="cancelDel">
+				<image src="https://ceres.zkthink.com/static/images/cancelClose.png" mode=""></image>
+			</view>
+		</tui-modal>
 	</view>
 </template>
 
 <script>
 	const NET = require('../../utils/request')
 	const API = require('../../config/api')
+	import tuiModal from "@/components/modal/modal";
 	export default {
+		components: {
+			tuiModal
+		},
 		data() {
 			return {
 				allCheckShow:false,
@@ -79,7 +99,9 @@
 				footprintList:[],
 				footEmpty:false,
 				newTimeArr:[],
-        tipsShow: false
+                tipsShow: false,
+				cardModal:false, //删除弹窗显示
+				ids: []
 			};
 		},
 		onLoad() {
@@ -100,31 +122,52 @@
 					url:'../../pages_category_page1/goodsModule/goodsDetails?productId='+productId+'&shopId='+shopId+'&skuId='+skuId
 				})
 			},
-			footprintDel(){
-				this.isAllCheck = false
-				let ids = []
+			// 点击编辑底下删除按钮
+			showCardModal(){
 				this.footprintList.forEach((value,index)=>{
 					value.products.forEach((value1,index1)=>{
 						if(value1.selected == 1){
-							ids.push(value1.productId)
+							this.ids.push(value1.productId)
+						}
+						if(!this.ids.length){
+							uni.showToast({
+								title:'请选择要删除的足迹商品！',
+								icon:'none'
+							})
+						}else{
+							this.cardModal = true
 						}
 					})
 				})
+			},
+			// 滑动删除单个商品足迹
+			delFootProduction(index,findex){
+				let dataArr = this.footprintList[findex]
+				this.newTimeArr.push(dataArr.createTime)
+				this.ids.push(dataArr.products[index].productId)
+				this.footprintDel()
+			},
+			// 删除方法
+			footprintDel(){
+				this.isAllCheck = false
 				NET.request(API.deleteFootprint,{
-					ids:ids,
+					ids:this.ids,
 					times:this.newTimeArr
 				}, 'POST').then(res => {
 					this.footEmpty = true
 					this.page = 1
 					this.pageSize = 5
 					this.getFootprintList()
+					this.cardModal = false
+					this.newTimeArr = []
+					this.ids = []
 					setTimeout(function(){
 						uni.showToast({
 							title: "删除成功",
 							duration: 2000,
 							icon: 'none',
 						});
-					},2000)
+					},1000)
 				}).catch(res => {
 					this.$u.toast(`删除失败`);
 				})
@@ -208,6 +251,7 @@
 			},
 			// 如果打开一个的时候，不需要关闭其他，则无需实现本方法
 			open(index,findex) {
+				console.log('打开')
 				this.footprintList[findex].products[index].show = true;
 				this.footprintList[findex].products.map((val, idx) => {
 					if(index != idx) this.footprintList[findex].products[idx].show = false;
@@ -231,6 +275,7 @@
 			finishClick(){
 				this.allCheckShow = false
 			},
+			
       goToIndex() {
         uni.switchTab({
           url:'/pages/tabbar/index/index'
@@ -371,11 +416,38 @@ page {
 		flex-direction: column;
 		align-items: center;
 		.tohome-box{
-			color: #C5AA7B;
-			border: 1rpx solid #C5AA7B;
+			color: #FF7800;
+			border: 1rpx solid #FF7800;
 			width: 240rpx;
 			height: 70rpx;
 			margin-top: 50rpx;
+		}
+	}
+	.Put-box1 {
+		.btn {
+			text-align: center;
+			margin-top: 40rpx;
+			border: 1px solid #333333;
+			height: 80upx;
+			line-height: 80upx;
+			width: 100%;
+			color: #333333;
+		}
+	
+		.submit {
+			background-color: #333333;
+			color: #FFEBC4;
+		}
+	}
+	
+	.cancelDel {
+		position: absolute;
+		bottom: -50px;
+		left: 45%;
+	
+		image {
+			width: 60upx;
+			height: 60upx;
 		}
 	}
 }

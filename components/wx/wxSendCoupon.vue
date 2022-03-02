@@ -72,15 +72,19 @@
          }
         },
         mounted(){
-            console.log(this.couponList,'couponList')
+            // console.log(this.couponList,'couponList')
             let ids = []
             this.couponList.forEach(item=>{
                 if(item.cardId){
                     ids.push(item.cardId)
-                } else {
-                    this.successList.push(item)
-                }
+                } 
+				// else {
+    //                 this.successList.push(item)
+    //             }
+				// 解除app h5不能领券问题
+				this.successList.push(item)
             })
+			// console.log(this.successList,'successList')
             // #ifdef MP-WEIXIN
             if(ids && ids.length > 0){
                this.buildParam4Plug(ids)

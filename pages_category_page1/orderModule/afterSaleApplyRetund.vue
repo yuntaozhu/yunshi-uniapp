@@ -45,7 +45,7 @@
       <view class="afterSale-select-box mt20">
         <view class="item">
           <view class="l">退款金额：
-            <text class="order-status">¥ {{sellPriceitem}}</text>
+            <text class="order-status">¥ {{sellPriceitem.toFixed(2)}}</text>
           </view>
         </view>
         <view class="item item-start">
@@ -154,6 +154,7 @@ export default {
       retundlist:[],
       orderId:0,
       isIphone: false,
+	  isAllSelect: 0,
     }
   },
   onReady() {
@@ -162,8 +163,10 @@ export default {
     this.fileList = this.$refs.uUpload.lists
   },
   onLoad(option) {
+	  console.log(option,'option')
     this.retundlist = JSON.parse(decodeURIComponent(option.list))
     this.orderId = option.orderId
+	this.isAllSelect = option.isAllSelect
     // console.log(this.retundlist, 'retundlist')
     this.retundlist.forEach(el =>{
       this.sellPriceitem = this.sellPriceitem + el.number*el.price
@@ -187,13 +190,13 @@ export default {
       }).catch(res => {})
     },
     ReturnMoney() {
-      if (this.ReturnMoneyQuery.goodsState == '') {
+      if (this.ReturnMoneyQuery.goodsState === '') {
         uni.showToast({
           title: '请选择货物状态！',
           duration: 2000,
           icon: 'none'
         });
-      } else if (this.liyoutext == '') {
+      } else if (this.liyoutext === '') {
         uni.showToast({
           title: '请选择退货原因！',
           duration: 2000,
@@ -205,28 +208,29 @@ export default {
           title: '正在提交...',
         })
         let skusobjdata = []
-        let skusobj = {}
-        for(let i=0;i<this.retundlist.length;i++){
-          skusobj["skuId"] = this.retundlist[i].skuId
-          skusobj["number"] = this.retundlist[i].number
-          skusobjdata.push(skusobj)
-        }
+		this.retundlist.forEach((i) => {
+			let skusobj = {}
+			skusobj["skuId"] = i.skuId
+			skusobj["number"] = i.number
+			skusobjdata.push(skusobj)
+		})
         NET.request(API.ApplyReturnMoney, {
           orderId:this.orderId,
           afterType:2,
           goodsState:this.ReturnMoneyQuery.goodsState,
           price: this.sellPriceitem,
-          returnReason:this.liyoutext,
-          explain:this.ReturnMoneyQuery.returnDesc,
-          image:this.commentImgs,
-          skus:skusobjdata
+          returnReason: this.liyoutext,
+          explain: this.ReturnMoneyQuery.returnDesc,
+          image: this.commentImgs,
+          skus: skusobjdata,
+		  isAllSelect: this.isAllSelect
         }, 'POST').then(res => {
           uni.hideLoading()
           uni.showToast({
             title: '提交成功'
           })
           uni.navigateTo({
-            url: 'afterSale'
+            url: '../../pages_category_page2/orderModule/afterSale'
           })
         }).catch(res => {
           uni.showToast({
@@ -237,7 +241,6 @@ export default {
           uni.hideLoading()
         })
       }
-
     },
     // 理由
     returnReasonTap(item,index){

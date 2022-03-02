@@ -1,22 +1,30 @@
 <template>
 	<view class="spikeListBox">
-		<view class="spikeBg">
-			<image src="https://ceres.zkthink.com/static/images/spikelLogo.png"></image>
-		</view>
-		<view class="tabs-nav-warp spikeNav">
-			<scroll-view class="tabs-nav" scroll-x="true">
-				<view class="ul">
-					<view class="li" v-for="(item, index) in querySessionData" :key="index"
-						:class="{active: index === active}" @click="changeTit(index, item)">
-						<view class="timeItem">
-							<view class="date" :class="{endCls: currentTime > item.endTime}">{{item.startTime}}</view>
-							<view class="state fs24" v-if="currentTime > item.timestamp">抢购中</view>
-							<view class="state" v-if="currentTime < item.timestamp">即将开始</view>
-							<view class="state" v-if="currentTime > item.endTime">已结束</view>
+		<view v-if="!shopSeckillId">
+			<view class="spikeBg">
+				<image src="https://ceres.zkthink.com/static/images/spikelLogo.png"></image>
+			</view>
+			<view class="tabs-nav-warp spikeNav">
+				<scroll-view class="tabs-nav" scroll-x="true">
+					<view class="ul">
+						<view class="li" v-for="(item, index) in querySessionData" :key="index"
+							:class="{active: index === active}" @click="changeTit(index, item)">
+							<view class="timeItem">
+								<view class="date" :class="{endCls: currentTime > item.endTime}">{{item.startTime}}</view>
+								<view class="state fs24" v-if="currentTime > item.timestamp">抢购中</view>
+								<view class="state" v-if="currentTime < item.timestamp">即将开始</view>
+								<view class="state" v-if="currentTime > item.endTime">已结束</view>
+							</view>
 						</view>
 					</view>
-				</view>
-			</scroll-view>
+				</scroll-view>
+			</view>
+		</view>
+		<view v-else class="shopStopTime">
+			<label v-if="currentTime > timestamp">距离结束：</label>
+			<label v-else>距离开始：</label>
+			<u-count-down :timestamp="shopEndTime" fontSize="24rpx" separatorColor="#C83732"
+			separatorSize="24rpx" bgColor="#C83732" color="#ffffff" height="200rpx"></u-count-down>
 		</view>
 		<view class="spikeList mar-top-20">
 			<view class="listItem" v-for="(item,index) in spikeLikeList" :key="index">
@@ -72,7 +80,11 @@
 <script>
 	const NET = require('../../utils/request')
 	const API = require('../../config/api')
+	import UCountDown from "../../uview-ui/components/u-count-down/u-count-down";
 	export default {
+		components:{
+			UCountDown
+		},
 		data() {
 			return {
 				spikeLikeList: [],
@@ -103,7 +115,9 @@
 				currentTime: '',
 				active: 0,
 				timestamp: null,
-				endTime: null
+				endTime: null,
+				shopEndTime:null,
+				
 			}
 		},
 		onLoad(options) {
@@ -122,7 +136,11 @@
 			// this.getQuerySession()
 		},
 		onShow() {
-			this.getQuerySession()
+			this.page = 1,
+			this.pageSize= 10,
+			this.querySessionData = []
+			this.spikeLikeList = []
+			this.getQuerySession()			
 		},
 		tabChange(key, value) {
 			this.activeTab = key
@@ -269,11 +287,13 @@
 				param = {
 					page: this.page,
 					pageSize: this.pageSize,
+					shopId: this.shopId,
 					shopSeckillId: this.shopSeckillId,
 				}
 				NET.request(API.getShopSeckillIndex, param, 'GET').then(res => {
 					uni.hideLoading()
 					this.spikeLikeData = res.data
+					this.shopEndTime = res.data.time
 					if (res.data.page.list.length === 0) {
 						this.loadingType = 1
 						this.page = this.page
@@ -303,7 +323,10 @@
 
 	.spikeListBox {
 		padding: 20rpx;
-
+        .shopStopTime{
+			text-align: center;
+			color: #FFFFFF;
+		}
 		.spikeBg {
 			text-align: center;
 			margin: 50rpx auto;

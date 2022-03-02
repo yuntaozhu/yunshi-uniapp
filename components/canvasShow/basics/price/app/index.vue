@@ -1,5 +1,5 @@
 <template>
-  <div class="group-list">
+  <div class="group-list" v-if="productData&&productData.composeProducts&&productData.composeProducts.length>0">
     <div class="group-warp">
       <div class="title">
         <label>

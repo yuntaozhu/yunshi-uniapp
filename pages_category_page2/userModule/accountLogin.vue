@@ -6,17 +6,17 @@
 		</view>
 		<view class="iphoneNum-box flex-row-plus flex-items">
 			<view style="margin-right: 30rpx">
-        <image class="loginIcon" src="https://ceres.zkthink.com/static/images/phone.png"></image>
+				<image class="loginIcon" src="https://ceres.zkthink.com/static/images/phone.png"></image>
 			</view>
 			<view>
 				<input v-model="loginQuery.account" placeholder-class="iphoneNum-input" type="number"
-					placeholder="请输入您的手机号" />
+					maxlength='11' placeholder="请输入您的手机号" />
 			</view>
 		</view>
 		<view class="flex-row-plus mar-top-20">
 			<view class="code-box">
 				<view style="margin-right: 30rpx">
-          <image class="loginIcon" src="https://ceres.zkthink.com/static/images/code.png"></image>
+					<image class="loginIcon" src="https://ceres.zkthink.com/static/images/code.png"></image>
 				</view>
 				<view>
 					<input v-model="loginQuery.code" placeholder-class="codeNum-input" placeholder="请输入验证码" />
@@ -86,7 +86,7 @@
 				} else {
 					const that = this
 					uni.showLoading({
-            mask: true,
+						mask: true,
 						title: '正在登录...',
 						duration: 2000,
 					});
@@ -119,24 +119,24 @@
 							if (that.beforePage && that.beforePage.route !==
 								'pages_category_page2/userModule/accountLogin' &&
 								that.beforePage.route !== 'pages_category_page2/userModule/login' &&
-                  that.beforePage.route !== 'pages_category_page2/userModule/register') {
-							  console.log(19)
+								that.beforePage.route !== 'pages_category_page2/userModule/register') {
+								console.log(19)
 								uni.navigateBack({
 									delta: 1
 								})
 							} else if (that.doubleBeforePage && that.doubleBeforePage.route !==
 								'pages_category_page2/userModule/accountLogin' &&
 								that.doubleBeforePage.route !== 'pages_category_page2/userModule/login' &&
-                  that.doubleBeforePage.route !== 'pages_category_page2/userModule/register') {
+								that.doubleBeforePage.route !== 'pages_category_page2/userModule/register') {
 								uni.navigateBack({
 									delta: 2
 								})
 							} else {
-							setTimeout(function() {
-								uni.switchTab({
-									url: '../../pages/tabbar/user/index'
-								})
-							}, 600)
+								setTimeout(function() {
+									uni.switchTab({
+										url: '../../pages/tabbar/user/index'
+									})
+								}, 600)
 							}
 						}
 					}).catch(res => {
@@ -231,10 +231,12 @@
 			border-bottom: 1rpx solid #DDDDDD;
 			height: 100rpx;
 			width: 600rpx;
-      .loginIcon {
-        width: 40rpx;
-        height: 53rpx;
-      }
+
+			.loginIcon {
+				width: 40rpx;
+				height: 53rpx;
+			}
+
 			.iphoneNum-input {
 				color: #999999;
 				font-size: 28rpx;
@@ -246,6 +248,7 @@
 			border-bottom: 1rpx solid #DDDDDD;
 			height: 100rpx;
 			width: 600rpx;
+
 			.passwordNum-input {
 				color: #999999;
 				font-size: 28rpx;
@@ -262,13 +265,16 @@
 			flex-direction: row;
 			justify-content: space-between;
 			align-items: center;
-      .loginIcon {
-        width: 44rpx;
-        height: 50rpx;
-      }
+
+			.loginIcon {
+				width: 44rpx;
+				height: 50rpx;
+			}
+
 			.code-lab {
 				width: 200rpx;
 			}
+
 			.codeNum-input {
 				color: #999999;
 				font-size: 28rpx;
@@ -289,8 +295,8 @@
 		}
 
 		.registerBut {
-      background: #333333;
-      color: #FFEBC4;
+			background: #333333;
+			color: #FFEBC4;
 			height: 100rpx;
 			width: 600rpx;
 			text-align: center;

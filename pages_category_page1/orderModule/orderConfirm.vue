@@ -429,6 +429,7 @@ export default {
       NET.request(_url, _data, 'POST').then(res => {
         uni.hideLoading()
         this.settlement = res.data
+        console.log(this.settlement)
         this.couponsList = res.data.coupons
         this.huabeiChargeType = res.data.huabeiChargeType
         if (this.huabeiChargeType === 2) {
@@ -481,7 +482,7 @@ export default {
         uni.removeStorageSync('receiveItem')
         this.usableListLength = res.data.coupons.length
         this.getTotal()
-        
+
       }).catch(res => {
         uni.hideLoading()
       })
@@ -670,6 +671,8 @@ export default {
         shopSumPrice += parseFloat(this.settlement.shops[i].totalNum)
         this.totalCount += this.settlement.shops[i].number
       }
+      console.log(this.settlement.shops,this.totalPrice )
+
       if (this.checkedPlatformCoupon) {
         if (this.checkedPlatformCoupon.couponType === 1 && this.totalPrice - this.checkedPlatformCoupon.reduceMoney > 0) { // 满减
           this.totalPrice = shopSumPrice - this.checkedPlatformCoupon.reduceMoney
@@ -888,7 +891,7 @@ export default {
           icon: 'none'
         })
       } else {
-		 
+
 	    if(this.oneClickSubmit){
 			this.oneClickSubmit = false
 			if (this.userAddressInfo.receiveName) {
@@ -980,7 +983,7 @@ export default {
 			  // #endif
 
 			  uni.hideLoading()
-			  NET.request(API.PlaceOrder, data, 'POST').then(res => {	  
+			  NET.request(API.PlaceOrder, data, 'POST').then(res => {
 				if(this.type == 2){
 					let carSkusData = data.shops
 					let skusArr = []
@@ -1021,7 +1024,7 @@ export default {
 					  url: '../orderModule/index?type=1'
 					})
 				})
-				
+
 			   }
 				// #endif
 				// #ifdef MP-ALIPAY
@@ -1032,7 +1035,11 @@ export default {
 
 				// #ifdef MP-WEIXIN
 				NET.request(API.gotoPay, submitResult, 'POST').then(res => {
-				  console.dir(res)
+				  console.dir(res,'API.gotoPay')
+				  let param = {
+				    orderId:submitResult.orderId,
+				    collageId:submitResult.collageId
+				  }
 				  uni.requestPayment({
 					provider: 'wxpay',
 					timeStamp: res.data.timeStamp,
@@ -1040,16 +1047,12 @@ export default {
 					package: res.data.package,
 					signType: res.data.signType,
 					paySign: res.data.paySign,
-					// success: function(payRes) {
 					success: function(payRes) {
-					  if(that.collageId){
-						  console.log(that.collageId,'that.collageId99999')
-					  	let param = {
-					  	  orderId:that.orderId,
-					  	  collageId:that.collageId
-					  	}
+						// 拼团微信支付成功回调
+					  if(param.collageId){
+						console.log(param,' param999999')
 					  	NET.request(API.paySuccess, param, 'POST').then(res => {
-					  		console.log(res,'支付成功')					 
+					  		console.log(res,'支付成功')
 					  	})
 					  }
 					  uni.showToast({

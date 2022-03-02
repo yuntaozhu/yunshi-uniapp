@@ -43,7 +43,7 @@
             </checkbox-group>
           </view>
           <view class="selectRight flex-items">
-            <view class="selectNum">{{number}}件商品</view>
+            <view class="selectNum">{{number || 0}}件商品</view>
             <view class="totalPrice">合计：<text>￥{{total.toFixed(2)}}</text></view>
           </view>
         </view>
@@ -72,16 +72,17 @@ export default {
       },
       number: null,
       total: 0,
-      distribution: null
+      distribution: null,
+	  isAllSelect:null,
     }
   },
   onLoad(item) {
     this.item = JSON.parse(item.item)
     this.distribution = this.item.skus[0].distribution
-    this.item.skus.forEach((item) => {
-      this.number = this.number + item.number
-      this.total = this.total + item.total
-    })
+    // this.item.skus.forEach((item) => {
+    //   this.number = this.number + item.number
+    //   this.total = this.total + item.total
+    // })
   },
   methods: {
     // 申请退款
@@ -96,20 +97,29 @@ export default {
       }else{
         uni.setStorageSync('afterSaleApplyRefund',this.xuanzlist)
         uni.navigateTo({
-          url: 'afterSaleApplyRefund?orderId='+this.item.orderId
+          url: 'afterSaleApplyRefund?orderId='+this.item.orderId+'&isAllSelect='+this.isAllSelect
         })
       }
     },
     // 全选
     changeAll (e) {
+		console.log(e,'dhjishjkfdjhdfsjhkds')
       if(e.detail.value.length == 0) {
         this.item.skus.map(item => this.$set(item, 'checked', false));
         this.$set(this.allCheck, 'checked', false);
         this.xuanzlist = []
+		this.isAllSelect = 0
       }else{
         this.item.skus.map(item => this.$set(item, 'checked', true));
         this.$set(this.allCheck, 'checked', true);
+		this.isAllSelect = 1
         this.xuanzlist = this.item.skus.filter(item => item.checked == true)
+		this.number = 0
+		this.total = 0
+		this.item.skus.forEach((item) => {
+		  this.number = this.number + item.number
+		  this.total = this.total + item.total
+		})
       }
     },
     // 申请退货
@@ -122,21 +132,45 @@ export default {
         })
       }else{
         uni.navigateTo({
-          url: 'afterSaleApplyRetund?list=' + encodeURIComponent(JSON.stringify(this.xuanzlist))+'&orderId='+this.item.orderId
+          url: 'afterSaleApplyRetund?list=' + encodeURIComponent(JSON.stringify(this.xuanzlist))+'&orderId='+this.item.orderId+'&isAllSelect='+this.isAllSelect
         })
       }
     },
     checkboxGroupChange(e){
       // console.log(e, 'fdsfdsfsdf')
     },
+	
     checkboxChange(e) {
-      console.log(e, 'fdsfdsfsdf')
+	  // 动态设置商品件数和总计
+	  if(e.checked){
+		  this.number = this.number + e.number
+		  this.total = this.total + e.total
+	  }else{
+		  this.number = this.number - e.number
+		  this.total = this.total - e.total
+	  }
+	  // 筛选勾选的
       this.xuanzlist = this.item.skus.filter(item => item.checked == true)
-      if(this.xuanzlist.findIndex(item=>item.checked===true)==-1){
-        this.$set(this.allCheck, 'checked', false);
-      } else {
-        this.$set(this.allCheck, 'checked', true);
-      }
+	  
+	  // 是否为全选
+	  if(this.item.skus.length == this.xuanzlist.length){
+		  this.isAllSelect = 1
+		  this.$set(this.allCheck, 'checked', true);
+	  }else{
+		  this.isAllSelect =  0
+		  this.$set(this.allCheck, 'checked', false);
+	  }
+	  console.log(this.isAllSelect,'this.isAllSelect')
+	  
+  //     if(this.xuanzlist.findIndex(item=>item.checked===true)==-1){
+		//   console.log(this.allCheck,'this.allCheck')
+		//   console.log(this.xuanzlist,'this.xuanzlist')
+  //       this.$set(this.allCheck, 'checked', false);
+  //     } else {
+		//   console.log(this.allCheck,'this.allCheck')
+  //       this.$set(this.allCheck, 'checked', true);
+		// console.log(this.xuanzlist,'this.xuanzlist')
+  //     }
     }
   }
 }

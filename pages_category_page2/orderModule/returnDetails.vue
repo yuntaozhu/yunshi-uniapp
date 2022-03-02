@@ -264,7 +264,7 @@
 			goAddLogistics(){
 				uni.setStorageSync("itemLogistics",this.item)
 				uni.navigateTo({
-				    url:'addLogistics'
+				    url:'../../pages_category_page1/orderModule/addLogistics'
 				})
 			},
       // 平台介入

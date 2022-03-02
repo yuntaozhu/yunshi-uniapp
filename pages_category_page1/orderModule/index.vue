@@ -481,6 +481,12 @@
 				// #ifdef MP-WEIXIN
 				let that = this
 				NET.request(API.gotoPay, submitResult, 'POST').then(res => {
+					console.log(item,'item订单提交9999')
+					console.log(res,'res订单提交9999')
+					let param = {
+						orderId: item.orderId,
+						collageId: item.collageId
+					}
 					uni.requestPayment({
 						provider: 'wxpay',
 						timeStamp: res.data.timeStamp,
@@ -489,13 +495,8 @@
 						signType: res.data.signType,
 						paySign: res.data.paySign,
 						success: function(payRes) {
-							console.log(that.orderId,'this.orderId')
-							console.log(item.collageId,'item.collageId')
-							if(item.collageId){
-								let param = {
-								  orderId:that.orderId,
-								  collageId:item.collageId
-								}
+							// 拼团支付成功回调
+							if(param.collageId){
 								NET.request(API.paySuccess, param, 'POST').then(res => {
 									console.log(res,'支付成功')					 
 								})

@@ -5,16 +5,17 @@
 			<view class="personalHead-box flex-sp-between flex-display flex-items">
 				<label>头像</label>
 				<image class="user-headImg" v-if="item.headImage" :src="item.headImage"></image>
-				<image class="user-headImg" v-else src="https://ceres.zkthink.com/static/img/user/morentouxiang.png"></image>
+				<image class="user-headImg" v-else src="https://ceres.zkthink.com/static/img/user/morentouxiang.png">
+				</image>
 			</view>
 		</view>
 		<view class="personalBack-box flex-items-plus flex-column">
 			<view class="personalHead-box flex-sp-between flex-display flex-items">
 				<label>昵称</label>
-<!--				<label class="font-color-999" v-if="item.name">{{item.name}}</label>-->
-<!--        <label class="font-color-999" v-else>{{item.phone}}</label>-->
-        <!-- <input class="nameInput" v-if="name" v-model="name" type="text" placeholder="请输入内容" @blur="changeName(1)" /> -->
-        <!-- <input class="nameInput" v-else type="text" v-model="phone" placeholder="请输入内容" @blur="changeName(2)" /> -->
+				<!--				<label class="font-color-999" v-if="item.name">{{item.name}}</label>-->
+				<!--        <label class="font-color-999" v-else>{{item.phone}}</label>-->
+				<!-- <input class="nameInput" v-if="name" v-model="name" type="text" placeholder="请输入内容" @blur="changeName(1)" /> -->
+				<!-- <input class="nameInput" v-else type="text" v-model="phone" placeholder="请输入内容" @blur="changeName(2)" /> -->
 				<input class="nameInput" v-model="name" type="text" placeholder="请输入内容" @blur="changeName" />
 			</view>
 			<view class="personalHead-box flex-sp-between flex-display flex-items" @click="sexShowClick">
@@ -42,9 +43,25 @@
 				</label>
 			</view>
 		</view>
-		<view class="flex-items-plus mar-top-50">
-			<view class="exitLoginBut  flex-items-plus" @click="quit">退出登录</view>
+		<view class="agreement">
+			<view class="agreement agreement_top" @click="protocol('app_privacy_agreement')">
+				<text>用户隐私协议</text>
+				<image src="../../static/images/right.png" mode=""></image>
+			</view>
+			<view class="agreement" @click="protocol('app_user_agreement')">
+				<text>用户服务协议</text>
+				<image src="../../static/images/right.png" mode=""></image>
+			</view>
 		</view>
+
+		<view class="mar-top-100">
+			<view class="exitLoginBut  flex-items-plus" @click="quit">退出登录</view>
+			<!-- #ifdef APP-PLUS -->
+			<view class="cancellation" @click="cancellation">注销账号</view>
+			<!-- #endif -->
+		</view>
+
+
 		<!-- 修改性别弹窗 -->
 		<u-select v-model="sexShow" title="修改性别" :list="sexList" @confirm="ConfirmSex"></u-select>
 		<!-- 修改生日弹窗 -->
@@ -99,7 +116,7 @@
 				},
 				code: '',
 				phone: '',
-        name: '',
+				name: '',
 				sexList: [{
 						value: '1',
 						label: '男'
@@ -131,14 +148,39 @@
 			})
 		},
 		methods: {
+			// 多商户用户协议
+			protocol(type) {
+				uni.navigateTo({
+					url: 'protocol?type=' + type
+				})
+			},
+			cancellation() {
+				uni.showModal({
+					title: "温馨提示",
+					content: "是否注销此账号！",
+					confirmText:"前往注销",
+					success(res) {
+						if (res.cancel) {
+							uni.showToast({
+								icon: 'none',
+								title: '已取消'
+							})
+						} else if (res.confirm) {
+							uni.navigateTo({
+								url: 'unsubscribe'
+							})
+						}
+					}
+				})
+			},
 			// 修改生日
 			changeTime() {
 				if (this.birthday == '1970-01-01' || this.birthday == '') {
 					this.timeShow = true
 				}
 			},
-      // 修改昵称
-      changeName() {
+			// 修改昵称
+			changeName() {
 				const newName = this.name || this.phone
 				if (!newName) {
 					uni.showToast({
@@ -163,13 +205,13 @@
 				}).catch(res => {
 					uni.hideLoading()
 				})
-      },
+			},
 			// 提交修改生日
 			ConfirmTime(content) {
 				if (this.birthday == '1970-01-01' || this.birthday == '') {
 					let birthday = content.year + '-' + content.month + '-' + content.day
 					uni.showLoading({
-            mask: true,
+						mask: true,
 						title: "正在加载中"
 					})
 					NET.request(API.UpdateUser, {
@@ -193,7 +235,7 @@
 			// 提交修改性别
 			ConfirmSex(content) {
 				uni.showLoading({
-          mask: true,
+					mask: true,
 					title: "正在加载中"
 				})
 				let sex = content[0].label
@@ -240,7 +282,7 @@
 			},
 			quit() {
 				uni.showLoading({
-          mask: true,
+					mask: true,
 					title: '正在退出...',
 					duration: 2000,
 				});
@@ -258,7 +300,7 @@
 			onGetAuthorize() {
 				const that = this
 				uni.showLoading({
-          mask: true,
+					mask: true,
 					title: '验证中...',
 				})
 				my.getPhoneNumber({
@@ -304,6 +346,43 @@
 </script>
 
 <style lang='scss'>
+	.agreement {
+		width: 710rpx;
+		margin: 20rpx auto 0;
+		background-color: #fff;
+
+		.agreement_top {
+			&::after {
+				content: "";
+				display: block;
+				position: absolute;
+				left: 32rpx;
+				bottom: 0;
+				width: 646rpx;
+				height: 4rpx;
+				background: #F5F7FA;
+			}
+		}
+
+		.agreement {
+			width: 100%;
+			height: 108rpx;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			font-size: 28rpx;
+			color: #333;
+			padding: 0 10rpx 0 32rpx;
+			box-sizing: border-box;
+			position: relative;
+
+			image {
+				width: 60rpx;
+				height: 60rpx;
+			}
+		}
+	}
+
 	.phoneWxBut {
 		width: 160rpx;
 		height: 60rpx;
@@ -327,9 +406,10 @@
 				border-bottom: 1upx solid #E5E5E5;
 				padding-bottom: 20upx;
 				margin-top: 36upx;
-        .nameInput {
-          text-align: right;
-        }
+
+				.nameInput {
+					text-align: right;
+				}
 			}
 
 			.personalHead-box1 {
@@ -363,10 +443,21 @@
 		}
 
 		.exitLoginBut {
-			width: 690upx;
 			height: 100upx;
 			background: #333333;
 			color: #FFEBC4;
+		}
+
+		.cancellation {
+			height: 100rpx;
+			margin: 24rpx auto 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #C5AA7B;
+			font-size: 28rpx;
+			background: #FFFFFF;
+			border: 3rpx solid #F3F4F5;
 		}
 
 		.sexRadio-box {

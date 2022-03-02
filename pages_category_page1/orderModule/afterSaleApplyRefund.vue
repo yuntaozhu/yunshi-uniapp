@@ -55,7 +55,7 @@
       <view class="afterSale-select-box mt20">
         <view class="item">
           <view class="l">退款金额：
-            <text class="order-status">¥ {{sellPriceitem}}</text>
+            <text class="order-status">¥ {{sellPriceitem.toFixed(2) }}</text>
           </view>
         </view>
         <view class="item item-start">
@@ -182,7 +182,8 @@ export default {
       orderId:0,
       isIphone: false,
       commentImgs: '',
-      afterType: 1
+      afterType: 1,
+	  isAllSelect:0,
     }
   },
   onReady() {
@@ -190,6 +191,7 @@ export default {
     this.fileList = this.$refs.uUpload.lists
   },
   onLoad(options) {
+	  console.log(options,'options')
     if (uni.getStorageSync('applyItem')) {
       this.afterRefund = uni.getStorageSync('applyItem')
       this.list.push(this.afterRefund)
@@ -198,13 +200,14 @@ export default {
       console.log(this.list, 'list')
     }
     this.orderId = parseInt(options.orderId)
+	this.isAllSelect = options.isAllSelect
     const res = uni.getStorageSync('storage_key');
     this.headerToken.Authorization = res.token
     console.log(this.list, 'list')
     this.list.forEach(el => {
       this.sellPriceitem = this.sellPriceitem + (el.number*el.price) + el.logisticsPrice
     })
-    this.sellPriceitem = this.sellPriceitem.toFixed(2)
+    // this.sellPriceitem = options.sellPriceitem
     // this.sellPriceitem = options.sellPriceitem
     this.getReasonEnums()
     uni.removeStorageSync('applyItem')
@@ -265,7 +268,8 @@ export default {
           returnReason:this.liyoutext,
           explain:this.ReturnMoneyQuery.returnDesc,
           image:this.commentImgs,
-          skus:skusobjdata
+          skus:skusobjdata,
+		  isAllSelect: this.isAllSelect
         }, 'POST').then(res => {
           uni.hideLoading()
           uni.showToast({

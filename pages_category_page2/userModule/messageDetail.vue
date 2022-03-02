@@ -27,7 +27,7 @@
 		},
 		onLoad(options) {
 			this.onlyid = options.noticeId
-            this.getNotice()
+			this.getNotice()
 		},
 		methods: {
 			formatRichText(html) {
@@ -58,32 +58,32 @@
 						this.htmlData = htmlData
 						console.log(this.htmlData)
 					})
-          uni.hideLoading()
+					uni.hideLoading()
 				}).catch(res => {
-          uni.hideLoading()
+					uni.hideLoading()
 					uni.showToast({
 						title: '失败',
 						icon: "none"
 					})
 				})
 			},
-      getNotice() {
-        uni.showLoading({
-          title: '加载中...',
-        })
-        NET.request(API.readNotice, {
-          noticeId: this.onlyid
-        }, 'POST').then(res => {
-			uni.hideLoading()
-          this.gitMassageDateils()
-        }).catch(res => {
-			uni.hideLoading()
-          uni.showToast({
-            title: '失败',
-            icon: "none"
-          })
-        })
-      }
+			getNotice() {
+				uni.showLoading({
+					title: '加载中...',
+				})
+				NET.request(API.readNotice, {
+					noticeId: this.onlyid
+				}, 'POST').then(res => {
+					uni.hideLoading()
+					this.gitMassageDateils()
+				}).catch(res => {
+					uni.hideLoading()
+					uni.showToast({
+						title: '失败',
+						icon: "none"
+					})
+				})
+			}
 		}
 	}
 </script>
@@ -106,6 +106,7 @@
 
 		.detailInfo {
 			word-wrap: break-word;
+
 			p {
 				font-size: 28upx;
 				color: #333333;

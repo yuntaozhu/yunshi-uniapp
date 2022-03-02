@@ -1,5 +1,5 @@
 <template>
-  <div class="hom-pro-list">
+  <div class="hom-pro-list" v-if="productData.length>0">
     <div class="product-swiper">
       <div class="product-swiper-box">
         <div class="product-swiper-warp" v-for="(item,index) in productData.slice(0, 3)" :key="index">
@@ -16,7 +16,8 @@
                 <img class="iconImg" v-if="item.activityType == 4" src="../../../static/images/spikeIcon.png">
                 <img class="iconImg" v-if="item.activityType == 3" src="../../../static/images/discountListIcon.png">
                 <img class="iconImg" v-if="item.activityType == 5" src="../../../static/images/discountListIcon.png">
-                <img class="iconImg" v-if="item.activityType == 8" src="../../../static/images/memberCenterIcon.png">
+                <img class="iconImg" v-if="item.activityType == 9" src="../../../static/images/memberCenterIcon.png">
+				<img class="iconImg" v-if="item.activityType == 8" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png">
                 <!-- #endif -->
                 <!-- #ifdef H5 || APP-PLUS -->
                 <image class="iconImg" v-if="item.activityType == 1" src="../../../static/images/groupBuyIcon.png"></image>
@@ -24,7 +25,8 @@
                 <image class="iconImg" v-if="item.activityType == 4" src="../../../static/images/spikeIcon.png"></image>
                 <image class="iconImg" v-if="item.activityType == 3" src="../../../static/images/discountListIcon.png"></image>
                 <image class="iconImg" v-if="item.activityType == 5" src="../../../static/images/discountListIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 8" src="../../../static/images/memberCenterIcon.png"></image>
+                <image class="iconImg" v-if="item.activityType == 9" src="../../../static/images/memberCenterIcon.png"></image>
+				<image class="iconImg" v-if="item.activityType == 8" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png"></image>
                 <!-- #endif -->
                 <div class="price">
                   ¥ {{item.price}}
