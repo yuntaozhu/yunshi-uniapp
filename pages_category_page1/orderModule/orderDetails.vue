@@ -729,22 +729,22 @@
 				}
 				// #ifdef H5
 				let ua = navigator.userAgent.toLowerCase();
-				// if (ua.match(/MicroMessenger/i) == "micromessenger") {
-				// 	this.payRequest(submitResult)
-				// } else {
-				NET.request(API.gotoH5Pay, submitResult, 'POST').then(res => {
-					//console.dir(res)
-					location.replace(res.data.mwebUrl)
-					// window.location.replace(url)
-				}).catch(err => {
-					this.submitActive = true
-					uni.hideLoading()
-					uni.showToast({
-						title: '支付失败',
-						icon: 'none'
+				if (ua.match(/MicroMessenger/i) == "micromessenger") {
+					this.payRequest(submitResult)
+				} else {
+					NET.request(API.gotoH5Pay, submitResult, 'POST').then(res => {
+						//console.dir(res)
+						location.replace(res.data.mwebUrl)
+						// window.location.replace(url)
+					}).catch(err => {
+						this.submitActive = true
+						uni.hideLoading()
+						uni.showToast({
+							title: '支付失败',
+							icon: 'none'
+						})
 					})
-				})
-				// }
+				}
 				// #endif
 				// #ifdef MP-WEIXIN
 				NET.request(API.gotoPay, submitResult, 'POST').then(res => {
@@ -998,6 +998,13 @@
 			},
 			//申请退款
 			applyMoneyAllTap() {
+				this.dataList.skus.map(item => {
+					if(item.afterState){
+						this.isAllSelect = 0
+						console.log('要拆单')
+					}
+				})
+				console.log(this.isAllSelect,'this.isAllSelect')
 				if (this.orderRefundList.length === 0) {
 					uni.showToast({
 						title: '您所有商品已经申请退款，请勿重复申请',
@@ -1007,7 +1014,8 @@
 				}
 				uni.setStorageSync('afterSaleApplyRefund', this.orderRefundList)
 				uni.navigateTo({
-					url: `afterSaleApplyRefund?orderId=${this.orderId}&sellPriceitem=${this.dataList.price}&isAllSelect=1`,
+					url: `afterSaleApplyRefund?orderId=${this.orderId}&sellPriceitem=${this.dataList.price}
+					      &isAllSelect=${this.isAllSelect}`,
 				})
 			},
 			confirmReceiptTap() {
@@ -1046,8 +1054,27 @@
 			},
 			// 申请售后
 			applyTap() {
+				if (this.orderRefundList.length === 0) {
+					uni.showToast({
+						title: '您所有商品已经申请退款，请勿重复申请',
+						icon: 'none'
+					})
+					return
+				}
+				uni.setStorageSync('afterSaleApplyRefund', this.orderRefundList)
+				let productData = this.item
+				let isAllSelect = 1
+        let newArr = JSON.parse(JSON.stringify(productData))
+        newArr.skus.map((item,index) => {
+          console.log("item----",item)
+					if(item.afterState){
+            newArr.skus.splice(index,1)
+						isAllSelect = 0
+					}
+				})
+				console.log(isAllSelect,'00000000000')
 				uni.navigateTo({
-					url: 'afterSaleApply?item=' + JSON.stringify(this.item),
+					url: 'afterSaleApply?item=' + JSON.stringify(newArr) + '&isAllSelect='+ isAllSelect
 				})
 			},
 			// 支付类型变更

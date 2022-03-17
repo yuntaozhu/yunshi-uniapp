@@ -92,14 +92,14 @@
 				source:2,
 				list:[],
 				loadingType:0,
-        sortIndex: 0,
-        ifNew:0,//是否新品
-        type:1,//价格排序条件
-        volume:1,//销量排序条件
+				sortIndex: 1,
+				ifNew:0,//是否新品
+				type:0,//价格排序条件
+				volume:0,//销量排序条件
 				topLeft: 0,
-        ifEmpty: false,
-        noMoreData: false,
-        total: 0
+				ifEmpty: false,
+				noMoreData: false,
+				total: 0
 			}
 		},
 		onLoad(option) {
@@ -129,17 +129,36 @@
         this.total = 0
         this.page = 1
         this.list = []
-        if(index == 1){
-          this.type = 1
-          this.volume = 1
-          this.sortIndex = index
-        }else if(index == 2){
-          this.type = this.type != 1 ? 1:2
-          this.sortIndex = index
-        }else if(index == 3){
-          this.volume = this.volume != 1 ? 1:2
-          this.sortIndex = index
-        }
+        // if(index == 1){
+        //   this.type = 1
+        //   this.volume = 1
+        //   this.sortIndex = index
+        // }else if(index == 2){
+        //   this.type = this.type != 1 ? 1:2
+        //   this.sortIndex = index
+        // }else if(index == 3){
+        //   this.volume = this.volume != 1 ? 1:2
+        //   this.sortIndex = index
+        // }
+		if(index === 1){
+			this.type = 0
+			this.volume = 0
+		}else if(index === 2){
+			this.volume = 0
+			if(this.type === 0){
+				this.type = 1
+			}else{
+				this.type = this.type = 1 ? 2 : 1
+			}
+		}else if (index === 3){
+			this.type = 0
+			if(this.volume === 0){
+				this.volume = 1
+			}else{
+				this.volume = this.volume = 1 ? 2 : 1
+			}
+		}
+		this.sortIndex = index
         this.searchList()
       },
 			searchTextDel(){

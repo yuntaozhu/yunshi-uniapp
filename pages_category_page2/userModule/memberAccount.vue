@@ -61,7 +61,7 @@
 				})
 			},
 			memberAccountWithdraw(){
-				if(this.accountInfo.price < 1){
+				if(this.accountInfo.price <= 0 ){
 					uni.showToast({
 						title: "您暂时没有余额，不能提现",
 						duration: 2000,

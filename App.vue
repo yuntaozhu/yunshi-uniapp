@@ -2,6 +2,9 @@
 // // #ifdef MP-WEIXIN
 // const miniShopPlugin = requirePlugin('mini-shop-plugin');
 // // #endif
+import NET from "@/utils/request";
+import API from "@/config/api";
+
 export default {
   onLaunch: function (options) {
     if (options && options.path === 'pages_category_page1/goodsModule/goodsDetails' && options.query) {
@@ -39,18 +42,31 @@ export default {
       }
     })
     // 购物车右上角数量
-    let allCartNum = (uni.getStorageSync('allCartNum')).toString()
-    if (allCartNum > 0) {
-      uni.setTabBarBadge({
-        index: 2,
-        text: allCartNum
-      })
-    }
-  },
+		if(uni.getStorageSync('storage_key')){
+			NET.request(API.ShoppingCart, {}, 'GET').then(resCart => {
+			  let cartNum = 0
+			  resCart.data.forEach(shopItem=>{
+			    shopItem.skus.forEach(goodsItem=>{
+			      cartNum += goodsItem.number
+			    })
+			  })
+			  uni.setStorageSync('allCartNum', cartNum)
+			  if (cartNum > 0) {
+			    uni.setTabBarBadge({
+			      index: 2,
+			      text: cartNum.toString()
+			    })
+			  }
+			})
+		}
+  }
+  ,
   globalData: {
     isIphone: false,
-  },
-};
+  }
+  ,
+}
+;
 </script>
 
 <style lang="scss">

@@ -41,11 +41,13 @@
 				</view>
 			</view>
 		</view>
+<!--    {{commentVOList}}-->
 		<view class="linkBox">
 			<view class="butBox flex-row-plus" v-if="commentVOList.addComment != ''">
 				<view class="addPraise-box1 flex-items-plus" @click="zanTap">
-					<image class="addPraise-icon" src="https://ceres.zkthink.com/static/images/addPraiseIcon.png"></image>
-					<label class="mar-left-10 font-color-FFEBC4">点赞</label>
+          <image class="addPraise-icon" src="https://ceres.zkthink.com/static/images/addPraiseIcon.png" v-if="!commentVOList.ifLike"/>
+          <image class="addPraise-icon" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-03-10/415f93719fa64af58b8d7cafb734ec4a_22.png" v-else/>
+          <label :class="['mar-left-10',commentVOList.ifLike?'font-color-FFEBC4':'font-color-DDD']">点赞</label>
 				</view>
 			</view>
 			<view class="butBox flex-row-plus" v-else>
@@ -54,8 +56,9 @@
 					<label class="mar-left-10 font-color-333">追加评价</label>
 				</view>
 				<view class="addPraise-box flex-items-plus" @click="zanTap">
-					<image class="addPraise-icon" src="https://ceres.zkthink.com/static/images/addPraiseIcon.png"></image>
-					<label class="mar-left-10 font-color-FFEBC4">点赞</label>
+					<image class="addPraise-icon" src="https://ceres.zkthink.com/static/images/addPraiseIcon.png" v-if="!commentVOList.ifLike"/>
+          <image class="addPraise-icon" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-03-10/415f93719fa64af58b8d7cafb734ec4a_22.png" v-else/>
+					<label :class="['mar-left-10',commentVOList.ifLike?'font-color-FFEBC4':'font-color-DDD']">点赞</label>
 				</view>
 			</view>
 		</view>
@@ -111,6 +114,9 @@
       },
 			//点赞
 			zanTap(){
+        uni.showLoading({
+          title:''
+        })
 				this.actionType = this.commentVOList.ifLike == 1 ?0:1
 				NET.request(API.LikeOrUnLikeComment,{
 				  commentId: this.commentVOList.commentId,
@@ -130,13 +136,13 @@
 					}
 				}).catch(res => {
 				  uni.hideLoading()
-				})
+				}).finally(()=>{uni.hideLoading()})
 			},
 			//追加评论
 			addCommentsClick(){
 				uni.setStorageSync('addCommentVOList', this.commentVOList);
 				uni.navigateTo({
-					url:'addEvaluate'
+					url:'addEvaluate?type=2'
 				})
 			},
       // 查看图片

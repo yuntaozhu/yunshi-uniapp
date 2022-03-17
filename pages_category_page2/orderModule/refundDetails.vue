@@ -59,7 +59,7 @@
 <!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
 				</view>
 				<!--  平台介入拒绝-->
-				<view class="status-title-box" v-if="status == 6">
+				<view class="status-title-box" v-if="status == 9 && isPlaformState === 1">
 					<view class="l">
 						<text class="status">审核失败</text>
 					</view>
@@ -113,9 +113,9 @@
 				</view>
 			</view>
 			<!-- 平台介入关闭 -->
-			<view class="order-details-info-box mt20" v-if="status == 6">
+			<view class="order-details-info-box mt20" v-if="status == 9 && isPlaformState === 1">
 				<view class="address-box return-explain-box">
-					<view>平台介入申请失败，退款已关闭</view>
+					<view>平台介入申请失败</view>
 				</view>
 			</view>
 			<!-- 退款关闭 -->

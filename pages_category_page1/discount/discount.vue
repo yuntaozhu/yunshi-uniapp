@@ -6,7 +6,9 @@
 <!--      </view>-->
     </view>
 	  <view class="countdown" v-if="shopShowType == false">
-      距活动结束剩余<view class="endDate"><span>{{hou}}</span><i>:</i><span>{{min}}</span><i>:</i><span>{{sec}}</span></view>
+			<label v-if="discountDataList.state">距活动结束剩余</label>
+			<label v-else>即将开始</label>
+			<view class="endDate"><span>{{hou}}</span><i>:</i><span>{{min}}</span><i>:</i><span>{{sec}}</span></view>
 	  </view>
 <!--	  <view class="filterBox" v-else>-->
 <!--		<view class="item" :class="selectIndex == 0 ? 'selected' : ''" @click="synthesize"><span>综合</span></view>-->
@@ -57,12 +59,18 @@
                 <label class="fs36">{{item.price}}</label>
               </view>
             </view>
-            <view class="snapUpBtn" @click="gogoodsDetails(item.shopId,item.productId,item.skuId)">
+            <view v-if="discountDataList.state" class="snapUpBtn" @click="gogoodsDetails(item.shopId,item.productId,item.skuId)">
               <view class="btnText">去抢购</view>
               <view style="width: 82%;margin: 0 auto">
                 <progress activeColor="#FFFFFF" :percent="getPercent(20, 100)" active stroke-width="5" />
               </view>
             </view>
+						<view v-else class="snapUpBtn btnStyle1">
+						  <view class="btnText">即将开始</view>
+						  <view style="width: 82%;margin: 0 auto">
+						    <progress activeColor="#FFFFFF" :percent="getPercent(20, 100)" active stroke-width="5" />
+						  </view>
+						</view>
           </view>
         </view>
       </view>
@@ -88,11 +96,12 @@ export default {
 			sec: "00",
 			shopId:0,
 			shopSeckillId:0,
-			type:1,//价格
-			volume:1,//销量
+			type:0,//价格
+			volume:0,//销量
 			shopShowType:false,
 			selectIndex:0,
-      sortIndex: 0
+      sortIndex: 1,
+			discountDataList:{},
 		}
 	},
 	onLoad(options) {
@@ -127,16 +136,24 @@ export default {
     sortTap(index){
       this.page = 1
       this.getDiscount = []
+			this.sortIndex = index
       if(index == 1){
-        this.type = 1
-        this.volume = 1
-        this.sortIndex = index
+        this.type = 0
+        this.volume = 0
       }else if(index == 2){
-        this.type = this.type != 1 ? 1:2
-        this.sortIndex = index
+				this.volume = 0
+				if(this.type===0){
+					this.type = 1
+				}else{
+					this.type = this.type != 1 ? 1:2
+				}
       }else if(index == 3){
-        this.volume = this.volume != 1 ? 1:2
-        this.sortIndex = index
+				this.type = 0
+				if(this.volume === 0){
+					this.volume = 1
+				}else{
+					this.volume = this.volume != 1 ? 1:2
+				}		
       }
       this.getDiscountList()
     },
@@ -188,9 +205,17 @@ export default {
         type:this.type,
         volume:this.volume
       }
+			uni.showLoading({
+				title:'数据加载中...'
+			})
 			NET.request(API.getDiscountList,param,'GET').then(res => {
+				this.discountDataList = res.data
 				if(this.shopShowType == false){
-					this.dateformat(res.data.time)
+					if(this.discountDataList.state){
+						this.dateformat(res.data.time)
+					}else{
+						this.dateformat(res.data.enableTime)
+					}
 					this.countDown()
 				}
 				if(res.data.page.list.length == 0){
@@ -199,7 +224,9 @@ export default {
 				}else{
 					this.getDiscount = this.getDiscount.concat(res.data.page.list)
 				}
+				uni.hideLoading()
 			}).catch(res => {
+				uni.hideLoading()
 				uni.showToast({
 					title:'失败',
 					icon:"none"
@@ -233,15 +260,15 @@ export default {
 		      let netxHou = hou;
 
 		      if (netxHou == 0 && netxMin == 0 && netxSec == -1) {
-		        clearTimeout(timeOut)
-				uni.switchTab({
-					url:'../../pages/tabbar/index/index'
-				})
-				uni.showToast({
-					title:"活动结束",
-					duration:2000,
-					icon:'none'
-				})
+								clearTimeout(timeOut)
+						uni.switchTab({
+							url:'../../pages/tabbar/index/index'
+						})
+						uni.showToast({
+							title:"活动结束",
+							duration:2000,
+							icon:'none'
+						})
 		      } else {
 		        if (netxSec == -1) {
 		          netxSec = 59
@@ -422,6 +449,10 @@ page {
                 border-radius: 10rpx;
               }
             }
+						.btnStyle1{
+							background: linear-gradient(90deg, #29C790 0%, #75D98C 100%);
+							box-shadow: 0 6rpx 12rpx rgba(52, 203, 144, 0.3);
+						}
           }
         }
       }

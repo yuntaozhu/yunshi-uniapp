@@ -84,16 +84,22 @@ name: "categoryShow",
         mask: true,
         title:'加载中...'
       })
+      if (this.total!=0&&this.productList.length>=this.total){
+        console.log("加载完了")
+        return
+      }
       NET.request(API.getProducts, {
         classifyId: this.categoryid,
         page:this.page,
         pageSize:this.pageSize
       }, 'GET').then(res => {
-        this.productList = res.data.list
+        this.productList = [...this.productList,...res.data.list]
+        this.total = res.data.total
         uni.hideLoading()
-        if (this.productList.length === 0) {
+        if (this.productList.length ===0) {
           this.ifShow = true
         }
+
       }).catch(res => {
         uni.hideLoading()
       })

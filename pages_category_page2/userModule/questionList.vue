@@ -6,7 +6,7 @@
 			</u-tabs>
 		</view>
 		<view v-if="questionTypeFlag == 0">
-			<view>
+			<view v-if="problemList.length>0">
 				<view class="wid function-box">
 					<view class="finishbox" @click="finishClick" v-if="allCheckShow">完成</view>
 					<view v-else class="flex-row-plus editicon-box flex-items fs28" @click="editClick">
@@ -17,7 +17,8 @@
 				</view>
 				<view class="swipe-box">
 					<u-swipe-action :show="item.show" :index="index" v-for="(item, index) in problemList"
-						:key="item.problemId" @click="problemClick" @open="problemOpen" :options="options">
+						:key="item.problemId" :disabled="allCheckShow" ref="problemActionSwipe" @click="problemClick" :autoClose="false" 
+						@open="problemOpen" :options="options">
 						<view class="flex-item itemBox" @click="goQuestionDetails(item.productId,item.problemId)">
 							<view class="item u-border-bottom wid flex-row-plus flex-items">
 								<view v-show="allCheckShow">
@@ -62,13 +63,13 @@
 				</view>
 				<view v-if="allCheckShow" class="pad-bot-140"></view>
 			</view>
-			<view v-if="ifEmpty" class="mar-top-60 empty-box">
+			<view v-if="ifEmpty" class="empty-box">
 				<image class="question-empty" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
 				<view class="tohome-box flex-items-plus">暂无提问内容</view>
 			</view>
 		</view>
 		<view v-if="questionTypeFlag == 1">
-			<view>
+			<view v-if="answerList.length > 0">
 				<view class="finishbox" @click="finishClick" v-if="allCheckShow">完成</view>
 				<view v-else class="flex-row-plus editicon-box flex-items fs28" @click="editClick">
 					<image class="editicon" src="https://ceres.zkthink.com/static/images/collectionEditicon.png">
@@ -77,7 +78,7 @@
 				</view>
 				<view class="swipe-box">
 					<u-swipe-action :show="item.show" :index="index" v-for="(item, index) in answerList"
-						:key="item.answerId" @click="answerClick" @open="answerOpen" :options="options">
+						:key="item.answerId" :disabled="allCheckShow" ref="answerActionSwipe" :autoClose="false"  @click="answerClick" @open="answerOpen" :options="options">
 						<view class="item itemBox u-border-bottom flex-item"
 							@click="goQuestionDetails(item.productId,item.problemId)">
 							<view class="wid" style="border-radius: 50%;">
@@ -136,7 +137,7 @@
 				</view>
 				<view v-if="allCheckShow" class="pad-bot-140"></view>
 			</view>
-			<view v-if="ifEmpty" class="mar-top-60 empty-box">
+			<view v-if="ifEmpty" class="empty-box">
 				<image class="question-empty" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
 				<view class="tohome-box flex-items-plus">暂无问答内容</view>
 			</view>
@@ -336,20 +337,44 @@
 					this.isAllAnswerCheck = true
 				}
 			},
+			//删除提问
 			problemClick(index, index1) {
 				if (index1 == 0) {
 					let ids = this.problemList[index].problemId
-					this.cancelProblem(ids)
-					this.problemList.splice(index, 1);
-					this.$u.toast(`删除成功`);
+					NET.request(API.deleteProblem, {
+						ids: [ids]
+					}, 'POST').then(res => {
+						this.problemPage = 1
+						this.problemList = []
+						this.proloadingType = 0
+						this.getProblemList()
+						this.$u.toast(`删除成功`);
+					}).catch(err => {
+						uni.showToast({
+							title: '删除失败',
+							icon: "none"
+						})
+					})
 				}
 			},
+			//删除回答
 			answerClick(index, index1) {
 				if (index1 == 0) {
 					let ids = this.answerList[index].answerId
-					this.cancelAnswer(ids)
-					this.answerList.splice(index, 1);
-					this.$u.toast(`删除成功`);
+					NET.request(API.deleteAnswer, {
+						ids: [ids]
+					}, 'POST').then(res => {
+						this.answerPage = 1
+						this.answerList = []
+						this.answerloadingType = 0
+						this.getAnswerList()
+						this.$u.toast(`删除成功`);
+					}).catch(res => {
+						uni.showToast({
+							title: '删除失败',
+							icon: "none"
+						})
+					})
 				}
 			},
 			problemOpen(index) {
@@ -362,28 +387,6 @@
 				this.answerList[index].show = true;
 				this.answerList.map((val, idx) => {
 					if (index != idx) this.answerList[idx].show = false;
-				})
-			},
-			//删除提问
-			cancelProblem(ids) {
-				NET.request(API.deleteProblem, {
-					ids: [ids]
-				}, 'POST').then(res => {}).catch(res => {
-					uni.showToast({
-						title: '失败',
-						icon: "none"
-					})
-				})
-			},
-			//删除回答
-			cancelAnswer(ids) {
-				NET.request(API.deleteAnswer, {
-					ids: [ids]
-				}, 'POST').then(res => {}).catch(res => {
-					uni.showToast({
-						title: '失败',
-						icon: "none"
-					})
 				})
 			},
 			//我的提问列表
@@ -408,6 +411,8 @@
 					}
 					if (this.problemList.length === 0) {
 						this.ifEmpty = true
+					}else{
+						this.ifEmpty = false
 					}
 				}).catch(res => {
 					uni.showToast({
@@ -438,6 +443,8 @@
 					}
 					if (this.answerList.length === 0) {
 						this.ifEmpty = true
+					}else{
+						this.ifEmpty = false
 					}
 				}).catch(res => {
 					uni.showToast({
@@ -463,6 +470,14 @@
 			},
 			editClick() {
 				this.allCheckShow = true
+				let problemActionSwipe = this.$refs.problemActionSwipe
+				let answerActionSwipe = this.$refs.answerActionSwipe
+				if(problemActionSwipe){
+					problemActionSwipe.forEach(item=>item.close())
+				}
+				if(answerActionSwipe){
+					answerActionSwipe.forEach(item=>item.close())
+				}
 			},
 			finishClick() {
 				this.allCheckShow = false
@@ -520,6 +535,7 @@
 			justify-content: center;
 			flex-direction: column;
 			align-items: center;
+			padding-top: 40%;
 
 			.tohome-box {
 				color: #999999;
@@ -527,8 +543,8 @@
 			}
 
 			.question-empty {
-				width: 113rpx;
-				height: 98rpx;
+				width: 198rpx;
+				height: 183rpx;
 			}
 		}
 
@@ -603,6 +619,7 @@
 				display: flex;
 				flex-direction: column;
 				justify-content: space-between;
+        padding: 10rpx 0;
 
 				.item-btn-right {
 					margin-left: 15rpx;

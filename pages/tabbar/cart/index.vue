@@ -218,7 +218,7 @@
 
       <!-- 热门推荐 -->
       <HotTemplate/>
-
+      <view style="width: 100%;height: 100rpx;background-color:#efefef;"></view>
       <!-- 删除确认弹窗 -->
       <tui-modal :show="cardModal"
                  :custom="true"
@@ -243,6 +243,7 @@
         </view>
       </tui-modal>
     </view>
+  </view>
 </template>
 
 <script>
@@ -566,6 +567,10 @@ export default {
         this.allNum = this.dataList.length
         if (this.dataList.length === 0) {
           this.isEmpty = true
+		  uni.setStorageSync('allCartNum', 0)
+		  uni.removeTabBarBadge({
+		    index: 2
+		  })
         }
         let recheck = false
         this.dataList.forEach((item, index) => {
@@ -648,18 +653,20 @@ export default {
     },
     // 数量加
     numAdd(index, cIndex) {
-      console.log('点击')
       this.dataList[index].priceNumber = 0
-      if (this.dataList[index].skus[cIndex].number <= 100) {
-        this.dataList[index].skus[cIndex].number = this.dataList[index].skus[cIndex].number + 1
-        this.dataList[index].priceNumber = 0
-        this.priceFn(index)
-        this.updateCart(this.dataList[index].skus[cIndex].skuId, this.dataList[index].skus[cIndex].number)
-      } else {
+      if (this.dataList[index].skus[cIndex].number >= this.dataList[index].skus[cIndex].stockNumber) {
+        this.dataList[index].skus[cIndex].number = this.dataList[index].skus[cIndex].stockNumber
         wx.showToast({
           title: '库存不足！',
           icon: 'none'
         })
+        return;
+      }
+      if (this.dataList[index].skus[cIndex].number <= this.dataList[index].skus[cIndex].stockNumber) {
+        this.dataList[index].skus[cIndex].number = this.dataList[index].skus[cIndex].number + 1
+        this.dataList[index].priceNumber = 0
+        this.priceFn(index)
+        this.updateCart(this.dataList[index].skus[cIndex].skuId, this.dataList[index].skus[cIndex].number)
       }
     },
     updateMoneyAndNum() {
@@ -976,7 +983,6 @@ page {
 }
 
 .content {
-  padding: 0 0 110rpx;
   overflow: hidden;
 
   .goosDetailshow-box {
@@ -1022,7 +1028,7 @@ page {
           box-shadow: 0 0 20rpx rgba(0, 0, 0, 0.1);
           color: #C5AA7B;
           margin-left: 30upx;
-          padding: 10upx 32 upx;
+          padding: 10upx 32upx;
           font-size: 26upx;
           text-align: center;
           z-index: 1;
@@ -1050,7 +1056,7 @@ page {
           background-color: #FFE4D0;
           color: #FF7800;
           margin-left: 30upx;
-          padding: 10upx 32 upx;
+          padding: 10upx 32upx;
           border-radius: 28upx;
           border: 1upx solid #FF7800;
           font-size: 26upx;

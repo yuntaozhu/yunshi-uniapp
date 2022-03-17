@@ -9,7 +9,7 @@
         </view>
       </view>
       <view v-if="currentDay == lastDay" class="signState flex-center mar-top-30">
-        <view class="signStateBg flex-items flex-center noSign" @click="test">
+        <view class="signStateBg flex-items flex-center noSign">
           <text class="fs48">已签到</text>
         </view>
       </view>
@@ -181,9 +181,6 @@ export default {
         this.getSignData()
         this.signTips = true
       }).catch(res => {})
-    },
-    test() {
-      this.signTips = true
     },
     // 格式化日期位数
     formatNum(num) {

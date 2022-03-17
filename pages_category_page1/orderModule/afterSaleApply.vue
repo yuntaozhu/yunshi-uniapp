@@ -17,13 +17,17 @@
                     :name='item.skuId'
                     @change="checkboxChange(item)">
                   <view class="order-info-item">
-                    <image :src="item.image" class="product-img"></image>
+                    <image :src="item.image"
+                           class="product-img"></image>
                     <view class="info-box">
-                      <text class="product-name">{{item.productName}}</text>
-                      <view class="product-sku">{{item.value}}</view>
+                      <text class="product-name">{{ item.productName }}</text>
+                      <view class="product-sku">{{ item.value }}</view>
                       <view class="price-sku-box">
-                        <text class="product-price"><text class="fuhao">￥</text>{{item.price}}</text>
-                        <text class="product-num">x {{item.number}}</text>
+                        <text class="product-price">
+                          <text class="fuhao">￥</text>
+                          {{ item.price }}
+                        </text>
+                        <text class="product-num">x {{ item.number }}</text>
                       </view>
                     </view>
                   </view>
@@ -36,20 +40,31 @@
       <view class="afterSale-select-box">
         <view class="selectBtn flex-items flex-sp-between">
           <view class="selectBox">
-            <checkbox-group name="allCheck" @change="changeAll">
+            <checkbox-group name="allCheck"
+                            @change="changeAll">
               <label>
-                <checkbox color="#C5AA7B" :value="allCheck.value" :checked="allCheck.checked"/><text>{{allCheck.name}}</text>
+                <checkbox color="#C5AA7B"
+                          :value="allCheck.value"
+                          :checked="allCheck.checked"/>
+                <text>{{ allCheck.name }}</text>
               </label>
             </checkbox-group>
           </view>
           <view class="selectRight flex-items">
-            <view class="selectNum">{{number || 0}}件商品</view>
-            <view class="totalPrice">合计：<text>￥{{total.toFixed(2)}}</text></view>
+            <view class="selectNum">{{ number || 0 }}件商品</view>
+            <view class="totalPrice">合计：
+              <text>￥{{ total.toFixed(2) }}</text>
+            </view>
           </view>
         </view>
         <view class="afterBtnBox flex-items flex-sp-between">
-          <view class="afterBtn1" @click="ReturnMoney(item)">仅退款</view>
-          <view v-if="distribution !== 1" class="afterBtn2" @click="ReturnGoods(item)">退款退货</view>
+          <view class="afterBtn1"
+                @click="ReturnMoney(item)">仅退款
+          </view>
+          <view v-if="distribution !== 1"
+                class="afterBtn2"
+                @click="ReturnGoods(item)">退款退货
+          </view>
         </view>
       </view>
     </view>
@@ -64,122 +79,162 @@ export default {
     return {
       item: {},
       checkboxChangelist: [],
-      xuanzlist:[],
-      allCheck : {
-        name : '全选',
-        value : 'all',
-        checked : false
+      xuanzlist: [],
+      allCheck: {
+        name: '全选',
+        value: 'all',
+        checked: false
       },
       number: null,
       total: 0,
       distribution: null,
-	  isAllSelect:null,
+      isAllSelect: 0,
+      evaluated: 0,//待评价订单申请
     }
   },
-  onLoad(item) {
-    this.item = JSON.parse(item.item)
+  onLoad(options) {
+    this.item = JSON.parse(options.item)
     this.distribution = this.item.skus[0].distribution
+    this.evaluated = options.isAllSelect
     // this.item.skus.forEach((item) => {
     //   this.number = this.number + item.number
     //   this.total = this.total + item.total
     // })
   },
   methods: {
+    // 算钱
+    HandleGetRefundMoney() {
+      return new Promise((resolve, reject) => {
+        if (this.xuanzlist.length <= 0) {
+          resolve(0)
+          return
+        }
+        uni.showLoading({
+          title: "计算中..."
+        })
+        let postData = {
+          orderId: this.item.orderId,
+          isAllSelect: this.evaluated == 1 ? this.xuanzlist.length === this.item.skus.length ? 1 : 0 : 0,
+          skus: this.xuanzlist
+        }
+        NET.request(API.GetRefundMoney, postData, "POST").then(res => {
+          uni.hideLoading()
+          resolve(parseFloat(res.json))
+        })
+      })
+    },
     // 申请退款
     ReturnMoney(item) {
-      console.log(99999)
-      if(this.xuanzlist.length<=0){
+      if (this.xuanzlist.length <= 0) {
         uni.showToast({
-          title:'请选择退款的商品',
-          duration:2000,
-          icon:'none'
+          title: '请选择退款的商品',
+          duration: 2000,
+          icon: 'none'
         })
-      }else{
-        uni.setStorageSync('afterSaleApplyRefund',this.xuanzlist)
+      } else {
+        uni.setStorageSync('afterSaleApplyRefund', this.xuanzlist)
         uni.navigateTo({
-          url: 'afterSaleApplyRefund?orderId='+this.item.orderId+'&isAllSelect='+this.isAllSelect
+          url: 'afterSaleApplyRefund?orderId=' + this.item.orderId + '&isAllSelect=' + (this.evaluated==1?this.isAllSelect:0)
         })
       }
     },
     // 全选
-    changeAll (e) {
-		console.log(e,'dhjishjkfdjhdfsjhkds')
-      if(e.detail.value.length == 0) {
+    async changeAll(e) {
+      if (e.detail.value.length == 0) {
         this.item.skus.map(item => this.$set(item, 'checked', false));
         this.$set(this.allCheck, 'checked', false);
         this.xuanzlist = []
-		this.isAllSelect = 0
-      }else{
+        if (this.item.state === 4 && this.evaluated != undefined) {
+          this.isAllSelect = this.evaluated
+        } else {
+          this.isAllSelect = 0
+        }
+      } else {
         this.item.skus.map(item => this.$set(item, 'checked', true));
         this.$set(this.allCheck, 'checked', true);
-		this.isAllSelect = 1
+        if (this.item.state === 4 && this.evaluated != undefined) {
+          this.isAllSelect = this.evaluated
+        } else {
+          this.isAllSelect = 1
+        }
         this.xuanzlist = this.item.skus.filter(item => item.checked == true)
-		this.number = 0
-		this.total = 0
-		this.item.skus.forEach((item) => {
-		  this.number = this.number + item.number
-		  this.total = this.total + item.total
-		})
+        this.number = 0
+        // this.total = 0
+        this.item.skus.forEach((item) => {
+          this.number = this.number + item.number
+          // this.total = this.total + item.total
+        })
       }
+      this.total = await this.HandleGetRefundMoney()
     },
     // 申请退货
     ReturnGoods(item) {
-      if(this.xuanzlist.length<=0){
+      if (this.xuanzlist.length <= 0) {
         uni.showToast({
-          title:'请选择退货的商品',
-          duration:2000,
-          icon:'none'
+          title: '请选择退货的商品',
+          duration: 2000,
+          icon: 'none'
         })
-      }else{
+      } else {
         uni.navigateTo({
-          url: 'afterSaleApplyRetund?list=' + encodeURIComponent(JSON.stringify(this.xuanzlist))+'&orderId='+this.item.orderId+'&isAllSelect='+this.isAllSelect
+          url: 'afterSaleApplyRetund?list=' + encodeURIComponent(JSON.stringify(this.xuanzlist)) + '&orderId=' + this.item.orderId + '&isAllSelect='+ (this.evaluated==1?this.isAllSelect:0)
         })
       }
     },
-    checkboxGroupChange(e){
+    checkboxGroupChange(e) {
       // console.log(e, 'fdsfdsfsdf')
     },
-	
-    checkboxChange(e) {
-	  // 动态设置商品件数和总计
-	  if(e.checked){
-		  this.number = this.number + e.number
-		  this.total = this.total + e.total
-	  }else{
-		  this.number = this.number - e.number
-		  this.total = this.total - e.total
-	  }
-	  // 筛选勾选的
+
+    async checkboxChange(e) {
+      // 动态设置商品件数和总计
+      if (e.checked) {
+        this.number = this.number + e.number
+        // this.total = this.total + e.total
+      } else {
+        this.number = this.number - e.number
+        // this.total = this.total - e.total
+      }
+      // 筛选勾选的
       this.xuanzlist = this.item.skus.filter(item => item.checked == true)
-	  
-	  // 是否为全选
-	  if(this.item.skus.length == this.xuanzlist.length){
-		  this.isAllSelect = 1
-		  this.$set(this.allCheck, 'checked', true);
-	  }else{
-		  this.isAllSelect =  0
-		  this.$set(this.allCheck, 'checked', false);
-	  }
-	  console.log(this.isAllSelect,'this.isAllSelect')
-	  
-  //     if(this.xuanzlist.findIndex(item=>item.checked===true)==-1){
-		//   console.log(this.allCheck,'this.allCheck')
-		//   console.log(this.xuanzlist,'this.xuanzlist')
-  //       this.$set(this.allCheck, 'checked', false);
-  //     } else {
-		//   console.log(this.allCheck,'this.allCheck')
-  //       this.$set(this.allCheck, 'checked', true);
-		// console.log(this.xuanzlist,'this.xuanzlist')
-  //     }
+
+      // 是否为全选
+      if (this.item.skus.length == this.xuanzlist.length) {
+        if (this.item.state === 4 && this.evaluated != undefined) {
+          this.isAllSelect = this.evaluated
+        } else {
+          this.isAllSelect = 1
+        }
+        this.$set(this.allCheck, 'checked', true);
+      } else {
+        if (this.item.state === 4 && this.evaluated != undefined) {
+          this.isAllSelect = this.evaluated
+        } else {
+          this.isAllSelect = 0
+        }
+        this.$set(this.allCheck, 'checked', false);
+      }
+      this.total = await this.HandleGetRefundMoney()
+
+      //     if(this.xuanzlist.findIndex(item=>item.checked===true)==-1){
+      //   console.log(this.allCheck,'this.allCheck')
+      //   console.log(this.xuanzlist,'this.xuanzlist')
+      //       this.$set(this.allCheck, 'checked', false);
+      //     } else {
+      //   console.log(this.allCheck,'this.allCheck')
+      //       this.$set(this.allCheck, 'checked', true);
+      // console.log(this.xuanzlist,'this.xuanzlist')
+      //     }
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss"
+       scoped>
 page {
   background: #F8F8F8;
 }
+
 .order-list-box {
   padding: 20upx 30upx;
   box-sizing: border-box;
@@ -315,8 +370,10 @@ page {
   box-sizing: border-box;
   height: 240rpx;
 }
+
 .afterBtnBox {
   margin-top: 30rpx;
+
   .afterBtn1 {
     width: 342rpx;
     line-height: 100rpx;
@@ -325,6 +382,7 @@ page {
     color: #333333;
     margin-right: 30rpx;
   }
+
   .afterBtn2 {
     width: 342rpx;
     height: 100rpx;
@@ -335,6 +393,7 @@ page {
     color: #FFEBC4;
   }
 }
+
 .selectBox /deep/ .uni-checkbox:not([disabled]) .uni-checkbox-input:hover {
   border-color: #C5AA7B;
 }

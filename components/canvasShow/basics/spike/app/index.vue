@@ -34,9 +34,9 @@
               <div class="price">
                 ¥ {{item.price}}
               </div>
-              <div class="original-price">
+              <!-- <div class="original-price">
                 ¥ {{item.originalPrice}}
-              </div>
+              </div> -->
             </div>
           </div>
         </div>

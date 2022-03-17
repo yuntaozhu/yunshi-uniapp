@@ -1,7 +1,7 @@
 <template>
 	<view class="messageCenter">
 		<view>
-			<view class="flex-items flex-sp-between fs26 topTitBox">
+			<view v-if="messageList.length" class="flex-items flex-sp-between fs26 topTitBox">
 				<view>
 					未读消息{{num}}条
 				</view>
@@ -40,7 +40,7 @@
 				</view>
 			</u-swipe-action>
 		</view>
-		<view v-if="ifEmpty" class="mar-top-60 empty-box">
+		<view v-if="ifEmpty" class="empty-box">
 			<image class="question-empty" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
 			<view class="tohome-box flex-items-plus">暂无消息</view>
 		</view>
@@ -89,6 +89,8 @@
 			GetUser() {
 				NET.request(API.GetUser, {}, 'GET').then(res => {
 					this.num = res.data.notRead
+					console.log(this.num,'this.num')
+					console.log(res.data,'res.data')
 				}).catch(res => {
 
 				})
@@ -273,6 +275,7 @@
 			justify-content: center;
 			flex-direction: column;
 			align-items: center;
+			padding-top: 50% ;
 			.tohome-box {
 				color: #999999;
 				margin-top: 50rpx;

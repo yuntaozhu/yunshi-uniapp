@@ -18,7 +18,7 @@
 				<view class="swipe-box">
 					<view class="actionBox" v-for="(item, index) in productCollect" :key="item.collectId"
 						:index="index">
-						<u-swipe-action ref="actionSwipe" :show="item.show" @open="productOpen(index)"
+						<u-swipe-action :disabled="allCheckShow" ref="actionSwipe" :show="item.show" :autoClose="false" @open="productOpen(index)"
 							@click="productActionClick" :options="options">
 							<!-- :disabled="allCheckShow" -->
 							<view class="flex-item" @click.stop="toGoodsDetails(item.productId,item.shopId,item.skuId)">
@@ -39,8 +39,15 @@
 											<text
 												class="title u-line-2 fs28 font-color-333">{{ item.productName }}</text>
 											<view class="flex-items">
-												<image v-if="item.activityType" class="iconImg mar-right-10"
-													:src="imgs[item.activityType]"></image>
+												<!-- <image v-if="item.activityType" class="iconImg mar-right-10"
+													:src="imgs[item.activityType]"></image> -->
+													<image v-if="item.activityType===1" class="iconImg" src="https://ceres.zkthink.com/static/images/groupBuyIcon.png" alt="拼团icon"></image>
+													<image v-if="item.activityType === 2" class="iconImg"  src="https://ceres.zkthink.com/static/images/spikeIcon.png" alt="秒杀活动"></image>
+													<image v-if="item.activityType === 3" class="iconImg discountIcon" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-03-14/38184785db4b4fbca767ada611097ae9_discount.png" alt="限时折扣活动"></image>
+													<image v-if="item.activityType === 4" class="iconImg" src="https://ceres.zkthink.com/static/images/spikeIcon.png" alt="平台秒杀"></image>
+													<image v-if="item.activityType===5" class="iconImg" src="https://ceres.zkthink.com/static/images/discountListIcon.png" alt="平台折扣"></image>
+													<image v-if="item.activityType===9" class="iconImg" src="https://ceres.zkthink.com/static/images/memberCenterIcon.png" alt="会员价"></image>			
+													<image v-if="item.activityType === 8" class="iconImg" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png" alt="场景营销"></image>
 												<text class="fs40 font-color-C83732">¥</text>
 												<text class="fs40 font-color-C83732 mar-right-20">{{item.price}}</text>
 												<text
@@ -84,7 +91,7 @@
 				</view>
 				<view class="swipe-box swipeBox">
 					<view class="shopBox" v-for="(item, index) in storeCollect" :key="item.collectId" :index="index">
-						<u-swipe-action :show="item.show" :options="options" @click="storeActionClick(index)"
+						<u-swipe-action ref="shopActionSwipe" :disabled="allCheckShow" :show="item.show" :options="options" @click="storeActionClick(index)"
 							@open="storeOpen(index)">
 							<view class="item wid flex-row-plus flex-display">
 								<view v-show="allCheckShow" class="selctBtn flex-items">
@@ -367,10 +374,12 @@
 				// 先将正在被操作的swipeAction标记为打开状态，否则由于props的特性限制，
 				// 原本为'false'，再次设置为'false'会无效
 				this.productCollect[index].show = true;
-				this.productCollect.map((val, idx) => {
-					if (index != idx) this.productCollect[idx].show = false;
+        // console.log(this.productCollect,index)
+
+        this.productCollect.map((val, idx) => {
+            if (index != idx) this.productCollect[idx].show = false;
 				})
-				// 商品删除参数
+        // 商品删除参数
 				this.ids = this.productCollect[index].collectId
 				this.currentIndex = index
 				this.currentType = 1
@@ -446,6 +455,15 @@
 			},
 			editClick() {
 				this.allCheckShow = true
+        let actionSwipe = this.$refs.actionSwipe;
+        let shopActionSwipe = this.$refs.shopActionSwipe;
+        if(actionSwipe){
+          actionSwipe.forEach(item=>item.close())
+        }
+        if(shopActionSwipe){
+          shopActionSwipe.forEach(item=>item.close())
+        }
+        console.log(shopActionSwipe)
 			},
 			finishClick() {
 				this.allCheckShow = false
@@ -467,9 +485,10 @@
 						this.proloadingType = 1
 						this.productPage = this.productPage
 					} else {
-						console.log(this.productCollect, 222)
 						this.productCollect = this.productCollect.concat(res.data.list)
-						this.productCollect.forEach((value, index) => {
+            console.log(this.productCollect, 222)
+
+            this.productCollect.forEach((value, index) => {
 							value['show'] = false
 							value['selected'] = 0
 						})
@@ -483,6 +502,7 @@
 			},
 			//收藏店铺查询
 			getStoreCollect() {
+        console.log(111)
 				uni.showLoading({
 					mask: true,
 					title: '加载中...'
@@ -499,6 +519,7 @@
 						this.storePage = this.storePage
 					}
 					this.storeCollect = this.storeCollect.concat(res.data.list)
+
 					this.storeCollect.forEach((value, index) => {
 						value['show'] = false
 						value['selected'] = 0
@@ -763,6 +784,9 @@
 			width: 58rpx;
 			height: 36rpx;
 			margin-right: 10rpx;
+		}
+		.discountIcon{
+			width: 100rpx;
 		}
 	}
 </style>

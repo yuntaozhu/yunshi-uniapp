@@ -116,6 +116,13 @@
 										<view class="product-name">{{cItem.productName}}</view>
 										<view class="product-num font-color-C5AA7B mar-top-10">{{cItem.users}}人付款</view>
 										<view class="product-price-box">
+											<image v-if="cItem.activityType===1" class="iconImg" src="https://ceres.zkthink.com/static/images/groupBuyIcon.png" alt="拼团icon"></image>
+											<image v-if="cItem.activityType === 2" class="iconImg"  src="https://ceres.zkthink.com/static/images/spikeIcon.png" alt="秒杀活动"></image>
+											<image v-if="cItem.activityType === 3" class="iconImg discountIcon" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-03-14/38184785db4b4fbca767ada611097ae9_discount.png" alt="限时折扣活动"></image>
+											<image v-if="cItem.activityType === 4" class="iconImg" src="https://ceres.zkthink.com/static/images/spikeIcon.png" alt="平台秒杀"></image>
+											<image v-if="cItem.activityType===5" class="iconImg" src="https://ceres.zkthink.com/static/images/discountListIcon.png" alt="平台折扣"></image>
+											<image v-if="cItem.activityType===9" class="iconImg" src="https://ceres.zkthink.com/static/images/memberCenterIcon.png" alt="会员价"></image>			
+											<image v-if="cItem.activityType === 8" class="iconImg" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png" alt="场景营销"></image>
 											<text class="price-box fs40 font-color-C83732 mar-right-20">￥{{cItem.price}}</text>
 											<text class="price-through">￥{{cItem.originalPrice}}</text>
 										</view>
@@ -264,7 +271,7 @@
 				}).catch(res => {})
 			},
 			goodsItemTap(productId, skuId) {
-				wx.navigateTo({
+				uni.navigateTo({
 					url: '../goodsModule/goodsDetails?shopId=' + this.id + '&productId=' + productId + '&skuId=' +
 						skuId
 				})
@@ -837,6 +844,15 @@ page {
 	flex-direction: row;
 	align-items: center;
 	margin-top: 30rpx;
+	
+	.iconImg {
+		width: 58rpx;
+		height: 36rpx;
+		margin-right: 10rpx;
+	}
+	.discountIcon{
+		width: 100rpx;
+	}
 }
 .product-price-box .price-through {
 	text-decoration: line-through;

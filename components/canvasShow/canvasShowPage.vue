@@ -45,6 +45,7 @@
                           :typeId="typeId"
                           :shopId="shopId"></com-image-text-nav>
       <com-product v-if="item.type==='productList'"
+                   ref="productPage"
                    :componentContent="item.componentContent"
                    :terminal="terminal"
                    :typeId="typeId"

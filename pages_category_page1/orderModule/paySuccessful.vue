@@ -71,7 +71,10 @@ export default {
     if (this.orderId) {
       this.getOrderPoliteFn()
     }
-    this.$refs.adWindow.getAd()
+    this.$nextTick(()=>{
+      this.$refs.adWindow.getAd()
+    })
+
   },
   methods: {
     goToOrder() {

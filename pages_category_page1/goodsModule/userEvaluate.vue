@@ -148,9 +148,13 @@
         evaluateEmpty: false
 			}
 		},
-		onLoad() {
+		onShow(){
+			this.commentVOList = []
 			this.getMyCommentList()
 		},
+		// onLoad() {
+		// 	this.getMyCommentList()
+		// },
 		onReachBottom(){
 			if(this.loadingType == 1){
 				uni.stopPullDownRefresh()
@@ -205,7 +209,7 @@
 					pageSize: this.pageSize,
 					state: this.state
 				}, 'GET').then(res => {
-          uni.hideLoading()
+                 uni.hideLoading()
 					if(res.data.page.list.length == 0){
 						this.loadingType = 1
 						this.page = this.page

@@ -289,6 +289,7 @@
 				setTimeout(function() {
 					uni.removeStorageSync('storage_key');
 					uni.removeStorageSync('distributorId');
+          uni.removeStorageSync("allCartNum")
 					uni.reLaunch({
 						url: 'login',
 						success() {

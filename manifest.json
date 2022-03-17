@@ -2,8 +2,8 @@
     "name" : "cereshop",
     "appid" : "__UNI__ECAA86F",
     "description" : "cereshop",
-    "versionName" : "1.6.0",
-    "versionCode" : 160,
+    "versionName" : "1.7.2",
+    "versionCode" : 172,
     "transformPx" : false,
     "app-plus" : {
         "kernel" : {
@@ -21,6 +21,9 @@
             "VideoPlayer" : {},
             "Payment" : {},
             "Share" : {}
+        },
+        "compatible" : {
+            "ignoreVersion" : true //true表示忽略版本检查提示框，HBuilderX1.9.0及以上版本支持  
         },
         /* 模块配置 */
         "distribute" : {
@@ -60,7 +63,7 @@
                     "weixin" : {
                         "__platform__" : [ "ios", "android" ],
                         "appid" : "wxec665c74647095aa",
-                        "UniversalLinks" : ""
+                        "UniversalLinks" : "https://ceres.zkthink.com/apple-app-site-association"
                     }
                 },
                 "maps" : {},
@@ -71,7 +74,7 @@
                 "share" : {
                     "weixin" : {
                         "appid" : "wxec665c74647095aa",
-                        "UniversalLinks" : ""
+                        "UniversalLinks" : "https://ceres.zkthink.com/apple-app-site-association"
                     }
                 },
                 "push" : {}

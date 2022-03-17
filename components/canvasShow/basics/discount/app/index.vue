@@ -1,5 +1,5 @@
 <template>
-  <div class="hom-pro-list">
+  <div class="hom-pro-list" v-if="productData.products.length">
     <div class="title">
       <!-- #ifdef MP-WEIXIN -->
       <img class="title-img" src="../../../static/images/discount/img-title.png" alt="限时折扣" mode="widthFix"/>

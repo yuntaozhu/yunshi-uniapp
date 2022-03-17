@@ -1,18 +1,25 @@
 <template>
   <view class="container">
-    <view class="content" style="padding-bottom:200upx;">
-      <view class="order-list-box" v-for="(item,index) in retundlist" :key="index">
+    <view class="content"
+          style="padding-bottom:200upx;">
+      <view class="order-list-box"
+            v-for="(item,index) in retundlist"
+            :key="index">
         <view class="item">
           <view class="order-info-box">
             <view class="order-info">
               <view class="order-info-item">
-                <image :src="item.image" class="product-img"></image>
+                <image :src="item.image"
+                       class="product-img"></image>
                 <view class="info-box">
-                  <text class="product-name">{{item.productName}}</text>
-                  <view class="product-sku">{{item.value}}</view>
+                  <text class="product-name">{{ item.productName }}</text>
+                  <view class="product-sku">{{ item.value }}</view>
                   <view class="price-sku-box">
-                    <text class="product-price"><text class="fuhao">￥</text>{{item.price}}</text>
-                    <text class="product-num">x {{item.number}}</text>
+                    <text class="product-price">
+                      <text class="fuhao">￥</text>
+                      {{ item.price }}
+                    </text>
+                    <text class="product-num">x {{ item.number }}</text>
                   </view>
                 </view>
               </view>
@@ -22,22 +29,31 @@
       </view>
 
       <view class="afterSale-select-box">
-        <view class="item" @click="openStatusSelect">
+        <view class="item"
+              @click="openStatusSelect">
           <view class="l">货物状态</view>
-          <view class="r-box" v-model="ReturnMoneyQuery.goodsState" v-if="ReturnMoneyQuery.goodsState == 0">
+          <view class="r-box"
+                v-model="ReturnMoneyQuery.goodsState"
+                v-if="ReturnMoneyQuery.goodsState == 0">
             <text>未收到货</text>
-            <image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="r"></image>
+            <image src="https://ceres.zkthink.com/static/images/arrowRight.png"
+                   class="r"></image>
           </view>
-          <view class="r-box" v-model="ReturnMoneyQuery.goodsState" v-if="ReturnMoneyQuery.goodsState == 1">
+          <view class="r-box"
+                v-model="ReturnMoneyQuery.goodsState"
+                v-if="ReturnMoneyQuery.goodsState == 1">
             <text>已收到货</text>
-            <image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="r"></image>
+            <image src="https://ceres.zkthink.com/static/images/arrowRight.png"
+                   class="r"></image>
           </view>
         </view>
-        <view class="item" @click="openReasonSelect">
+        <view class="item"
+              @click="openReasonSelect">
           <view class="l">退款原因</view>
           <view class="r-box">
-            <text v-model="ReturnMoneyQuery.returnReason">{{liyoutext}}</text>
-            <image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="r"></image>
+            <text v-model="ReturnMoneyQuery.returnReason">{{ liyoutext }}</text>
+            <image src="https://ceres.zkthink.com/static/images/arrowRight.png"
+                   class="r"></image>
           </view>
         </view>
       </view>
@@ -45,13 +61,16 @@
       <view class="afterSale-select-box mt20">
         <view class="item">
           <view class="l">退款金额：
-            <text class="order-status">¥ {{sellPriceitem.toFixed(2)}}</text>
+            <text class="order-status">¥ {{ sellPriceitem.toFixed(2) }}</text>
           </view>
         </view>
         <view class="item item-start">
           <view class="l">退款说明：</view>
           <view class="r-box r-box2">
-            <input v-model="ReturnMoneyQuery.returnDesc" type="text" placeholder="选填" class="r-box-input"></input>
+            <input v-model="ReturnMoneyQuery.returnDesc"
+                   type="text"
+                   placeholder="选填"
+                   class="r-box-input"></input>
           </view>
         </view>
       </view>
@@ -59,7 +78,12 @@
       <view class="afterSale-select-box mt20">
         <view class="upload-title">上传凭证</view>
         <view class="mar-left-10 mar-top-10">
-          <u-upload :limitType="['png', 'jpg', 'jpeg', 'webp', 'gif', 'image']" max-count="4" :action="action" ref="uUpload" :header="headerToken" :form-data="formData"></u-upload>
+          <u-upload :limitType="['png', 'jpg', 'jpeg', 'webp', 'gif', 'image']"
+                    max-count="4"
+                    :action="action"
+                    ref="uUpload"
+                    :header="headerToken"
+                    :form-data="formData"></u-upload>
         </view>
       </view>
 
@@ -74,45 +98,85 @@
       </view>
     </view>
 
-    <view class="order-confirm-box" style="padding-top:30upx;" :style="{'padding-bottom':(isIphone==true? 90:0)+'rpx'}">
-      <text class="btn" @click="confirmTap">提交</text>
+    <view class="order-confirm-box"
+          style="padding-top:30upx;"
+          :style="{'padding-bottom':(isIphone==true? 90:0)+'rpx'}">
+      <text class="btn"
+            @click="confirmTap">提交
+      </text>
     </view>
 
     <!-- 货物状态弹框 -->
-    <u-popup v-model="cargoStatusShowFalg" mode="center" border-radius="14" width="80%" closeable="true">
+    <u-popup v-model="cargoStatusShowFalg"
+             mode="center"
+             border-radius="14"
+             width="80%"
+             closeable="true">
       <view class="alert-box">
         <view class="afterSale-status-box">
           <view class="status-title">货物状态</view>
           <view class="item-box">
-            <view class="item" @click="ReturnMoneyQuery.goodsState = 0">
+            <view class="item"
+                  @click="ReturnMoneyQuery.goodsState = 0">
               <text class="status-select-title">未收到货</text>
-              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/selectActive.png" v-if="ReturnMoneyQuery.goodsState == 0" class="status-select-img"></image>
-              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/selectEmpty.png" v-else class="status-select-img"></image>
+              <image mode="aspectFill"
+                     src="https://ceres.zkthink.com/static/images/selectActive.png"
+                     v-if="ReturnMoneyQuery.goodsState == 0"
+                     class="status-select-img"></image>
+              <image mode="aspectFill"
+                     src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                     v-else
+                     class="status-select-img"></image>
             </view>
-            <view class="item" @click="ReturnMoneyQuery.goodsState = 1">
+            <view class="item"
+                  @click="ReturnMoneyQuery.goodsState = 1">
               <text class="status-select-title">已收到货</text>
-              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/selectActive.png" v-if="ReturnMoneyQuery.goodsState == 1" class="status-select-img"></image>
-              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/selectEmpty.png" v-else class="status-select-img"></image>
+              <image mode="aspectFill"
+                     src="https://ceres.zkthink.com/static/images/selectActive.png"
+                     v-if="ReturnMoneyQuery.goodsState == 1"
+                     class="status-select-img"></image>
+              <image mode="aspectFill"
+                     src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                     v-else
+                     class="status-select-img"></image>
             </view>
           </view>
-          <view class="status-btn" @click="closeStatusSelect">确定</view>
+          <view class="status-btn"
+                @click="closeStatusSelect">确定
+          </view>
         </view>
       </view>
     </u-popup>
     <!-- 退款原因弹框 -->
     <!-- 退款原因弹框 -->
-    <u-popup v-model="reasonShowFalg" mode="center" border-radius="14" width="80%" closeable="true">
+    <u-popup v-model="reasonShowFalg"
+             mode="center"
+             border-radius="14"
+             width="80%"
+             closeable="true">
       <view class="alert-box">
-        <view class="afterSale-status-box" scroll-y>
+        <view class="afterSale-status-box"
+              scroll-y>
           <view class="status-title">退款原因</view>
           <view class="item-box">
-            <view class="item" @click="returnReasonTap(item,index)" v-for="(item,index) in liyouData" :key="index">
-              <text class="status-select-title">{{item}}</text>
-              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/selectActive.png" v-if="ReturnMoneyQuery.returnReason == index" class="status-select-img"></image>
-              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/selectEmpty.png" v-else class="status-select-img"></image>
+            <view class="item"
+                  @click="returnReasonTap(item,index)"
+                  v-for="(item,index) in liyouData"
+                  :key="index">
+              <text class="status-select-title">{{ item }}</text>
+              <image mode="aspectFill"
+                     src="https://ceres.zkthink.com/static/images/selectActive.png"
+                     v-if="ReturnMoneyQuery.returnReason == index"
+                     class="status-select-img"></image>
+              <image mode="aspectFill"
+                     src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                     v-else
+                     class="status-select-img"></image>
             </view>
           </view>
-          <view class="status-btn" @click="closeReasonSelect">确定</view>
+          <view class="status-btn"
+                @click="closeReasonSelect">确定
+          </view>
         </view>
       </view>
     </u-popup>
@@ -140,54 +204,77 @@ export default {
         returnReason: 0,
         returnType: 0
       },
-      action:API.UploadUrl,
-      formData:{'folderId': -1},
-      headerToken:{Authorization:''},
-      fileList:[],
-      sellPriceitem: 0 ,//退款价格
+      action: API.UploadUrl,
+      formData: {'folderId': -1},
+      headerToken: {Authorization: ''},
+      fileList: [],
+      sellPriceitem: 0,//退款价格
       listitemid: '',	//选中商品的id
-      orderCode:'',	// 选中订单编码
+      orderCode: '',	// 选中订单编码
 
-      liyouData:[],
-      liyoutext:'',
-      liyouindex:'',
-      retundlist:[],
-      orderId:0,
+      liyouData: [],
+      liyoutext: '',
+      liyouindex: '',
+      retundlist: [],
+      orderId: 0,
       isIphone: false,
-	  isAllSelect: 0,
+      isAllSelect: 0,
     }
   },
   onReady() {
     this.isIphone = getApp().globalData.isIphone;
-    console.log(this.isIphone)
     this.fileList = this.$refs.uUpload.lists
   },
-  onLoad(option) {
-	  console.log(option,'option')
+  async onLoad(option) {
     this.retundlist = JSON.parse(decodeURIComponent(option.list))
+    console.log(option,'this.retundlist')
+
     this.orderId = option.orderId
-	this.isAllSelect = option.isAllSelect
+    this.isAllSelect = option.isAllSelect
     // console.log(this.retundlist, 'retundlist')
-    this.retundlist.forEach(el =>{
-      this.sellPriceitem = this.sellPriceitem + el.number*el.price
+    this.retundlist.forEach(el => {
+      this.sellPriceitem = this.sellPriceitem + el.number * el.price
     })
     this.getReasonEnums()
+    this.sellPriceitem = await this.HandleGetRefundMoney()
   },
   methods: {
+    // 算钱
+    HandleGetRefundMoney() {
+      return new Promise((resolve, reject) => {
+        uni.showLoading({
+          title: "计算中..."
+        })
+        let postData = {
+          orderId: this.orderId,
+          isAllSelect: this.isAllSelect==1 ? 1 : 0,
+          skus: this.retundlist,
+          afterType:2,
+          goodsState:this.ReturnMoneyQuery.goodsState
+        }
+        NET.request(API.GetRefundMoney, postData, "POST").then(res => {
+          uni.hideLoading()
+          resolve (parseFloat(res.json))
+        }).catch(err=>{
+          uni.hideLoading()
+        })
+      })
+    },
     confirmTap() {
-      if(this.fileList.length>0){
+      if (this.fileList.length > 0) {
         this.commentImgsFlag = true
-        for(let i=0;i<this.fileList.length;i++){
-          this.commentImgs += this.fileList[i].response.data.url+','
+        for (let i = 0; i < this.fileList.length; i++) {
+          this.commentImgs += this.fileList[i].response.data.url + ','
         }
       }
       this.ReturnMoney()
     },
-    getReasonEnums(){
+    getReasonEnums() {
       NET.request(API.ReasonEnums, 'GET').then(res => {
         this.liyouData = res.data
         this.liyoutext = this.liyouData[0]
-      }).catch(res => {})
+      }).catch(res => {
+      })
     },
     ReturnMoney() {
       if (this.ReturnMoneyQuery.goodsState === '') {
@@ -208,22 +295,22 @@ export default {
           title: '正在提交...',
         })
         let skusobjdata = []
-		this.retundlist.forEach((i) => {
-			let skusobj = {}
-			skusobj["skuId"] = i.skuId
-			skusobj["number"] = i.number
-			skusobjdata.push(skusobj)
-		})
+        this.retundlist.forEach((i) => {
+          let skusobj = {}
+          skusobj["skuId"] = i.skuId
+          skusobj["number"] = i.number
+          skusobjdata.push(skusobj)
+        })
         NET.request(API.ApplyReturnMoney, {
-          orderId:this.orderId,
-          afterType:2,
-          goodsState:this.ReturnMoneyQuery.goodsState,
+          orderId: this.orderId,
+          afterType: 2,
+          goodsState: this.ReturnMoneyQuery.goodsState,
           price: this.sellPriceitem,
           returnReason: this.liyoutext,
           explain: this.ReturnMoneyQuery.returnDesc,
           image: this.commentImgs,
           skus: skusobjdata,
-		  isAllSelect: this.isAllSelect
+          isAllSelect: this.isAllSelect
         }, 'POST').then(res => {
           uni.hideLoading()
           uni.showToast({
@@ -243,7 +330,7 @@ export default {
       }
     },
     // 理由
-    returnReasonTap(item,index){
+    returnReasonTap(item, index) {
       this.ReturnMoneyQuery.returnReason = index
       this.liyoutext = item
     },
@@ -254,8 +341,9 @@ export default {
     openReasonSelect() {
       this.reasonShowFalg = true
     },
-    closeStatusSelect() {
+    async closeStatusSelect() {
       this.cargoStatusShowFalg = false
+      this.sellPriceitem = await this.HandleGetRefundMoney()
     },
     closeReasonSelect() {
       this.reasonShowFalg = false

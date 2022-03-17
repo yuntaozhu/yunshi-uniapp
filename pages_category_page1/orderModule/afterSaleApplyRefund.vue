@@ -190,30 +190,59 @@ export default {
     this.isIphone = getApp().globalData.isIphone;
     this.fileList = this.$refs.uUpload.lists
   },
-  onLoad(options) {
+  async onLoad(options) {
 	  console.log(options,'options')
     if (uni.getStorageSync('applyItem')) {
       this.afterRefund = uni.getStorageSync('applyItem')
       this.list.push(this.afterRefund)
     } else if (uni.getStorageSync('afterSaleApplyRefund')) {
       this.list = uni.getStorageSync('afterSaleApplyRefund')
-      console.log(this.list, 'list')
     }
+	console.log(this.list,'this.list')
     this.orderId = parseInt(options.orderId)
 	this.isAllSelect = options.isAllSelect
+	console.log(this.isAllSelect,'this.isAllSelect')
     const res = uni.getStorageSync('storage_key');
     this.headerToken.Authorization = res.token
-    console.log(this.list, 'list')
     this.list.forEach(el => {
-      this.sellPriceitem = this.sellPriceitem + (el.number*el.price) + el.logisticsPrice
+		if(this.isAllSelect > 0){
+			this.sellPriceitem = this.sellPriceitem + (el.number*el.price) + el.logisticsPrice
+		}else{
+			this.sellPriceitem = this.sellPriceitem + (el.number*el.price)
+		}
+
     })
     // this.sellPriceitem = options.sellPriceitem
     // this.sellPriceitem = options.sellPriceitem
     this.getReasonEnums()
     uni.removeStorageSync('applyItem')
     uni.removeStorageSync('afterSaleApplyRefund')
+    this.sellPriceitem=await this.HandleGetRefundMoney()
   },
   methods: {
+    // 算钱
+    HandleGetRefundMoney() {
+      return new Promise((resolve, reject) => {
+        uni.showLoading({
+          title: "计算中..."
+        })
+        let postData = {
+          orderId: this.orderId,
+          isAllSelect: this.isAllSelect==1 ? 1 : 0,
+          skus: this.list,
+          afterType:2,
+          goodsState:this.ReturnMoneyQuery.goodsState
+        }
+        NET.request(API.GetRefundMoney, postData, "POST").then(res => {
+          uni.hideLoading()
+          resolve (parseFloat(res.json))
+        }).catch(err=>{
+          uni.hideLoading()
+        })
+      })
+    },
+
+
     confirmTap() {
       console.log(this.fileList, 'commentImgs')
       if(this.fileList.length>0){
@@ -306,8 +335,10 @@ export default {
     openReasonSelect() {
       this.reasonShowFalg = true
     },
-    closeStatusSelect() {
+    async closeStatusSelect() {
       this.cargoStatusShowFalg = false
+      this.sellPriceitem=await this.HandleGetRefundMoney()
+
     },
     closeAfterSelect() {
       this.refundTypeShow = false

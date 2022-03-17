@@ -121,6 +121,7 @@ module.exports = {
 	ReasonEnums: WX_API_BASE + '/after/getReasonSelect', //  选择退款原因查询
 	ApplyReturnMoney: WX_API_BASE + '/after/submit', //  申请售后
 	GetHuabeiConfig: WX_API_BASE + '/order/getHuabeiConfig', //查询花呗手续费配置
+	GetRefundMoney:WX_API_BASE + '/after/getReturnPrice',// 获取退款金额
 
 	//购物车
 	ShoppingaddCart: WX_API_BASE + '/cart/addCart', //  加入购物车
@@ -193,6 +194,9 @@ module.exports = {
 	getSeckillList: WX_API_BASE + '/seckill/getIndex', //秒杀专区首页数据查询
 	getProblems: WX_API_BASE + '/seckill/getProblems', //商品问答数据查询
 	getProblemDetail: WX_API_BASE + '/seckill/getProblemDetail', //问答详情查询
+	getQueryPlatformSeckillList: WX_API_BASE + '/platform-seckill/queryPlatformSeckillList', //平台秒杀列表
+	getPlatformSeckills: WX_API_BASE + '/canvas/getPlatformSeckills', //根据seckillId查询对应的秒杀商品列表
+	
 	//拼团专区
 	getGroupSettlement: WX_API_BASE + '/work/getSettlement', //拼团单结算查询
 	getGroupBuyList: WX_API_BASE + '/work/getIndex', //拼团专区首页数据查询

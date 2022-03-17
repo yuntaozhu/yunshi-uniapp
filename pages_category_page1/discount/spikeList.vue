@@ -21,10 +21,16 @@
 			</view>
 		</view>
 		<view v-else class="shopStopTime">
-			<label v-if="currentTime > timestamp">距离结束：</label>
-			<label v-else>距离开始：</label>
-			<u-count-down :timestamp="shopEndTime" fontSize="24rpx" separatorColor="#C83732"
-			separatorSize="24rpx" bgColor="#C83732" color="#ffffff" height="200rpx"></u-count-down>
+			<view v-if="spikeLikeData.state === 1">
+				<label>距离结束：</label>
+				<u-count-down :timestamp="spikeLikeData.time" fontSize="24rpx" separatorColor="#C83732"
+				separatorSize="24rpx" bgColor="#C83732" color="#ffffff" height="200rpx"></u-count-down>
+			</view>
+			<view  v-else>
+				<label>距离开始：</label>
+				<u-count-down :timestamp="spikeLikeData.enableTime" fontSize="24rpx" separatorColor="#C83732"
+				separatorSize="24rpx" bgColor="#C83732" color="#ffffff" height="200rpx"></u-count-down>
+			</view>
 		</view>
 		<view class="spikeList mar-top-20">
 			<view class="listItem" v-for="(item,index) in spikeLikeList" :key="index">
@@ -34,7 +40,7 @@
 				<view class="itemInfo">
 					<p>{{item.productName}}</p>
 					<view v-if="shopId" class="number">限量件 {{item.limitStockNumber}} / 剩余{{item.stockNumber}}件</view>
-					<view v-else class="number">限量件 {{item.total}} / 剩余{{item.total - item.saleNumber}}件</view>
+					<view v-else class="number">限量件 {{item.limitNumber}} / 剩余{{item.stockNumber}}件</view>
 					<view class="originalPrice">原价: ¥{{item.originalPrice}}</view>
 					<view class="price">
 						<view class="currentPrice flex-items font-color-FF7800">
@@ -46,7 +52,7 @@
 								<label class="fs36">{{item.price}}</label>
 							</view>
 						</view>
-						<view class="snapUpBtn" v-if="currentTime > timestamp"
+						<view class="snapUpBtn" v-if="spikeLikeData.state === 1 || platformSeckillList[platformIndex].state===3"
 							@click="gogoodsDetails(item.shopId,item.productId,item.skuId)">
 							<view class="btnText">去抢购</view>
 							<view class="progressBox">
@@ -54,17 +60,9 @@
 									active stroke-width="5" />
 							</view>
 						</view>
-						<view class="snapUpBtn" :class="{btnStyle1: currentTime < timestamp}"
-							v-if="currentTime < timestamp">
+						<view class="snapUpBtn" :class="{btnStyle1: spikeLikeData.state === 0 || spikeLikeData.ifEnable === 2 || platformSeckillList[platformIndex].state===2}"
+							v-if="spikeLikeData.state === 0 || spikeLikeData.ifEnable === 2 || platformSeckillList[platformIndex].state===2">
 							<view class="btnText">即将开始</view>
-							<view class="progressBox">
-								<progress activeColor="#FFFFFF" :percent="getPercent(item.saleNumber, item.total)"
-									active stroke-width="5" />
-							</view>
-						</view>
-						<view class="snapUpBtn" :class="{btnStyle2: currentTime > endTime}"
-							v-if="currentTime > endTime">
-							<view class="btnText">已结束</view>
 							<view class="progressBox">
 								<progress activeColor="#FFFFFF" :percent="getPercent(item.saleNumber, item.total)"
 									active stroke-width="5" />
@@ -116,8 +114,9 @@
 				active: 0,
 				timestamp: null,
 				endTime: null,
-				shopEndTime:null,
-				
+				platformSeckillId: 0,
+				platformSeckillList:[],
+				platformIndex:0,
 			}
 		},
 		onLoad(options) {
@@ -140,7 +139,10 @@
 			this.pageSize= 10,
 			this.querySessionData = []
 			this.spikeLikeList = []
-			this.getQuerySession()			
+			this.getQuerySession()
+			if(!this.shopId){
+				this.getQueryPlatformSeckillData()
+			}
 		},
 		tabChange(key, value) {
 			this.activeTab = key
@@ -156,7 +158,7 @@
 				uni.stopPullDownRefresh()
 			} else {
 				this.page = this.page + 1
-				this.getSpikeLike()
+				// this.getSpikeLike()
 			}
 		},
 		methods: {
@@ -169,11 +171,51 @@
 					this.pageSize = 10
 					this.session = item.time.substring(0, 16)
 					this.spikeLikeList = []
-					this.getSpikeLike()
+					// this.getSpikeLike()
+					this.platformSeckillId = this.platformSeckillList[index].seckillId
+					this.platformIndex = index
+					this.getPlatformSeckillsData(index)
 					this.timestamp = item.timestamp
 					this.endTime = item.endTime
 				}
 			},
+			// 查询秒杀列表
+			getQueryPlatformSeckillData(){
+				NET.request(API.getQueryPlatformSeckillList,'GET').then(res => {
+					this.platformSeckillList = res.data
+					this.platformSeckillId = res.data[0].seckillId
+					this.getPlatformSeckillsData(0)
+				}).catch(err => {
+					uni.showToast({
+						title:'失败',
+						icon:'none'
+					})
+				})
+			},
+			// 根据seckillId查询对应的秒杀商品列表
+			getPlatformSeckillsData(index){
+				uni.showLoading({
+					mask: true,
+					title: '数据加载中...',
+				})
+				NET.request(API.getPlatformSeckills,{ seckillId:this.platformSeckillId },'GET').then(res => {
+				 uni.hideLoading()
+			   if(res.data[0].products === 0){
+					 this.loadingType = 1
+					 this.page = this.page
+				 }else{
+					 this.spikeLikeList = res.data[index].products
+				 }
+				}).catch(err => {
+					uni.hideLoading()
+					uni.showToast({
+						title:'失败',
+						icon:'none'
+					})
+				})
+			},
+			
+			// 根据时间查询
 			queryProductListBySession() {
 				NET.request(API.querySession, {
 					page: this.sessionPage,
@@ -248,7 +290,7 @@
 			getSpikeLike() {
 				uni.showLoading({
 					mask: true,
-					title: 'Loading...',
+					title: '数据加载中...',
 				})
 				let param = ''
 				param = {
@@ -259,10 +301,6 @@
 				NET.request(API.queryProductListBySession, param, 'POST').then(res => {
 					uni.hideLoading()
 					this.spikeLikeData = res.data
-					// if(this.shopShowType == false){
-					// 	this.dateformat(this.spikeLikeData.time)
-					// 	this.countDown()
-					// }
 					if (res.data.list.length === 0) {
 						this.loadingType = 1
 						this.page = this.page
@@ -281,7 +319,7 @@
 			getShopSeckillList(){
 				uni.showLoading({
 					mask: true,
-					title: 'Loading...',
+					title: '数据加载中...',
 				})
 				let param = ''
 				param = {
@@ -293,7 +331,6 @@
 				NET.request(API.getShopSeckillIndex, param, 'GET').then(res => {
 					uni.hideLoading()
 					this.spikeLikeData = res.data
-					this.shopEndTime = res.data.time
 					if (res.data.page.list.length === 0) {
 						this.loadingType = 1
 						this.page = this.page

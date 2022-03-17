@@ -13,7 +13,8 @@
 					<label class="mar-left-30">{{ditem.createTime}}</label>
 				</view>
         <view class="listItem" :index="index" v-for="(item, index) in ditem.products" :key="item.footprintId" @click="click(index,findex)">
-          <u-swipe-action :show="item.show" @open="open(index,findex)" @click="delFootProduction(index,findex)" :options="options">
+          <u-swipe-action :show="item.show"  ref="footActionSwipe" :disabled="allCheckShow"
+		  @open="open(index,findex)" @click="delFootProduction(index,findex)" :options="options">
             <view class="itemBox">
               <view @click.stop="toGoodsDetails(item.productId,item.shopId,item.skuId)" class="item wid flex-display">
                 <view v-if="allCheckShow" class="selectIconBox">
@@ -25,8 +26,15 @@
                 <view class="title-wrap mar-left-20">
                   <text class="title u-line-2 fs28">{{ item.productName }}</text>
                   <view class="flex-items">
-                    <label class="fs40 mar-right-20 font-color-C83732">¥{{item.price}}</label>
-                    <label class="font-color-CCC discountsPriceLine fs24">¥{{item.originalPrice}}</label>
+										<image v-if="item.activityType===1" class="iconType" src="https://ceres.zkthink.com/static/images/groupBuyIcon.png" alt="拼团icon"></image>
+										<image v-if="item.activityType === 2" class="iconType"  src="https://ceres.zkthink.com/static/images/spikeIcon.png" alt="秒杀活动"></image>
+										<image v-if="item.activityType === 3" class="iconType discountIcon" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-03-14/38184785db4b4fbca767ada611097ae9_discount.png" alt="限时折扣活动"></image>
+										<image v-if="item.activityType === 4" class="iconType" src="https://ceres.zkthink.com/static/images/spikeIcon.png" alt="平台秒杀"></image>
+										<image v-if="item.activityType===5" class="iconType" src="https://ceres.zkthink.com/static/images/discountListIcon.png" alt="平台折扣"></image>
+										<image v-if="item.activityType===9" class="iconType" src="https://ceres.zkthink.com/static/images/memberCenterIcon.png" alt="会员价"></image>			
+						        <image v-if="item.activityType === 8" class="iconType" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png" alt="场景营销"></image>
+                    <label class="fs40 mar-right-20 font-color-C83732">¥{{ item.price }}</label>
+                    <label class="font-color-CCC discountsPriceLine fs24">¥{{ item.originalPrice }}</label>
                   </view>
                 </view>
               </view>
@@ -271,6 +279,10 @@
 			},
 			editClick(){
 				this.allCheckShow = true
+				let footActionSwipe = this.$refs.footActionSwipe;
+				if(footActionSwipe){
+				  footActionSwipe.forEach(item=>item.close())
+				}
 			},
 			finishClick(){
 				this.allCheckShow = false
@@ -337,6 +349,14 @@ page {
 			width: 200rpx;
 			flex: 0 0 200rpx;
 			height: 200rpx;
+		}
+		.iconType{
+			width: 64rpx;
+			height: 38rpx;
+			margin-right: 10rpx;
+		}
+		.discountIcon{
+			width: 100rpx;
 		}
 		.head-img{
 			width: 80rpx;
