@@ -37,7 +37,7 @@
     <view v-if="list.length>0" class="listBox">
       <view v-for="(item, index) in list" :key="index" class="goodsDetails-box flex-display flex-column" @click="goodsDateils(item.shopId,item.productId,item.skuId)">
         <view v-if="item.activityType === 0" class="goodsDetails flex-items-plus flex-row">
-          <image class="goodsImg" :src="item.image"></image>
+          <image class="goodsImg default-img" :src="item.image"></image>
           <view class="mar-left-30">
             <view class="goodsName-box overflowNoDot">
               <label class="goodsName fs26">{{item.productName}}</label>
@@ -64,7 +64,7 @@
         <view v-else class="spikeList goodsDetails">
           <view class="listItem">
             <view class="itemBox">
-              <img :src="item.image">
+              <img :src="item.image" class="pic-img default-img">
             </view>
             <view class="itemInfo mar-top-30">
               <p>{{item.productName}}</p>

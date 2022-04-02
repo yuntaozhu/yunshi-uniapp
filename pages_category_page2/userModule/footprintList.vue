@@ -21,7 +21,7 @@
                   <image v-if="item.selected == 1" @click.stop="footItemSel(index,findex,0)" src="https://ceres.zkthink.com/static/images/selectActive.png" class="cart-select-img"></image>
                   <image v-else @click.stop="footItemSel(index,findex,1)" src="https://ceres.zkthink.com/static/images/selectEmpty.png" class="cart-select-img"></image>
                 </view>
-                <image class="product-img" mode="aspectFill" :src="item.image" />
+                <image class="product-img default-img" mode="aspectFill" :src="item.image" />
                 <!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
                 <view class="title-wrap mar-left-20">
                   <text class="title u-line-2 fs28">{{ item.productName }}</text>

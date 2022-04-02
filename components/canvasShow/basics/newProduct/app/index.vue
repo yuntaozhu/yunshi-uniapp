@@ -5,7 +5,7 @@
         <div class="product-swiper-warp" v-for="(item,index) in productData.slice(0, 3)" :key="index">
           <div class=" product-swiper-item" @click="jumpProductDetail(item)">
             <div class="product-swiper-img">
-              <img class="img" :src="item.image">
+              <img class="img pic-img default-img" :src="item.image">
             </div>
             <div class="product-swiper-info">
               <label class="product-name">{{item.productName}}</label>

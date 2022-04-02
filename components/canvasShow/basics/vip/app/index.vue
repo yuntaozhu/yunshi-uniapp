@@ -16,7 +16,7 @@
             <swiper-item class="vip-item-warp" v-for="(itemJ,indexJ) in listTemp" :key="indexJ">
               <div class="vip-item"  v-for="(item,index) in itemJ" :key="index"  @click="jumpProductDetail(item)">
                 <div class="vip-item-img">
-                  <image v-show="item.image" class="img" :src="item.image"></image>
+                  <image class="img default-img" :src="item.image"></image>
                 </div>
                 <div class="vip-item-info">
                   <h3 class="name">
@@ -60,7 +60,7 @@
           <div class="vip-item-warp" v-for="(itemJ,indexJ) in listTemp" :key="indexJ">
             <div class="vip-item"  v-for="(item,index) in itemJ" :key="index" @click="jumpProductDetail(item)">
               <div class="vip-item-img">
-                <img v-show="item.image" class="img" :src="item.image">
+                <img class="img default-img" :src="item.image">
               </div>
               <div class="vip-item-info">
                 <h3 class="name">

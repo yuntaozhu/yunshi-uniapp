@@ -111,7 +111,7 @@
 							<view class="shop-list-box" v-if="total > 0">
 								<view class="item" v-for="(cItem, index) in storeInfolist" :key="index"
 									@click="goodsItemTap(cItem.productId,cItem.skuId)">
-									<image :src="cItem.image" class="product-img"></image>
+									<image :src="cItem.image" class="product-img default-img"></image>
 									<view class="product-bottom-box">
 										<view class="product-name">{{cItem.productName}}</view>
 										<view class="product-num font-color-C5AA7B mar-top-10">{{cItem.users}}人付款</view>

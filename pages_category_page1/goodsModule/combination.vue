@@ -12,7 +12,7 @@
     <view class="combinationList">
       <view class="combinationItem" v-for="(item, index) of productList" :key="index" @click="goodsDateils(item.shopId,item.productId,item.skuId)">
         <view class="imgBox">
-          <image :src="item.image"></image>
+          <image :src="item.image" class="pic-img default-img"></image>
         </view>
         <view class="itemInfoBox">
           <view class="itemTit">{{item.productName}}</view>
@@ -33,7 +33,7 @@
     <u-popup v-model="goosDetailshowFlag" mode="bottom" border-radius="14">
       <view class="goosDetailshow-box">
         <view class="detailImg-box flex-row-plus">
-          <image class="detailImg" :src="skuImg"></image>
+          <image class="detailImg default-img" :src="skuImg"></image>
           <view class="flex-column-plus mar-left-40">
             <view class="font-color-C5AA7B">
               <label class="fs24">¥</label>

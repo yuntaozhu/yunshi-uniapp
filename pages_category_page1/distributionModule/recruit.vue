@@ -71,7 +71,7 @@
           <view class="mar-top-60">
             <label class="fs-bold fs36">请填写相关信息</label>
           </view>
-          <view class="flex-items flex-row mar-top-60">
+         <view class="flex-items flex-row mar-top-60">
             <view class="fs26 font-color-656">真实姓名<label class="font-color-red">*</label></view>
             <input class="recruitName mar-left-20 fs26" v-model="userName"/>
           </view>
@@ -250,13 +250,13 @@
 				width: 520upx;
 				height: 550upx;
 				.recruitName {
-					border: 1upx solid #DDDDDD;
+					border: 2upx solid #DDDDDD;
 					width: 300upx;
 					height: 48upx;
 				}
 
 				.recruitIphone {
-					border: 1upx solid #DDDDDD;
+					border: 2upx solid #DDDDDD;
 					width: 300upx;
 					height: 48upx;
 				}

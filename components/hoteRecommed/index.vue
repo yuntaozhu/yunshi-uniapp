@@ -11,7 +11,7 @@
         @click="goodsDateils(item.shopId,item.productId,item.skuId)"
       >
         <view class="itemImg">
-          <image :src="item.image"></image>
+          <image :src="item.image" class="pic-img default-img"></image>
         </view>
         <view class="itemTit">{{item.productName}}</view>
         <view class="flex-items shopNameBox">

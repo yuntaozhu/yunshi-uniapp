@@ -67,6 +67,9 @@ export default {
 			this.getProblems()
 		}
 	},
+	onShow() {
+		this.getProblems()
+	},
 	onLoad(options) {
 		this.productId = options.productId
 		this.images = options.img

@@ -25,7 +25,7 @@
           <div class="pro-item-inner">
           <div class="pro-item">
           <div class="pro-item-img">
-            <img v-show="item.image" class="img" :src="item.image">
+            <img class="img default-img" :src="item.image">
           </div>
           <div class="pro-item-info">
             <h3 class="name">

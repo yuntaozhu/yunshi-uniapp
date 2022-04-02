@@ -59,6 +59,7 @@
                   </view>
                 </view>
               </view>
+							<view v-if="isRegionalScope" class="adressTips">当前地址不支持配送，可更换其他地址试试</view>
               <view class="delivery-way-box">
                 <view>
                   <view class="item">
@@ -106,7 +107,7 @@
               <text class="total-num ml10">总计</text>
               <text class="total-price ml10"
                     v-if="item.totalNum > 0">
-                ¥{{ (parseFloat(item.totalNum) + parseFloat(item.distribution.distributionPrice)).toFixed(2) }}
+                ¥{{ (parseFloat(item.totalNum) + parseFloat(item.distribution.distributionPrice || 0)).toFixed(2) }}
               </text>
               <text class="total-price ml10"
                     v-else>¥0.00
@@ -232,9 +233,10 @@
         </view>
       </view>
       <!-- active 当有地址时按钮加上active选中的样式-->
-      <view :class="[submitActive ? 'btn active' : 'btn']"
+			<button v-if="isRegionalScope" class="btn unActive" type="default" :disabled="false">提交订单</button>
+      <button v-else :class="[submitActive ? 'btn active' : 'btn']"
             @click="submitOrder">提交订单
-      </view>
+      </button>
       <!-- <text class="btn" v-else>提交订单</text> -->
 
     </view>
@@ -465,6 +467,7 @@ export default {
       integralShow: false, // 显示隐藏积分
       checkedPlatformCoupon: undefined,
       oneClickSubmit: true, //只提交订单一次
+			isRegionalScope: false, //是否在商家配置范围内地址
     }
   },
   onLoad(options) {
@@ -624,11 +627,27 @@ export default {
         uni.removeStorageSync('receiveItem')
         this.usableListLength = res.data.coupons.length
         this.getTotal()
+				this.isReceiveCan()
 
       }).catch(res => {
         uni.hideLoading()
       })
     },
+		// 根据地址判断是否能下单
+		isReceiveCan(){
+			this.settlement.shops.map(item=>{
+				if(item.receiveNotMatch){
+					this.isRegionalScope = item.receiveNotMatch
+				}
+				if(this.isRegionalScope){
+					uni.showToast({
+						title: '当前地址不支持配送，请参与红色字提示',
+						icon: 'none'
+					})
+				}
+			})
+		},
+		
     addAddressTap() {
       uni.navigateTo({
         url: '../../pages_category_page2/userModule/address?type=1',
@@ -826,7 +845,7 @@ export default {
       this.calcCredit()
       // 加上每个商家的运费
       this.settlement.shops.forEach((item) => {
-        this.totalPrice = this.totalPrice + item.distribution.distributionPrice
+        this.totalPrice = this.totalPrice + (item.distribution.distributionPrice || 0)
       })
       this.recalcHuabei()
     },
@@ -1025,6 +1044,9 @@ export default {
     showHuabeiDetail() {
       this.showHuabeiPopup = true
     },
+		// submitOrder() {
+		// 	console.log('确认订单')
+		// },
     submitOrder() {
       const that = this
       if (this.paymentMode === 0) {
@@ -1625,6 +1647,10 @@ page {
   color: #999;
   font-weight: 400;
 }
+.adressTips{
+	margin-bottom: 19rpx;
+	color: #D53912;
+}
 
 .delivery-way-box {
   display: flex;
@@ -1726,6 +1752,11 @@ page {
 .order-confirm-box .btn.active {
   background: #333333;
   color: #FFEBC4;
+}
+.order-confirm-box .btn.unActive {
+	background: #333333;
+	color: #FFEBC4;
+	opacity: 0.7;
 }
 
 .discount-item1 {

@@ -9,7 +9,7 @@
               :autoplay="true">
         <swiper-item v-for="(imgItem, index) in productData.images"
                      :key="index">
-          <image class="goodsImg"
+          <image class="goodsImg default-img"
                  :src='imgItem'></image>
         </swiper-item>
       </swiper>
@@ -349,7 +349,7 @@
       <view class="flex-display flex-row">
         <view>
           <image @click="goStore"
-                 class="inStore-logo"
+                 class="inStore-logo default-img"
                  :src="productData.shopLogo"></image>
         </view>
         <view class="flex-display flex-column mar-left-20">
@@ -741,6 +741,9 @@ export default {
       this.allCartNum = '...'
     }
   },
+	onShow() {
+		this.getProblems()
+	},
   onLoad(options) {
     console.log("options----", options)
     this.isIphone = getApp().globalData.isIphone;

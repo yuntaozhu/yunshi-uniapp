@@ -71,7 +71,7 @@
                        class="cart-select-img"></image>
                 <view class="pro-r">
                   <image :src="skuItem.image"
-                         class="pro-img"></image>
+                         class="pro-img default-img"></image>
                   <view class="pro-r-r">
                     <view class="pro-name">{{ skuItem.productName }}</view>
                     <view class="sku-box">
@@ -218,6 +218,7 @@
 
       <!-- 热门推荐 -->
       <HotTemplate/>
+			
       <view style="width: 100%;height: 100rpx;background-color:#efefef;"></view>
       <!-- 删除确认弹窗 -->
       <tui-modal :show="cardModal"

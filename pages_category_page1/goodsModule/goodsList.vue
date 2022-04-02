@@ -34,7 +34,7 @@
 				<view class="spikeList goodsDetails">
 				  <view class="listItem">
 				    <view class="itemBox">
-				      <img :src="item.image">
+				      <img :src="item.image" class="pic-img default-img">
 				    </view>
 				    <view class="itemInfo">
 				      <p>{{item.productName}}</p>
@@ -335,7 +335,7 @@ input{padding-left: 80upx;}
           img {
             width: 100%;
             height: 100%;
-          }
+					}
         }
         .itemInfo {
           flex: 1;

@@ -130,6 +130,22 @@ export default {
     this.topLeft = e.scrollTop
   },
   methods: {
+		// 分享到朋友圈
+		onShareTimeline: function() {
+		  return {
+		    title: this.miniHomeRemark,
+		    imageUrl: this.miniHomeImg,
+		    path: 'pages/tabbar/index/index',
+		  }
+		},
+		// 分享好友
+		onShareAppMessage: function() {
+			return {
+				title: this.miniHomeRemark,
+				imageUrl: this.miniHomeImg,
+				path: 'pages/tabbar/index/index',
+			}
+		},
     /**
      * 请求非首页的子组件的下一页
      * */

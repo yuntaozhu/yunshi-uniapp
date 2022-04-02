@@ -12,7 +12,6 @@
       <view class="order-list-box">
         <view>
           <view class="item"
-                v-if="item.skus[0].ifAdd!==1"
                 v-for="(item, index) in list"
                 :key="index"
                 @click="itemTap(item.orderId,item)">
@@ -54,7 +53,7 @@
                       v-for="(proItem, pIndex) in item.skus"
                       :key="pIndex">
                   <image :src="proItem.image"
-                         class="product-img"></image>
+                         class="product-img default-img"></image>
                   <view class="info-box">
                     <text class="product-name">{{ proItem.productName }}</text>
                     <view class="product-sku">{{ proItem.value }}</view>
@@ -72,9 +71,9 @@
                             class="evaluate"
                             @click.stop="evaluateTap(proItem,item.orderId)">立即评价
                       </view>
-                      <view v-if="proItem.commentId != 0 && item.state == 4"
+                      <view v-if="proItem.commentId != 0 && item.state == 4 && item.skus[0].ifAdd !== 1"
                             class="evaluate2"
-                            @click.stop="evaluateTowTap(index,proItem.commentId)">追加评价
+                            @click.stop="evaluateTowTap(index,proItem.commentId)">追加评价{{item.skus[0].ifAdd}}
                       </view>
                     </view>
                   </view>
@@ -102,7 +101,7 @@
                         @click.stop="payOrder(item,index)">立即付款
                   </text>
                   <text class="btn l"
-                        v-if="(item.state==3 || item.state==4) && ( item.afterState == 0 || item.afterState == 6)"
+                        v-if="(item.state==3 || item.state==4) && ( item.afterState == 0 || item.afterState == 6) && item.skus[0].ifAdd !== 1"
                         @click.stop="applyTap(item,index)">申请售后
                   </text>
                   <text class="btn l"

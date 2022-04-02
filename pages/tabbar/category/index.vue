@@ -19,7 +19,7 @@
 			</view>
 					<view class="t-list">
 						<view @click="navToList(item.classifyId, titem.classifyId)" class="t-item" v-for="titem in item.childs" :key="titem.classifyId">
-							<image :src="titem.classifyImage"></image>
+							<image :src="titem.classifyImage" class="pic-img default-img"></image>
 							<text>{{titem.classifyName}}</text>
 						</view>
 					</view>
@@ -195,6 +195,10 @@
 			content: '';
 			flex: 99;
 			height: 0;
+		}
+		image{
+			width: 140rpx;
+			height: 140rpx;
 		}
 	}
 	.t-item{

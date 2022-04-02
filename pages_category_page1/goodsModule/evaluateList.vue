@@ -21,8 +21,8 @@
 				</view>
 				<view class="fs26 pad-topbot-20 font-color-333">{{item.comment}}。</view>
 				<view class="evaluateImg-box">
-					<view v-for="(commentItemImg, cindex) in item.images" :key="index">
-						<image @click="previewImg(index,cindex)" class="img-item" :src="commentItemImg"></image>
+					<view v-for="(commentItemImg, cindex) in item.images" :key="cindex">
+						<image @click="previewImg(commentItemImg)" class="img-item" :src="commentItemImg"></image>
 					</view>
 				</view>
         <view class="addEvaluate" v-if="item.addComment !== ''">
@@ -30,7 +30,7 @@
           <view class="addEvaluateText">{{item.addComment}}</view>
           <view class="item-image-box" v-if="item.addImages">
             <view v-for="(itemAddImg, imgIndex) in item.addImages" :key="imgIndex">
-              <image @click='previewImg(index, imgIndex)' class="img-item" :src="itemAddImg"></image>
+              <image @click='previewImg(itemAddImg)' class="img-item" :src="itemAddImg"></image>
             </view>
           </view>
         </view>
@@ -65,8 +65,7 @@
 			this.commentListLength = this.commentList.length
 		},
 		methods: {
-			previewImg(index,cindex){
-				let img =  this.commentList[index].images[cindex]
+			previewImg(img){
 				wx.previewImage({
 					current: img, // 当前显示图片的http链接
 					urls: [img] // 需要预览的图片http链接列表

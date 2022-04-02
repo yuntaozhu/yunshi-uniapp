@@ -76,6 +76,15 @@ export default {
 uni-rich-text img {
   max-width: 100% !important;
 }
+// 图片占位图
+.pic-img{
+	width: 100%;
+	height: 100%;
+}
+.default-img {
+	background: url(./static/images/default.png) no-repeat center;
+	background-size: 100% 100%;
+}
 
 .line1 {
   text-overflow: ellipsis;

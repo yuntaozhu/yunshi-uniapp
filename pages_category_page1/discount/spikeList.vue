@@ -21,21 +21,35 @@
 			</view>
 		</view>
 		<view v-else class="shopStopTime">
-			<view v-if="spikeLikeData.state === 1">
+			<view class="TimeBigBox" v-if="spikeLikeData.state === 1">
 				<label>距离结束：</label>
-				<u-count-down :timestamp="spikeLikeData.time" fontSize="24rpx" separatorColor="#C83732"
-				separatorSize="24rpx" bgColor="#C83732" color="#ffffff" height="200rpx"></u-count-down>
+				<view class="flex-row-plus fs34 flex-items-plus mar-top-10">
+				  <view class="countdown-box flex-items-plus">{{ hou }}</view>
+				  <view class="font-color-999">:</view>
+				  <view class="countdown-box flex-items-plus">{{ min }}</view>
+				  <view class="font-color-999">:</view>
+				  <view class="countdown-box flex-items-plus">{{ sec }}</view>
+				</view>
+				<!-- <u-count-down :timestamp="spikeLikeData.time" fontSize="24rpx" separatorColor="#C83732"
+				separatorSize="24rpx" bgColor="#C83732" color="#ffffff" height="200rpx"></u-count-down> -->
 			</view>
-			<view  v-else>
+			<view  v-else class="TimeBigBox">
 				<label>距离开始：</label>
-				<u-count-down :timestamp="spikeLikeData.enableTime" fontSize="24rpx" separatorColor="#C83732"
-				separatorSize="24rpx" bgColor="#C83732" color="#ffffff" height="200rpx"></u-count-down>
+				<view class="flex-row-plus fs34 flex-items-plus mar-top-10">
+				  <view class="countdown-box flex-items-plus">{{ hou }}</view>
+				  <view class="font-color-999">:</view>
+				  <view class="countdown-box flex-items-plus">{{ min }}</view>
+				  <view class="font-color-999">:</view>
+				  <view class="countdown-box flex-items-plus">{{ sec }}</view>
+				</view>
+				<!-- <u-count-down :timestamp="spikeLikeData.enableTime" fontSize="24rpx" separatorColor="#C83732"
+				separatorSize="24rpx" bgColor="#C83732" color="#ffffff" height="200rpx"></u-count-down> -->
 			</view>
 		</view>
 		<view class="spikeList mar-top-20">
 			<view class="listItem" v-for="(item,index) in spikeLikeList" :key="index">
 				<view class="itemBox">
-					<img :src="item.productImage || item.image">
+					<img :src="item.productImage || item.image" class="pic-img default-img">
 				</view>
 				<view class="itemInfo">
 					<p>{{item.productName}}</p>
@@ -52,22 +66,30 @@
 								<label class="fs36">{{item.price}}</label>
 							</view>
 						</view>
-						<view class="snapUpBtn" v-if="spikeLikeData.state === 1 || platformSeckillList[platformIndex].state===3"
+						<view v-if="spikeLikeData.state === 1  || (platformSeckillList[platformIndex] && platformSeckillList[platformIndex].state === 3)"
+						  class="snapUpBtn" 
 							@click="gogoodsDetails(item.shopId,item.productId,item.skuId)">
 							<view class="btnText">去抢购</view>
 							<view class="progressBox">
-								<progress activeColor="#FFFFFF" :percent="getPercent(item.saleNumber, item.total)"
+								<progress activeColor="#FFFFFF" :percent="getPercent(item.saleNumber||item.stockNumber, item.total)"
 									active stroke-width="5" />
 							</view>
 						</view>
-						<view class="snapUpBtn" :class="{btnStyle1: spikeLikeData.state === 0 || spikeLikeData.ifEnable === 2 || platformSeckillList[platformIndex].state===2}"
-							v-if="spikeLikeData.state === 0 || spikeLikeData.ifEnable === 2 || platformSeckillList[platformIndex].state===2">
+						<view v-if="spikeLikeData.state === 0 || (platformSeckillList[platformIndex] && platformSeckillList[platformIndex].state === 2)" 
+						  class="snapUpBtn" :class="{btnStyle1: spikeLikeData.state === 0 || (platformSeckillList[platformIndex] && platformSeckillList[platformIndex].state === 2) }">
 							<view class="btnText">即将开始</view>
 							<view class="progressBox">
-								<progress activeColor="#FFFFFF" :percent="getPercent(item.saleNumber, item.total)"
+								<progress activeColor="#FFFFFF" :percent="getPercent(item.saleNumber || item.stockNumber, item.total)"
 									active stroke-width="5" />
 							</view>
 						</view>
+						<!-- <view class="snapUpBtn" v-if="spikeLikeData.state === 0 || spikeLikeData.ifEnable === 2 || platformSeckillList[platformIndex].state===2" :class="{btnStyle1: spikeLikeData.state === 0 || spikeLikeData.ifEnable === 2 || platformSeckillList[platformIndex].state===2}">
+							<view class="btnText">即将开始</view>
+							<view class="progressBox">
+								<progress activeColor="#FFFFFF" :percent="getPercent(item.saleNumber || item.stockNumber, item.total)"
+									active stroke-width="5" />
+							</view>
+						</view> -->
 					</view>
 				</view>
 			</view>
@@ -98,7 +120,6 @@
 				shopSeckillId: 0,
 				type: 1, //价格
 				volume: 1, //销量
-				shopShowType: false,
 				selectIndex: 0,
 				list: [],
 				classList: [],
@@ -117,6 +138,7 @@
 				platformSeckillId: 0,
 				platformSeckillList:[],
 				platformIndex:0,
+				ticker: null, //定时器
 			}
 		},
 		onLoad(options) {
@@ -124,42 +146,40 @@
 			this.currentTime = new Date().getTime();
 			console.log(this.currentTime, 'current')
 			if (options.shopId && options.shopSeckillId) {
-				this.shopShowType = false
 				this.shopId = options.shopId
 				this.shopSeckillId = options.shopSeckillId
 			} else {
-				this.shopShowType = true
 				this.shopId = 0
 				this.shopSeckillId = 0
 			}
-			// this.getQuerySession()
 		},
 		onShow() {
 			this.page = 1,
 			this.pageSize= 10,
 			this.querySessionData = []
 			this.spikeLikeList = []
-			this.getQuerySession()
 			if(!this.shopId){
+				this.getQuerySession()
 				this.getQueryPlatformSeckillData()
-			}
-		},
-		tabChange(key, value) {
-			this.activeTab = key
-			this.changeType = value
-			this.page = 0
-			if (key !== 'index') {
-				this.classifyId = key === 'All' ? '' : key
-				this.list = []
+			}else{
+				this.getShopSeckillList()
+				console.log('店铺')
 			}
 		},
 		onReachBottom() {
 			if (this.loadingType == 1) {
 				uni.stopPullDownRefresh()
 			} else {
-				this.page = this.page + 1
-				// this.getSpikeLike()
+				if(this.shopId){
+					this.page = this.page + 1
+					this.getShopSeckillList()
+				}
 			}
+		},
+		beforeDestroy(){
+			// 销毁前清楚定时器
+			clearInterval(this.ticker)
+			console.log('销毁前清楚定时器')
 		},
 		methods: {
 			changeTit(index, item) {
@@ -171,7 +191,6 @@
 					this.pageSize = 10
 					this.session = item.time.substring(0, 16)
 					this.spikeLikeList = []
-					// this.getSpikeLike()
 					this.platformSeckillId = this.platformSeckillList[index].seckillId
 					this.platformIndex = index
 					this.getPlatformSeckillsData(index)
@@ -192,7 +211,7 @@
 					})
 				})
 			},
-			// 根据seckillId查询对应的秒杀商品列表
+			// 平台首页根据seckillId查询对应的秒杀商品列表
 			getPlatformSeckillsData(index){
 				uni.showLoading({
 					mask: true,
@@ -215,21 +234,22 @@
 				})
 			},
 			
-			// 根据时间查询
-			queryProductListBySession() {
-				NET.request(API.querySession, {
-					page: this.sessionPage,
-					pageSize: this.sessionPage,
-					session: this.session
-				}, 'POST').then(res => {
-					this.listData = res.data
-				}).catch(res => {
-					uni.showToast({
-						title: '失败',
-						icon: "none"
-					})
-				})
-			},
+			// // 根据时间查询
+			// queryProductListBySession() {
+			// 	NET.request(API.querySession, {
+			// 		page: this.sessionPage,
+			// 		pageSize: this.sessionPage,
+			// 		session: this.session
+			// 	}, 'POST').then(res => {
+			// 		this.listData = res.data
+			// 	}).catch(res => {
+			// 		uni.showToast({
+			// 			title: '失败',
+			// 			icon: "none"
+			// 		})
+			// 	})
+			// },
+			// 平台秒杀头部时间
 			getQuerySession() {
 				NET.request(API.querySession, {}, 'GET').then(res => {
 					let arr = []
@@ -250,11 +270,11 @@
 					this.session = this.querySessionData[0].time.substring(0, 16)
 					this.timestamp = this.querySessionData[0].timestamp
 					this.endTime = this.querySessionData[0].endTime
-					if(this.shopSeckillId){
-						this.getShopSeckillList()
-					}else{
-						this.getSpikeLike()
-					}
+					// if(this.shopSeckillId){
+					// 	this.getShopSeckillList()
+					// }else{
+					// 	this.getSpikeLike()
+					// }
 					
 				}).catch(res => {
 					uni.showToast({
@@ -263,6 +283,7 @@
 					})
 				})
 			},
+			// 时间处理
 			getCaption(obj, state) {
 				var index = obj.lastIndexOf("\|");
 				if (state == 0) {
@@ -272,12 +293,14 @@
 				}
 				return obj;
 			},
+			// 跳转商品详情页
 			gogoodsDetails(shopId, productId, skuId) {
 				uni.navigateTo({
 					url: '../goodsModule/goodsDetails?shopId=' + shopId + '&productId=' + productId + '&skuId=' +
 						skuId
 				})
 			},
+			// 按钮进度条
 			getPercent(num, total) {
 				num = parseFloat(num);
 				total = parseFloat(total);
@@ -286,35 +309,35 @@
 				}
 				return total <= 0 ? "0%" : Math.round((num / total) * 10000) / 100.0;
 			},
-			// 获取首页更多秒杀
-			getSpikeLike() {
-				uni.showLoading({
-					mask: true,
-					title: '数据加载中...',
-				})
-				let param = ''
-				param = {
-					page: this.page,
-					pageSize: this.pageSize,
-					session: this.session
-				}
-				NET.request(API.queryProductListBySession, param, 'POST').then(res => {
-					uni.hideLoading()
-					this.spikeLikeData = res.data
-					if (res.data.list.length === 0) {
-						this.loadingType = 1
-						this.page = this.page
-					} else {
-						this.spikeLikeList = this.spikeLikeList.concat(res.data.list)
-						console.log(this.spikeLikeList, 'list')
-					}
-				}).catch(res => {
-					uni.showToast({
-						title: '失败',
-						icon: "none"
-					})
-				})
-			},
+			// // 获取首页更多秒杀
+			// getSpikeLike() {
+			// 	uni.showLoading({
+			// 		mask: true,
+			// 		title: '数据加载中...',
+			// 	})
+			// 	let param = ''
+			// 	param = {
+			// 		page: this.page,
+			// 		pageSize: this.pageSize,
+			// 		session: this.session
+			// 	}
+			// 	NET.request(API.queryProductListBySession, param, 'POST').then(res => {
+			// 		uni.hideLoading()
+			// 		this.spikeLikeData = res.data
+			// 		if (res.data.list.length === 0) {
+			// 			this.loadingType = 1
+			// 			this.page = this.page
+			// 		} else {
+			// 			this.spikeLikeList = this.spikeLikeList.concat(res.data.list)
+			// 			console.log(this.spikeLikeList, 'list')
+			// 		}
+			// 	}).catch(res => {
+			// 		uni.showToast({
+			// 			title: '失败',
+			// 			icon: "none"
+			// 		})
+			// 	})
+			// },
 			// 获取店铺更多秒杀
 			getShopSeckillList(){
 				uni.showLoading({
@@ -331,6 +354,19 @@
 				NET.request(API.getShopSeckillIndex, param, 'GET').then(res => {
 					uni.hideLoading()
 					this.spikeLikeData = res.data
+					if (this.ticker) { //这一段是防止进入页面出去后再进来计时器重复启动
+					  clearInterval(this.ticker);
+					}
+					this.ticker = setInterval(()=>{
+						if(this.spikeLikeData.time > 0){
+							this.shopCountDown(this.spikeLikeData.time)
+							this.spikeLikeData.time -= 1000
+						}
+						if(this.spikeLikeData.enableTime > 0){
+							this.shopCountDown(this.spikeLikeData.enableTime)
+							this.spikeLikeData.enableTime -= 1000
+						}
+					},1000)
 					if (res.data.page.list.length === 0) {
 						this.loadingType = 1
 						this.page = this.page
@@ -344,6 +380,25 @@
 						icon: "none"
 					})
 				})
+			},
+			// 处理店铺秒杀倒计时
+			shopCountDown(timeAll){
+				let msec = timeAll
+				let hou = parseInt(msec / 3600000)
+				let min = parseInt((msec % 3600000) / 60000)
+				let sec = parseInt(((msec % 3600000) % 60000) / 1000)
+				if(hou < 10){
+					hou = '0' + hou
+				}
+				if(min < 10){
+					min = '0' + min
+				}
+				if(sec < 10){
+					sec = '0' + sec
+				}
+				this.hou = hou
+				this.min = min
+				this.sec = sec
 			}
 		}
 	}
@@ -361,9 +416,21 @@
 	.spikeListBox {
 		padding: 20rpx;
         .shopStopTime{
-			text-align: center;
-			color: #FFFFFF;
-		}
+					text-align: center;
+					color: #FFFFFF;
+					.TimeBigBox{
+						display: flex;
+						align-items: center;
+						justify-content: center;
+					}
+					.countdown-box {
+					    padding: 0 8rpx;
+					    height: 48rpx;
+					    color: #FFFFFF;
+					    background: linear-gradient(90deg, #C83732 0%, #E25C44 100%);
+					    margin: 10rpx;
+				  }
+				}
 		.spikeBg {
 			text-align: center;
 			margin: 50rpx auto;

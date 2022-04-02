@@ -13,7 +13,7 @@
         <swiper-item class="product-list-item-warp" v-for="(item,index) in productData" :key="index" @click="jumpProductDetail(item)">
           <div class="product-list-item">
             <div class="product-list-img">
-              <img v-show="item.image" class="img" :src="item.image">
+              <img class="img pic-img default-img" :src="item.image">
             </div>
             <div class="product-list-info">
               <label class="product-name">{{item.productName}}</label>
@@ -66,7 +66,7 @@
         <div class="product-list-item-warp" v-for="(item,index) in productData" :key="index" @click="jumpProductDetail(item)">
           <div class="product-list-item">
             <div class="product-list-img">
-              <img v-show="item.image" class="img" :src="item.image">
+              <img class="img pic-img default-img" :src="item.image">
             </div>
             <div class="product-list-info">
               <label class="product-name">{{item.productName}}</label>

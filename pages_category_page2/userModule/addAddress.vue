@@ -103,7 +103,7 @@ const API = require('../../config/api')
 				ordertype:0,
 				editAddress:{},
         addressTagIndex: 0,
-        defaultRegion: [],
+        // defaultRegion: [],
         addressData: {
           username: '',
           phone: '',
@@ -117,6 +117,7 @@ const API = require('../../config/api')
 		},
 		onLoad(options) {
 			this.type = options.type
+			console.log(this.type,'this.type')
 			if(options.ordertype == 1){
 				this.ordertype = 1
 			}
@@ -140,10 +141,10 @@ const API = require('../../config/api')
             }
           }
           this.ifDefault = this.editAddress.ifDefault
-          this.addressData.defaultRegion = this.ssqText.split("-")
-          this.addressData.province = this.defaultRegion[0]
-          this.addressData.city = this.defaultRegion[1]
-          this.addressData.area = this.defaultRegion[2]
+          this.addressData.defaultRegion = this.addressData.ssqText.split("-")
+          this.addressData.province = this.addressData.defaultRegion[0]
+          this.addressData.city = this.addressData.defaultRegion[1]
+          this.addressData.area = this.addressData.defaultRegion[2]
           this.addressData.id = this.editAddress.receiveId
           uni.hideLoading()
         }).catch(res => {

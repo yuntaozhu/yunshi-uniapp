@@ -33,7 +33,7 @@
 											class="cart-select-img"></image>
 									</view>
 									<view class="infoCent flex-items">
-										<image class="product-img" mode="aspectFill" :src="item.image" />
+										<image class="product-img default-img" mode="aspectFill" :src="item.image" />
 										<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
 										<view class="title-wrap mar-left-20 priceBox">
 											<text
@@ -122,7 +122,7 @@
 										<view class="itemImgBox" v-for="(sItem, sIndex) of item.productList"
 											:key="sIndex"
 											@click.stop="goodsDateils(sItem.shopId,sItem.productId,sItem.skuId)">
-											<image :src="sItem.image"></image>
+											<image :src="sItem.image" class="pic-img default-img"></image>
 										</view>
 									</view>
 								</view>

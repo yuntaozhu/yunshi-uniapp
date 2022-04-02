@@ -51,7 +51,7 @@
 					</view>
 					<view class="goodsDes-box flex-column-plus mar-top-30">
 						<view class="flex-row-plus" @click.stop="goGoodsDetails(item.shopId,item.productId,item.skuId)">
-							<image class="goodsDes-img" :src="item.productImage"></image>
+							<image class="goodsDes-img default-img" :src="item.productImage"></image>
 							<view class="goodsDesText-box">
 								<label class="fs26 goodsDes-text">{{item.productName}}</label>
 								<view class="mar-top-70">
