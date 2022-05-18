@@ -59,7 +59,7 @@
                   </view>
                 </view>
               </view>
-							<view v-if="isRegionalScope" class="adressTips">当前地址不支持配送，可更换其他地址试试</view>
+							<view v-if="item.receiveNotMatch" class="adressTips">当前地址不支持配送，可更换其他地址试试</view>
               <view class="delivery-way-box">
                 <view>
                   <view class="item">
@@ -472,6 +472,7 @@ export default {
   },
   onLoad(options) {
     this.getQuery()
+		console.log(options,'options')
     this.type = options.type
     if (options.receiveId) {
       this.receiveId = options.receiveId
@@ -484,7 +485,7 @@ export default {
     }
     if (uni.getStorageSync("skuItemDTOList") != "") {
       this.skuItemDTOList = uni.getStorageSync('skuItemDTOList')
-      //console.log(this.skuItemDTOList, 66666)
+      console.log(this.skuItemDTOList, '66666')
       if (this.skuItemDTOList[0].shopDiscountId > 0) {
         this.sumitType = 4
       } else if (this.skuItemDTOList[0].shopSeckillId > 0) {
@@ -564,6 +565,8 @@ export default {
           shops: this.skuItemDTOList,
           receiveId: this.receiveId
         }
+				// composeId: 68
+				console.log(this.skuItemDTOList,'this.skuItemDTOList')
       }
       NET.request(_url, _data, 'POST').then(res => {
         uni.hideLoading()
@@ -649,8 +652,9 @@ export default {
 		},
 		
     addAddressTap() {
+			console.log(this.type, 'this.type')
       uni.navigateTo({
-        url: '../../pages_category_page2/userModule/address?type=1',
+        url: '../../pages_category_page2/userModule/address?type='+ this.type,
       })
     },
     getDate(time) {

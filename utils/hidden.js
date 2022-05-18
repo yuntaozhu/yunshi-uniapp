@@ -1,8 +1,8 @@
 // 中间部分
 export function hidden (str, frontLen, endLen) {
   let endLenData = 0
-	if(!str.length){
-		return
+	if(!str.length || !str){
+		return ''
 	}
   if (str.length !== 2) {
     endLenData = endLen

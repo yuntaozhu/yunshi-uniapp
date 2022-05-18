@@ -73,7 +73,7 @@
                       </view>
                       <view v-if="proItem.commentId != 0 && item.state == 4 && item.skus[0].ifAdd !== 1"
                             class="evaluate2"
-                            @click.stop="evaluateTowTap(index,proItem.commentId)">追加评价{{item.skus[0].ifAdd}}
+                            @click.stop="evaluateTowTap(index,proItem.commentId)">追加评价
                       </view>
                     </view>
                   </view>

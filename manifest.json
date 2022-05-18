@@ -1,6 +1,6 @@
 {
     "name" : "cereshop",
-    "appid" : "__UNI__ECAA86F",
+    "appid" : "__UNI__B04DFAC",
     "description" : "cereshop",
     "versionName" : "1.7.2",
     "versionCode" : 172,
@@ -121,7 +121,6 @@
     "quickapp" : {},
     /* 快应用特有相关 */
     "mp-weixin" : {
-        /* 小程序特有相关 */
         "appid" : "wxf0713a10bbae8732",
         "setting" : {
             "urlCheck" : false,

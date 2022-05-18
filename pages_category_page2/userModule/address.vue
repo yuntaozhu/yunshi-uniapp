@@ -86,9 +86,10 @@
 		},
 		methods: {
 			back() {
-				if (this.type == 1) {
+				console.log(this.type,'type')
+				if (this.type == 1 || this.type == 2 ) {
 					uni.navigateTo({
-						url: '../../pages_category_page1/orderModule/orderConfirm?type=3'
+						url: '../../pages_category_page1/orderModule/orderConfirm?type=' + this.type
 					})
 				} else {
 					uni.switchTab({
@@ -97,7 +98,7 @@
 				}
 			},
 			addAddressClick() {
-				if (this.type == 1) {
+				if (this.type ==  1 || this.type == 2) {
 					uni.navigateTo({
 						url: 'addAddress?type=1&ordertype=1'
 					})
@@ -144,11 +145,11 @@
 				})
 			},
 			itemTap(item) {
-				if (this.type == 1) {
+				if (this.type == 1 ||  this.type == 2) {
 					uni.setStorageSync('receiveItem', item)
 					uni.navigateTo({
-						url: '../../pages_category_page1/orderModule/orderConfirm?type=3&receiveId=' + item
-							.receiveId
+						url: '../../pages_category_page1/orderModule/orderConfirm?receiveId=' + item
+							.receiveId +'&type='+ this.type
 					})
 				}
 			},

@@ -112,6 +112,7 @@ export default {
     },
     // 获取广告信息
     getAd() {
+			console.log(this.triggerCondition,'triggerCondition000000')
       const res = uni.getStorageSync('storage_key'),
           token = res.token;
       setTimeout(() => {
@@ -119,7 +120,7 @@ export default {
         this.isLogin = !!token
         console.log(this.buyerUserId,this.isLogin,this.triggerCondition)
         NET.request(API.GetAd, {
-          triggerCondition: 2
+          triggerCondition: this.triggerCondition
         }, 'POST').then(res => {
           console.log('123131321323', res)
           if (res.data) {

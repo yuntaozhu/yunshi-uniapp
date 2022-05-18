@@ -141,9 +141,9 @@
 				</view>
 			</view>
 			<!-- 退款成功 -->
-			<view class="order-details-info-box mt20" v-if="status == 6">
+			<view class="order-details-info-box mt20" v-if="itemlist.afterState != 6 && status == 6">
 				<view class="order-details-price return-explain-box">
-					<text>已原路退回金额</text>
+					<text>已原路退回金额 {{itemlist.afterState}}</text>
 					<text class="price-box"><text class="fuhao">￥</text>{{itemlist.price}}</text>
 				</view>
 			</view>

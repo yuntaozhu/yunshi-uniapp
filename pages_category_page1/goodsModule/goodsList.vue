@@ -140,23 +140,26 @@
         //   this.volume = this.volume != 1 ? 1:2
         //   this.sortIndex = index
         // }
-		if(index === 1){
-			this.type = 0
-			this.volume = 0
-		}else if(index === 2){
-			this.volume = 0
-			if(this.type === 0){
-				this.type = 1
-			}else{
-				this.type = this.type = 1 ? 2 : 1
-			}
-		}else if (index === 3){
-			this.type = 0
-			if(this.volume === 0){
-				this.volume = 1
-			}else{
-				this.volume = this.volume = 1 ? 2 : 1
-			}
+				console.log(index,'index')
+			if(index === 1){
+				this.type = 0
+				this.volume = 0
+			}else if(index === 2){
+				this.volume = 0
+				if(this.type === 0){
+					this.type = 1
+				}else{
+					console.log(this.type,'this.type1')
+					this.type = this.type != 1 ? 1 : 2
+				}
+				console.log(this.type,'this.type2')
+			}else if (index === 3){
+				this.type = 0
+				if(this.volume === 0){
+					this.volume = 1
+				}else{
+					this.volume = this.volume != 1 ? 1 : 2
+				}
 		}
 		this.sortIndex = index
         this.searchList()
