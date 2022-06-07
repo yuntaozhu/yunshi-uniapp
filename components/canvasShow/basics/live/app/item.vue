@@ -1,6 +1,6 @@
 <template>
   <view class="live-box">
-    <view class="live-ongoing" v-if="liveData.liveStatus === 101">
+    <view class="live-ongoing" v-if="liveData.liveStatus === 101" @click="toLive">
       <image class="cover-img" :src="liveData.feedsImg" />
       <view class="status">
         <view class="status-state">
