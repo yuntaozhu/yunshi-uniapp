@@ -650,7 +650,7 @@ export default {
 				}
 			})
 		},
-		
+
     addAddressTap() {
 			console.log(this.type, 'this.type')
       uni.navigateTo({
@@ -1198,7 +1198,6 @@ export default {
                     url: '../orderModule/index?type=1'
                   })
                 })
-
               }
               // #endif
               // #ifdef MP-ALIPAY
@@ -1271,24 +1270,20 @@ export default {
               //console.log(submitResult, 'app-submitResult')
               NET.request(API.gotoAppPay, submitResult, 'POST').then(res => {
                 uni.hideLoading()
-                let str = res.data.package
-                var index = str.lastIndexOf("\=");
-                str = str.substring(index + 1, str.length);
                 var obj = {
                   appid: res.data.appId,
                   noncestr: res.data.nonceStr,
                   package: 'Sign=WXPay',
-                  prepayid: str,
+                  prepayid: res.data.prepayId,
                   timestamp: res.data.timeStamp,
-                  sign: 'MD5',
+                  sign: res.data.paySign,
                   partnerid: res.data.partnerId
                 }
-                //console.log(res.data, '111')
-                //console.log(obj, '111')
                 uni.requestPayment({
                   provider: 'wxpay',
                   orderInfo: obj,
                   success: function (payRes) {
+										console.log('支付成功',payRes)
                     uni.showToast({
                       icon: 'none',
                       title: '支付成功'
@@ -1299,6 +1294,7 @@ export default {
                   },
                   fail: function (err) {
                     //console.log(err)
+										console.log('支付失败',err)
                     uni.showToast({
                       icon: 'none',
                       title: '支付取消'
@@ -1309,6 +1305,7 @@ export default {
                   }
                 })
               }).catch(err => {
+								console.log(err, 'catch支付失败')
                 uni.hideLoading()
                 uni.showToast({
                   title: '支付失败',

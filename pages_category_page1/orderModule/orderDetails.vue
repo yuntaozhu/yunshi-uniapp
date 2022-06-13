@@ -784,20 +784,15 @@
 				// #endif
 				// #ifdef APP-PLUS
 				NET.request(API.gotoAppPay, submitResult, 'POST').then(res => {
-					let str = res.data.package
-					var index = str.lastIndexOf("\=");
-					str = str.substring(index + 1, str.length);
 					var obj = {
-						appid: res.data.appId,
-						noncestr: res.data.nonceStr,
-						package: 'Sign=WXPay',
-						prepayid: str,
-						timestamp: res.data.timeStamp,
-						sign: 'MD5',
-						partnerid: res.data.partnerId
+					  appid: res.data.appId,
+					  noncestr: res.data.nonceStr,
+					  package: 'Sign=WXPay',
+					  prepayid: res.data.prepayId,
+					  timestamp: res.data.timeStamp,
+					  sign: res.data.paySign,
+					  partnerid: res.data.partnerId
 					}
-					console.log(res.data, '111')
-					console.log(obj, '111')
 					uni.requestPayment({
 						provider: 'wxpay',
 						orderInfo: obj,

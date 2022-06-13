@@ -39,9 +39,6 @@
           <view class="user-logoin-title"
                 v-if="useritem.name">{{ useritem.name }}
           </view>
-          <view class="user-logoin-title"
-                v-else>{{ infoitem.phone }}
-          </view>
           <view class="experience flex-items"
                 @click="goToMemberCenter">
             <label>成长值</label>
@@ -263,7 +260,6 @@ export default {
   data() {
     return {
       item: {},
-      infoitem: {},
       useritem: {},
       isLoading: false,
       corpId: null,
@@ -276,7 +272,6 @@ export default {
     if (uni.getStorageSync('storage_key')) {
       this.item = uni.getStorageSync('storage_key');
     }
-    this.getInfo()
     this.GetUser()
   },
   methods: {
@@ -344,16 +339,6 @@ export default {
 
       })
     },
-    // 获取会员信息
-    getInfo() {
-      NET.request(API.Info, {
-        token: this.item.token,
-      }, 'GET').then(res => {
-        this.infoitem = res.data
-      }).catch(res => {
-
-      })
-    },
     // 个人信息  登录页面
     gologin() {
       uni.navigateTo({
@@ -362,8 +347,7 @@ export default {
     },
     goinfo() {
       uni.navigateTo({
-        url: '../../../pages_category_page2/userModule/personalDetails?infoitem=' + JSON.stringify(this
-            .infoitem)
+        url: '../../../pages_category_page2/userModule/personalDetails'
       })
     },
     // 我的评论

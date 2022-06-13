@@ -197,6 +197,8 @@ export default {
       }
     },
     toLive() {
+      console.log(liveAppid,'liveAppid')
+      console.log(this.liveData.roomId,'this.liveData.roomId')
 			if (!liveAppid || !this.liveData) { return }
 			// 跳转直播间携带路由参数
 			// let customParams = encodeURIComponent(JSON.stringify({ path: 'livePage/index', pid: 1 }))

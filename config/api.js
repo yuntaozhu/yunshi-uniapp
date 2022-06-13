@@ -24,7 +24,9 @@ const TERMINAL = 1
 module.exports = {
 	terminal: TERMINAL, // 画布设备 1 小程序，2 H5，3 App 4 电脑
 	SettledMerchantPrefix: DOMAIN_PREFIX + '/settled-merchant', //商家入驻链接
-	shareLink: DOMAIN_PREFIX + '/h5', // 分享地址
+	// shareLink: DOMAIN_PREFIX + '/h5', // 分享地址
+	shareLink: 'https://ceres.zkthink.com/h5', // 分享地址
+
 	//登录注册
 	Verify: WX_API_BASE + '/app/getCode', //  获取短信验证码
 	Login: WX_API_BASE + '/app/login', //  手机号验证码登录、注册
@@ -196,7 +198,7 @@ module.exports = {
 	getProblemDetail: WX_API_BASE + '/seckill/getProblemDetail', //问答详情查询
 	getQueryPlatformSeckillList: WX_API_BASE + '/platform-seckill/queryPlatformSeckillList', //平台秒杀列表
 	getPlatformSeckills: WX_API_BASE + '/canvas/getPlatformSeckills', //根据seckillId查询对应的秒杀商品列表
-	
+
 	//拼团专区
 	getGroupSettlement: WX_API_BASE + '/work/getSettlement', //拼团单结算查询
 	getGroupBuyList: WX_API_BASE + '/work/getIndex', //拼团专区首页数据查询
