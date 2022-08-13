@@ -134,9 +134,7 @@
 						  icon:"none"
 						})
 					}
-				}).catch(res => {
-				  uni.hideLoading()
-				}).finally(()=>{uni.hideLoading()})
+				}).finally(()=>{setTimeout(()=>{uni.hideLoading()}),1000})
 			},
 			//追加评论
 			addCommentsClick(){

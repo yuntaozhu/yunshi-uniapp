@@ -103,7 +103,7 @@
 								<image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="arrow-img">
 								</image>
 							</view>
-							<view class="toService" @click="openService">
+							<view class="toService" @click="openService(dataList.shopId)">
 								<image src="https://ceres.zkthink.com/static/images/serviceImg-order-detail.png"
 									class="service-img"></image>
 								<text>联系客服</text>
@@ -515,8 +515,6 @@
 					this.dataList = data
 					this.dataList.receivePhone = hidden(this.dataList.receivePhone, 3, 4)
 					this.ifShow = true
-					console.log(this.dataList)
-					console.log(dataList.collageDetail.length, 888)
 					this.getShippingTrace(this.dataList.express, this.dataList.deliverFormid)
 					if (this.dataList.state == 1 || this.dataList.state == 6) {
 						this.countDown();
@@ -1128,52 +1126,69 @@
 					}
 				})
 			},
-			openService() {
-				if (this.isLoading || !this.shopId || this.shopId === 'null') {
-					return
-				}
-				const shopids = uni.getStorageSync('service_shopids') || []
-				const corpIds = uni.getStorageSync('service_corpIds') || []
-				const urls = uni.getStorageSync('service_urls') || []
-
-				const index = shopids.indexOf(this.shopId)
-				if (index === -1) {
+			openService(shopId){
 					this.isLoading = true
-					const id = this.shopId || null
 					NET.request(API.CustomerService, {
-						id
+						id:shopId
 					}, 'get').then(res => {
 						if (res.code === '') {
-							shopids.push(this.shopId)
-							corpIds.push(res.data.corpId)
-							urls.push(res.data.url)
-
-							uni.setStorageSync('service_shopids', shopids);
-							uni.setStorageSync('service_corpIds', corpIds);
-							uni.setStorageSync('service_urls', urls);
-
 							this.corpId = res.data.corpId
 							this.serviceURL = res.data.url
-							// #ifdef MP-WEIXIN
-							this.flyToService()
-							// #endif
+							this.flyToService({
+                corpId:res.data.corpId,
+                serviceURL:res.data.url
+              })
 						}
 						this.isLoading = false
 					}).catch(err => {
 						console.log(err)
 						this.isLoading = false
 					})
-				} else {
-					this.corpId = corpIds[index]
-					this.serviceURL = urls[index]
-
-					// #ifdef MP-WEIXIN
-					this.flyToService()
-					// #endif
-				}
 			},
-			flyToService() {
-				if (!this.serviceURL || !this.corpId) {
+			flyToService(data) {
+        let self = data
+        console.log(self.serviceURL, self.corpId)
+        // #ifdef MP-WEIXIN
+        if (!self.serviceURL || !self.corpId) {
+          self.hasService = false
+          return
+        }
+        wx.openCustomerServiceChat({
+          extInfo: {
+            url: self.serviceURL
+          },
+          corpId: self.corpId, // 企业ID
+          success(res) {
+          },
+          fail(err) {
+          }
+        })
+        // #endif
+        // #ifdef APP-PLUS
+        try {
+          let sweixin = null
+          plus.share.getServices(res=>{
+            sweixin = res.find(i => i.id === 'weixin')
+            if(sweixin){
+              sweixin.openCustomerServiceChat({
+                corpid: self.corpId,
+                url: self.serviceURL,
+              },suc=>{
+                console.log("success",JSON.stringify(res))
+              },err=>{
+                console.log("error",JSON.stringify(err))
+              })
+            }else{
+              plus.nativeUI.alert('当前环境不支持微信操作!')
+            }
+          },function(){
+            uni.showToast({title: "获取服务失败，不支持该操作。"+JSON.stringify(e), icon: 'error'})
+          })
+        } catch (err) {
+          uni.showToast({title: "调用失败，不支持该操作。"+JSON.stringify(err), icon: 'error'})
+        }
+        // #endif
+			/*	if (!this.serviceURL || !this.corpId) {
 					return
 				}
 				// 获取店铺id、客服链接
@@ -1183,7 +1198,7 @@
 				wx.openCustomerServiceChat({
 					extInfo,
 					corpId: this.corpId // 企业ID
-				})
+				})*/
 			}
 		},
 		filters: {

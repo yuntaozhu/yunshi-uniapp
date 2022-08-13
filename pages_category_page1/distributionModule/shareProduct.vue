@@ -109,12 +109,12 @@
 
 			// 保存图片到本地
 			WXfenx() {
-				// #ifdef APP-PLUS || MP-WEIXIN || MP-ALIPAY 
+				// #ifdef APP-PLUS || MP-WEIXIN || MP-ALIPAY
 				uni.showLoading({
 					title: '图片保存中...'
 				})
-				// #endif	
-				
+				// #endif
+
 				// #ifdef APP-PLUS
 				uni.downloadFile({
 					url: this.erweima,
@@ -136,12 +136,25 @@
 									});
 								}
 							});
+						} else {
+							uni.hideLoading()
+							uni.showToast({
+								title: "保存失败",
+								icon: "none"
+							});
 						}
+					},
+					fail: (res) => {
+						uni.hideLoading()
+						uni.showToast({
+							title: "保存失败",
+							icon: "none"
+						});
 					}
 				})
-				// #endif	
-				
-				// #ifdef MP-WEIXIN || MP-ALIPAY 
+				// #endif
+
+				// #ifdef MP-WEIXIN || MP-ALIPAY
 				uni.getImageInfo({
 					src: this.erweima,
 					success: function(image) {
@@ -195,7 +208,7 @@
 					}
 				});
 				// #endif
-				// #ifdef H5 
+				// #ifdef H5
 				var oA = document.createElement('a');
 				oA.download = ''; // 设置下载的文件名，默认是’下载’
 				oA.href = this.erweima;

@@ -24,7 +24,7 @@
                     <img :src="item.shopLogo">
                   </div>
                 </div>
-                <label class="buy-count">{{item.users?item.users: 0}}人付款</label>
+                <label class="buy-count">已售{{item.number?item.number: 0}}件</label>
               </div>
               <div class="price-warp">
                 <!-- #ifdef MP-WEIXIN -->
@@ -77,7 +77,7 @@
                     <img :src="item.shopLogo">
                   </div>
                 </div>
-                <label class="buy-count">{{item.users?item.users: 0}}人付款</label>
+                <label class="buy-count">已售{{item.number?item.number: 0}}件</label>
               </div>
               <div class="price-warp">
                 <!-- #ifdef MP-WEIXIN -->

@@ -38,8 +38,8 @@
 				    </view>
 				    <view class="itemInfo">
 				      <p>{{item.productName}}</p>
-				      <view class="number" v-if="item.users != null">
-                <view class="numText">{{item.users}}人付款</view>
+				      <view class="number" v-if="item.number != null">
+                <view class="numText">已售{{item.number}}件</view>
                 <view class="numText" v-if="item.total !=0 && item.activityType !== 0">限量{{item.total}}件</view>
               </view>
 					  <view class="flex-row-plus flex-item mar-top-30">

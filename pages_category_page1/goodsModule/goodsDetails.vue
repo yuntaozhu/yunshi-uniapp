@@ -376,7 +376,51 @@
         </view>
       </view>
     </view>
+<!--    拼团滚动-->
+    <view class="news-box">
+      <view class="news-bg">
+        <swiper class="goodsImgswiper-box"
+                :vertical="true"
+                :circular="true"
+                interval="8000"
+                duration="2000"
+                :autoplay="true">
+          <swiper-item v-for="(item, index) of broadCastList" :key="index">
+            <view class="news-item flex-items">
+              <image class="item-avatar" :src="item.headImage"></image>
+              <view class="news-item-user">{{item.name}}</view>
+              <view class="news-item-info">{{item.timeStr}}</view>
+              <view class="news-item-info" v-if="item.type === 1">给了好评</view>
+              <view class="news-item-info" v-if="item.type === 2">正在拼单</view>
+              <view class="news-item-info" v-if="item.type === 3">拼单成功</view>
+              <view class="news-item-info" v-if="item.type === 4">下单</view>
+            </view>
+          </swiper-item>
+        </swiper>
+      </view>
+    </view>
     <view class="buygoods-box">
+<!--      底部去拼团按钮-->
+      <view v-if="selectedSku.activityType === 1&&topThreeCollageOrders.length > 0">
+        <view class="groupByInfo" v-for="(Gitem, index) in topThreeCollageOrders">
+          <view v-if="Gitem.time > 0" class="flex-items flex-sp-between groupByInfoBox">
+            <view class="groupByLeft flex-items">
+              <view class="groupByAvatar flex-items">
+                <img :src="Gitem.headImage"
+                     alt="">
+                <span class="fs26">{{ Gitem.name }}</span>
+              </view>
+              <view class="groupByNum fs26">还差<b>{{ Gitem.person }}人</b>拼成</view>
+              <view class="groupByTime">
+                <view class="endDate fs26">剩余{{ timeChange(Gitem.time) }}</view>
+              </view>
+            </view>
+            <view class="groupByRight">
+              <view class="groupByBtn" @click="getGroupShow(Gitem.collageId)">去拼单</view>
+            </view>
+          </view>
+        </view>
+      </view>
       <view class="buygoodsBut-box flex-row-plus"
             :style="{'height':(isIphone === true? 160:130)+'rpx'}">
         <view class="btns_container">
@@ -386,7 +430,7 @@
                    src="https://ceres.zkthink.com/static/images/storeIcon.png"></image>
             <label class="fs22">店铺</label>
           </view>
-          <!-- #ifdef MP-WEIXIN -->
+          <!-- #ifdef MP-WEIXIN || APP-PLUS -->
           <view v-if="hasService"
                 class="btns flex-column-plus mar-left-10"
                 @click="flyToService">
@@ -451,7 +495,7 @@
             <view class="font-color-C5AA7B">
               <label class="fs24">¥</label>
               <label class="fs36 mar-left-10"
-                     v-text="selectedSku.activityType === 1 && btnType === 4 ? selectedSku.originalPrice : selectedSku.price"></label>
+                     v-text="selectedSku.activityType === 1 && btnType === 4 ? selectedSku.salePrice : selectedSku.price"></label>
             </view>
             <label class="fs24 font-color-999 mar-top-20">库存 {{ selectedSku.stockNumber }} 件</label>
             <label class="fs24 mar-top-20">已选</label>
@@ -719,7 +763,8 @@ export default {
       shopMarkTools: [], //店铺优惠券
       ifShow: false,
       topLeft: 0,
-      currentActive: 0
+      currentActive: 0,
+      broadCastList: []
     }
   },
   computed: {
@@ -745,7 +790,6 @@ export default {
 		this.getProblems()
 	},
   onLoad(options) {
-    console.log("options----", options)
     this.isIphone = getApp().globalData.isIphone;
     if (getApp().globalData.productShareItem) {
       const item = getApp().globalData.productShareItem
@@ -755,7 +799,6 @@ export default {
       this.salesId = parseInt(item.salesId)
       getApp().globalData.productShareItem = undefined
     } else {
-      console.log(options, '001001')
       this.shopId = parseInt(options.shopId)
       this.productId = options.productId
       this.paramSkuId = options.skuId
@@ -770,6 +813,7 @@ export default {
     this.getProblems()
     this.allCartNum = uni.getStorageSync('allCartNum')
     this.getServiceUrl()
+    this.getBroadCastListFn()
   },
   onUnload() {
     if (this.countdownInterval) {
@@ -781,7 +825,6 @@ export default {
     if (this.funtimeOut) {
       clearTimeout(this.funtimeOut)
     }
-    console.log('onUnload')
   },
   mounted() {
     // 获取手机的屏幕高度
@@ -796,10 +839,17 @@ export default {
     this.topLeft = e.scrollTop
   },
   methods: {
+    getBroadCastListFn() {
+      NET.request(API.GetBroadCastList, {
+        productId: this.productId,
+        shopGroupWorkId: this.shopGroupWorkId,
+      }, 'GET').then(res => {
+        this.broadCastList = res.data
+      }).catch(res => {
+      })
+    },
     onDetailScroll(e) {
-      console.log(e)
       this.topLeft = e.scrollTop
-      console.log(this.topLeft)
     },
     previewImg(index, cindex) {
       let img = this.commentList[index].images[cindex]
@@ -1127,7 +1177,6 @@ export default {
       if (skuId) {
         let mapinfo = this.productData.map
         for (var key in mapinfo) {
-          console.log(skuId, mapinfo[key].skuId, 'test')
           if (parseInt(mapinfo[key].skuId) === parseInt(skuId)) {
             this.selectedSku = mapinfo[key]
             // 选中sku对应的规格
@@ -1213,7 +1262,6 @@ export default {
       this.$forceUpdate(); // 重绘
     },
     selectSkuPostProcessor() {
-      console.log('selectSkuPostProcessor')
       const ifEnable = this.selectedSku.ifEnable
       if (this.selectedSku.activityType === 1 && ifEnable === 0) {
         this.topThreeCollageOrders = this.selectedSku.collageOrders.slice(0, 3)
@@ -1659,7 +1707,7 @@ export default {
     },
     flyToService() {
       let self = this
-      console.log(self.serviceURL, self.corpId)
+      // #ifdef MP-WEIXIN
       if (!self.serviceURL || !self.corpId) {
         self.hasService = false
         return
@@ -1674,6 +1722,39 @@ export default {
         fail(err) {
         }
       })
+      // #endif
+      // #ifdef APP-PLUS
+      try {
+        let sweixin = null
+        plus.share.getServices(res=>{
+          sweixin = res.find(i => i.id === 'weixin')
+          if(sweixin){
+            sweixin.openCustomerServiceChat({
+              corpid: self.corpId,
+              url: self.serviceURL,
+            },success=>{
+              console.log("success",JSON.stringify(success))
+            },err=>{
+              console.log("error",JSON.stringify(err))
+            })
+          }else{
+            plus.nativeUI.alert('当前环境不支持微信操作!')
+          }
+        },function(err){
+          console.log(err)
+          uni.showToast({title: "获取服务失败，不支持该操作。"+JSON.stringify(e), icon: 'error'})
+        })
+      } catch (err) {
+        console.log(err)
+        uni.showToast({title: "调用失败，不支持该操作。"+JSON.stringify(err), icon: 'error'})
+      }
+      /*plus.runtime.openURL(self.serviceURL, function(res) {
+        uni.showToast({
+          title: JSON.stringify(res),
+          icon: "success"
+        })
+      })*/
+      // #endif
     },
   }
 }
@@ -2230,7 +2311,41 @@ export default {
     position: fixed;
     bottom: 0upx;
     box-sizing: border-box;
-
+    .groupByInfo {
+      background: #fffbe9;
+      padding:  0 30rpx;
+      height: 80rpx;
+      .groupByInfoBox {
+        height: 80rpx;
+      }
+      .groupByLeft {
+        .groupByAvatar {
+          margin-right: 15rpx;
+        }
+        img {
+          width: 50rpx;
+          height: 50rpx;
+        }
+        .name {
+          font-size: 24rpx;
+        }
+        .groupByNum {
+          margin-right: 10rpx;
+        }
+        .groupByTime {
+          color: #333333;
+        }
+      }
+      .groupByBtn {
+        height: 60rpx;
+        background: #333333;
+        color: #FFEBC4;
+        font-size: 14rpx;
+        line-height: 60rpx;
+        text-align: center;
+        padding: 0 20rpx;
+      }
+    }
     .buygoodsBut-box {
       background-color: #FFFFFF;
       width: 750upx;
@@ -2333,7 +2448,7 @@ export default {
 
   .returnTopService-box {
     position: fixed;
-    bottom: 160upx;
+    bottom: 240upx;
     right: 30upx;
 
     .fs16 {
@@ -2346,7 +2461,6 @@ export default {
       border-radius: 50%;
       background: #FFFFFF;
       opacity: 0.8;
-
       .returnTopImg {
         width: 58upx;
         height: 58upx;
@@ -3206,5 +3320,33 @@ export default {
   //    }
   //  }
   //}
+}
+//拼团提示
+.news-box {
+  position: fixed;
+  left: 20rpx;
+  top: 200rpx;
+  .news-bg {
+    height: 70rpx;
+    overflow: hidden;
+    .news-item {
+      background: rgba(0, 0, 0, 0.75);
+      border-radius: 16rpx;
+      height: 70rpx;
+      color: #FFFFFF;
+      font-size: 24rpx;
+      padding: 0 20rpx;
+      display: inline-flex;
+      .item-avatar {
+        width: 50rpx;
+        height: 50rpx;
+        border-radius: 50%;
+        margin-right: 20rpx;
+      }
+      .news-item-user {
+        margin-right: 8rpx;
+      }
+    }
+  }
 }
 </style>

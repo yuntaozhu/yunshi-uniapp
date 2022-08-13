@@ -55,7 +55,6 @@
 			          desc: item.time,
 			        })
 			      }
-			      this.steps = this.steps.reverse()
 			    }).catch(res => {
 			    })
 			},

@@ -26,6 +26,7 @@
         </view>
         <view>
           <input v-model="loginQuery.code"
+                 :maxlength="4"
                  placeholder-class="codeNum-input"
                  placeholder="请输入验证码"/>
         </view>
@@ -69,11 +70,12 @@ export default {
   },
   mixins: [sendVerifyCode],
   onLoad(options) {
-    if (options.inviteSpell == 1) {
+    if (options.inviteSpell && parseInt(options.inviteSpell) === 1) {
       this.inviteSpelltype = true
-      this.inviteSpell = uni.getStorageSync('inviteSpell');
+      this.inviteSpell = uni.getStorageSync('inviteSpell')
+      console.log('this.inviteSpell', this.inviteSpell)
     }
-    this.loginQuery.salesId = uni.getStorageSync('salesId');
+    this.loginQuery.salesId = uni.getStorageSync('salesId')
     var pages = getCurrentPages()
     if (pages.length >= 2) {
       this.beforePage = pages[pages.length - 2]
@@ -139,10 +141,13 @@ export default {
           if (this.inviteSpelltype == true) {
             setTimeout(function () {
               uni.reLaunch({
-                url: '../../pages_category_page1/goodsModule/inviteSpell?collageId=' +
-                    this.inviteSpell.collageId + '&orderId=' + this.inviteSpell
-                        .orderId + '&type=0' + '&productId=' + this.inviteSpell
-                        .productId + '&skuId=' + this.inviteSpell.skuId
+                url: '../../pages_category_page1/goodsModule/inviteSpell?collageId='
+                        + that.inviteSpell.collageId
+                        + '&orderId=' + that.inviteSpell.orderId
+                        + '&type=0'
+                        + '&productId=' + that.inviteSpell.productId
+                        + '&skuId=' + that.inviteSpell.skuId
+                        + '&shopGroupWorkId=' + that.inviteSpell.shopGroupWorkId
               })
               uni.removeStorageSync('inviteSpell');
             }, 2000)

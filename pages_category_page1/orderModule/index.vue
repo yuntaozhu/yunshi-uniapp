@@ -544,7 +544,7 @@ export default {
         type: 2
       }
       // #ifdef H5
-      let ua = navigator.userAgent.toLowerCase();		
+      let ua = navigator.userAgent.toLowerCase();
       if (ua.match(/MicroMessenger/i) == "micromessenger") {
       	this.payRequest(submitResult)
       } else {

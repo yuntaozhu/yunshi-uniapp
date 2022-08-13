@@ -35,7 +35,8 @@
 				WXloginQuery: {
 					"code": "",
 					"salesId": 0,
-					"headImg": ''
+					"headImg": '',
+          "terminal":1
 				},
 				noMp: false,
 				// beforePage: undefined,

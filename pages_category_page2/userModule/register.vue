@@ -20,8 +20,8 @@
 						<image class="loginIcon" src="https://ceres.zkthink.com/static/images/code.png"></image>
 					</view>
 					<view style="margin-left: 40rpx;">
-						<input v-model="RegisterQuery.code" class="codeNum-inputbox" placeholder-class="codeNum-input"
-							placeholder="请输入验证码" />
+						<input :maxlength="4" v-model="RegisterQuery.code" class="codeNum-inputbox"
+							placeholder-class="codeNum-input" placeholder="请输入验证码" />
 					</view>
 				</view>
 				<view :class="disabled === true ? 'on' : ''" :disabled="disabled" class="getcode" @click="codede">
@@ -93,7 +93,7 @@
 						duration: 2000,
 						icon: 'none'
 					});
-				} else if(!this.agreement){
+				} else if (!this.agreement) {
 					uni.showToast({
 						title: '请先阅读并同意《用户服务协议和个人隐私协议》',
 						duration: 2000,
@@ -105,10 +105,27 @@
 						title: '正在注册...',
 						duration: 2000,
 					})
+
+					// 判断用户类型
+					let terminal = 0
+					//#ifdef APP-PLUS
+					terminal = 1
+					//#endif
+					//#ifdef MP-WEIXIN
+					terminal = 2
+					//#endif
+					//#ifdef H5
+					terminal = 3
+					//#endif
+					//#ifdef MP-ALIPAY
+					terminal = 4
+					//#endif
+
 					NET.request(API.Login, {
 						type: 1,
 						phone: this.phone,
 						verificationCode: this.RegisterQuery.code,
+						terminal
 					}, 'POST').then(res => {
 						uni.hideLoading()
 						uni.showToast({
@@ -321,7 +338,8 @@
 		.agreement {
 			margin: 100rpx 50rpx;
 			line-height: 50rpx;
-			image{
+
+			image {
 				width: 34rpx;
 				height: 34rpx;
 				margin-right: 15upx;

@@ -7,7 +7,7 @@
         <view class="ad-boxs">
           <image class="img"
                  :src="adInfo.popupImg"
-                 mode="widthFix"></image>
+                 ></image>
           <view class="coupon-list">
             <scroll-view :scroll-top="0"
                          class="scrollBox"
@@ -287,25 +287,31 @@ export default {
 .ad-coupons {
   .ad-box-warp {
     width: 510rpx;
+    position: relative;
 
     .ad-boxs {
+      min-height: 700rpx;
       .img {
+        position: absolute;
+        top:0;
+        left:0;
         width: 100%;
+        height: 100%;
       }
     }
   }
 
   .coupon-list {
     width: 446rpx;
-    height: 295rpx;
+    height: 450rpx;
     overflow: auto;
     position: absolute;
-    top: 308rpx;
+    top: 20rpx;
     left: 50%;
     margin-left: -223rpx;
 
     .scrollBox {
-      height: 294upx;
+      height: 450upx;
     }
 
     .item {

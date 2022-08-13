@@ -38,7 +38,7 @@
           <text class="font-color-999 fs22">{{item.createTime}}</text>
 					<view class="praise-box flex-items flex-row">
 						<!-- <image class="praise-icon" src="https://ceres.zkthink.com/static/images/praiseIcon.png"></image> -->
-						<image class="praise-icon" @click="zanTap(index,item.commen0tId,0)" src="https://ceres.zkthink.com/static/images/praiseActiveIcon.png"
+						<image class="praise-icon" @click="zanTap(index,item.commentId,0)" src="https://ceres.zkthink.com/static/images/praiseActiveIcon.png"
 						 v-if="item.ifLike == 1"></image>
 						<image class="praise-icon" @click="zanTap(index,item.commentId,1)" src="https://ceres.zkthink.com/static/images/praiseIcon.png" v-else></image>
 						<text class="mar-left-10 font-color-999">{{item.likes}}</text>
