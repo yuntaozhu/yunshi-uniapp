@@ -1,6 +1,8 @@
 <template>
 	<view class="spikeListBox">
-		<view v-if="!shopSeckillId">
+    <global-loading />
+
+    <view v-if="!shopSeckillId">
 			<view class="spikeBg">
 				<image src="https://ceres.zkthink.com/static/images/spikelLogo.png"></image>
 			</view>
@@ -67,7 +69,7 @@
 							</view>
 						</view>
 						<view v-if="spikeLikeData.state === 1  || (platformSeckillList[platformIndex] && platformSeckillList[platformIndex].state === 3)"
-						  class="snapUpBtn" 
+						  class="snapUpBtn"
 							@click="gogoodsDetails(item.shopId,item.productId,item.skuId)">
 							<view class="btnText">去抢购</view>
 							<view class="progressBox">
@@ -75,7 +77,7 @@
 									active stroke-width="5" />
 							</view>
 						</view>
-						<view v-if="spikeLikeData.state === 0 || (platformSeckillList[platformIndex] && platformSeckillList[platformIndex].state === 2)" 
+						<view v-if="spikeLikeData.state === 0 || (platformSeckillList[platformIndex] && platformSeckillList[platformIndex].state === 2)"
 						  class="snapUpBtn" :class="{btnStyle1: spikeLikeData.state === 0 || (platformSeckillList[platformIndex] && platformSeckillList[platformIndex].state === 2) }">
 							<view class="btnText">即将开始</view>
 							<view class="progressBox">
@@ -213,10 +215,10 @@
 			},
 			// 平台首页根据seckillId查询对应的秒杀商品列表
 			getPlatformSeckillsData(index){
-				uni.showLoading({
-					mask: true,
-					title: '数据加载中...',
-				})
+				// uni.showLoading({
+				// 	mask: true,
+				// 	title: '数据加载中...',
+				// })
 				NET.request(API.getPlatformSeckills,{ seckillId:this.platformSeckillId },'GET').then(res => {
 				 uni.hideLoading()
 			   if(res.data[0].products === 0){
@@ -233,7 +235,7 @@
 					})
 				})
 			},
-			
+
 			// // 根据时间查询
 			// queryProductListBySession() {
 			// 	NET.request(API.querySession, {
@@ -275,7 +277,7 @@
 					// }else{
 					// 	this.getSpikeLike()
 					// }
-					
+
 				}).catch(res => {
 					uni.showToast({
 						title: '失败1111',
@@ -340,10 +342,10 @@
 			// },
 			// 获取店铺更多秒杀
 			getShopSeckillList(){
-				uni.showLoading({
-					mask: true,
-					title: '数据加载中...',
-				})
+				// uni.showLoading({
+				// 	mask: true,
+				// 	title: '数据加载中...',
+				// })
 				let param = ''
 				param = {
 					page: this.page,

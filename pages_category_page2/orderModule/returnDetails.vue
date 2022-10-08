@@ -1,6 +1,7 @@
 <!-- 退货详情 -->
 <template>
 	<view>
+    <global-loading />
 		<view class="">
 			<view class="order-details-status">
 				<view class="status-title-box" v-if='status == -1'>
@@ -209,10 +210,12 @@
 </template>
 
 <script>
-	const NET = require('../../utils/request')
+	import GlobalLoading from "../../components/GlobalLoading";
+  const NET = require('../../utils/request')
 	const API = require('../../config/api')
 	export default {
-		data() {
+    components: {GlobalLoading},
+    data() {
 			return {
 				item:{},
 				itemlist:{},
@@ -243,14 +246,14 @@
 				})
 			},
 			cancelRefundTap(){
-					uni.showLoading({
-						title:'正在撤销退货...'
-					})
+					// uni.showLoading({
+					// 	title:'正在撤销退货...'
+					// })
 					NET.request(API.CancelReturnGoods, {
 						afterId:this.item.afterId,
 						orderId:this.item.orderId
 					}, 'POST').then(res => {
-						uni.hideLoading()
+						// uni.hideLoading()
 						uni.showToast({
 							title:'撤销成功',
 						})
@@ -258,7 +261,7 @@
 							url:'../../pages/tabbar/user/index'
 						})
 					}).catch(res => {
-						uni.hideLoading()
+						// uni.hideLoading()
 					})
 			},
 			goAddLogistics(){
@@ -277,22 +280,22 @@
         // this.orderId = orderId
       },
       interventionFn() {
-        uni.showLoading({
-          title:'正在申请介入...'
-        })
+        // uni.showLoading({
+        //   title:'正在申请介入...'
+        // })
         NET.request(API.platform, {
           afterId: this.afterId,
           orderId: this.orderId,
           image: this.images,
           reason: this.reason
         }, 'POST').then(res => {
-          uni.hideLoading()
+          // uni.hideLoading()
           this.intervention = false
           uni.showToast({
             title:'申请成功',
           })
         }).catch(res => {
-          uni.hideLoading()
+          // uni.hideLoading()
         })
       },
       closeInterventionFn() {

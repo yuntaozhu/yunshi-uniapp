@@ -1,6 +1,8 @@
 <template>
 	<view class="container">
-		<!-- 商品列表 -->
+    <global-loading />
+
+    <!-- 商品列表 -->
 		<view class="flex-items-plus flex-row search">
       <view class="searchBg">
         <view class="searchImg-box flex-items-plus">
@@ -168,10 +170,10 @@
 				this.keyWord = ''
 			},
 			searchList(type){
-        uni.showLoading({
-          mask: true,
-          title: '加载中...',
-				})
+        // uni.showLoading({
+        //   mask: true,
+        //   title: '加载中...',
+				// })
 				if(type == 1){
 					this.list = []
 					this.page = 1

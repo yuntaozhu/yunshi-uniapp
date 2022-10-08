@@ -1,6 +1,8 @@
 <template>
 	<view class="container">
-		<!-- 商品列表 -->
+    <global-loading />
+
+    <!-- 商品列表 -->
 		<view>
 			<view v-for="(item, index) in list" :key="index" class="goodsDetails-box flex-display flex-column mar-left-30" @click="goodsDateils(item.shopId,item.productId,item.skuId)">
 				<view v-if="item.activityType == 0" class="goodsDetails flex-items-plus flex-row mar-top-30">
@@ -82,9 +84,9 @@
 		},
 		methods: {
 			searchList(type){
-        uni.showLoading({
-				      title: '加载中...',
-				})
+        // uni.showLoading({
+				//       title: '加载中...',
+				// })
 				if(type == 1){
 					this.list = []
 					this.page = 1

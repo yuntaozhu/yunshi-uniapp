@@ -1,6 +1,8 @@
 <!-- 订单中心 -->
 <template>
   <view class="container">
+    <global-loading/>
+
     <view style="padding-bottom:68upx;">
       <view>
         <u-tabs :list="tabList"
@@ -123,7 +125,7 @@
                   </text>
                   <text class="btn r"
                         v-if='item.state==5'
-                        @click.stop="againCollage(item.skus[0].productId,item.shopId,item.skus[0].skuId)">
+                        @click.stop="againCollage(item.skus[0].productId,item.shopId,item.skus[0].skuId,item.collageId!=0,item)">
                     {{ item.collageId != 0 ? '再次开团' : '再次购买' }}
                   </text>
                 </view>
@@ -339,12 +341,82 @@ export default {
   },
   methods: {
     //去商品详情
-    againCollage(productId, shopId, skuId) {
+    againCollage(productId, shopId, skuId, isStartAGroup, item) {
+      console.log(item)
+      if (isStartAGroup) {
+        uni.navigateTo({
+          url: '../goodsModule/goodsDetails?productId=' + productId + '&shopId=' + shopId + '&skuId=' +
+              skuId
+        })
+      } else {
+        // 跳转详情
+        this.buyAgain(item)
+      }
+    },
+    async buyAgain(item) {
+      // 循环sku，获取商品详情
+      const postAjax = []
+      item.skus.forEach(e=>{
+        postAjax.push(this.queryProductDetail(e))
+      })
+      // 并发执行
+      const skuDetailList = await Promise.all(postAjax);
+      let canNotBuyNameList = []
+      // 判断库存
+      skuDetailList.forEach(skuDetail=>{
+        for (const skuDetailSkuMapKey in skuDetail.map) {
+          // 判断此SKU是否存在于传进来的item
+          const findSku = item.skus.find(findItem=>findItem.skuId === skuDetail.map[skuDetailSkuMapKey].skuId);
+          if(findSku){
+            const skuInfo = skuDetail.map[skuDetailSkuMapKey]
+            if(findSku.number > skuInfo.stockNumber){
+              canNotBuyNameList.push(findSku.productName)
+            }
+          }
+        }
+      })
+      // 如果有库存不足
+      if(canNotBuyNameList.length>0){
+        uni.showToast({
+          icon:'none',
+          title:canNotBuyNameList.join(",")+" 库存不足"
+        })
+        return;
+      }
+      // 制造数据
+      const buyInfo = [{
+        ifWork: item.ifWork,
+        shopId: item.shopId,
+        shopName: item.shopName,
+        shopDiscountId: item.shopDiscountId,
+        shopSeckillId: item.shopSeckillId,
+        skus: item.skus
+      }]
+      uni.setStorageSync('skuItemDTOList', buyInfo)
       uni.navigateTo({
-        url: '../goodsModule/goodsDetails?productId=' + productId + '&shopId=' + shopId + '&skuId=' +
-            skuId
+        url: '../orderModule/orderConfirm?type=1',
       })
     },
+
+    //获取商品详情
+    async queryProductDetail(item) {
+      // uni.showLoading({
+      //   title: '加载中...',
+      //   mask: true
+      // })
+      this.$showLoading("加载中...")
+      let postData = {
+        shopId: item.shopId,
+        productId: item.productId,
+        skuId: item.skuId,
+        terminal: 1
+      }
+      let productData
+      const res = await NET.request(API.QueryProductDetail, postData, "GET")
+      this.$hideLoading()
+      return res.data
+    },
+
     goInviteSpll(collageId, orderId, productId, skuId, shopGroupWorkId) {
       uni.navigateTo({
         url: '../goodsModule/inviteSpell?collageId=' + collageId + '&orderId=' + orderId + '&type=1' +
@@ -376,10 +448,11 @@ export default {
       if (this.orderState == 0) {
         this.orderState = ''
       }
-      uni.showLoading({
-        mask: true,
-        title: '加载中...',
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '加载中...',
+      // })
+      this.$showLoading("加载中...")
       NET.request(API.FindOrderList, {
         state: this.orderState,
         page: this.page,
@@ -389,14 +462,16 @@ export default {
           this.loadingType = 1
           this.page = this.page
         }
-        uni.hideLoading()
+        // uni.hideLoading()
+        this.$hideLoading()
         this.listTotal = res.data.total
         this.list = this.list.concat(res.data.list)
         if (this.list.length === 0) {
           this.ifEmpty = true
         }
       }).catch(res => {
-        uni.hideLoading()
+        // uni.hideLoading()
+        this.$hideLoading()
       })
     },
     cancelOrder(orderId, index) {
@@ -406,14 +481,17 @@ export default {
     },
     doCancel() {
       this.closeTips = false
-      uni.showLoading({
-        mask: true,
-        title: '提交中...',
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '提交中...',
+      // })
+      this.$showLoading("加载中...")
       NET.request(API.CancelOrder, {
         orderId: this.currentOrderId
       }, 'POST').then(res => {
-        uni.hideLoading()
+        // uni.hideLoading()
+        this.$hideLoading()
+
         uni.showToast({
           title: '取消成功',
         })
@@ -428,7 +506,9 @@ export default {
         }, 1500);
 
       }).catch(res => {
-        uni.hideLoading()
+        // uni.hideLoading()
+        this.$hideLoading()
+
       })
     },
     goLogisticsTap(express, deliverFormid) {
@@ -455,7 +535,9 @@ export default {
       NET.request(API.ConfirmReceive, {
         orderId: orderId
       }, 'POST').then(res => {
-        uni.hideLoading()
+        // uni.hideLoading()
+        this.$hideLoading()
+
         uni.showToast({
           title: '确认成功',
         })
@@ -467,7 +549,9 @@ export default {
           this.getListData()
         }, 1500);
       }).catch(res => {
-        uni.hideLoading()
+        // uni.hideLoading()
+        this.$hideLoading()
+
       })
     },
     delOrder(orderId) {
@@ -486,13 +570,16 @@ export default {
       })
     },
     doDel(orderId) {
-      uni.showLoading({
-        title: '提交中...',
-      })
+      // uni.showLoading({
+      //   title: '提交中...',
+      // })
+      this.$showLoading("加载中...")
       NET.request(API.DelOrder, {
         orderId: orderId
       }, 'POST').then(res => {
-        uni.hideLoading()
+        // uni.hideLoading()
+        this.$hideLoading()
+
         uni.showToast({
           title: '删除成功',
         })
@@ -505,7 +592,9 @@ export default {
         }, 1500);
 
       }).catch(res => {
-        uni.hideLoading()
+        // uni.hideLoading()
+        this.$hideLoading()
+
       })
     },
     // 跳转订单详情
@@ -533,9 +622,10 @@ export default {
       this.totalPrice = item.orderPrice
       // #endif
       // #ifndef MP-ALIPAY
-      uni.showLoading({
-        title: '订单提交中...',
-      })
+      // uni.showLoading({
+      //   title: '订单提交中...',
+      // })
+      this.$showLoading("加载中...")
       // #endif
       let submitResult = {
         collageId: item.collageId,
@@ -546,20 +636,24 @@ export default {
       // #ifdef H5
       let ua = navigator.userAgent.toLowerCase();
       if (ua.match(/MicroMessenger/i) == "micromessenger") {
-      	this.payRequest(submitResult)
+        this.payRequest(submitResult)
       } else {
-				NET.request(API.gotoH5Pay, submitResult, 'POST').then(res => {
-					//console.dir(res)
-					location.replace(res.data.mwebUrl)
-					// window.location.replace(url)
-				}).catch(err => {
-					this.submitActive = true
-					uni.hideLoading()
-					uni.showToast({
-						title: '支付失败',
-						icon: 'none'
-					})
-				})
+        NET.request(API.gotoH5Pay, submitResult, 'POST').then(res => {
+          //console.dir(res)
+          location.replace(res.data.mwebUrl)
+          // window.location.replace(url)
+          this.$hideLoading()
+
+        }).catch(err => {
+          this.submitActive = true
+          // uni.hideLoading()
+          uni.showToast({
+            title: '支付失败',
+            icon: 'none'
+          })
+          this.$hideLoading()
+
+        })
       }
       // #endif
       // #ifdef MP-ALIPAY
@@ -597,16 +691,20 @@ export default {
             this.orderState = ''
             this.list = []
             this.getListData()
+            this.$hideLoading()
           },
-          fail: function (err) {
+          fail:  (err)=> {
             uni.showToast({
               icon: 'none',
               title: '支付失败'
             })
+            this.$hideLoading()
           }
         })
       }).catch(err => {
-        uni.hideLoading()
+        // uni.hideLoading()
+        this.$hideLoading()
+
         uni.showToast({
           title: '支付失败',
           icon: 'none'
@@ -615,15 +713,17 @@ export default {
       // #endif
       // #ifdef APP-PLUS
       NET.request(API.gotoAppPay, submitResult, 'POST').then(res => {
-		var obj = {
-		  appid: res.data.appId,
-		  noncestr: res.data.nonceStr,
-		  package: 'Sign=WXPay',
-		  prepayid: res.data.prepayId,
-		  timestamp: res.data.timeStamp,
-		  sign: res.data.paySign,
-		  partnerid: res.data.partnerId
-		}
+        console.log("支付返回---", res)
+        var obj = {
+          appid: res.data.appId,
+          noncestr: res.data.nonceStr,
+          package: 'Sign=WXPay',
+          prepayid: res.data.prepayId,
+          timestamp: res.data.timeStamp,
+          sign: res.data.paySign,
+          partnerid: res.data.partnerId
+        }
+        console.log(obj)
         uni.requestPayment({
           provider: 'wxpay',
           orderInfo: obj,
@@ -636,19 +736,24 @@ export default {
             this.page = 1
             this.orderState = ''
             this.list = []
+            this.$hideLoading()
+
             this.getListData()
 
           },
-          fail: function (err) {
+          fail:(err)=> {
             console.log(err)
             uni.showToast({
               icon: 'none',
               title: '支付取消'
             })
+            this.$hideLoading()
           }
         })
       }).catch(err => {
-        uni.hideLoading()
+        // uni.hideLoading()
+        this.$hideLoading()
+
         uni.showToast({
           title: '支付失败',
           icon: 'none'
@@ -657,9 +762,10 @@ export default {
       // #endif
     },
     continuePay() {
-      uni.showLoading({
-        title: '加载中...',
-      })
+      // uni.showLoading({
+      //   title: '加载中...',
+      // })
+      this.$showLoading("加载中...")
       const payInfo = Object.assign({}, this.alipayInfo, {
         'paymentMode': this.paymentMode,
         'huabeiPeriod': this.huabeiPeriod
@@ -674,7 +780,9 @@ export default {
           provider: 'alipay',
           orderInfo: res.data.tradeNo,
           success: (payRes) => {
-            uni.hideLoading()
+            // uni.hideLoading()
+            this.$hideLoading()
+
             if (payRes.resultCode == '6001') {
               uni.showToast({
                 icon: 'none',
@@ -691,7 +799,8 @@ export default {
               })
             }
           },
-          fail: function (err) {
+          fail:  (err)=> {
+            this.$hideLoading()
             uni.showToast({
               icon: 'none',
               title: '支付取消'
@@ -699,7 +808,9 @@ export default {
           }
         });
       }).catch(err => {
-        uni.hideLoading()
+        // uni.hideLoading()
+        this.$hideLoading()
+
         uni.showToast({
           title: '支付失败',
           icon: 'none'
@@ -762,10 +873,12 @@ export default {
             }
           });
         });
-        jweixin.error(function (res) {
+        jweixin.error( (res)=> {
           console.log('error')
           console.log(res)
-          uni.hideLoading()
+          // uni.hideLoading()
+          this.$hideLoading()
+
           uni.showToast({
             icon: 'none',
             title: '支付失败了',
@@ -773,7 +886,9 @@ export default {
           });
         });
       }).catch(err => {
-        uni.hideLoading()
+        // uni.hideLoading()
+        this.$hideLoading()
+
       })
     },
     evaluateTap(item, orderId) {
@@ -864,7 +979,7 @@ page {
 }
 
 .nav-box-box {
-  height: 88upx;
+  height: 88rpx;
   background: #f6f6f6;
   white-space: nowrap;
   position: fixed;
@@ -876,12 +991,12 @@ page {
 
 .nav-box-box .item {
   display: inline-view;
-  padding: 0 30upx;
+  padding: 0 30rpx;
   box-sizing: border-box;
-  height: 88upx;
+  height: 88rpx;
   text-align: center;
-  line-height: 88upx;
-  font-size: 30upx;
+  line-height: 88rpx;
+  font-size: 30rpx;
   color: #666;
   font-weight: 500;
 }
@@ -890,24 +1005,24 @@ page {
   display: inline-view;
   color: #ff7911;
   box-sizing: border-box;
-  height: 88upx;
+  height: 88rpx;
   border-bottom: 2px solid #ff7911;
 }
 
 .order-list-box {
-  padding: 20upx 30upx 0;
+  padding: 20rpx 30rpx 0;
   box-sizing: border-box;
 }
 
 .order-list-box .item {
-  margin-bottom: 20upx;
+  margin-bottom: 20rpx;
   background: #fff;
-  border-radius: 10upx;
+  border-radius: 10rpx;
 }
 
 .order-list-top {
-  height: 96upx;
-  padding: 0 30upx;
+  height: 96rpx;
+  padding: 0 30rpx;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -923,21 +1038,21 @@ page {
 }
 
 .shop-img {
-  width: 36upx;
-  height: 36upx;
-  margin-right: 10upx;
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 10rpx;
 }
 
 .shop-name {
-  font-size: 30upx;
+  font-size: 30rpx;
   color: #333;
   font-weight: bold;
 }
 
 .arrow-img {
-  margin-left: 15upx;
-  width: 25upx;
-  height: 25upx;
+  margin-left: 15rpx;
+  width: 25rpx;
+  height: 25rpx;
 }
 
 .order-status {

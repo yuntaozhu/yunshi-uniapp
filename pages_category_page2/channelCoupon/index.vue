@@ -1,5 +1,6 @@
 <template>
   <view class="channel-coupon">
+    <global-loading />
     <view class="details">
       <swiper class="swiper" :indicator-dots="true" :autoplay="true">
         <swiper-item v-for="(imgItem, index) in channelCouponData.productImageList" :key="index">
@@ -81,10 +82,12 @@
 </template>
 
 <script>
+import GlobalLoading from "../../components/GlobalLoading";
 const NET = require('../../utils/request')
 const API = require('../../config/api')
 export default {
   name: "channelCoupon",
+  components: {GlobalLoading},
   data() {
     return {
       channelCouponData:{},
@@ -110,15 +113,15 @@ export default {
   methods:{
     // 获取渠道优惠券
     getChannelCoupon(){
-      uni.showLoading({
-        mask: true,
-        title: '加载中...'
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '加载中...'
+      // })
       NET.request(API.getChannelCoupon, this.params, 'GET').then(res => {
         this.channelCouponData = res.data
-        uni.hideLoading()
+        // uni.hideLoading()
       }).catch(res => {
-        uni.hideLoading()
+        // uni.hideLoading()
         uni.showToast({
           title: '失败',
           icon: "none"
@@ -127,10 +130,10 @@ export default {
     },
     // 获取推荐产品
     getProductList(){
-      uni.showLoading({
-        mask: true,
-        title: '加载中...'
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '加载中...'
+      // })
       var params ={
         page: 1,
         pageSize: 10,
@@ -138,9 +141,9 @@ export default {
       }
       NET.request(API.getRandomProduct, params, 'GET').then(res => {
         this.productList = res.data.list
-        uni.hideLoading()
+        // uni.hideLoading()
       }).catch(res => {
-        uni.hideLoading()
+        // uni.hideLoading()
       })
     },
     // 领取优惠券

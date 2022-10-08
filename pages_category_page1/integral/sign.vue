@@ -1,84 +1,87 @@
 <template>
-  <view class="signBox" v-if="ifShow">
-    <view class="signBg">
-      <view class="signDayNumBox flex-center" v-if="continuousNum">
-        <view class="signDayNum fs28">
-          当前周期已连续签到
-          <text class="fs40">{{ continuousNum || '0' }}</text>
-          天
+  <view>
+    <global-loading />
+    <view class="signBox" v-if="ifShow">
+      <view class="signBg">
+        <view class="signDayNumBox flex-center" v-if="continuousNum">
+          <view class="signDayNum fs28">
+            当前周期已连续签到
+            <text class="fs40">{{ continuousNum || '0' }}</text>
+            天
+          </view>
         </view>
-      </view>
-      <view v-if="currentDay == lastDay" class="signState flex-center mar-top-30">
-        <view class="signStateBg flex-items flex-center noSign">
-          <text class="fs48">已签到</text>
+        <view v-if="currentDay == lastDay" class="signState flex-center mar-top-30">
+          <view class="signStateBg flex-items flex-center noSign">
+            <text class="fs48">已签到</text>
+          </view>
         </view>
-      </view>
-      <view v-if="currentDay != lastDay" class="signState flex-center mar-top-30" @click="signInFn" >
-        <view class="signStateBg flex-items flex-center">
-          <text class="fs48">未签到</text>
+        <view v-if="currentDay != lastDay" class="signState flex-center mar-top-30" @click="signInFn" >
+          <view class="signStateBg flex-items flex-center">
+            <text class="fs48">未签到</text>
+          </view>
         </view>
-      </view>
-      <view class="calendarBox">
-        <view class="calendarBg">
-          <view class="calendar-box">
-            <view class="month">
-              <view class="u-arrow u-arrow-left" @click="lastMonth"></view>
-              <view>{{year}}年{{month}}月</view>
-              <view class="u-arrow u-arrow-right" @click="nextMonth"></view>
-              <picker v-if="checkDate" class="picker" mode="date" fields="month" @change="changeDate" />
-            </view>
-            <view class="week">
-              <view :style="'color:'+(weeks==weeked?bgweek:'')+';'" v-for="weeks in weekArr">{{weeks}}</view>
-            </view>
-            <view class="day">
-              <view
-                class="dayItem"
-                v-for="(days,index) in dayArr"
-                :key="index"
-                @click="signToday(days,index)"
-              >
+        <view class="calendarBox">
+          <view class="calendarBg">
+            <view class="calendar-box">
+              <view class="month">
+                <view class="u-arrow u-arrow-left" @click="lastMonth"></view>
+                <view>{{year}}年{{month}}月</view>
+                <view class="u-arrow u-arrow-right" @click="nextMonth"></view>
+                <picker v-if="checkDate" class="picker" mode="date" fields="month" @change="changeDate" />
+              </view>
+              <view class="week">
+                <view :style="'color:'+(weeks==weeked?bgweek:'')+';'" v-for="weeks in weekArr">{{weeks}}</view>
+              </view>
+              <view class="day">
                 <view
-                  :class="[
+                    class="dayItem"
+                    v-for="(days,index) in dayArr"
+                    :key="index"
+                    @click="signToday(days,index)"
+                >
+                  <view
+                      :class="[
                     {'checkday':days.date==''},
                     {'choose':days.date==currentDay},
                     {'select': days.select === 1}
                   ]"
-                  class="dayValue"
-                >{{days.day}}</view>
+                      class="dayValue"
+                  >{{days.day}}</view>
+                </view>
               </view>
             </view>
           </view>
         </view>
       </view>
-    </view>
-    <view class="redEnvelope mar-top-20">
-      <view class="redEnvelopeBg flex-items flex-end">
-        <view>
-          <view class="fs32 font-color-333">积分兑换红包优惠券</view>
-          <view class="fs24 font-color-999 mar-top-10">各种大额红包等你兑换哦</view>
-          <view class="fs24 font-color-FFF exchangeBtn mar-top-20" @click="goToexchange">马上兑换</view>
-        </view>
-      </view>
-    </view>
-    <!-- 签到弹窗 -->
-    <tui-modal :show="signTips" :custom="true" :fadein="true">
-      <view class="Put-box1">
-        <view class="text-align fs34 fs-bold">
-          签到成功
-        </view>
-        <view class="mar-top-40 text-align">
-          今日签到成功，签到积分可以在我的积分内兑换商品
-        </view>
-        <view class="flex-display flex-sp-between">
-          <view class="btn" @click="signTips = false">
-            取消
-          </view>
-          <view class="btn submit" @click="signTips = false">
-            确定
+      <view class="redEnvelope mar-top-20">
+        <view class="redEnvelopeBg flex-items flex-end">
+          <view>
+            <view class="fs32 font-color-333">积分兑换红包优惠券</view>
+            <view class="fs24 font-color-999 mar-top-10">各种大额红包等你兑换哦</view>
+            <view class="fs24 font-color-FFF exchangeBtn mar-top-20" @click="goToexchange">马上兑换</view>
           </view>
         </view>
       </view>
-    </tui-modal>
+      <!-- 签到弹窗 -->
+      <tui-modal :show="signTips" :custom="true" :fadein="true">
+        <view class="Put-box1">
+          <view class="text-align fs34 fs-bold">
+            签到成功
+          </view>
+          <view class="mar-top-40 text-align">
+            今日签到成功，签到积分可以在我的积分内兑换商品
+          </view>
+          <view class="flex-display flex-sp-between">
+            <view class="btn" @click="signTips = false">
+              取消
+            </view>
+            <view class="btn submit" @click="signTips = false">
+              确定
+            </view>
+          </view>
+        </view>
+      </tui-modal>
+    </view>
   </view>
 </template>
 
@@ -118,10 +121,10 @@ export default {
   },
   methods: {
     getSignData() {
-      uni.showLoading({
-        mask: true,
-        title: '请稍等...',
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '请稍等...',
+      // })
       let selectMonth = this.year + '-' + this.formatNum(this.month)
       const that = this
       NET.request(API.selectByMonth,
@@ -130,7 +133,7 @@ export default {
         },
         'POST')
         .then(res => {
-          uni.hideLoading()
+          // uni.hideLoading()
           that.ifShow = true
           that.signList = res.data
 
@@ -172,12 +175,12 @@ export default {
     },
     // 签到
     signInFn() {
-      uni.showLoading({
-        mask: true,
-        title: '请稍等...',
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '请稍等...',
+      // })
       NET.request(API.creditSignIn, {}, 'POST').then(res => {
-        uni.hideLoading()
+        // uni.hideLoading()
         this.getSignData()
         this.signTips = true
       }).catch(res => {})

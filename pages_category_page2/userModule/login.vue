@@ -1,5 +1,6 @@
 <template>
 	<view class="container flex-items-plus flex-column">
+    <global-loading />
 		<view class="login-logoBox">
 			<image class="login-logo" src="https://ceres.zkthink.com/static/images/loginLogo.png"></image>
 		</view>
@@ -35,8 +36,7 @@
 				WXloginQuery: {
 					"code": "",
 					"salesId": 0,
-					"headImg": '',
-          "terminal":1
+					"headImg": ''
 				},
 				noMp: false,
 				// beforePage: undefined,
@@ -82,10 +82,11 @@
 			},
 			// 微信登录
 			GetUserInfo() {
-				uni.showLoading({
-					title: '正在加载...',
-					mask: true
-				});
+				// uni.showLoading({
+				// 	title: '正在加载...',
+				// 	mask: true
+				// });
+
 				const that = this
 				// // #ifdef APP-PLUS
 				// uni.login({

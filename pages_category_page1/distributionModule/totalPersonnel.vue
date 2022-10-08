@@ -1,6 +1,8 @@
 <template>
 	<view>
-		<view class="totalClient-topBackImg flex-items flex-column">
+    <global-loading />
+
+    <view class="totalClient-topBackImg flex-items flex-column">
       <view class="topBg">
         <view class="font-color-8A734A mar-top-30 fs60">{{SubordinateSalesData.total}}</view>
         <view class="font-color-C5AA7B">累计分销员(人）</view>
@@ -73,10 +75,10 @@
 		},
 		methods: {
 			getSubordinateSales() {
-				uni.showLoading({
-          mask: true,
-					title: '加载中...'
-				})
+				// uni.showLoading({
+        //   mask: true,
+				// 	title: '加载中...'
+				// })
 				NET.request(API.FindSubordinateSalesList, {
 					shopId: this.shopId,
 					distributorId: this.distributorId,

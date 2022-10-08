@@ -1,5 +1,6 @@
 <template>
 	<view class="collection-box">
+    <global-loading />
 		<view class="tabsbox">
 			<u-tabs :list="collectionTypeList" bar-width="60" :bold="false" active-color="#333333"
 				inactive-color="#CCCCCC" :is-scroll="false" :current="collectionTypeFlag"
@@ -46,7 +47,7 @@
 													<image v-if="item.activityType === 3" class="iconImg discountIcon" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-03-14/38184785db4b4fbca767ada611097ae9_discount.png" alt="限时折扣活动"></image>
 													<image v-if="item.activityType === 4" class="iconImg" src="https://ceres.zkthink.com/static/images/spikeIcon.png" alt="平台秒杀"></image>
 													<image v-if="item.activityType===5" class="iconImg" src="https://ceres.zkthink.com/static/images/discountListIcon.png" alt="平台折扣"></image>
-													<image v-if="item.activityType===9" class="iconImg" src="https://ceres.zkthink.com/static/images/memberCenterIcon.png" alt="会员价"></image>			
+													<image v-if="item.activityType===9" class="iconImg" src="https://ceres.zkthink.com/static/images/memberCenterIcon.png" alt="会员价"></image>
 													<image v-if="item.activityType === 8" class="iconImg" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png" alt="场景营销"></image>
 												<text class="fs40 font-color-C83732">¥</text>
 												<text class="fs40 font-color-C83732 mar-right-20">{{item.price}}</text>
@@ -470,10 +471,10 @@
 			},
 			//收藏商品查询
 			getProductCollect() {
-				uni.showLoading({
-					mask: true,
-					title: '加载中...'
-				})
+				// uni.showLoading({
+				// 	mask: true,
+				// 	title: '加载中...'
+				// })
 				NET.request(API.getProductCollect, {
 						page: this.productPage,
 						pageSize: this.productPageSize
@@ -502,11 +503,11 @@
 			},
 			//收藏店铺查询
 			getStoreCollect() {
-        console.log(111)
-				uni.showLoading({
-					mask: true,
-					title: '加载中...'
-				})
+        // console.log(111)
+				// uni.showLoading({
+				// 	mask: true,
+				// 	title: '加载中...'
+				// })
 				NET.request(API.getStoreCollect, {
 						page: this.storePage,
 						pageSize: this.storePageSize

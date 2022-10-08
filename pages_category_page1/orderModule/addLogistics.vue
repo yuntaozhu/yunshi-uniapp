@@ -1,7 +1,9 @@
 <!-- 退货/退款填写物流信息 -->
 <template>
 	<view>
-		<view class="content">
+    <global-loading />
+
+    <view class="content">
 			<view class="afterSale-select-box mt20">
 				<view class="item" @click="openWaySelect">
 					<view class="l">物流公司</view>
@@ -111,10 +113,11 @@
 				this.getSendReturnGoods()
 			},
 			getSendReturnGoods() {
-				uni.showLoading({
-          mask: true,
-					url:'物流信息提交中...'
-				})
+				// uni.showLoading({
+        //   mask: true,
+				// 	url:'物流信息提交中...'
+				// })
+
 				NET.request(API.SendReturnGoods, {
 					orderId: this.item.orderId,
 					afterId: this.item.afterId,

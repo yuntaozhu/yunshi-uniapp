@@ -1,6 +1,8 @@
 <template>
 	<view class="memberCenter">
-		<view class="avatarTop">
+    <global-loading />
+
+    <view class="avatarTop">
 			<view class="avatarBox">
 				<image :src="memberData.headImage"></image>
 			</view>
@@ -113,10 +115,10 @@
 				this.noSign = 7
 				this.signDate = 0
 				// 获取签到
-				uni.showLoading({
-          mask: true,
-					title: '加载中...',
-				})
+				// uni.showLoading({
+        //   mask: true,
+				// 	title: '加载中...',
+				// })
 				NET.request(API.selectSigninRecordList, {}, 'GET').then(res => {
 					uni.hideLoading()
 					this.recordList = res.data
@@ -133,10 +135,10 @@
 					page: this.page,
 					pageSize: this.pageSize,
 				}
-				uni.showLoading({
-          mask: true,
-					title: '加载中...',
-				})
+				// uni.showLoading({
+        //   mask: true,
+				// 	title: '加载中...',
+				// })
 				NET.request(API.selectSigninHistory, param, 'GET').then(res => {
 					if(res.data.list.length===0){
 						this.loadingType = true
@@ -152,10 +154,10 @@
 			// 签到
 			signInFn() {
 				if (this.upDate !== this.currentData) {
-					uni.showLoading({
-            mask: true,
-						title: '请稍等...',
-					})
+					// uni.showLoading({
+          //   mask: true,
+					// 	title: '请稍等...',
+					// })
 					NET.request(API.signIn, {}, 'POST').then(res => {
 						uni.hideLoading()
 						uni.showToast({

@@ -116,6 +116,7 @@
 
 <script>
 // import comComponentMap from './componentMap'
+
 import comBanner from '@/components/canvasShow/basics/banner'
 import comText from '@/components/canvasShow/basics/text'
 import comImageText from '@/components/canvasShow/basics/imageText'
@@ -137,7 +138,6 @@ import comPrice from '@/components/canvasShow/basics/price/app'
 import comNewProduct from '@/components/canvasShow/basics/newProduct/app'
 import comShop from '@/components/canvasShow/basics/shop'
 import comLive from '@/components/canvasShow/basics/live/app'
-import api from './config/api'
 import {sendReqMixin} from './config/mixin'
 
 export default {
@@ -148,8 +148,7 @@ export default {
       // terminal: 4, // 画布设备 1 小程序，2 H5，3 App 4 电脑
       // typeId: 3, // 画布类型 1 平台画布，2 自定义页面，3 商家店铺装修
       // shopId: 0, // 店铺id
-      componentsData: [],
-      activeComponent: -1,
+      // componentsData: [],
       // componentMap: componentMap
     }
   },
@@ -188,35 +187,14 @@ export default {
     shopId: {
       type: Number,
       default: 0
+    },
+    componentsData: {
+      type: Array,
+      default: ()=>[]
     }
-  },
-  mounted() {
-    // this.shopId = Cookies.get('cereShopId')
-    this.canvasGet()
   },
   methods: {
-    // 读取画布
-    canvasGet() {
-      var _this = this
-      var apiUrl = api.getCanvas + '?terminal=' + this.terminal + '&type=' + this.typeId
-      if (this.shopId) {
-        apiUrl += '&shopId=' + this.shopId
-      }
-      let params = {
-        url: apiUrl,
-        method: 'GET'
-      }
-      this.sendReq(params, (res) => {
-        if (JSON.stringify(res.data) !== '{}') {
-          _this.canvasId = res.data.canvasId
-          var componentsData = JSON.parse(res.data.json)
-          _this.componentsData = componentsData
-        } else {
-          _this.canvasId = ''
-        }
-        // console.log(JSON.parse(res.data.json))
-      })
-    }
+
   }
 }
 </script>

@@ -1,5 +1,5 @@
 // const DOMAIN_PREFIX = 'http://127.0.0.1:9007'
-const DOMAIN_PREFIX = 'https://ceres.zkthink.com/api'
+const DOMAIN_PREFIX = 'https://ceresdev.zkthink.com/api'
 
 // https://ceresdev.zkthink.com
 // #ifndef H5
@@ -26,9 +26,6 @@ module.exports = {
 	SettledMerchantPrefix: DOMAIN_PREFIX + '/settled-merchant', //商家入驻链接
 	// shareLink: DOMAIN_PREFIX + '/h5', // 分享地址
 	shareLink: 'https://ceres.zkthink.com/h5', // 分享地址
-
-	// refreshtoken
-	RefreshToken:WX_API_BASE + "/app/refreshToken",
 
 	//登录注册
 	Verify: WX_API_BASE + '/app/getCode', //  获取短信验证码
@@ -64,11 +61,9 @@ module.exports = {
 	DeleteSearch: WX_API_BASE + '/app/deleteSearch', //  删除搜索记录
 	Getindexdata: WX_API_BASE + '/app/index', //  首页数据查询
 	GetremenList: WX_API_BASE + '/product/getRandomSortProduct', //  获取热门推荐
-	GetBroadCastList: WX_API_BASE + '/product/getBroadCastList', //  获取拼团数据
 
 	QueryProductDetail: WX_API_BASE + '/product/getById', //  查询商品详情
 	QueryProductSku: WX_API_BASE + '/product/getProducts', //  查询商品sku详情
-	getSpecificSku: WX_API_BASE + '/product/getSpecificSku', // 查询指定的sku详情
 	getCouponProducts: WX_API_BASE + '/coupon/getCouponProducts', //  优惠券商品列表查询
 
 
@@ -147,7 +142,6 @@ module.exports = {
 	//分销中心
 	FindSaleStoreList: WX_API_BASE + '/distributor/getDistributorAll', //  分销中心列表查询
 	QuerySalesMainInfo: WX_API_BASE + '/distributor/getShopDistributor', //  店铺分销数据查询
-	getDistributionLevelConfig: WX_API_BASE + '/distributor/getDistributionLevelConfig', //  分销规则查询
 	FindSalesOrderPage: WX_API_BASE + '/distributor/getReward', //  累计奖励查询
 	GetNotReward: WX_API_BASE + '/distributor/getNotReward', //  累计未结算奖励查询
 	FindSalesCustomerList: WX_API_BASE + '/distributor/getBuyers', //  累计客户查询
@@ -274,4 +268,7 @@ module.exports = {
 	getChannelProduct: WX_API_BASE + '/credit/signIn', // 获取渠道优惠券推荐产品
 	getRandomProduct: WX_API_BASE + '/product/getRandomSortProduct', // 查询随机排序的商品
 
+
+	// 埋点
+	doPointer:WX_API_BASE+'/user/trackReport'
 }

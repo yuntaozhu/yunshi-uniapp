@@ -47,9 +47,7 @@ export default {
 			  let cartNum = 0
 			  resCart.data.forEach(shopItem=>{
 			    shopItem.skus.forEach(goodsItem=>{
-            if (goodsItem.shelveState !== 0) {
-              cartNum += goodsItem.number
-            }
+			      cartNum += goodsItem.number
 			    })
 			  })
 			  uni.setStorageSync('allCartNum', cartNum)

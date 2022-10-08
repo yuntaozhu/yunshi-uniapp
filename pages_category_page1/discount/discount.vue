@@ -1,5 +1,7 @@
 <template>
   <view class="spikeListBox">
+    <global-loading />
+
     <view class="discountBg">
 <!--      <view class="discountInfoBox">-->
 <!--        <view class="discountInfo">全场1折</view>-->
@@ -153,7 +155,7 @@ export default {
 					this.volume = 1
 				}else{
 					this.volume = this.volume != 1 ? 1:2
-				}		
+				}
       }
       this.getDiscountList()
     },
@@ -205,9 +207,9 @@ export default {
         type:this.type,
         volume:this.volume
       }
-			uni.showLoading({
-				title:'数据加载中...'
-			})
+			// uni.showLoading({
+			// 	title:'数据加载中...'
+			// })
 			NET.request(API.getDiscountList,param,'GET').then(res => {
 				this.discountDataList = res.data
 				if(this.shopShowType == false){

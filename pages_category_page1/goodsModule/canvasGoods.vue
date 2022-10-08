@@ -1,5 +1,7 @@
 <template>
   <view class="container">
+    <global-loading />
+
     <!-- 商品列表 -->
     <!--		<view class="flex-items-plus flex-row search">-->
     <!--      <view class="searchBg">-->
@@ -168,9 +170,9 @@ export default {
     // 	this.keyWord = ''
     // },
     searchList(type){
-      uni.showLoading({
-        title: '加载中...',
-      })
+      // uni.showLoading({
+      //   title: '加载中...',
+      // })
       if(type == 1){
         this.list = []
         this.page = 1

@@ -1,5 +1,7 @@
 <template>
   <view class="spikeListBox">
+    <global-loading />
+
     <view class="discountBg">
       <view class="discountInfoBox">
         <view class="discountInfo">全场{{discountInfo.discount}}折</view>
@@ -115,7 +117,7 @@ export default {
 		// }
     console.log(options.discountId, 'discountId---')
     this.discountId = options.discountId
-    
+
 	},
 	onShow() {
 		this.getDiscountInfo()
@@ -210,10 +212,10 @@ export default {
 			})
 		},
 		getDiscountList(){
-      uni.showLoading({
-        mask: true,
-        title: 'Loading...',
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: 'Loading...',
+      // })
       let param = {
         page:this.page,
         pageSize:this.pageSize,

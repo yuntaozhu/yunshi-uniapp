@@ -1,5 +1,6 @@
 <template>
-  <view class="content">
+  <view class="content" :animation="animationData">
+    <global-loading />
     <!-- 购物车 -->
     <view v-if="dataList.length !== 0">
       <view class="cart-bg">
@@ -218,7 +219,7 @@
 
       <!-- 热门推荐 -->
       <HotTemplate/>
-			
+
       <view style="width: 100%;height: 100rpx;background-color:#efefef;"></view>
       <!-- 删除确认弹窗 -->
       <tui-modal :show="cardModal"
@@ -254,6 +255,12 @@ import api from "../../../components/canvasShow/config/api";
 
 const NET = require('../../../utils/request')
 const API = require('../../../config/api')
+const animation = uni.createAnimation({
+  duration: 500,
+  timingFunction: "ease-in-out",
+  delay: 0
+})
+
 export default {
   components: {
     tuiModal,
@@ -261,6 +268,7 @@ export default {
   },
   data() {
     return {
+      animationData:{},
       goodsDetailShowFlag: false,
       OriginalSelectedSku: {},
       selectedSku: {},
@@ -330,6 +338,8 @@ export default {
 
   },
   onShow() {
+    animation.opacity(1).step()
+    this.animationData = animation.export()
     //判断是否登录
     /* let item = {}
     if(uni.getStorageSync('storage_key')){
@@ -346,6 +356,11 @@ export default {
     this.getDataList()
     /* } */
   },
+  onHide(){
+    animation.opacity(0).step()
+    this.animationData = animation.export()
+  },
+
   methods: {
 
     // 提交更换商品规格
@@ -404,10 +419,10 @@ export default {
     },
     //获取商品详情
     queryProductDetail() {
-      uni.showLoading({
-        mask: true,
-        title: '加载中...'
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '加载中...'
+      // })
       NET.request(API.QueryProductDetail, {
             shopId: this.shopId,
             productId: this.productId,
@@ -558,10 +573,10 @@ export default {
       this.btnType = type
     },
     getDataList() {
-      uni.showLoading({
-        mask: true,
-        title: '加载中...',
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '加载中...',
+      // })
       NET.request(API.ShoppingCart, {}, 'GET').then(res => {
         uni.hideLoading()
         this.dataList = res.data
@@ -892,9 +907,9 @@ export default {
      * @returns {*[]}
      */
     getPriceBySelect(needReturn=false){
-      uni.showLoading({
-        title:"计算中..."
-      })
+      // uni.showLoading({
+      //   title:"计算中..."
+      // })
       let addCart = []
       let len = this.dataList.length
       for (let i = 0; i < len; i++) {
@@ -985,6 +1000,7 @@ page {
 
 .content {
   overflow: hidden;
+  opacity: 0;
 
   .goosDetailshow-box {
     .detailImg-box {

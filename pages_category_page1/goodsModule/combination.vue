@@ -1,5 +1,7 @@
 <template>
   <view class="combinationBox">
+    <global-loading />
+
     <view class="topInfo">
       <view class="topBg">
         <swiper class="swiper" :circular="circular" :autoplay="autoplay" :vertical="vertical" :duration="duration">
@@ -120,10 +122,10 @@ export default {
   },
   methods: {
     getSelectByPriceId() {
-      uni.showLoading({
-        mask: true,
-        title: '加载中...',
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '加载中...',
+      // })
       NET.request(API.selectByPriceId,{
         priceId: this.priceId
       },'GET').then(res => {
@@ -312,10 +314,10 @@ export default {
             icon: "none"
           })
         } else {
-          uni.showLoading({
-            mask: true,
-            title: '添加中...',
-          })
+          // uni.showLoading({
+          //   mask: true,
+          //   title: '添加中...',
+          // })
           NET.request(API.ShoppingaddCart, {
             skuId: this.skuProdId,
             number: this.buyNum,

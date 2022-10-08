@@ -1,6 +1,7 @@
 <template>
   <view class="coupon-popup" :class="showActivity && 'show'" >
-	<view class="mask" @click="closePopup"></view>
+    <global-loading />
+    <view class="mask" @click="closePopup"></view>
     <view class="couponShow-box" id="popupInner">
         <view class="tabsbox">
             <u-tabs
@@ -151,10 +152,11 @@ export default {
         },
         // 领取优惠券
         receiveTap(couponItemInfo, type) {
-            uni.showLoading({
-                mask: true,
-                title: '领取中...',
-            })
+            // uni.showLoading({
+            //     mask: true,
+            //     title: '领取中...',
+            // })
+            this.$showLoading("领取中...")
             let ReceiveCoupon
             if (type === 0) {
                 ReceiveCoupon = {
@@ -168,7 +170,7 @@ export default {
                 }
             }
             NET.request(API.ReceiveCoupon, ReceiveCoupon, 'POST').then(res => {
-                uni.hideLoading()
+                // uni.hideLoading()
                 this.isShowSuccess = true
                 setTimeout(() => {
                     this.isShowSuccess = false
@@ -179,7 +181,7 @@ export default {
                 // 	this.showActivity = false
                 // }, 3000);
             }).catch(res => {
-                uni.hideLoading()
+                // uni.hideLoading()
                 uni.showToast({
                     title: res.msg,
                     icon: 'none'

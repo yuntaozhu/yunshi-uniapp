@@ -1,6 +1,8 @@
 <template>
 	<view>
-		<!-- 专题 -->
+    <global-loading />
+
+    <!-- 专题 -->
 		<swiper class="banner" indicator-dots indicator-color="#FFFFFF" indicator-active-color="#FF7911" autoplay>
 			<swiper-item class="banner-item" v-for="(item,index) in bannerList">
 				<image :src="item" mode="widthFix" class="bannerImg"></image>
@@ -68,10 +70,10 @@
 		methods: {
 			getSubjectDetailByKeyList() {
 				let _this = this
-				uni.showLoading({
-          mask: true,
-					title: '加载中...'
-				})
+				// uni.showLoading({
+        //   mask: true,
+				// 	title: '加载中...'
+				// })
 				NET.request(API.SubjectWithProduct + this.key, {
 					current: this.current,
 					map: {},

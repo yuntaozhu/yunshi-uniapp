@@ -1,5 +1,7 @@
 <template>
   <view class="container">
+    <global-loading />
+
     <!-- 平台介入 -->
     <view class="addEvaluate-box flex-items-plus flex-column-plus">
       <view class="addEvaluate flex-column-plus">
@@ -66,9 +68,9 @@ export default {
         })
         return false
       }
-      uni.showLoading({
-        title:'正在申请介入...'
-      })
+      // uni.showLoading({
+      //   title:'正在申请介入...'
+      // })
       NET.request(API.platform, {
         afterId: this.afterId,
         orderId: this.orderId,

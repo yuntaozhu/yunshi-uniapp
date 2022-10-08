@@ -1,7 +1,9 @@
 <!-- 退货/退款上传凭证 -->
 <template>
 	<view>
-		<view class="content">
+    <global-loading />
+
+    <view class="content">
 			<view class="afterSale-select-box mt20">
 				<view class="item item-start">
 					<view class="l"><text class="font-color-C5AA7B">*</text>问题描述</view>
@@ -63,10 +65,10 @@ const API = require('../../config/api')
             this.commentImgs += this.fileList[i].response.data.url+','
           }
         }
-        uni.showLoading({
-          mask: true,
-          title:'正在申请介入...'
-        })
+        // uni.showLoading({
+        //   mask: true,
+        //   title:'正在申请介入...'
+        // })
         NET.request(API.platform, {
           afterId: this.afterId,
           orderId: this.orderId,

@@ -1,6 +1,7 @@
 <!-- 修改个人信息 -->
 <template>
 	<view class="container fs28" :style="{height:screenHeight+'px'}">
+    <global-loading />
 		<view class="headBox">
 			<view class="personalHead-box flex-sp-between flex-display flex-items">
 				<label>头像</label>
@@ -189,10 +190,10 @@
 					})
 					return false
 				}
-				uni.showLoading({
-					mask: true,
-					title: "正在加载中"
-				})
+				// uni.showLoading({
+				// 	mask: true,
+				// 	title: "正在加载中"
+				// })
 				NET.request(API.UpdateUser, {
 					name: newName
 				}, 'POST').then(res => {
@@ -210,10 +211,10 @@
 			ConfirmTime(content) {
 				if (this.birthday == '1970-01-01' || this.birthday == '') {
 					let birthday = content.year + '-' + content.month + '-' + content.day
-					uni.showLoading({
-						mask: true,
-						title: "正在加载中"
-					})
+					// uni.showLoading({
+					// 	mask: true,
+					// 	title: "正在加载中"
+					// })
 					NET.request(API.UpdateUser, {
 						birthday
 					}, 'POST').then(res => {
@@ -234,10 +235,10 @@
 			},
 			// 提交修改性别
 			ConfirmSex(content) {
-				uni.showLoading({
-					mask: true,
-					title: "正在加载中"
-				})
+				// uni.showLoading({
+				// 	mask: true,
+				// 	title: "正在加载中"
+				// })
 				let sex = content[0].label
 				NET.request(API.UpdateUser, {
 					sex
@@ -281,11 +282,11 @@
 				return
 			},
 			quit() {
-				uni.showLoading({
-					mask: true,
-					title: '正在退出...',
-					duration: 2000,
-				});
+				// uni.showLoading({
+				// 	mask: true,
+				// 	title: '正在退出...',
+				// 	duration: 2000,
+				// });
 				setTimeout(function() {
 					uni.removeStorageSync('storage_key');
 					uni.removeStorageSync('distributorId');
@@ -300,12 +301,14 @@
 			},
 			onGetAuthorize() {
 				const that = this
-				uni.showLoading({
-					mask: true,
-					title: '验证中...',
-				})
+				// uni.showLoading({
+				// 	mask: true,
+				// 	title: '验证中...',
+				// })
+        this.$showLoading()
 				my.getPhoneNumber({
 					success: (res) => {
+            this.$hideLoading()
 						let encryptedData = res.response;
 						console.log('encryptedData:', encryptedData)
 						NET.request(API.UpdateAliPhone, {
@@ -315,12 +318,13 @@
 							const item = res.data
 							uni.setStorageSync('storage_key', item);
 							that.phone = item.phone
-							uni.hideLoading()
+							// uni.hideLoading()
 						}).finally(res => {
 							uni.hideLoading()
 						})
 					},
 					fail: (res) => {
+            this.$hideLoading()
 						console.log('getPhoneNumber failed', res);
 						uni.hideLoading()
 						uni.showToast({

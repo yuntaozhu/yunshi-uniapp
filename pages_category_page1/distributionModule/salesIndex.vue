@@ -1,6 +1,8 @@
 <template>
 	<view class="container">
-		<view class="salesIndex-topBackImg">
+    <global-loading />
+
+    <view class="salesIndex-topBackImg">
 			<view class="topStoreTag flex-row-plus">
 				<view class="storeName overflow font-color-FFF">
           <image class="storeLogoImg" :src="item.shopLogo"></image>
@@ -58,25 +60,6 @@
 				</view>
 			</view>
 		</view>
-    <view class="rule-box">
-      <view class="rule-box-bg">
-        <view class="rule-box-tit">
-          <view class="fs32 font-color-FFF">分销规则</view>
-          <view class="font-color-FFF fs24 mar-top-10">分销比例均按照成交商品金额计算</view>
-        </view>
-        <view class="rule-list">
-          <view class="rule-item" v-for="(item, index) of levelConfig" :key="index">
-            <view class="item-left">
-              <image :src="item.levelLogo"></image>
-            </view>
-            <view class="item-right">
-              <view class="rule-item-tit fs28 font-color-333">{{item.levelName}}</view>
-              <view class="fs24 font-color-666">{{item.levelDesc}}</view>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
 	</view>
 </template>
 
@@ -88,22 +71,20 @@
 			return {
 				item: {},
 				SalesMainItem: {},
-        levelConfig: []
 			}
 		},
 		onLoad(options) {
 			this.item = JSON.parse(options.distributeInfo)
 			uni.setStorageSync("salesId", this.item.distributorId)
 			this.getSalesMainInfo()
-      this.getRuleInfo()
 		},
 
 		methods: {
 			getSalesMainInfo() {
-				uni.showLoading({
-          mask: true,
-					title: '加载中...'
-				})
+				// uni.showLoading({
+        //   mask: true,
+				// 	title: '加载中...'
+				// })
 				NET.request(API.QuerySalesMainInfo, {
 					distributorId: this.item.distributorId,
 					shopId:this.item.shopId
@@ -114,14 +95,6 @@
 				uni.hideLoading()
 				})
 			},
-      getRuleInfo() {
-        NET.request(API.getDistributionLevelConfig, {
-          shopId:this.item.shopId
-        }, 'GET').then(res => {
-          this.levelConfig = res.data
-        }).catch(res => {
-        })
-      },
 			//累计奖励
 			gototalAward() {
 				uni.navigateTo({
@@ -164,10 +137,10 @@
 				var system = 4
 				// #endif
 
-				uni.showLoading({
-          mask: true,
-				  title: '请稍候...'
-				})
+				// uni.showLoading({
+        //   mask: true,
+				//   title: '请稍候...'
+				// })
 				/* const res = {'data':'https://cereshop.oss-cn-shenzhen.aliyuncs.com/test/2021-06-10/64223b9f0eef41abbb5d4056b9a40e2a08441534-3cbe-47af-8134-fc74635e069f.png'}
 				uni.hideLoading()
 				uni.navigateTo({
@@ -268,7 +241,6 @@
         height: 158upx;
         width: 690upx;
         margin-top: 30upx;
-        border-radius: 8rpx;
         label {
           color: #FDEDD3;
         }
@@ -280,7 +252,6 @@
           background: linear-gradient(90deg, #FDEDD3 0%, #EDDABA 100%);
           text-align: center;
           margin-bottom: 28rpx;
-          border-radius: 8rpx;
         }
         .salesIcon {
           width: 60upx;
@@ -289,13 +260,11 @@
       }
     }
     .awardInfo {
-      padding: 0 20rpx;
       .award-box {
         height: 158upx;
-        width: 100%;
+        width: 690upx;
         margin-top: 30upx;
         background: #FFFFFF;
-        border-radius: 8rpx;
         .salesIcon {
           width: 60upx;
           height: 56upx;
@@ -308,61 +277,14 @@
       margin-top: 30upx;
       flex-flow: wrap;
       justify-content: center;
-      padding: 0 20rpx;
       .btnListBox {
         background: #FFFFFF;
         height: 196upx;
-        width: 100%;
-        border-radius: 8rpx;
+        width: 690upx;
       }
       .salesIcon {
         width: 90rpx;
         height: 90rpx;
-      }
-    }
-    .rule-box {
-      margin-top: 20rpx;
-      padding: 0 20rpx;
-      border-radius: 16rpx;
-      overflow: hidden;
-      width: 100%;
-      .rule-box-bg {
-        background: url("https://ceres.zkthink.com/static/images/distributionBg.png") no-repeat top left;
-        background-size: contain;
-        padding: 32rpx 24rpx 0 24rpx;
-        width: 100%;
-        min-height: 764rpx;
-        .rule-box-tit {
-          width: 100%;
-        }
-        .rule-list {
-          background: #FFFFFF;
-          border-radius: 16rpx;
-          margin-top: 20rpx;
-          padding: 32rpx 24rpx;
-          width: 100%;
-          .rule-item {
-            display: flex;
-            width: 100%;
-            margin-bottom: 30rpx;
-            margin-right: 15rpx;
-            .item-left {
-              width: 64rpx;
-              margin-right: 20rpx;
-              image {
-                width: 64rpx;
-                height: 64rpx;
-              }
-            }
-            .item-right {
-              flex: 1;
-              .rule-item-tit {
-                height: 64rpx;
-                line-height: 64rpx;
-              }
-            }
-          }
-        }
       }
     }
 	}

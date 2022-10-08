@@ -1,6 +1,7 @@
 <!-- 地址列表 -->
 <template>
 	<view class="container">
+    <global-loading />
 		<view v-if="addresListlist.length" class="pad-bot-140 addAddress">
 			<view class="addAddress-content flex-row-plus" v-for="(item, index) in addresListlist" :key="index">
 				<!--				<view class="address-hesd">{{item.username1}}</view>-->
@@ -10,7 +11,7 @@
 						<text class="font-color-999 mar-left-30">{{item.receivePhone}}</text>
 					</view>
 					<view class="defaultAD-box">
-						<text class="def" v-if="item.defult">默认</text>
+						<text class="def" v-if="item.ifDefault">默认</text>
 						<text class="lable font-color-999" v-else-if="item.label!=''">{{item.label}}</text>
 						<text class="user-address font-color-999">{{item.receiveAdress}}{{item.address}}</text>
 					</view>
@@ -110,10 +111,10 @@
 
 			},
 			getAddressData() {
-				uni.showLoading({
-					mask: true,
-					title: '加载中...',
-				})
+				// uni.showLoading({
+				// 	mask: true,
+				// 	title: '加载中...',
+				// })
 				NET.request(API.QueryMemberAddres, {
 					page: this.page,
 					pageSize: this.pageSize
@@ -166,10 +167,10 @@
 						self.addData['address'] = res.detailInfo
 						self.addData['province'] = res.provinceName
 						self.addData['city'] = res.cityName
-						uni.showLoading({
-							mask: true,
-							title: '导入中...',
-						})
+						// uni.showLoading({
+						// 	mask: true,
+						// 	title: '导入中...',
+						// })
 						setTimeout(() => {
 							uni.hideLoading();
 							uni.navigateTo({

@@ -1,6 +1,8 @@
 <template>
 	<view>
-		<view class="totalClient-topBackImg flex-items flex-column">
+    <global-loading />
+
+    <view class="totalClient-topBackImg flex-items flex-column">
       <view class="topBg">
         <view class="font-color-8A734A mar-top-30 fs60">{{SalesCustomerData.total}}</view>
         <view class="font-color-C5AA7B">累计客户(人）</view>
@@ -76,10 +78,10 @@
 		},
 		methods: {
 			getSalesCustomer() {
-				uni.showLoading({
-          mask: true,
-					title: '加载中...'
-				})
+				// uni.showLoading({
+        //   mask: true,
+				// 	title: '加载中...'
+				// })
 				NET.request(API.FindSalesCustomerList, {
 					shopId: this.shopId,
 					distributorId: this.distributorId,

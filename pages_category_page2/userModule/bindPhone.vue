@@ -1,5 +1,6 @@
 <template>
 	<view class="container flex-items-plus flex-column">
+    <global-loading />
 		<view class="login-logoBox">
 			<image class="login-logo" src="https://ceres.zkthink.com/static/images/loginLogo.png"></image>
 		</view>
@@ -141,16 +142,19 @@
 			},
 			onGetAuthorize() {
 				const that = this
-				uni.showLoading({
-          mask: true,
-					title: '验证中...',
-				})
+				// uni.showLoading({
+        //   mask: true,
+				// 	title: '验证中...',
+				// })
+        this.$showLoading()
 				my.getPhoneNumber({
 					success: (res) => {
+            this.$hideLoading()
 						let encryptedData = res.response;
 						that.updateAliPhone(encryptedData, true)
 					},
 					fail: (res) => {
+            this.$hideLoading()
 						console.log('getPhoneNumber failed', res);
 						uni.hideLoading()
 						uni.showToast({

@@ -1,5 +1,6 @@
 <template>
 	<view class="footprint-box">
+    <global-loading />
 		<view v-if="!tipsShow">
 			<view class="wid function-box">
 				<view class="finishbox" @click="finishClick" v-if="allCheckShow">完成</view>
@@ -31,7 +32,7 @@
 										<image v-if="item.activityType === 3" class="iconType discountIcon" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-03-14/38184785db4b4fbca767ada611097ae9_discount.png" alt="限时折扣活动"></image>
 										<image v-if="item.activityType === 4" class="iconType" src="https://ceres.zkthink.com/static/images/spikeIcon.png" alt="平台秒杀"></image>
 										<image v-if="item.activityType===5" class="iconType" src="https://ceres.zkthink.com/static/images/discountListIcon.png" alt="平台折扣"></image>
-										<image v-if="item.activityType===9" class="iconType" src="https://ceres.zkthink.com/static/images/memberCenterIcon.png" alt="会员价"></image>			
+										<image v-if="item.activityType===9" class="iconType" src="https://ceres.zkthink.com/static/images/memberCenterIcon.png" alt="会员价"></image>
 						        <image v-if="item.activityType === 8" class="iconType" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png" alt="场景营销"></image>
                     <label class="fs40 mar-right-20 font-color-C83732">¥{{ item.price }}</label>
                     <label class="font-color-CCC discountsPriceLine fs24">¥{{ item.originalPrice }}</label>
@@ -58,7 +59,7 @@
 			<image class="footprint-empty" src="https://datumstar.oss-cn-shenzhen.aliyuncs.com/dkyaemtmfwfxbvtuyyhi.png"></image>
 			<view class="tohome-box flex-items-plus">去首页逛逛</view>
 		</view>
-		
+
 		<!-- 删除确认弹窗 -->
 		<tui-modal :show="cardModal" :custom="true" :fadein="true">
 			<view class="Put-box1">
@@ -210,10 +211,10 @@
 					this.footprintList = []
 					this.footEmpty = false
 				}
-				uni.showLoading({
-            mask: true,
-					  title: '加载中...',
-				})
+				// uni.showLoading({
+        //     mask: true,
+				// 	  title: '加载中...',
+				// })
 				NET.request(API.getFootprintList,
 				{
 					page:this.page,
@@ -287,7 +288,7 @@
 			finishClick(){
 				this.allCheckShow = false
 			},
-			
+
       goToIndex() {
         uni.switchTab({
           url:'/pages/tabbar/index/index'
@@ -453,18 +454,18 @@ page {
 			width: 100%;
 			color: #333333;
 		}
-	
+
 		.submit {
 			background-color: #333333;
 			color: #FFEBC4;
 		}
 	}
-	
+
 	.cancelDel {
 		position: absolute;
 		bottom: -50px;
 		left: 45%;
-	
+
 		image {
 			width: 60upx;
 			height: 60upx;

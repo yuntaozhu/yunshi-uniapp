@@ -1,5 +1,7 @@
 <template>
   <view class="spikeListBox">
+    <global-loading />
+
     <view class="spikeBgBox">
       <view class="discountBg">
       </view>
@@ -117,7 +119,7 @@ export default {
       this.shopId = 0
       this.shopDiscountId = 0
     }
-    
+
   },
   onShow() {
   	this.getMemberList()
@@ -197,10 +199,10 @@ export default {
       })
     },
     getMemberList(){
-      uni.showLoading({
-        mask: true,
-        title: '加载中...',
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '加载中...',
+      // })
       let param = ''
       const storageKey = uni.getStorageSync('storage_key');
       if(storageKey){

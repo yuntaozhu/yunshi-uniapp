@@ -1,5 +1,6 @@
 <template>
   <view class="memberCenter" v-if="ifShow">
+    <global-loading />
     <view class="memberBox">
       <view class="posBox">
         <view class="memberBoxTop">
@@ -172,12 +173,12 @@ export default {
     },
     getIntegralList() {
       // 获取签到信息
-      uni.showLoading({
-        mask: true,
-        title: '加载中...',
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '加载中...',
+      // })
       NET.request(API.selectCreditRecord, this.integralInfo, 'POST').then(res => {
-        uni.hideLoading()
+        // uni.hideLoading()
         this.ifShow = true
         this.integralRecord = res.data.list
       }).catch(res => {

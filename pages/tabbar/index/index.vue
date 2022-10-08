@@ -1,48 +1,56 @@
 <template>
-  <div>
-    <!-- #ifdef MP-WEIXIN -->
-    <view class="header weiXinBox"
-          :style="{'padding-top': topHeight + 'px'}">
-      <view class="topBox"
-            :style="{'height': height + 'px'}">
-        <image class="logo"
-               src="https://ceres.zkthink.com/static/assets/img/logo.png"
-               mode="widthFix"></image>
-      </view>
-    </view>
-    <view class="wxBtnBg"
-          :style="{'padding-top': (topHeight + height + 10) + 'px'}">
-      <view class="weiXinBoxBtn"
-            @click="searchPro">
-        <image class="search-icon"
-               src="https://ceres.zkthink.com/static/images/searchImg.png"
-               mode="widthFix">
-        </image>
-        <text>请输入您想要的宝贝</text>
-      </view>
-    </view>
-    <!-- #endif -->
-    <!-- #ifdef H5 || APP-PLUS -->
-    <view class="header">
-      <view class="topBox topWap">
-        <image class="logo"
-               src="https://ceres.zkthink.com/static/assets/img/logo.png"
-               mode="widthFix"></image>
-        <view class="search-btn"
-              @click="searchPro">
-          <image class="search-icon"
-                 src="https://ceres.zkthink.com/static/img/search.png"
-                 mode="widthFix">
-          </image>
-        </view>
-      </view>
-    </view>
-    <!-- #endif -->
-    <category-list @tabChange='tabChange'></category-list>
+  <div class="hom-page" :style="{'padding-top': height + 'px'}">
+    <global-loading />
+    <!--&lt;!&ndash;  #ifdef MP-WEIXIN &ndash;&gt;-->
+    <!--<view class="header weiXinBox"-->
+          <!--:style="{'padding-top': topHeight + 'px'}">-->
+      <!--<view class="topBox"-->
+            <!--:style="{'height': height + 'px'}">-->
+        <!--<image class="logo"-->
+               <!--src="https://ceres.zkthink.com/static/assets/img/logo.png"-->
+               <!--mode="widthFix"></image>-->
+      <!--</view>-->
+    <!--</view>-->
+    <!--<view class="wxBtnBg"-->
+          <!--:style="{'padding-top': (topHeight + height + 10) + 'px'}">-->
+      <!--<view class="weiXinBoxBtn"-->
+            <!--@click="searchPro">-->
+        <!--<image class="search-icon"-->
+               <!--src="https://ceres.zkthink.com/static/images/searchImg.png"-->
+               <!--mode="widthFix">-->
+        <!--</image>-->
+        <!--<text>请输入您想要的宝贝</text>-->
+      <!--</view>-->
+    <!--</view>-->
+    <!--&lt;!&ndash; #endif &ndash;&gt;-->
+    <!--&lt;!&ndash; #ifdef H5 || APP-PLUS &ndash;&gt;-->
+    <!--<view class="header">-->
+      <!--<view class="topBox topWap">-->
+        <!--<image class="logo"-->
+               <!--src="https://ceres.zkthink.com/static/assets/img/logo.png"-->
+               <!--mode="widthFix"></image>-->
+        <!--<view class="search-btn"-->
+              <!--@click="searchPro">-->
+          <!--<image class="search-icon"-->
+                 <!--src="https://ceres.zkthink.com/static/img/search.png"-->
+                 <!--mode="widthFix">-->
+          <!--</image>-->
+        <!--</view>-->
+      <!--</view>-->
+    <!--</view>-->
+    <!--&lt;!&ndash; #endif &ndash;&gt;-->
+    <!--<category-list @tabChange='tabChange'></category-list>-->
+    <com-header  v-if="componentsData.length > 1 && componentsData[0].type==='header'"
+                :componentContent="componentsData[0].componentContent"
+                :terminal="terminal"
+                :typeId="1"
+                @tabChange="tabChange"></com-header>
     <canvas-page ref="canvasPage"
+                 :componentsData="componentsData"
                  v-if="activeTab==0"
                  :terminal="terminal"
-                 :typeId="1"></canvas-page>
+                 :typeId="1"
+    ></canvas-page>
     <category-show ref="categoryShow"
                    v-else
                    :categoryid="categoryid"></category-show>
@@ -78,14 +86,19 @@
 <script>
 import tuiModal from "@/components/modal/modal";
 import AdWindow from "@/components/adWindow";
-
+const NET = require('@/utils/request')
 const API = require('../../../config/api')
+import api from '@/components/canvasShow/config/api'
 import CategoryList from "@/components/basics/categoryList.vue"
 import CategoryShow from "@/components/basics/categoryShow.vue"
+import comHeader from '@/components/canvasShow/basics/header/app'
 import canvasPage from '@/components/canvasShow/canvasShowPage.vue'
+import GlobalLoading from "../../../components/GlobalLoading";
 
 export default {
   components: {
+    GlobalLoading,
+    comHeader,
     AdWindow,
     CategoryList,
     CategoryShow,
@@ -100,7 +113,9 @@ export default {
       topHeight: 0,
       height: 0,
       topLeft: 0,
-      privacyShow: false
+      privacyShow: false,
+      componentsData: [],
+      typeId: 1
     }
   },
   onReachBottom() {
@@ -113,23 +128,47 @@ export default {
       // #endif
     }
     this.$nextTick(() => {
+      this.canvasGet()
       this.$refs.adWindow.getAd()
     })
   },
   onShow() {
     // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
     let menuButtonInfo = uni.getMenuButtonBoundingClientRect()
-    this.topHeight = menuButtonInfo.top + 10
+    this.topHeight = menuButtonInfo.top
     this.height = menuButtonInfo.height
     // #endif
 
   },
-
-
   onPageScroll(e) {
     this.topLeft = e.scrollTop
   },
   methods: {
+    // 读取画布
+    canvasGet() {
+      var _this = this
+      var apiUrl = api.getCanvas + '?terminal=' + this.terminal + '&type=' + this.typeId
+      if (this.shopId) {
+        apiUrl += '&shopId=' + this.shopId
+      }
+      let params = {
+        url: apiUrl,
+        method: 'GET'
+      }
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '加载中...',
+      // })
+      NET.request(apiUrl, {}, 'GET').then(res => {
+        if (JSON.stringify(res.data) !== '{}') {
+          var componentsData = JSON.parse(res.data.json)
+          this.componentsData = componentsData
+        }
+        uni.hideLoading()
+      }).catch(res => {
+        uni.hideLoading()
+      })
+    },
 		// 分享到朋友圈
 		onShareTimeline: function() {
 		  return {
@@ -175,18 +214,14 @@ export default {
       this.activeTab = index
       this.categoryid = id
     },
-    // 查询产品
-    searchPro(key, type) {
-      uni.navigateTo({
-        url: `/pages_category_page1/search/index/index`
-      })
-    }
   }
 };
 </script>
 
-<style lang="scss"
-       scoped>
+<style lang="scss" scoped>
+  .hom-page{
+    margin-top: calc(20rpx + var(--status-bar-height));
+  }
 .header {
   .toLive {
     height: 40px;

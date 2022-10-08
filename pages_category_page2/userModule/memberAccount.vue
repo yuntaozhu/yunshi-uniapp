@@ -1,5 +1,7 @@
 <!-- 我的账户 -->
 <template>
+  <view>
+    <global-loading />
 	<view class="container" v-if="ifShow">
 		<view class="balance">
 		</view>
@@ -18,6 +20,7 @@
 			</view>
 		</view>
 	</view>
+  </view>
 </template>
 
 <script>
@@ -48,10 +51,10 @@
 			},
 			getBalance(){
 				const _ = this
-        uni.showLoading({
-          mask: true,
-          title: '加载中...'
-        })
+        // uni.showLoading({
+        //   mask: true,
+        //   title: '加载中...'
+        // })
 				NET.request(API.GetDistributor,{},"GET").then(res => {
           uni.hideLoading()
           this.ifShow = true

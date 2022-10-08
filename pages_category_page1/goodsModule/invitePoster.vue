@@ -1,6 +1,8 @@
 <template>
 	<view class="invitePoster-box">
-		<view class="poster-box flex-items-plus flex-column">
+    <global-loading />
+
+    <view class="poster-box flex-items-plus flex-column">
 			<image class="header-img mar-top-10" :src="data.headImage"></image>
 			<label class="mar-top-30">发现一件好物，快来和我一起拼</label>
 			<image class="poster-img mar-top-50" :src="data.image"></image>
@@ -65,10 +67,11 @@
 					return
 				}
 				if(type == 1){
-					uni.showLoading({
-            mask: true,
-						title:"生成图片中..."
-					})
+					// uni.showLoading({
+          //   mask: true,
+					// 	title:"生成图片中..."
+					// })
+          this.$showLoading()
 					let that = this
 					setTimeout(function(){
             // #ifdef H5 || MP-WEIXIN || APP-PLUS
@@ -77,6 +80,7 @@
 							quality: 0, // 图片质量
 							canvasId: 'posterCanvas', // 画布ID
 							success(res) {
+                this.$hideLoading()
 							  console.log(res.tempFilePath, 'test0000')
                 that.saveDownload(res.tempFilePath)
 							},
@@ -86,7 +90,8 @@
 									duration: 2000,
 									icon: 'none'
 								})
-								uni.hideLoading();
+                this.$hideLoading()
+								// uni.hideLoading();
 							}
 						})
             // #endif
@@ -100,33 +105,37 @@
                   url: res.apFilePath,
                   success: res => {
                     console.log('saveImage', res)
-                    uni.hideLoading();
+                    // uni.hideLoading();
+                    this.$hideLoading()
                     uni.showToast({
                       title: '图片保存成功~',
                       duration: 2000
                     })
                   },
                   fail: err => {
+                    this.$hideLoading()
                     console.error('saveImage err', err)
                   },
                 })
               },
               fail() {
+                this.$hideLoading()
                 uni.showToast({
                   title: '保存失败，稍后再试',
                   duration: 2000,
                   icon: 'none'
                 })
-                uni.hideLoading();
+                // uni.hideLoading();
               }
             })
             // #endif
 					},5000)
 				}else if(type == 2){
-					uni.showLoading({
-            mask: true,
-						title:"图片生成中..."
-					})
+					// uni.showLoading({
+          //   mask: true,
+					// 	title:"图片生成中..."
+					// })
+          this.$showLoading()
 					let that = this
 					setTimeout(function(){
 						uni.canvasToTempFilePath({ //把画布转化成临时文件进行保存
@@ -137,8 +146,9 @@
 								uni.downloadFile({
 									url: res.tempFilePath,//网络路径，下载下来
 									success: (res1) => {
+                    this.$hideLoading()
 										if (res1.statusCode === 200) {
-											uni.hideLoading();
+											// uni.hideLoading();
 											uni.showModal({
 											   title: '提示',
 											   content: '长按即可保存图片',
@@ -159,6 +169,7 @@
 							},
 							fail(err) {
 								console.log(err.errMsg)
+                this.$hideLoading()
 								uni.showToast({
 									title: '保存失败，稍后再试',
 									duration: 2000,
@@ -171,10 +182,11 @@
 			},
       saveDownload (file) {
 				const that = this
-			  uni.showLoading({
-			  mask: true,
-			  			title:"图片保存中..."
-			  		})
+			  // uni.showLoading({
+			  // mask: true,
+			  // 			title:"图片保存中..."
+			  // 		})
+        this.$showLoading()
 	        console.log(file,'test1')
 	        uni.getImageInfo({
 	          src: file,
@@ -186,13 +198,15 @@
 	                filePath: res1.path, //画布保存的图片临时文件
 	                success(res2) {
 	                  console.log(3333)
-	                  uni.hideLoading();
+                    this.$hideLoading()
+	                  // uni.hideLoading();
 	                  uni.showToast({
 	                    title: '图片保存成功~',
 	                    duration: 2000
 	                  })
 	                },
 	                fail(res3) {
+                    this.$hideLoading()
 	                  if (res3.errMsg === 'saveImageToPhotosAlbum:fail auth deny') {
 	                    // that.$store.dispatch('SetPhoneShow', 1)
 	                    uni.showToast({
@@ -207,7 +221,7 @@
 	                      icon: 'none'
 	                    })
 	                  }
-	                  uni.hideLoading();
+	                  // uni.hideLoading();
 	                }
 	              })
 	          }

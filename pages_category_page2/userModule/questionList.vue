@@ -1,5 +1,6 @@
 <template>
 	<view class="question-box">
+    <global-loading />
 		<view class="tabsbox">
 			<u-tabs :list="questionTypeList" bar-width="140" :bold="false" active-color="#C5AA7B"
 				inactive-color="#999999" :is-scroll="false" :current="questionTypeFlag" @change="questionTypeActive">
@@ -17,7 +18,7 @@
 				</view>
 				<view class="swipe-box">
 					<u-swipe-action :show="item.show" :index="index" v-for="(item, index) in problemList"
-						:key="item.problemId" :disabled="allCheckShow" ref="problemActionSwipe" @click="problemClick" :autoClose="false" 
+						:key="item.problemId" :disabled="allCheckShow" ref="problemActionSwipe" @click="problemClick" :autoClose="false"
 						@open="problemOpen" :options="options">
 						<view class="flex-item itemBox" @click="goQuestionDetails(item.productId,item.problemId)">
 							<view class="item u-border-bottom wid flex-row-plus flex-items">
@@ -391,10 +392,10 @@
 			},
 			//我的提问列表
 			getProblemList() {
-				uni.showLoading({
-					mask: true,
-					title: '加载中...',
-				})
+				// uni.showLoading({
+				// 	mask: true,
+				// 	title: '加载中...',
+				// })
 				NET.request(API.getProblemList, {
 						page: this.problemPage,
 						pageSize: this.problemPageSize
@@ -423,10 +424,10 @@
 			},
 			//我的回答列表
 			getAnswerList() {
-				uni.showLoading({
-					mask: true,
-					title: '加载中...',
-				})
+				// uni.showLoading({
+				// 	mask: true,
+				// 	title: '加载中...',
+				// })
 				NET.request(API.getAnswerList, {
 						page: this.answerPage,
 						pageSize: this.answerPageSize

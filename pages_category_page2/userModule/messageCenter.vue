@@ -1,5 +1,6 @@
 <template>
 	<view class="messageCenter">
+    <global-loading />
 		<view>
 			<view v-if="messageList.length" class="flex-items flex-sp-between fs26 topTitBox">
 				<view>
@@ -119,10 +120,10 @@
 				return newContent;
 			},
 			getAllMessage() {
-				uni.showLoading({
-					mask: true,
-					title: '加载中...'
-				})
+				// uni.showLoading({
+				// 	mask: true,
+				// 	title: '加载中...'
+				// })
 				NET.request(API.getMessage, {
 					'page': this.page,
 					'pageSize': this.pageSize
@@ -177,10 +178,10 @@
 			},
 			// 删除消息
 			productClick(item) {
-				uni.showLoading({
-					mask: true,
-					title: '正在删除...'
-				})
+				// uni.showLoading({
+				// 	mask: true,
+				// 	title: '正在删除...'
+				// })
 				NET.request(API.delMessage, {
 					noticeId: item.noticeId
 				}, 'post').then(res => {

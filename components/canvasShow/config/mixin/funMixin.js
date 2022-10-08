@@ -19,7 +19,7 @@ export const tool = {
     }
   },
   mounted() {
-    console.log('加载了组件')
+    // console.log('加载了组件')
   },
   methods: {
     ...mapMutations({

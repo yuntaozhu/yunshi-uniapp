@@ -222,20 +222,13 @@
             <image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/service.png" mode="widthFix"></image>
             <view class="item-btn-text">平台客服</view>
           </view> -->
-<!--        <button open-type="contact"
+        <button open-type="contact"
                 class="item-btn btnNone">
           <image class="item-btn-icon"
                  src="https://ceres.zkthink.com/static/img/user/service.png"
                  mode="widthFix"></image>
           <view class="item-btn-text">平台客服</view>
-        </button>-->
-        <view @click="flyToService"
-              class="item-btn btnNone">
-          <image class="item-btn-icon"
-                 src="https://ceres.zkthink.com/static/img/user/service.png"
-                 mode="widthFix"></image>
-          <view class="item-btn-text">平台客服</view>
-        </view>
+        </button>
 
         <!-- <view class="item-btn" @click="toSuccess">
           <image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/userCouponIcon.png" mode="widthFix"></image>
@@ -274,7 +267,6 @@ export default {
     }
   },
   onLoad() {
-    this.getServiceUrl()
   },
   onShow() {
     if (uni.getStorageSync('storage_key')) {
@@ -514,7 +506,7 @@ export default {
       } else {
         uni.navigateTo({
           url: '../../../pages_category_page1/coupon/list'
-        })
+        })````
       }
     },
     //判断是否是分销员
@@ -538,91 +530,6 @@ export default {
           url: '../../../pages_category_page1/orderModule/index?type=' + type
         })
       }
-    },
-
-    getServiceUrl() {
-      const shopids = uni.getStorageSync('service_shopids') || []
-      const corpIds = uni.getStorageSync('service_corpIds') || []
-      const urls = uni.getStorageSync('service_urls') || []
-
-        this.isLoading = true
-        const id = null
-        NET.request(API.CustomerService, {
-
-        }, 'get').then(res => {
-          if (res.code === '' && res.data.corpId && res.data.url) {
-            shopids.push(this.shopId)
-            corpIds.push(res.data.corpId)
-            urls.push(res.data.url)
-
-            uni.setStorageSync('service_shopids', shopids);
-            uni.setStorageSync('service_corpIds', corpIds);
-            uni.setStorageSync('service_urls', urls);
-
-            this.corpId = res.data.corpId
-            this.serviceURL = res.data.url
-            if (this.serviceURL) {
-              this.hasService = true
-            }
-          }
-          this.isLoading = false
-        }).catch(err => {
-          console.log(err)
-          this.isLoading = false
-        })
-
-    },
-    flyToService() {
-      let self = this
-      // #ifdef MP-WEIXIN
-      console.log(self.serviceURL, self.corpId)
-      if (!self.serviceURL || !self.corpId) {
-        self.hasService = false
-        return
-      }
-      wx.openCustomerServiceChat({
-        extInfo: {
-          url: self.serviceURL
-        },
-        corpId: self.corpId, // 企业ID
-        success(res) {
-        },
-        fail(err) {
-        }
-      })
-      // #endif
-      // #ifdef APP-PLUS
-      try {
-        let sweixin = null
-        plus.share.getServices(res=>{
-          sweixin = res.find(i => i.id === 'weixin')
-          if(sweixin){
-            sweixin.openCustomerServiceChat({
-              corpid: self.corpId,
-              url: self.serviceURL,
-            },success=>{
-              console.log("success",JSON.stringify(success))
-            },err=>{
-              console.log("error",JSON.stringify(err))
-            })
-          }else{
-            plus.nativeUI.alert('当前环境不支持微信操作!')
-          }
-        },function(err){
-          console.log(err)
-          uni.showToast({title: "获取服务失败，不支持该操作。"+JSON.stringify(e), icon: 'error'})
-        })
-      } catch (err) {
-        console.log(err)
-        uni.showToast({title: "调用失败，不支持该操作。"+JSON.stringify(err), icon: 'error'})
-      }
-      /*plus.runtime.openURL(self.serviceURL, function(res) {
-        uni.showToast({
-          title: JSON.stringify(res),
-          icon: "success"
-        })
-      })*/
-      // #endif
     },
   }
 }

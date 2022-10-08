@@ -1,6 +1,7 @@
 <template>
 	<view>
-		<view class="header">
+    <global-loading />
+    <view class="header">
 			<image class="logo" src="https://ceres.zkthink.com//assets/img/logo.png" mode="widthFix"></image>
 		</view>
 		<view class="content">
@@ -53,10 +54,10 @@
 		},
 		methods: {
 			loadData(){
-				uni.showLoading({
-          mask: true,
-					title:'加载中...'
-				})
+				// uni.showLoading({
+        //   mask: true,
+				// 	title:'加载中...'
+				// })
 				NET.request(API.FindCategoryListByDepth, {
 						classifyId: "",
 					}, 'GET').then(res => {
@@ -69,10 +70,10 @@
 				})
 			},
 			getChildCategory(){
-				uni.showLoading({
-          mask: true,
-					title:'加载中...'
-				})
+				// uni.showLoading({
+        //   mask: true,
+				// 	title:'加载中...'
+				// })
 				NET.request(API.FindCategoryListByDepth,{
 					classifyId:this.currentId
 				},'GET').then(res => {

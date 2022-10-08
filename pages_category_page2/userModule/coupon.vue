@@ -1,6 +1,7 @@
 <!-- 优惠券列表 -->
 <template>
 	<view class="container">
+    <global-loading />
 		<view class="list">
 			<view
 				class="item"
@@ -53,10 +54,10 @@
 	  },
 		methods: {
 			getFindCouponList(){
-			    uni.showLoading({
-            mask: true,
-			      title: '加载中...',
-			    })
+			    // uni.showLoading({
+          //   mask: true,
+			    //   title: '加载中...',
+			    // })
 			    NET.request(API.FindCouponList,"GET").then(res => {
 			      uni.hideLoading()
 				    this.list = res.data

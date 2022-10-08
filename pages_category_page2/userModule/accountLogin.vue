@@ -1,45 +1,60 @@
 <template>
   <!-- 登录 -->
   <view class="container flex-items-plus flex-column">
+    <global-loading />
     <view class="login-logoBox">
-      <image class="login-logo"
-             src="https://ceres.zkthink.com/static/images/loginLogo.png"></image>
+      <image
+          class="login-logo"
+          src="https://ceres.zkthink.com/static/images/loginLogo.png"
+      ></image>
     </view>
     <view class="iphoneNum-box flex-row-plus flex-items">
       <view style="margin-right: 30rpx">
-        <image class="loginIcon"
-               src="https://ceres.zkthink.com/static/images/phone.png"></image>
+        <image
+            class="loginIcon"
+            src="https://ceres.zkthink.com/static/images/phone.png"
+        ></image>
       </view>
       <view>
-        <input v-model="loginQuery.account"
-               placeholder-class="iphoneNum-input"
-               type="number"
-               maxlength='11'
-               placeholder="请输入您的手机号"/>
+        <input
+            v-model="loginQuery.account"
+            placeholder-class="iphoneNum-input"
+            type="number"
+            maxlength='11'
+            placeholder="请输入您的手机号"
+        />
       </view>
     </view>
     <view class="flex-row-plus mar-top-20">
       <view class="code-box">
         <view style="margin-right: 30rpx">
-          <image class="loginIcon"
-                 src="https://ceres.zkthink.com/static/images/code.png"></image>
+          <image
+              class="loginIcon"
+              src="https://ceres.zkthink.com/static/images/code.png"
+          ></image>
         </view>
         <view>
-          <input v-model="loginQuery.code"
-                 :maxlength="4"
-                 placeholder-class="codeNum-input"
-                 placeholder="请输入验证码"/>
+          <input
+              v-model="loginQuery.code"
+              :maxlength="4"
+              placeholder-class="codeNum-input"
+              placeholder="请输入验证码"
+          />
         </view>
       </view>
-      <view :class="disabled === true ? 'on' : ''"
-            :disabled="disabled"
-            class="getcode"
-            @click="codede">{{ text }}
+      <view
+          :class="disabled === true ? 'on' : ''"
+          :disabled="disabled"
+          class="getcode"
+          @click="codede"
+      >{{ text }}
       </view>
     </view>
     <view class="mar-top-60">
-      <view class="registerBut mar-top-100"
-            @click="login">登录
+      <view
+          class="registerBut mar-top-100"
+          @click="login"
+      >登录
       </view>
     </view>
   </view>
@@ -70,12 +85,11 @@ export default {
   },
   mixins: [sendVerifyCode],
   onLoad(options) {
-    if (options.inviteSpell && parseInt(options.inviteSpell) === 1) {
+    if (options.inviteSpell == 1) {
       this.inviteSpelltype = true
-      this.inviteSpell = uni.getStorageSync('inviteSpell')
-      console.log('this.inviteSpell', this.inviteSpell)
+      this.inviteSpell = uni.getStorageSync('inviteSpell');
     }
-    this.loginQuery.salesId = uni.getStorageSync('salesId')
+    this.loginQuery.salesId = uni.getStorageSync('salesId');
     var pages = getCurrentPages()
     if (pages.length >= 2) {
       this.beforePage = pages[pages.length - 2]
@@ -101,11 +115,11 @@ export default {
         });
       } else {
         const that = this
-        uni.showLoading({
-          mask: true,
-          title: '正在登录...',
-          duration: 2000,
-        });
+        // uni.showLoading({
+        //   mask: true,
+        //   title: '正在登录...',
+        //   duration: 2000,
+        // });
         NET.request(API.Login, {
           type: 2,
           phone: this.loginQuery.account,
@@ -141,13 +155,10 @@ export default {
           if (this.inviteSpelltype == true) {
             setTimeout(function () {
               uni.reLaunch({
-                url: '../../pages_category_page1/goodsModule/inviteSpell?collageId='
-                        + that.inviteSpell.collageId
-                        + '&orderId=' + that.inviteSpell.orderId
-                        + '&type=0'
-                        + '&productId=' + that.inviteSpell.productId
-                        + '&skuId=' + that.inviteSpell.skuId
-                        + '&shopGroupWorkId=' + that.inviteSpell.shopGroupWorkId
+                url: '../../pages_category_page1/goodsModule/inviteSpell?collageId=' +
+                    this.inviteSpell.collageId + '&orderId=' + this.inviteSpell
+                        .orderId + '&type=0' + '&productId=' + this.inviteSpell
+                        .productId + '&skuId=' + this.inviteSpell.skuId
               })
               uni.removeStorageSync('inviteSpell');
             }, 2000)

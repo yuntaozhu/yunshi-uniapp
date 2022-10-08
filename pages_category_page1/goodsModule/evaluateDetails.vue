@@ -1,6 +1,8 @@
 <template>
 	<view class="container">
-		<!-- 评论详情 -->
+    <global-loading />
+
+    <!-- 评论详情 -->
 		<view class="evaluate-contentbox">
 			<view class="evaluate-content flex-items flex-row flex-sp-between">
 				<view class="flex-items">
@@ -114,9 +116,9 @@
       },
 			//点赞
 			zanTap(){
-        uni.showLoading({
-          title:''
-        })
+        // uni.showLoading({
+        //   title:''
+        // })
 				this.actionType = this.commentVOList.ifLike == 1 ?0:1
 				NET.request(API.LikeOrUnLikeComment,{
 				  commentId: this.commentVOList.commentId,
@@ -134,7 +136,9 @@
 						  icon:"none"
 						})
 					}
-				}).finally(()=>{setTimeout(()=>{uni.hideLoading()}),1000})
+				}).catch(res => {
+				  uni.hideLoading()
+				}).finally(()=>{uni.hideLoading()})
 			},
 			//追加评论
 			addCommentsClick(){

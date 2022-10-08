@@ -1,5 +1,7 @@
 <template>
   <view class="couponProduct">
+    <global-loading />
+
     <view class="productList">
       <view class="couponTit flex-items">
         <image src="https://ceres.zkthink.com/static/images/counponTitIcon.png"></image>
@@ -80,9 +82,9 @@ export default {
       })
     },
     getProductList() {
-      uni.showLoading({
-        title: '加载中...',
-      })
+      // uni.showLoading({
+      //   title: '加载中...',
+      // })
       NET.request(API.getCouponProducts, {
         activityId: this.cid,
         page: this.page,
@@ -98,7 +100,7 @@ export default {
           this.ifEmpty = true
         }
       }).catch(res => {
-        uni.hideLoading()
+        // uni.hideLoading()
       })
     },
     // 商品详情

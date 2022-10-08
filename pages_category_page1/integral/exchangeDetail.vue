@@ -1,5 +1,6 @@
 <template>
   <view class="exchangeDetailBox">
+    <global-loading />
     <view class="topBg">
       <view class="exchangeCoupon flex-items">
         <view class="couponInfo">
@@ -122,22 +123,22 @@ export default {
   },
   methods: {
     getProductList() {
-      uni.showLoading({
-        title: '加载中...',
-      })
+      // uni.showLoading({
+      //   title: '加载中...',
+      // })
       NET.request(API.getCouponProducts, {
         activityId: this.currentCoupon.couponId,
         page: this.page,
         pageSize: this.pageSize
       }, 'GET').then(res => {
-        uni.hideLoading()
+        // uni.hideLoading()
         if (res.data.list.length === 0) {
           this.loadingType = 1
         } else {
           this.productList = this.productList.concat(res.data.list)
         }
       }).catch(res => {
-        uni.hideLoading()
+        // uni.hideLoading()
       })
     },
     receiveCoupon() {

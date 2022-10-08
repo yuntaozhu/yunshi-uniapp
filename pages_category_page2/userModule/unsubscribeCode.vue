@@ -1,7 +1,8 @@
 <template>
 	<!-- 登录 -->
 	<view class="container flex-items-plus flex-column">
-		<view class="login-logoBox">
+    <global-loading />
+    <view class="login-logoBox">
 			<image class="login-logo" src="https://ceres.zkthink.com/static/images/loginLogo.png"></image>
 		</view>
 		<view class="iphoneNum-box flex-row-plus flex-items">
@@ -71,18 +72,18 @@
 				NET.request(API.delUser + this.code, {}, "delete").then(res => {
 					console.log(res)
 					if (res.code == '200') {
-						uni.showLoading({
-							mask: true,
-							title: '注销成功，正在退出...',
-							duration: 2000,
-						});
+						// uni.showLoading({
+						// 	mask: true,
+						// 	title: '注销成功，正在退出...',
+						// 	duration: 2000,
+						// });
 						setTimeout(function() {
 							uni.removeStorageSync('storage_key');
 							uni.removeStorageSync('distributorId');
 							uni.reLaunch({
 								url: 'login',
 								success() {
-									uni.hideLoading()
+									// uni.hideLoading()
 								}
 							})
 						}, 1000)

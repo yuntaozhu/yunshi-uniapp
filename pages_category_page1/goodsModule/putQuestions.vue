@@ -1,5 +1,7 @@
 <template>
   <view class="qaBox">
+    <global-loading />
+
     <view class="qaTopInfo">
       <view class="qaTopInfoBox">
         <image :src="qudata.images"></image>
@@ -60,10 +62,10 @@
           })
           return false
         }
-        uni.showLoading({
-          title: '提交中...',
-          mask: true
-        });
+        // uni.showLoading({
+        //   title: '提交中...',
+        //   mask: true
+        // });
 				if(this.anonymous == true){
 					this.ifAnonymous = 1
 				}else{

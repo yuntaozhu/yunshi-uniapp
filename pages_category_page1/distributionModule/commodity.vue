@@ -1,6 +1,8 @@
 <template>
 	<view class="container">
-		<view>
+    <global-loading />
+
+    <view>
 			<view v-for="(item, index) in Productlist" :key="index" class="goodsDetails-box flex-display flex-column mar-left-30"
 				  @click="goodsDatails(item)">
 				<view class="goodsDetails flex-items-plus flex-row mar-top-30">
@@ -67,10 +69,10 @@
 		},
 		methods: {
 			getStoreProductList() {
-				uni.showLoading({
-          mask: true,
-					title: '加载中...'
-				})
+				// uni.showLoading({
+        //   mask: true,
+				// 	title: '加载中...'
+				// })
 				NET.request(API.StoreProductList, {
 					shopId: this.shopId,
 					page:this.page,
@@ -95,7 +97,7 @@
 				// #ifdef APP-PLUS
 				var system = 1
 				// #endif
-				
+
 				// #ifdef H5
 				var system = 3
 				// #endif
@@ -108,10 +110,10 @@
 				var system = 4
 				// #endif
 
-				uni.showLoading({
-                  mask: true,
-				  title: '请稍候...'
-				})
+				// uni.showLoading({
+        //           mask: true,
+				//   title: '请稍候...'
+				// })
 				NET.request(API.getSharePic, {
 				  productId: item.productId,
 				  shopId: item.shopId,

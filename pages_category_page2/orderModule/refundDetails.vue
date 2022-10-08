@@ -1,189 +1,192 @@
 <!-- 退货详情 -->
 <template>
-	<view v-if="ifShow">
-		<view>
-			<view class="order-details-status">
-				<view class="status-title-box" v-if='status == 1'>
-					<view class="l">
-						<text class="status">审核中</text>
-						<!-- <text class="label" v-if="deliveryfalse">还剩1天22时30分</text> -->
-					</view>
-<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsTime.png"></image>-->
-				</view>
-				<!--  审核通过-->
-				<view class="status-title-box" v-if="status == 10">
-					<view class="l">
-						<text class="status">审核通过</text>
-						<!-- <text class="label" v-if="deliveryfalse">2020年4月24日 22:00:00</text> -->
-					</view>
-<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsSuccess.png"></image>-->
-				</view>
-				<!--  审核不通过-->
-				<view class="status-title-box" v-if="status == 6">
-					<view class="l">
-						<text class="status">审核不通过</text>
-						<!-- <text class="label" v-if="deliveryfalse">2020年4月24日 22:00:00</text> -->
-					</view>
-<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsSuccess.png"></image>-->
-				</view>
-        <view class="reason" v-if="status == 6">原因: {{ itemlist.reason }}</view>
-				<!--  退款中-->
-				<view class="status-title-box" v-if="status == 2">
-					<view class="l">
-						<text class="status">退款中</text>
-						<!-- <text class="label">2020年4月24日 22:00:00</text> -->
-					</view>
-<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
-				</view>
-        <!--  退款中-->
-        <view class="status-title-box" v-if="status == 7">
-          <view class="l">
-            <text class="status">评审中</text>
+  <view>
+    <global-loading />
+    <view v-if="ifShow">
+      <view>
+        <view class="order-details-status">
+          <view class="status-title-box" v-if='status == 1'>
+            <view class="l">
+              <text class="status">审核中</text>
+              <!-- <text class="label" v-if="deliveryfalse">还剩1天22时30分</text> -->
+            </view>
+            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsTime.png"></image>-->
           </view>
-<!--          <image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
+          <!--  审核通过-->
+          <view class="status-title-box" v-if="status == 10">
+            <view class="l">
+              <text class="status">审核通过</text>
+              <!-- <text class="label" v-if="deliveryfalse">2020年4月24日 22:00:00</text> -->
+            </view>
+            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsSuccess.png"></image>-->
+          </view>
+          <!--  审核不通过-->
+          <view class="status-title-box" v-if="status == 6">
+            <view class="l">
+              <text class="status">审核不通过</text>
+              <!-- <text class="label" v-if="deliveryfalse">2020年4月24日 22:00:00</text> -->
+            </view>
+            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsSuccess.png"></image>-->
+          </view>
+          <view class="reason" v-if="status == 6">原因: {{ itemlist.reason }}</view>
+          <!--  退款中-->
+          <view class="status-title-box" v-if="status == 2">
+            <view class="l">
+              <text class="status">退款中</text>
+              <!-- <text class="label">2020年4月24日 22:00:00</text> -->
+            </view>
+            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
+          </view>
+          <!--  退款中-->
+          <view class="status-title-box" v-if="status == 7">
+            <view class="l">
+              <text class="status">评审中</text>
+            </view>
+            <!--          <image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
+          </view>
+          <!--  退货完成待退款-->
+          <view class="status-title-box" v-if="status == 4">
+            <view class="l">
+              <text class="status">退款成功</text>
+              <!-- <text class="label">2020年4月24日 22:00:00</text> -->
+            </view>
+            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
+          </view>
+          <!--  退货完成拒绝退款-->
+          <view class="status-title-box" v-if="status == 5">
+            <view class="l">
+              <text class="status">退款失败</text>
+              <!-- <text class="label">2020年4月24日 22:00:00</text> -->
+            </view>
+            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
+          </view>
+          <!--  平台介入拒绝-->
+          <view class="status-title-box" v-if="status == 9 && isPlaformState === 1">
+            <view class="l">
+              <text class="status">审核失败</text>
+            </view>
+          </view>
+          <!--  退款成功-->
+          <view class="status-title-box" v-if="status == 9">
+            <view class="l">
+              <text class="status">撤销申请</text>
+              <!-- <text class="label" v-if="deliveryfalse">2020年4月24日 22:00:00</text> -->
+            </view>
+            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsSuccess.png"></image>-->
+          </view>
+
         </view>
-				<!--  退货完成待退款-->
-				<view class="status-title-box" v-if="status == 4">
-					<view class="l">
-						<text class="status">退款成功</text>
-						<!-- <text class="label">2020年4月24日 22:00:00</text> -->
-					</view>
-<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
-				</view>
-				<!--  退货完成拒绝退款-->
-				<view class="status-title-box" v-if="status == 5">
-					<view class="l">
-						<text class="status">退款失败</text>
-						<!-- <text class="label">2020年4月24日 22:00:00</text> -->
-					</view>
-<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
-				</view>
-				<!--  平台介入拒绝-->
-				<view class="status-title-box" v-if="status == 9 && isPlaformState === 1">
-					<view class="l">
-						<text class="status">审核失败</text>
-					</view>
-				</view>
-				<!--  退款成功-->
-				<view class="status-title-box" v-if="status == 9">
-					<view class="l">
-						<text class="status">撤销申请</text>
-						<!-- <text class="label" v-if="deliveryfalse">2020年4月24日 22:00:00</text> -->
-					</view>
-<!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsSuccess.png"></image>-->
-				</view>
 
-			</view>
-
-			<!-- 发起退款 -->
-			<view class="order-details-info-box mt20" v-if='status == 0'>
-				<view class="order-details-price" v-if='status != 0'>
-					<text>退款总金额</text>
-					<text class="price-box"><text class="fuhao">￥</text>{{itemlist.price}}</text>
-				</view>
-				<view class="address-box return-explain-box">
-					<view>您已成功发起退款申请，请耐心等待商家处理。</view>
-					<view class="address-info-r mt20 mar-top-20">
-						<view class="item fs24">
-							<text class="circle"></text>
-							<text class="">卖家同意或超时未处理，系统将退款给您</text>
-						</view>
-						<view class="item fs24">
-							<text class="circle"></text>
-							<text class="">如果卖家拒绝，您可以修改退款申请后再次发起，卖家会重新处理</text>
-						</view>
-					</view>
-					<view class="return-explain-btn">
-						<text class="btn" @click="cancelRefundTap">撤销申请</text>
-            <text class="btn" @click="platform(itemlist.afterId, itemlist.orderId)" v-if="status==6 || status==8">平台介入</text>
-					</view>
-				</view>
-			</view>
-      <view class="order-details-info-box mt20" v-if="status==6 || status==8">
-        <view class="return-explain-btn">
-          <text class="btn" @click="cancelRefundTap">撤销申请</text>
-          <text class="btn" @click="platform(itemlist.afterId, itemlist.orderId)">平台介入</text>
+        <!-- 发起退款 -->
+        <view class="order-details-info-box mt20" v-if='status == 0'>
+          <view class="order-details-price" v-if='status != 0'>
+            <text>退款总金额</text>
+            <text class="price-box"><text class="fuhao">￥</text>{{itemlist.price}}</text>
+          </view>
+          <view class="address-box return-explain-box">
+            <view>您已成功发起退款申请，请耐心等待商家处理。</view>
+            <view class="address-info-r mt20 mar-top-20">
+              <view class="item fs24">
+                <text class="circle"></text>
+                <text class="">卖家同意或超时未处理，系统将退款给您</text>
+              </view>
+              <view class="item fs24">
+                <text class="circle"></text>
+                <text class="">如果卖家拒绝，您可以修改退款申请后再次发起，卖家会重新处理</text>
+              </view>
+            </view>
+            <view class="return-explain-btn">
+              <text class="btn" @click="cancelRefundTap">撤销申请</text>
+              <text class="btn" @click="platform(itemlist.afterId, itemlist.orderId)" v-if="status==6 || status==8">平台介入</text>
+            </view>
+          </view>
         </view>
-      </view>
-			<!-- 退款成功 -->
-			<view class="order-details-info-box mt20" v-if="status == 4">
-				<view class="order-details-price return-explain-box">
-					<text>已原路退回金额</text>
-					<text class="price-box"><text class="fuhao">￥</text>{{itemlist.price}}</text>
-				</view>
-			</view>
-			<!-- 平台介入关闭 -->
-			<view class="order-details-info-box mt20" v-if="status == 9 && isPlaformState === 1">
-				<view class="address-box return-explain-box">
-					<view>平台介入申请失败</view>
-				</view>
-			</view>
-			<!-- 退款关闭 -->
-			<view class="order-details-info-box mt20" v-if="status == 9">
-				<view class="address-box return-explain-box">
-					<view>因您撤销退款申请，退款已关闭</view>
-				</view>
-			</view>
+        <view class="order-details-info-box mt20" v-if="status==6 || status==8">
+          <view class="return-explain-btn">
+            <text class="btn" @click="cancelRefundTap">撤销申请</text>
+            <text class="btn" @click="platform(itemlist.afterId, itemlist.orderId)">平台介入</text>
+          </view>
+        </view>
+        <!-- 退款成功 -->
+        <view class="order-details-info-box mt20" v-if="status == 4">
+          <view class="order-details-price return-explain-box">
+            <text>已原路退回金额</text>
+            <text class="price-box"><text class="fuhao">￥</text>{{itemlist.price}}</text>
+          </view>
+        </view>
+        <!-- 平台介入关闭 -->
+        <view class="order-details-info-box mt20" v-if="status == 9 && isPlaformState === 1">
+          <view class="address-box return-explain-box">
+            <view>平台介入申请失败</view>
+          </view>
+        </view>
+        <!-- 退款关闭 -->
+        <view class="order-details-info-box mt20" v-if="status == 9">
+          <view class="address-box return-explain-box">
+            <view>因您撤销退款申请，退款已关闭</view>
+          </view>
+        </view>
 
-			<view class="order-list-box" >
-				<view class="title">退款信息</view>
-				<view class="item" >
-					<view class="order-info-box">
-						<view class="order-info" v-for="item in itemlist.skus">
-							<view class="order-info-item">
-								<image :src="item.image" class="product-img"></image>
-								<view class="info-box">
-									<text class="product-name">{{item.productName}}</text>
-									<view class="product-sku mt20">{{item.value}}</view>
-								</view>
-							</view>
-						</view>
-						<view class="delivery-way-box">
-							<view class="item" v-if="deliveryfalse">
-								<!-- <text class="way">退款原因：多拍/错拍/不想要</text> -->
-							</view>
-							<view class="item">
-								<text class="way">退款金额：￥{{itemlist.price}}</text>
-							</view>
-							<view class="item">
-								<text class="way">退款编号：{{itemlist.afterFormid}}</text>
-							</view>
-							<view class="item">
-								<text class="way">申请时间：{{itemlist.createTime}}</text>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
-			<view class="order-list-box negotiate">
-				<view class="title">协商历史</view>
-        <view class="orderLineBox">
-          <u-time-line>
-            <u-time-line-item v-if="itemlist.afterHistory.length>0" v-for="item in itemlist.afterHistory">
-              <!-- 此处没有自定义左边的内容，会默认显示一个点 -->
-              <template v-slot:content>
-                <view>
-                  <view class="u-order-desc">{{item.title}}</view>
-                  <view class="u-order-time">{{item.time}}</view>
+        <view class="order-list-box" >
+          <view class="title">退款信息</view>
+          <view class="item" >
+            <view class="order-info-box">
+              <view class="order-info" v-for="item in itemlist.skus">
+                <view class="order-info-item">
+                  <image :src="item.image" class="product-img"></image>
+                  <view class="info-box">
+                    <text class="product-name">{{item.productName}}</text>
+                    <view class="product-sku mt20">{{item.value}}</view>
+                  </view>
                 </view>
-              </template>
-            </u-time-line-item>
-          </u-time-line>
+              </view>
+              <view class="delivery-way-box">
+                <view class="item" v-if="deliveryfalse">
+                  <!-- <text class="way">退款原因：多拍/错拍/不想要</text> -->
+                </view>
+                <view class="item">
+                  <text class="way">退款金额：￥{{itemlist.price}}</text>
+                </view>
+                <view class="item">
+                  <text class="way">退款编号：{{itemlist.afterFormid}}</text>
+                </view>
+                <view class="item">
+                  <text class="way">申请时间：{{itemlist.createTime}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
         </view>
-			</view>
-		</view>
-    <u-popup v-model="intervention" mode="center" border-radius="14" close-icon-pos="top-right"
-             close-icon-size="20">
-      <view class="interventionBox">
-        <view class="intTit">你已申请平台介入正在审核中...</view>
-<!--        <textarea class="textarea-text" v-model="reason" placeholder-style="color:#BBBBBB" placeholder="请输入介入原因"/>-->
-<!--        <view class="btnBox">-->
-<!--          <button @click="interventionFn" class="primary">确定</button>-->
-<!--          <button @click="closeInterventionFn">取消</button>-->
-<!--        </view>-->
+        <view class="order-list-box negotiate">
+          <view class="title">协商历史</view>
+          <view class="orderLineBox">
+            <u-time-line>
+              <u-time-line-item v-if="itemlist.afterHistory.length>0" v-for="item in itemlist.afterHistory">
+                <!-- 此处没有自定义左边的内容，会默认显示一个点 -->
+                <template v-slot:content>
+                  <view>
+                    <view class="u-order-desc">{{item.title}}</view>
+                    <view class="u-order-time">{{item.time}}</view>
+                  </view>
+                </template>
+              </u-time-line-item>
+            </u-time-line>
+          </view>
+        </view>
       </view>
-    </u-popup>
-	</view>
+      <u-popup v-model="intervention" mode="center" border-radius="14" close-icon-pos="top-right"
+               close-icon-size="20">
+        <view class="interventionBox">
+          <view class="intTit">你已申请平台介入正在审核中...</view>
+          <!--        <textarea class="textarea-text" v-model="reason" placeholder-style="color:#BBBBBB" placeholder="请输入介入原因"/>-->
+          <!--        <view class="btnBox">-->
+          <!--          <button @click="interventionFn" class="primary">确定</button>-->
+          <!--          <button @click="closeInterventionFn">取消</button>-->
+          <!--        </view>-->
+        </view>
+      </u-popup>
+    </view>
+  </view>
 </template>
 
 <script>
@@ -223,14 +226,14 @@
 				})
 			},
       cancelRefundTap(){
-        uni.showLoading({
-          title:'正在撤销退货...'
-        })
+        // uni.showLoading({
+        //   title:'正在撤销退货...'
+        // })
         NET.request(API.CancelReturnGoods, {
           afterId:this.item.afterId,
           orderId:this.item.orderId
         }, 'POST').then(res => {
-          uni.hideLoading()
+          // uni.hideLoading()
           uni.showToast({
             title:'撤销成功',
           })
@@ -238,7 +241,7 @@
             url:'../../pages/tabbar/user/index'
           })
         }).catch(res => {
-          uni.hideLoading()
+          // uni.hideLoading()
         })
       },
       // 平台介入

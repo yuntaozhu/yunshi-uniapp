@@ -109,9 +109,7 @@
         </view>
       </view>
     </u-popup>
-    <u-popup v-model="cargoStatusShowFalg"
-             mode="bottom"
-             border-radius="14">
+    <u-popup v-model="cargoStatusShowFalg" mode="bottom" border-radius="14">
       <view class="alert-box">
         <view class="afterSale-status-box">
           <view class="status-title">货物状态</view>
@@ -132,13 +130,9 @@
       </view>
     </u-popup>
     <!-- 退款原因弹框 -->
-    <u-popup v-model="reasonShowFalg"
-             mode="bottom"
-             border-radius="14"
-             width="80%"
-             height="60%">
+    <u-popup v-model="reasonShowFalg" mode="bottom" border-radius="14">
       <view class="alert-box">
-        <view class="afterSale-status-box" scroll-y style="height:100%;">
+        <view class="afterSale-status-box" scroll-y style="height:60%;">
           <view class="status-title">退款原因</view>
           <view class="item-box">
             <view class="item" @click="returnReasonTap(item,index)" v-for="(item,index) in liyouData" :key="index">
@@ -197,25 +191,60 @@ export default {
     this.fileList = this.$refs.uUpload.lists
   },
   async onLoad(options) {
+	  console.log(options,'options')
     if (uni.getStorageSync('applyItem')) {
       this.afterRefund = uni.getStorageSync('applyItem')
       this.list.push(this.afterRefund)
     } else if (uni.getStorageSync('afterSaleApplyRefund')) {
       this.list = uni.getStorageSync('afterSaleApplyRefund')
     }
+	console.log(this.list,'this.list')
     this.orderId = parseInt(options.orderId)
 	this.isAllSelect = options.isAllSelect
+	console.log(this.isAllSelect,'this.isAllSelect')
     const res = uni.getStorageSync('storage_key');
     this.headerToken.Authorization = res.token
     this.list.forEach(el => {
-		this.sellPriceitem = this.sellPriceitem + el.actualPrice + el.logisticsPrice
+		if(this.isAllSelect > 0){
+			this.sellPriceitem = this.sellPriceitem + (el.number*el.price) + el.logisticsPrice
+		}else{
+			this.sellPriceitem = this.sellPriceitem + (el.number*el.price)
+		}
+
     })
+    // this.sellPriceitem = options.sellPriceitem
+    // this.sellPriceitem = options.sellPriceitem
     this.getReasonEnums()
     uni.removeStorageSync('applyItem')
     uni.removeStorageSync('afterSaleApplyRefund')
+    this.sellPriceitem=await this.HandleGetRefundMoney()
   },
   methods: {
+    // 算钱
+    HandleGetRefundMoney() {
+      return new Promise((resolve, reject) => {
+        // uni.showLoading({
+        //   title: "计算中..."
+        // })
+        let postData = {
+          orderId: this.orderId,
+          isAllSelect: this.isAllSelect==1 ? 1 : 0,
+          skus: this.list,
+          afterType:2,
+          goodsState:this.ReturnMoneyQuery.goodsState
+        }
+        NET.request(API.GetRefundMoney, postData, "POST").then(res => {
+          uni.hideLoading()
+          resolve (parseFloat(res.json))
+        }).catch(err=>{
+          uni.hideLoading()
+        })
+      })
+    },
+
+
     confirmTap() {
+      console.log(this.fileList, 'commentImgs')
       if(this.fileList.length>0){
         this.commentImgsFlag = true
         for(let i=0;i<this.fileList.length;i++){
@@ -244,10 +273,11 @@ export default {
           icon: 'none'
         });
       } else {
-        uni.showLoading({
-          title: '正在提交...',
-        })
+        // uni.showLoading({
+        //   title: '正在提交...',
+        // })
         let skusobjdata = []
+        console.log(this.list)
         this.list.forEach((i) => {
           let skusobj = {}
           skusobj["skuId"] = i.skuId
@@ -295,6 +325,7 @@ export default {
       this.ReturnMoneyQuery.returnReason = index
       this.liyoutext = item
     },
+
     openStatusSelect() {
       this.cargoStatusShowFalg = true
     },
@@ -306,14 +337,8 @@ export default {
     },
     async closeStatusSelect() {
       this.cargoStatusShowFalg = false
-      this.sellPriceitem = 0
-      this.list.forEach(el => {
-        this.sellPriceitem += el.actualPrice
-        //已收到货物，就不退运费
-        if (this.ReturnMoneyQuery.goodsState === 0) {
-          this.sellPriceitem += el.logisticsPrice
-        }
-      })
+      this.sellPriceitem=await this.HandleGetRefundMoney()
+
     },
     closeAfterSelect() {
       this.refundTypeShow = false

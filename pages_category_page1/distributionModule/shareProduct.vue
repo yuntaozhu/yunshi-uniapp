@@ -1,6 +1,8 @@
 <template>
 	<view>
-		<u-mask :show="show" z-index="10000">
+    <global-loading />
+
+    <u-mask :show="show" z-index="10000">
 			<view class="warp">
 				<view class="rect" @tap.stop>
 					<!-- 关闭按钮 -->
@@ -110,9 +112,9 @@
 			// 保存图片到本地
 			WXfenx() {
 				// #ifdef APP-PLUS || MP-WEIXIN || MP-ALIPAY
-				uni.showLoading({
-					title: '图片保存中...'
-				})
+				// uni.showLoading({
+				// 	title: '图片保存中...'
+				// })
 				// #endif
 
 				// #ifdef APP-PLUS
@@ -136,20 +138,7 @@
 									});
 								}
 							});
-						} else {
-							uni.hideLoading()
-							uni.showToast({
-								title: "保存失败",
-								icon: "none"
-							});
 						}
-					},
-					fail: (res) => {
-						uni.hideLoading()
-						uni.showToast({
-							title: "保存失败",
-							icon: "none"
-						});
 					}
 				})
 				// #endif

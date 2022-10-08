@@ -1,5 +1,7 @@
 <template>
  <view class="groupBuy">
+   <global-loading />
+
    <view class="groupBuyBg">
      <image src="https://ceres.zkthink.com/static/images/groupBuyLogo.png"></image>
    </view>
@@ -198,10 +200,10 @@ export default {
 			})
 		},
 		getGroupBuylist(){
-      uni.showLoading({
-        mask: true,
-        title: '加载中...',
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '加载中...',
+      // })
       let param = {
         page:this.page,
         pageSize:this.pageSize,

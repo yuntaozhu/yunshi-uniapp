@@ -1,5 +1,7 @@
 <template>
   <view class="container flex-center flex-column">
+    <global-loading />
+
     <view
         class="inStoreBackImg flex-items-plus"
         v-if="StoreListData.length>0"
@@ -89,10 +91,10 @@ export default {
       });
     },
     getStoreList() {
-      uni.showLoading({
-        mask: true,
-        title: '加载中...'
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '加载中...'
+      // })
       NET.request(API.FindSaleStoreList, {
         page: this.page,
         pageSize: this.pageSize

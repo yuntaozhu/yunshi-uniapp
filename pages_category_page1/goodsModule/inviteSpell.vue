@@ -1,59 +1,51 @@
 <template>
 	<view class="inviteSpell-con">
-		<global-loading />
+    <global-loading />
 
-		<view class="grouped">
-			<view v-if="showJoinGroup" class="fs32 font-color-FFF">{{remainPerson !== 0?'等待成团':'已成团'}}</view>
-			<view class="fs26 number">{{inviteSpell.person}}人团</view>
-		</view>
-		<view class="topBox">
-			<view class="title-box flex-row-plus" @click="goodsDateils()">
-				<image class="pro-img" :src="inviteSpell.image"></image>
-				<view class="flex-column-plus mar-left-30">
-					<view class="title-lab fs28">{{inviteSpell.productName}}</view>
-					<view class="flex-row-plus flex-sp-between">
-						<view class="flex-column-plus">
-							<!--              <view class="spellNum flex-items-plus font-color-C5AA7B mar-top-30 fs24">{{inviteSpell.person}}人团</view>-->
-							<view class="flex-row-plus mar-top-30 flex-items">
-								<label class="font-color-C83732 fs24">¥</label>
-								<label class="font-color-C83732 fs36 mar-left-5">{{inviteSpell.price}}</label>
-								<label
-									class="font-color-CCC discountsPriceLine fs26 mar-left-20">¥{{inviteSpell.originalPrice}}</label>
-							</view>
-						</view>
-						<!--            <view class="mar-top-20">-->
-						<!--              <image class="issueregiment" src="https://ceres.zkthink.com/static/images/issueregiment.png"></image>-->
-						<!--            </view>-->
-					</view>
-				</view>
-			</view>
-		</view>
+    <view class="grouped">
+      <view class="fs32 font-color-FFF">{{remainPerson !== 0?'等待成团':'已成团'}}</view>
+      <view class="fs26 number">{{inviteSpell.person}}人团</view>
+    </view>
+    <view class="topBox">
+      <view class="title-box flex-row-plus">
+        <image class="pro-img" :src="inviteSpell.image"></image>
+        <view class="flex-column-plus mar-left-30">
+          <view class="title-lab fs28">{{inviteSpell.productName}}</view>
+          <view class="flex-row-plus flex-sp-between">
+            <view class="flex-column-plus">
+<!--              <view class="spellNum flex-items-plus font-color-C5AA7B mar-top-30 fs24">{{inviteSpell.person}}人团</view>-->
+              <view class="flex-row-plus mar-top-30 flex-items">
+                <label class="font-color-C83732 fs24">¥</label>
+                <label class="font-color-C83732 fs36 mar-left-5">{{inviteSpell.price}}</label>
+                <label class="font-color-CCC discountsPriceLine fs26 mar-left-20">¥{{inviteSpell.originalPrice}}</label>
+              </view>
+            </view>
+<!--            <view class="mar-top-20">-->
+<!--              <image class="issueregiment" src="https://ceres.zkthink.com/static/images/issueregiment.png"></image>-->
+<!--            </view>-->
+          </view>
+        </view>
+      </view>
+    </view>
 		<view class="spellpersonnel-box">
-			<view class="bgBox flex-items-plus flex-column">
-				<view class="flex-items flex-sp-around flex-row-plus mar-right-20">
-					<view class="flex-column flex-items-plus mar-left-20" v-for="(item,index) in inviteSpell.personList"
-						:key="index">
-						<image v-if="index == 0" class="head-icon border-FF7 z-index-0" :src="item.headImage"></image>
-						<image v-else class="head-icon " :src="item.headImage"></image>
-						<view v-if="index == 0" class="fs18 colonel-box">团长</view>
-					</view>
-					<view v-for="ritem in remainPerson">
-						<view class="replenish-icon flex-items-plus mar-left-20">?</view>
-					</view>
-				</view>
-				<view v-if="remainPerson !== 0">
-					<view v-if="showJoinGroup" class="mar-top-50 font-color-333">还差<label
-							class="font-color-C5AA7B">{{remainPerson}}</label>人成团，距结束还剩{{hou}}:{{min}}:{{sec}}</view>
-					<view v-if="type === 1 && showJoinGroup" @click="shareClick"
-						class="offered-but font-color-FFF flex-items-plus mar-top-60">邀请好友拼单</view>
-					<view v-if="type === 0 && showJoinGroup" @click="getOffered"
-						class="offered-but font-color-FFF flex-items-plus mar-top-60">立即参团</view>
-					<view v-else-if="!showJoinGroup" class="group-disabled font-color-FFF flex-items-plus mar-top-60">{{showGroupText}}
-					</view>
-					<view v-if="type === 1 && showJoinGroup" @click="goinvitePoster" class="poster-but flex-items-plus mar-top-40">生成邀请海报
-					</view>
-				</view>
-			</view>
+      <view class="bgBox flex-items-plus flex-column">
+        <view class="flex-items flex-sp-around flex-row-plus mar-right-20">
+          <view class="flex-column flex-items-plus mar-left-20" v-for="(item,index) in inviteSpell.personList" :key="index">
+            <image v-if="index == 0" class="head-icon border-FF7 z-index-0" :src="item.headImage"></image>
+            <image v-else class="head-icon " :src="item.headImage"></image>
+            <view v-if="index == 0" class="fs18 colonel-box">团长</view>
+          </view>
+          <view v-for="ritem in remainPerson">
+            <view class="replenish-icon flex-items-plus mar-left-20">?</view>
+          </view>
+        </view>
+		  <view v-if="remainPerson !== 0">
+			  <view class="mar-top-50 font-color-333">还差<label class="font-color-C5AA7B">{{remainPerson}}</label>人成团，距结束还剩{{hou}}:{{min}}:{{sec}}</view>
+			  <view v-if="type == 1" @click="shareClick" class="offered-but font-color-FFF flex-items-plus mar-top-60">邀请好友拼单</view>
+			  <view v-if="type == 0" @click="getOffered" class="offered-but font-color-FFF flex-items-plus mar-top-60">立即参团</view>
+			  <view v-if="type == 1" @click="goinvitePoster" class="poster-but flex-items-plus mar-top-40">生成邀请海报</view>
+		  </view>
+      </view>
 		</view>
 		<view class="spellrule flex-items-plus flex-column mar-top-20">
 			<view class="flex-row-plus">
@@ -74,7 +66,7 @@
 			</view>
 		</view>
 		<!-- 商品详情 -->
-		<u-popup class="goosDetailshow-box" v-model="goodsDetailShowFlag" mode="bottom" border-radius="14">
+		<u-popup class="goosDetailshow-box" v-model="goosDetailshowFlag" mode="bottom" border-radius="14">
 			<view>
 				<view class="detailImg-box flex-row-plus">
 					<image class="detailImg" :src="skuImg"></image>
@@ -92,8 +84,7 @@
 						<label class="fs24 font-color-999">{{attritem.skuName}}</label>
 						<view class="colorName-box">
 							<view class="pad-bot-30" v-for="(attrRes, resIndex) in attritem.values" :key="resIndex">
-								<label class="colorName" :class="{'colorName-on' :subIndex[index] == resIndex}"
-									@click="colorActiveClick(attrRes,index,resIndex)">{{attrRes.skuValue}}</label>
+								<label class="colorName" :class="{'colorName-on' :subIndex[index] == resIndex}" @click="colorActiveClick(attrRes,index,resIndex)">{{attrRes.skuValue}}</label>
 							</view>
 						</view>
 					</view>
@@ -106,14 +97,12 @@
 						<label class="add" @click="numAdd">+</label>
 					</view>
 				</view>
-				<view class="goosDetailbut-box flex-items-plus"
-					:style="{'padding-bottom':(isIphone===true? 50:20)+'rpx'}">
+				<view class="goosDetailbut-box flex-items-plus" :style="{'padding-bottom':(isIphone===true? 50:20)+'rpx'}">
 					<view class="joinbuyBut" @click="getGroupSettlement(2)">确定</view>
 				</view>
 			</view>
 		</u-popup>
-		<shareSpell ref="shareSpell" @shareCancel='shareCancel' :url="url" :img="inviteSpell.image" title="好友邀请您来拼单啦">
-		</shareSpell>
+		<shareSpell ref="shareSpell" @shareCancel='shareCancel' :url="url"></shareSpell>
 	</view>
 </template>
 
@@ -134,40 +123,39 @@
 				}, {
 					name: '人满成团 失败退款'
 				}, ],
-				collageId: 0,
-				orderId: 0,
-				type: 0,
-				inviteSpell: {},
-				personLen: 0,
-				remainPerson: 0,
+				collageId:0,
+				orderId:0,
+				type:0,
+				inviteSpell:{},
+				personLen:0,
+				remainPerson:0,
 				hou: "00",
 				min: "00",
 				sec: "00",
-				timeOut: undefined,
-				goodsDetailShowFlag: false,
-				productId: 0,
-				skuId: 0,
-				shopGroupWorkId: 0,
-				buyNum: 1,
-				skuProdId: 0,
-				skuImg: '',
-				skuPrice: 0,
-				stockNumber: 0,
-				skuProdList: {},
+				timeOut:undefined,
+				goosDetailshowFlag: false,
+				productId:0,
+				skuId:0,
+				shopGroupWorkId:0,
+				buyNum:1,
+				skuProdId:0,
+				skuImg:'',
+				skuPrice:0,
+				stockNumber:0,
+				skuProdList:{},
 				isIphone: "",
 				selectArr: [], // 存放被选中的值
 				subIndex: [], // 是否选中 因为不确定是多规格还是单规格，所以这里定义数组来判断
 				attrItemIdArr: [], //存放被选中的id
-				shopId: 0,
+				shopId:0,
 				attrList: [],
+				productDetail:{},
 				userInfo: {},
-				url: '',
-				shareTitle: '',
-				showJoinGroup: false,
-				showGroupText: '立即参团'
+				url:'',
+				shareTitle: ''
 			};
 		},
-		components: {
+		components:{
 			shareSpell
 		},
 		onShareAppMessage: function(res) {
@@ -175,45 +163,11 @@
 			//console.log('res=====',res);
 			if (res.from === 'button') {
 				//console.log('来自页面内转发按钮');
-			} else if (res.from === 'menu') {
+			} else if (res.from === 'menu'){
 				//console.log('右上角菜单转发按钮');
 			}
-			this.url = '/pages_category_page1/goodsModule/inviteSpell?collageId=' +
-				this.collageId + '&orderId=' + this.orderId + '&type=0' + '&productId=' + this.productId + '&skuId=' +
-				this.skuId + '&shopGroupWorkId=' + this.shopGroupWorkId
-			this.shareTitle = `【仅剩${this.remainPerson}个名额】我${this.inviteSpell.price}元拼了${this.inviteSpell.productName}`
-			// 返回数据
-			return {
-				title: that.shareTitle,
-				path: that.url,
-				success: function(res) {
-					// 转发成功，可以把当前页面的链接发送给后端，用于记录当前页面被转发了多少次或其他业务
-					wx.request({
-						url: app.buildUrl("/member/share"),
-						data: {
-							url: utils.getCurrentPageUrlWithArgs()
-						},
-						success: function(res) {
-							//console.log('成功');
-						}
-					});
-				},
-				fail: function(res) {
-					// 转发失败
-				}
-			}
-		},
-		onShareTimeline: function(res) {
-			var that = this;
-			//console.log('res=====',res);
-			if (res.from === 'button') {
-				//console.log('来自页面内转发按钮');
-			} else if (res.from === 'menu') {
-				//console.log('右上角菜单转发按钮');
-			}
-			this.url = '/pages_category_page1/goodsModule/inviteSpell?collageId=' +
-					this.collageId + '&orderId=' + this.orderId + '&type=0' + '&productId=' + this.productId + '&skuId=' +
-					this.skuId + '&shopGroupWorkId=' + this.shopGroupWorkId
+			this.url = '/pages_category_page1/goodsModule/inviteSpell?collageId='
+					+ this.collageId +'&orderId='+ this.orderId+'&type=0'+'&productId='+this.productId+'&skuId='+this.skuId+'&shopGroupWorkId='+this.shopGroupWorkId
 			this.shareTitle = `【仅剩${this.remainPerson}个名额】我${this.inviteSpell.price}元拼了${this.inviteSpell.productName}`
 			// 返回数据
 			return {
@@ -237,32 +191,35 @@
 			}
 		},
 		onUnload() {
-			if (this.timeOut) {
-				clearTimeout(this.timeOut)
+			if(this.timeOut){
+			    clearTimeout(this.timeOut)
 			}
 		},
-		onShow() {
-			//判断是否登录
-			this.userInfo = uni.getStorageSync('storage_key');
-			if (!(this.userInfo && this.userInfo.buyerUserId)) {
+		onShow(){
+            //判断是否登录
+			let item = {}
+			if(uni.getStorageSync('storage_key')){
+				item = uni.getStorageSync('storage_key');
+			}
+			if(JSON.stringify(item) == '{}'){
 				let data = {
 					collageId : this.collageId,
 					orderId : this.orderId,
 					productId : this.productId,
 					skuId : this.skuId,
 					type : this.type,
-					shopGroupWorkId: this.shopGroupWorkId
 				}
 				uni.setStorageSync("inviteSpell",data)
-				uni.navigateTo({
-					url:'../../pages_category_page2/userModule/accountLogin?inviteSpell=1'
-				})
-			} else {
-				this.getInviteSpell()
+				// uni.navigateTo({
+				// 	url:'../../pages_category_page2/userModule/accountLogin?inviteSpell=1'
+				// })
+			}else{
+				this.userInfo = uni.getStorageSync('storage_userInfo')
 			}
+			this.getInviteSpell()
 		},
 		onLoad(options) {
-			console.log(options, 'options')
+			console.log(options,'options')
 			this.isIphone = getApp().globalData.isIphone;
 			let item = getApp().globalData.inviteSpellShareItem
 			if (item) {
@@ -279,69 +236,73 @@
 				this.skuId = parseInt(options.skuId)
 				this.shopGroupWorkId = parseInt(options.shopGroupWorkId)
 			}
-			// #ifdef MP-WEIXIN
-			this.url = '/pages_category_page1/goodsModule/inviteSpell?collageId=' +
-				this.collageId + '&orderId=' + this.orderId + '&productId=' + this.productId + '&skuId=' + this.skuId +
-				'&shopGroupWorkId=' + this.shopGroupWorkId
-			// #endif
-			// #ifndef MP-WEIXIN
-			this.url = '/h5/#/pages_category_page1/goodsModule/inviteSpell?collageId=' +
-				this.collageId + '&orderId=' + this.orderId + '&productId=' + this.productId + '&skuId=' + this.skuId +
-				'&shopGroupWorkId=' + this.shopGroupWorkId
-			// #endif
+			this.getProductSku()
+			this.queryProductDetail()
+			this.url = '/pages_category_page1/goodsModule/inviteSpell?collageId='
+					+ this.collageId +'&orderId='+ this.orderId+'&productId='+this.productId+'&skuId='+this.skuId+'&shopGroupWorkId='+this.shopGroupWorkId
 		},
-		methods: {
-			getOffered() {
-				this.goodsDetailShowFlag = true
-			},
-			goodsDateils() {
-				uni.navigateTo({
-					url: '/pages_category_page1/goodsModule/goodsDetails?shopId=' + this.shopId + '&productId=' +
-						this.productId + '&skuId=' +
-						this.skuId
-				})
+		methods:{
+			getOffered(){
+        this.goosDetailshowFlag = true
 			},
 			//拼团下单
-			getGroupSettlement(type) {
-				uni.removeStorageSync("skuItemDTOList")
-				let data = {}
-				data = {
-					collageId: this.collageId,
-					number: this.buyNum,
-					productId: this.productId,
-					shopId: this.shopId,
-					skuId: this.skuProdId,
-					shopGroupWorkId: this.shopGroupWorkId,
-					type: type
+			getGroupSettlement(type){
+        uni.removeStorageSync("skuItemDTOList")
+				let data={}
+				data= {
+					collageId:this.collageId,
+					number:this.buyNum,
+					productId:this.productId,
+					shopId:this.shopId,
+					skuId:this.skuProdId,
+					shopGroupWorkId:this.shopGroupWorkId,
+					type:type
 				}
-				uni.setStorageSync('skuItemList', data)
-				this.goodsDetailShowFlag = false
+				uni.setStorageSync('skuItemList',data)
+				this.goosDetailshowFlag = false
 				this.buyNum = 1
 				uni.navigateTo({
 					url: '../orderModule/orderConfirm?type=1',
 				})
 			},
-			getProductSku() {
-				NET.request(API.getSpecificSku, {
-					skuId: this.skuId,
-					productId: this.productId
+			//获取商品详情
+			queryProductDetail() {
+				NET.request(API.QueryProductDetail,
+				{
+					shopId:this.shopId,
+					productId:this.productId,
+					skuId:this.skuId,
+					terminal:1
+				},
+				"GET").then(res => {
+					this.productDetail = res.data
+					for (let i = 0; i < res.data.attrList.length; i++) {
+						this.subIndex[i] = 0
+					}
+					this.attrItemIdArr[0] = res.data.attrList[0].attrValueList[0].id
+				}).catch(res => {
+				})
+			},
+			getProductSku(){
+				NET.request(API.QueryProductSku, {
+					skuId:this.skuId,
+					productId:this.productId
 				}, 'GET').then(res => {
 					this.skuProdList = res.data
 					this.attrList = res.data.names
 					this.attrValueList = res.data.names[0].values
 					//渲染商详之后，默认先选中第一个规格
-					this.colorActiveClick(this.attrValueList[0], 0, 0)
+					this.colorActiveClick(this.attrValueList[0],0,0)
 					this.skuProdId = this.skuId
 					this.skuImg = res.data.image
 					this.skuPrice = res.data.price
 					this.stockNumber = res.data.stockNumber
 					this.shopId = res.data.shopId
+
 				}).catch(res => {
-					uni.showToast({
-						title: '查询sku信息失败',
-						icon: "none"
-					})
+
 				})
+
 			},
 			// 数量减
 			numSub() {
@@ -356,9 +317,9 @@
 			},
 			// 数量加
 			numAdd() {
-				if (this.buyNum < this.stockNumber) {
+				if(this.buyNum < this.stockNumber){
 					this.buyNum = this.buyNum + 1
-				} else {
+				}else{
 					uni.showToast({
 						title: '库存不足！',
 						icon: "none"
@@ -398,13 +359,13 @@
 			},
 			checkItemDataClick(attrItemIdArr) {
 				let attrkey = ''
-				for (let i = 0; i < attrItemIdArr.length; i++) {
-					attrkey += attrItemIdArr[i] + ','
+				for(let i =0;i<attrItemIdArr.length;i++){
+					attrkey += attrItemIdArr[i]+','
 				}
-				attrkey = attrkey.substring(0, attrkey.length - 1)
+				attrkey = attrkey.substring(0,attrkey.length - 1)
 				let mapinfo = this.skuProdList.map
-				for (var key in mapinfo) {
-					if (attrkey == key) {
+				for (var key in mapinfo){
+					if(attrkey == key){
 						this.skuProdId = mapinfo[key].skuId
 						this.skuImg = mapinfo[key].skuImg
 						this.skuPrice = mapinfo[key].price
@@ -412,68 +373,53 @@
 					}
 				}
 			},
-			shareClick() {
+			shareClick(){
 				this.$refs.shareSpell.shareShow = true
 			},
-			shareCancel() {
+			shareCancel(){
 				this.$refs.shareSpell.shareShow = false
 			},
-			goinvitePoster() {
-				console.log(this.inviteSpell, 'test')
+			goinvitePoster(){
+			  console.log(this.inviteSpell, 'test')
 				let data = {
-					image: this.inviteSpell.image,
-					headImage: this.inviteSpell.headImage,
-					productName: this.inviteSpell.productName,
-					person: this.inviteSpell.person,
-					originalPrice: this.inviteSpell.originalPrice,
-					price: this.inviteSpell.price,
-					collageId: this.collageId,
-					productId: this.productId,
-					skuId: this.skuId,
-					orderId: this.orderId
+					image:this.inviteSpell.image,
+					headImage:this.inviteSpell.headImage,
+					productName:this.inviteSpell.productName,
+					person:this.inviteSpell.person,
+					originalPrice:this.inviteSpell.originalPrice,
+					price:this.inviteSpell.price,
+					collageId:this.collageId,
+          productId:this.productId,
+          skuId:this.skuId,
+					orderId:this.orderId
 				}
 				uni.navigateTo({
-					url: 'invitePoster?data=' + JSON.stringify(data)
+					url:'invitePoster?data='+ JSON.stringify(data)
 				})
 			},
-			getInviteSpell() {
-				uni.showLoading({
-					mask: true,
-					title: '加载中...',
-				})
+			getInviteSpell(){
+				// uni.showLoading({
+        //           mask: true,
+				//   title: '加载中...',
+				// })
 				NET.request(API.getInviteSpell, {
-					collageId: this.collageId,
+					collageId:this.collageId,
 					orderId: this.orderId
 				}, 'POST').then(res => {
 					this.inviteSpell = res.data
 					this.type = 0
-					this.inviteSpell.personList.forEach(item => {
-						if (this.userInfo && item.buyerUserId === this.userInfo.buyerUserId) {
+					this.inviteSpell.personList.forEach(item=>{
+						if(item.name === this.userInfo.name){
 							this.type = 1
 						}
 					})
 					this.personLen = res.data.personList.length
 					this.remainPerson = res.data.person - this.personLen
-					const orderState = res.data.orderState
-					const activityState = res.data.activityState
-					const collageOrderState = res.data.collageOrderState
-					if (orderState !== 6 || activityState !== 1 || collageOrderState !== 0 || res.data.time <= 1) {
-						this.showJoinGroup = false
-						if (activityState !== 1) {
-							this.showGroupText = '活动已结束'
-						}
-						if (collageOrderState !== 0 || orderState !== 6 || res.data.time <= 1) {
-							this.showGroupText = '拼单已失效'
-						}
-					} else {
-						this.showJoinGroup = true;
-						this.dateformat(res.data.time)
-						this.countDown()
-						this.getProductSku()
-					}
+					this.dateformat(res.data.time)
+					this.countDown()
 					uni.hideLoading()
 				}).catch(res => {
-					uni.hideLoading()
+				  uni.hideLoading()
 				})
 			},
 			//时分秒换算
@@ -492,403 +438,357 @@
 				this.min = min
 				this.sec = sec
 			},
-			countDown() {
-				let timeOut = setTimeout(() => {
-					let hou = parseInt(this.hou);
-					let min = parseInt(this.min);
-					let sec = parseInt(this.sec);
+			countDown(){
+			    let timeOut = setTimeout(() => {
+			      let hou = parseInt(this.hou);
+			      let min = parseInt(this.min);
+			      let sec = parseInt(this.sec);
 
-					let netxSec = sec - 1;
-					let netxMin = min
-					let netxHou = hou;
+			      let netxSec = sec - 1;
+			      let netxMin = min
+			      let netxHou = hou;
 
-					if (netxHou === 0 && netxMin === 0 && netxSec === -1) {
-						this.showJoinGroup = false
-						clearTimeout(timeOut)
-						// uni.switchTab({
-						// 	url:'../../pages/tabbar/index/index'
-						// })
-					} else {
-						if (netxSec === -1) {
-							netxSec = 59
-							netxMin = netxMin - 1;
-						}
-						if (netxMin === -1) {
-							netxMin = 59
-							netxHou = netxHou - 1
-						}
-						if (netxHou === -1) {
-							netxHou = 23
-						}
+			      if (netxHou == 0 && netxMin == 0 && netxSec == -1) {
+			        clearTimeout(timeOut)
+					// uni.switchTab({
+					// 	url:'../../pages/tabbar/index/index'
+					// })
+			      } else {
+			        if (netxSec == -1) {
+			          netxSec = 59
+			          netxMin = netxMin - 1;
+			        }
+			        if (netxMin == -1) {
+			          netxMin = 59
+			          netxHou = netxHou - 1
+			        }
+			        if (netxHou == -1) {
+			          netxHou = 23
+			        }
 
-						this.hou = this.timeFormat(netxHou)
-						this.min = this.timeFormat(netxMin)
-						this.sec = this.timeFormat(netxSec)
-						this.timeOut = timeOut
-						this.countDown();
-					}
-				}, 1000)
+			        this.hou = this.timeFormat(netxHou),
+			        this.min = this.timeFormat(netxMin),
+			        this.sec = this.timeFormat(netxSec),
+			        this.timeOut = timeOut
+			        this.countDown();
+			      }
+			    }, 1000)
 			},
 			timeFormat(param) { //小于10的格式化函数
-				return param < 10 ? '0' + param : param;
+			    return param < 10 ? '0' + param : param;
 			},
 		}
 	}
 </script>
 
 <style lang="scss">
-	page {
-		background-color: #F7F7F7;
+page{background-color: #F7F7F7;}
+.copy-color{
+	display: flex;
+	justify-content: center;
+	align-items:center;
+	flex-direction: column;
+}
+.inviteSpell-con{
+  background: url("https://ceres.zkthink.com/static/images/pintuanbg.png") no-repeat left top;
+  background-size: contain;
+  .grouped {
+    text-align: center;
+    padding-top: 40rpx;
+    .number {
+      display: inline-block;
+      color: #FFEBC4;
+      height: 48rpx;
+      line-height: 48rpx;
+      padding: 0 30rpx;
+      background: #525252;
+      margin-top: 10rpx;
+    }
+  }
+	.z-index-0{
+		z-index: 0;
 	}
-
-	.copy-color {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		flex-direction: column;
+	.border-FF7{
+		border: 2rpx solid #FFF;
 	}
-
-	.inviteSpell-con {
-		background: url("https://ceres.zkthink.com/static/images/pintuanbg.png") no-repeat left top;
-		background-size: contain;
-
-		.grouped {
-			text-align: center;
-			padding-top: 40rpx;
-
-			.number {
-				display: inline-block;
-				color: #FFEBC4;
-				height: 48rpx;
-				line-height: 48rpx;
-				padding: 0 30rpx;
-				background: #525252;
-				margin-top: 10rpx;
-			}
+	.colonel-box{
+		color: #FFEBC4;
+		background-color: #333333;
+		width: 86rpx;
+		height: 32rpx;
+		line-height: 32rpx;
+		border-radius: 15rpx;
+		text-align: center;
+		margin-top: -20rpx;
+		z-index: 2;
+	}
+	.font-color-C5AA7B{
+		color: #C5AA7B;
+	}
+  .topBox {
+    padding: 40rpx 20rpx 0 20rpx;
+  }
+	.title-box{
+		padding: 30rpx;
+    background: #FFFFFF;
+		.title-lab{
+			width: 400rpx;
+      height: 130rpx;
 		}
-
-		.z-index-0 {
-			z-index: 0;
+		.spellNum{
+			background-color: #FFEDDF;
+			border-radius: 22rpx;
+			width: 144rpx;
+			height: 44rpx;
 		}
-
-		.border-FF7 {
-			border: 2rpx solid #FFF;
+		.pro-img{
+			width: 222rpx;
+			height: 222rpx;
 		}
-
-		.colonel-box {
-			color: #FFEBC4;
+		.issueregiment{
+			width: 120rpx;
+			height: 122rpx;
+		}
+	}
+	.spellpersonnel-box{
+		margin-top: 20rpx;
+    padding: 0 20rpx;
+    .bgBox {
+      background-color: #FFFFFF;
+      padding: 30rpx 0;
+    }
+		.head-icon{
+			width: 102rpx;
+			height: 102rpx;
+			border-radius: 50%;
+		}
+		.replenish-icon{
+			width: 102rpx;
+			height: 102rpx;
+			border-radius: 50%;
+			border: 1rpx #E5E5E5 dashed;
+			font-size: 60rpx;
+			color: #DBDBDB;
+		}
+		.offered-but{
 			background-color: #333333;
-			width: 86rpx;
-			height: 32rpx;
-			line-height: 32rpx;
-			border-radius: 15rpx;
-			text-align: center;
-			margin-top: -20rpx;
-			z-index: 2;
+			border-radius: 5rpx;
+			width: 420rpx;
+			height: 66rpx;
+      color: #FFEBC4;
 		}
-
-		.font-color-C5AA7B {
+		.poster-but{
+			border: #C5AA7B 1rpx solid;
+			border-radius: 5rpx;
+			width: 420rpx;
+			height: 66rpx;
 			color: #C5AA7B;
 		}
-
-		.topBox {
-			padding: 40rpx 20rpx 0 20rpx;
+	}
+	.spellrule{
+		background-color: #FFFFFF;
+		padding: 50rpx 20rpx;
+		.dot1{
+			width: 4rpx;
+			height: 4rpx;
+			background-color: #B6B6C1;
+			border-radius: 50%;
+			margin-left: 10rpx;
 		}
-
-		.title-box {
-			padding: 30rpx;
-			background: #FFFFFF;
-
-			.title-lab {
-				width: 400rpx;
-				height: 130rpx;
-			}
-
-			.spellNum {
-				background-color: #FFEDDF;
-				border-radius: 22rpx;
-				width: 144rpx;
-				height: 44rpx;
-			}
-
-			.pro-img {
-				width: 222rpx;
-				height: 222rpx;
-			}
-
-			.issueregiment {
-				width: 120rpx;
-				height: 122rpx;
+		.dot2{
+			width: 6rpx;
+			height: 6rpx;
+			background-color: #B6B6C1;
+			border-radius: 50%;
+			margin-left: 10rpx;
+		}
+		.dot3{
+			width: 8rpx;
+			height: 8rpx;
+			background-color: #B6B6C1;
+			border-radius: 50%;
+			margin-left: 10rpx;
+		}
+	}
+	.inactive-box{
+		padding: 40rpx 40rpx;
+		.weixin-box{
+			width: 100rpx;
+			height: 100rpx;
+			background-color: #F5F5F5;
+			border-radius: 50%;
+			image{
+				width: 55rpx;
+				height: 55rpx;
 			}
 		}
+	}
+	.goosDetailshow-box {
+		.detailImg-box {
+			margin-top: 30upx;
+			margin-left: 30upx;
+			border-radius: 10upx;
+			border-bottom: 1upx solid #EDEDED;
+			padding-bottom: 20upx;
+			width: 690upx;
 
-		.spellpersonnel-box {
-			margin-top: 20rpx;
-			padding: 0 20rpx;
-
-			.bgBox {
-				background-color: #FFFFFF;
-				padding: 30rpx 0;
-			}
-
-			.head-icon {
-				width: 102rpx;
-				height: 102rpx;
-				border-radius: 50%;
-			}
-
-			.replenish-icon {
-				width: 102rpx;
-				height: 102rpx;
-				border-radius: 50%;
-				border: 1rpx #E5E5E5 dashed;
-				font-size: 60rpx;
-				color: #DBDBDB;
-			}
-
-			.offered-but {
-				background-color: #333333;
-				border-radius: 5rpx;
-				width: 420rpx;
-				height: 66rpx;
-				color: #FFEBC4;
-			}
-
-			.group-disabled {
-				background: #b7b7b7;
-				border-radius: 5rpx;
-				width: 420rpx;
-				height: 66rpx;
-				line-height: 80upx;
-				justify-content: center;
-				color: #333333;
-			}
-
-			.poster-but {
-				border: #C5AA7B 1rpx solid;
-				border-radius: 5rpx;
-				width: 420rpx;
-				height: 66rpx;
-				color: #C5AA7B;
+			.detailImg {
+				width: 180upx;
+				height: 180upx;
 			}
 		}
 
-		.spellrule {
-			background-color: #FFFFFF;
-			padding: 50rpx 20rpx;
+		.color-box {
+			padding: 30upx 30upx;
+			border-bottom: 1upx solid #EDEDED;
+			width: 690upx;
 
-			.dot1 {
-				width: 4rpx;
-				height: 4rpx;
-				background-color: #B6B6C1;
-				border-radius: 50%;
-				margin-left: 10rpx;
-			}
-
-			.dot2 {
-				width: 6rpx;
-				height: 6rpx;
-				background-color: #B6B6C1;
-				border-radius: 50%;
-				margin-left: 10rpx;
-			}
-
-			.dot3 {
-				width: 8rpx;
-				height: 8rpx;
-				background-color: #B6B6C1;
-				border-radius: 50%;
-				margin-left: 10rpx;
-			}
-		}
-
-		.inactive-box {
-			padding: 40rpx 40rpx;
-
-			.weixin-box {
-				width: 100rpx;
-				height: 100rpx;
-				background-color: #F5F5F5;
-				border-radius: 50%;
-
-				image {
-					width: 55rpx;
-					height: 55rpx;
-				}
-			}
-		}
-
-		.goosDetailshow-box {
-			.detailImg-box {
+			.colorName-box {
+				display: flex;
+				flex-wrap: wrap;
+				flex-direction: row;
+				justify-content: flex-start;
+				align-items: center;
 				margin-top: 30upx;
-				margin-left: 30upx;
-				border-radius: 10upx;
-				border-bottom: 1upx solid #EDEDED;
-				padding-bottom: 20upx;
-				width: 690upx;
+				margin-left: -30upx;
 
-				.detailImg {
-					width: 180upx;
-					height: 180upx;
+				.colorName-on {
+					background-color: #FFE5D0;
+					color: #C5AA7B;
+					margin-left: 30upx;
+					padding: 10upx 32upx;
+					border-radius: 28upx;
+					border: 1upx solid #C5AA7B;
+					font-size: 26upx;
+					text-align: center;
+					z-index: 1;
+				}
+
+				.colorName {
+					background-color: #F5F5F5;
+					margin-left: 30upx;
+					padding: 10upx 32upx;
+					border-radius: 28upx;
+					font-size: 26upx;
+					z-index: 2;
 				}
 			}
 
-			.color-box {
-				padding: 30upx 30upx;
-				border-bottom: 1upx solid #EDEDED;
-				width: 690upx;
+		}
 
-				.colorName-box {
-					display: flex;
-					flex-wrap: wrap;
-					flex-direction: row;
-					justify-content: flex-start;
-					align-items: center;
-					margin-top: 30upx;
-					margin-left: -30upx;
+		.modelNum-box {
+			padding: 30upx 30upx;
+			border-bottom: 1upx solid #EDEDED;
+			width: 690upx;
 
-					.colorName-on {
-						background-color: #FFE5D0;
-						color: #C5AA7B;
-						margin-left: 30upx;
-						padding: 10upx 32upx;
-						border-radius: 28upx;
-						border: 1upx solid #C5AA7B;
-						font-size: 26upx;
-						text-align: center;
-						z-index: 1;
-					}
+			.modelNumName-box {
+				display: flex;
+				flex-wrap: wrap;
+				flex-direction: row;
+				justify-content: flex-start;
+				align-items: center;
+				margin-top: 30upx;
+				margin-left: -30upx;
 
-					.colorName {
-						background-color: #F5F5F5;
-						margin-left: 30upx;
-						padding: 10upx 32upx;
-						border-radius: 28upx;
-						font-size: 26upx;
-						z-index: 2;
-					}
+				.modelNumName-on {
+					background-color: #FFE4D0;
+					color: #C5AA7B;
+					margin-left: 30upx;
+					padding: 10upx 32upx;
+					border-radius: 28upx;
+					border: 1upx solid #C5AA7B;
+					font-size: 26upx;
+					text-align: center;
 				}
 
-			}
-
-			.modelNum-box {
-				padding: 30upx 30upx;
-				border-bottom: 1upx solid #EDEDED;
-				width: 690upx;
-
-				.modelNumName-box {
-					display: flex;
-					flex-wrap: wrap;
-					flex-direction: row;
-					justify-content: flex-start;
-					align-items: center;
-					margin-top: 30upx;
-					margin-left: -30upx;
-
-					.modelNumName-on {
-						background-color: #FFE4D0;
-						color: #C5AA7B;
-						margin-left: 30upx;
-						padding: 10upx 32upx;
-						border-radius: 28upx;
-						border: 1upx solid #C5AA7B;
-						font-size: 26upx;
-						text-align: center;
-					}
-
-					.modelNumName {
-						background-color: #F5F5F5;
-						margin-left: 30upx;
-						padding: 10upx 32upx;
-						border-radius: 28upx;
-						font-size: 26upx;
-					}
+				.modelNumName {
+					background-color: #F5F5F5;
+					margin-left: 30upx;
+					padding: 10upx 32upx;
+					border-radius: 28upx;
+					font-size: 26upx;
 				}
 			}
+		}
+	.joinbuyBut{
+		width: 690upx;
+		height: 80upx;
+		border-radius: 40upx 40upx;
+		background-color: #3D3C3D;
+		color: #FFFEFE;
+		font-size: 28upx;
+		line-height: 80upx;
+		text-align: center;
+	}
+		.goodsNum-box {
+			padding: 30upx 30upx;
+			width: 690upx;
+			padding-bottom: 268upx;
 
-			.joinbuyBut {
-				width: 690upx;
+			.goodsNumber {
+				border: 1upx solid #999999;
+				padding: 3upx 20upx;
+			}
+
+			.subtract {
+				border: 1upx solid #999999;
+				padding: 3upx 20upx;
+				margin-right: -1upx;
+			}
+
+			.add {
+				border: 1upx solid #999999;
+				padding: 3upx 20upx;
+				margin-left: -1upx;
+			}
+		}
+
+		.goosDetailbut-box {
+			.joinShopCartBut {
+				width: 343upx;
 				height: 80upx;
-				border-radius: 40upx 40upx;
+				border-radius: 40upx 0 0 40upx;
+				background-color: #3D3C3D;
+				color: #FFFEFE;
+				font-size: 28upx;
+				line-height: 80upx;
+				text-align: center;
+				margin-left: 30upx;
+			}
+
+			.buyNowBut {
+				width: 343upx;
+				height: 80upx;
+				border-radius: 0 40upx 40upx 0;
 				background-color: #3D3C3D;
 				color: #FFFEFE;
 				font-size: 28upx;
 				line-height: 80upx;
 				text-align: center;
 			}
-
-			.goodsNum-box {
-				padding: 30upx 30upx;
-				width: 690upx;
-				padding-bottom: 268upx;
-
-				.goodsNumber {
-					border: 1upx solid #999999;
-					padding: 3upx 20upx;
-				}
-
-				.subtract {
-					border: 1upx solid #999999;
-					padding: 3upx 20upx;
-					margin-right: -1upx;
-				}
-
-				.add {
-					border: 1upx solid #999999;
-					padding: 3upx 20upx;
-					margin-left: -1upx;
-				}
-			}
-
-			.goosDetailbut-box {
-				.joinShopCartBut {
-					width: 343upx;
-					height: 80upx;
-					border-radius: 40upx 0 0 40upx;
-					background-color: #3D3C3D;
-					color: #FFFEFE;
-					font-size: 28upx;
-					line-height: 80upx;
-					text-align: center;
-					margin-left: 30upx;
-				}
-
-				.buyNowBut {
-					width: 343upx;
-					height: 80upx;
-					border-radius: 0 40upx 40upx 0;
-					background-color: #3D3C3D;
-					color: #FFFEFE;
-					font-size: 28upx;
-					line-height: 80upx;
-					text-align: center;
-				}
-			}
 		}
 	}
+}
 </style>
 <style scoped>
-	.spellrule /deep/ .u-steps__item__num {
-		background: #F3F4F5 !important;
-		border: none !important;
-		width: 60rpx;
-		height: 60rpx;
-	}
-
-	.spellrule /deep/ .u-steps .u-steps__item--row .u-steps__item__line {
-		left: 66%;
-		width: 67%;
-	}
-
-	.spellrule /deep/ .u-steps .u-steps__item--row .u-line {
-		height: 6rpx;
-		border-bottom: none;
-		background: #F3F4F5;
-		border-bottom: none !important;
-	}
-
-	.spellrule /deep/ .u-steps .u-steps__item--row .u-steps__item__text--row {
-		width: 180rpx;
-		padding: 0 25rpx;
-	}
+ .spellrule /deep/ .u-steps__item__num {
+   background: #F3F4F5 !important;
+   border: none !important;
+   width: 60rpx;
+   height: 60rpx;
+ }
+ .spellrule /deep/ .u-steps .u-steps__item--row .u-steps__item__line {
+   left: 66%;
+   width: 67%;
+ }
+ .spellrule /deep/ .u-steps .u-steps__item--row .u-line {
+   height: 6rpx;
+   border-bottom: none;
+   background: #F3F4F5;
+   border-bottom: none !important;
+ }
+ .spellrule /deep/ .u-steps .u-steps__item--row .u-steps__item__text--row {
+   width: 180rpx;
+   padding: 0 25rpx;
+ }
 </style>

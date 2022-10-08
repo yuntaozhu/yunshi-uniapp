@@ -1,5 +1,7 @@
 <template>
   <view class="payCourteous">
+    <global-loading />
+
     <view class="payTitBox flex-items flex-center" :style="{'padding-top': topHeight + 'px'}">
       <view class="payTit fs30">支付成功</view>
     </view>
@@ -88,10 +90,10 @@ export default {
       })
     },
     getOrderPoliteFn() {
-      uni.showLoading({
-        mask: true,
-        title: '加载中...',
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '加载中...',
+      // })
       NET.request(API.getOrderPolite,{
         orderId: this.orderId
       },'GET').then(res => {

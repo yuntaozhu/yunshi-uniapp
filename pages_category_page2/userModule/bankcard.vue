@@ -1,5 +1,6 @@
 <template>
 	<view class="container">
+    <global-loading />
 		<view class="bankcardList">
 			<view class="addBankcard-content flex-row-plus" v-for="(item, index) in bankcardList" :key="index">
 				<view class="bankcard-detail" @click="itemTap(item.bankId)">
@@ -68,10 +69,10 @@
 				})
 			},
 			getBankcardData(){
-        uni.showLoading({
-          mask: true,
-          title: '加载中...',
-        })
+        // uni.showLoading({
+        //   mask: true,
+        //   title: '加载中...',
+        // })
 				NET.request(API.QueryBankcardList,{
 					page: this.page,
 					pageSize:this.pageSize,

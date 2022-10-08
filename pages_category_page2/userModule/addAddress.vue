@@ -1,6 +1,7 @@
 <template>
 	<!-- 编辑/添加地址 -->
 	<view class="container flex-center flex-column">
+    <global-loading />
     <!-- #ifdef MP-WEIXIN -->
 <!--    <view class="wxAddress flex-items flex-end" v-if="type == 1">-->
 <!--      <view class="wxBtnBox flex-items" @click="addAddressWx">-->
@@ -124,10 +125,10 @@ const API = require('../../config/api')
 			let receiveId = options.receiveId
       this.id = receiveId
 			if(this.type == 2){
-        uni.showLoading({
-          mask: true,
-          title: '请稍后...',
-        })
+        // uni.showLoading({
+        //   mask: true,
+        //   title: '请稍后...',
+        // })
         NET.request(API.receiveGetInfo,{receiveId:receiveId},"GET").then(res => {
           this.editAddress = res.data
           this.addressData.username = this.editAddress.receiveName

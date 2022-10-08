@@ -1,6 +1,8 @@
 <!-- 申请售后 -->
 <template>
   <view>
+    <global-loading />
+
     <view class="content">
       <view class="order-list-box">
         <view class="item">
@@ -11,31 +13,12 @@
                     active-color="#C5AA7B"
                     shape="circle"
                     size="40"
-                    v-for="(item, index) in this.wrapperList"
+                    v-for="(item, index) in item.skus"
                     :key="index"
                     v-model="item.checked"
+                    :name='item.skuId'
                     @change="checkboxChange(item)">
-                  <view v-if="item.dataType === 1" class="order-info-price">
-                    <view>
-                      <text class="price-notice">定价捆绑商品</text>
-                    </view>
-                    <view class="order-info-item" v-for="priceItem in item.skus">
-                      <image :src="priceItem.image"
-                             class="product-img"></image>
-                      <view class="info-box">
-                        <text class="product-name">{{ priceItem.productName }}</text>
-                        <view class="product-sku">{{ priceItem.value }}</view>
-                        <view class="price-sku-box">
-                          <text class="product-price">
-                            <text class="fuhao">￥</text>
-                            {{ priceItem.price }}
-                          </text>
-                          <text class="product-num">x {{ priceItem.number }}</text>
-                        </view>
-                      </view>
-                    </view>
-                  </view>
-                  <view v-else class="order-info-item">
+                  <view class="order-info-item">
                     <image :src="item.image"
                            class="product-img"></image>
                     <view class="info-box">
@@ -98,7 +81,7 @@ export default {
     return {
       item: {},
       checkboxChangelist: [],
-      checkedList: [],
+      xuanzlist: [],
       allCheck: {
         name: '全选',
         value: 'all',
@@ -109,28 +92,10 @@ export default {
       distribution: null,
       isAllSelect: 0,
       evaluated: 0,//待评价订单申请
-      wrapperList: []
     }
   },
   onLoad(options) {
     this.item = JSON.parse(options.item)
-    const priceList = []
-    this.item.skus.forEach(sku => {
-      console.log('sku', sku.actualPrice)
-      //定价捆绑特殊处理
-      if (sku.activityType === 6) {
-        priceList.push(sku)
-      } else {
-        const newItem = Object.assign({}, sku, {'dataType': 2})
-        this.wrapperList.push(newItem)
-      }
-    })
-    if (priceList.length > 0) {
-      this.wrapperList.push({
-        'dataType': 1,
-        'skus': priceList
-      })
-    }
     this.distribution = this.item.skus[0].distribution
     this.evaluated = options.isAllSelect
     // this.item.skus.forEach((item) => {
@@ -140,67 +105,61 @@ export default {
   },
   methods: {
     // 算钱
-    calcRefundMoney() {
-        if (this.checkedList.length <= 0) {
-          return 0
+    HandleGetRefundMoney() {
+      return new Promise((resolve, reject) => {
+        if (this.xuanzlist.length <= 0) {
+          resolve(0)
+          return
         }
-        console.log('calc')
-        let total = 0
-        this.checkedList.forEach(item => {
-          if (item.dataType === 1) {
-            item.skus.forEach(sku => {
-              total += sku.actualPrice
-            })
-          } else {
-            total += item.actualPrice
-          }
+        // uni.showLoading({
+        //   title: "计算中..."
+        // })
+        let postData = {
+          orderId: this.item.orderId,
+          isAllSelect: this.evaluated == 1 ? this.xuanzlist.length === this.item.skus.length ? 1 : 0 : 0,
+          skus: this.xuanzlist
+        }
+        NET.request(API.GetRefundMoney, postData, "POST").then(res => {
+          uni.hideLoading()
+          resolve(parseFloat(res.json))
         })
-        return total
+      })
     },
-    checkRemainPrice() {
-      let totalPrice = 0
-      this.item.skus.forEach(item => {
-        totalPrice += item.actualPrice
-      })
-      let refundPrice = 0
-      this.checkedList.forEach(item => {
-        refundPrice += item.actualPrice
-      })
-      if (totalPrice - refundPrice < 0.01) {
-        return false
+    // 申请退款
+    ReturnMoney(item) {
+      if (this.xuanzlist.length <= 0) {
+        uni.showToast({
+          title: '请选择退款的商品',
+          duration: 2000,
+          icon: 'none'
+        })
+      } else {
+        uni.setStorageSync('afterSaleApplyRefund', this.xuanzlist)
+        uni.navigateTo({
+          url: 'afterSaleApplyRefund?orderId=' + this.item.orderId + '&isAllSelect=' + (this.evaluated==1?this.isAllSelect:0)
+        })
       }
-      return true
     },
     // 全选
     async changeAll(e) {
-      if (e.detail.value.length === 0) {
-        this.wrapperList.map(item => this.$set(item, 'checked', false));
+      if (e.detail.value.length == 0) {
+        this.item.skus.map(item => this.$set(item, 'checked', false));
         this.$set(this.allCheck, 'checked', false);
-        this.checkedList = []
-        if (this.item.state === 4 && this.evaluated !== undefined) {
+        this.xuanzlist = []
+        if (this.item.state === 4 && this.evaluated != undefined) {
           this.isAllSelect = this.evaluated
         } else {
           this.isAllSelect = 0
         }
-        this.number = 0
       } else {
-        this.wrapperList.map(item => this.$set(item, 'checked', true));
+        this.item.skus.map(item => this.$set(item, 'checked', true));
         this.$set(this.allCheck, 'checked', true);
-        if (this.item.state === 4 && this.evaluated !== undefined) {
+        if (this.item.state === 4 && this.evaluated != undefined) {
           this.isAllSelect = this.evaluated
         } else {
           this.isAllSelect = 1
         }
-        this.checkedList = []
-        this.wrapperList.forEach(item => {
-          if (item.checked) {
-            if (item.dataType === 1) {
-              this.checkedList = this.checkedList.concat(item.skus)
-            } else {
-              this.checkedList.push(item)
-            }
-          }
-        })
+        this.xuanzlist = this.item.skus.filter(item => item.checked == true)
         this.number = 0
         // this.total = 0
         this.item.skus.forEach((item) => {
@@ -208,46 +167,19 @@ export default {
           // this.total = this.total + item.total
         })
       }
-      this.total = this.calcRefundMoney()
-    },
-    // 申请退款
-    ReturnMoney(item) {
-      if (this.checkedList.length <= 0) {
-        uni.showToast({
-          title: '请选择退款的商品',
-          duration: 2000,
-          icon: 'none'
-        })
-      } else if (this.checkedList.length !== this.item.skus.length && !this.checkRemainPrice()) {
-        uni.showToast({
-          title: '剩余商品价值过低，请一起退款',
-          duration: 2000,
-          icon: 'none'
-        })
-      } else {
-        uni.setStorageSync('afterSaleApplyRefund', this.checkedList)
-        uni.navigateTo({
-          url: 'afterSaleApplyRefund?orderId=' + this.item.orderId + '&isAllSelect=' + (this.evaluated === 1 ? this.isAllSelect : 0)
-        })
-      }
+      this.total = await this.HandleGetRefundMoney()
     },
     // 申请退货
     ReturnGoods(item) {
-      if (this.checkedList.length <= 0) {
+      if (this.xuanzlist.length <= 0) {
         uni.showToast({
           title: '请选择退货的商品',
           duration: 2000,
           icon: 'none'
         })
-      } else if (this.checkedList.length !== this.item.skus.length && !this.checkRemainPrice()) {
-        uni.showToast({
-          title: '剩余商品价值过低，请一起退款',
-          duration: 2000,
-          icon: 'none'
-        })
       } else {
         uni.navigateTo({
-          url: 'afterSaleApplyRetund?list=' + encodeURIComponent(JSON.stringify(this.checkedList)) + '&orderId=' + this.item.orderId + '&isAllSelect='+ (this.evaluated === 1 ? this.isAllSelect : 0)
+          url: 'afterSaleApplyRetund?list=' + encodeURIComponent(JSON.stringify(this.xuanzlist)) + '&orderId=' + this.item.orderId + '&isAllSelect='+ (this.evaluated==1?this.isAllSelect:0)
         })
       }
     },
@@ -258,64 +190,41 @@ export default {
     async checkboxChange(e) {
       // 动态设置商品件数和总计
       if (e.checked) {
-        if (e.dataType === 1) {
-          e.skus.forEach(item => {
-            this.number += item.number
-          })
-        } else {
-          this.number = this.number + e.number
-        }
+        this.number = this.number + e.number
         // this.total = this.total + e.total
       } else {
-        if (e.dataType === 1) {
-          e.skus.forEach(item => {
-            this.number -= item.number
-          })
-        } else {
-          this.number = this.number - e.number
-        }
+        this.number = this.number - e.number
         // this.total = this.total - e.total
       }
       // 筛选勾选的
-      this.checkedList = []
-      this.wrapperList.forEach(item => {
-        if (item.checked) {
-          if (item.dataType === 1) {
-            this.checkedList = this.checkedList.concat(item.skus)
-          } else {
-            this.checkedList.push(item)
-          }
-        }
-      })
-
-      //this.checkedList = this.item.skus.filter(item => item.checked === true)
+      this.xuanzlist = this.item.skus.filter(item => item.checked == true)
 
       // 是否为全选
-      if (this.item.skus.length === this.checkedList.length) {
-        if (this.item.state === 4 && this.evaluated !== undefined) {
+      if (this.item.skus.length == this.xuanzlist.length) {
+        if (this.item.state === 4 && this.evaluated != undefined) {
           this.isAllSelect = this.evaluated
         } else {
           this.isAllSelect = 1
         }
         this.$set(this.allCheck, 'checked', true);
       } else {
-        if (this.item.state === 4 && this.evaluated !== undefined) {
+        if (this.item.state === 4 && this.evaluated != undefined) {
           this.isAllSelect = this.evaluated
         } else {
           this.isAllSelect = 0
         }
         this.$set(this.allCheck, 'checked', false);
       }
-      this.total = this.calcRefundMoney()
+      this.total = await this.HandleGetRefundMoney()
 
-      //     if(this.checkedList.findIndex(item=>item.checked===true)==-1){
+      //     if(this.xuanzlist.findIndex(item=>item.checked===true)==-1){
       //   console.log(this.allCheck,'this.allCheck')
-      //   console.log(this.checkedList,'this.checkedList')
+      //   console.log(this.xuanzlist,'this.xuanzlist')
       //       this.$set(this.allCheck, 'checked', false);
       //     } else {
       //   console.log(this.allCheck,'this.allCheck')
       //       this.$set(this.allCheck, 'checked', true);
-      // console.log(this.checkedList,'this.checkedList')
+      // console.log(this.xuanzlist,'this.xuanzlist')
       //     }
     }
   }
@@ -386,18 +295,6 @@ page {
 
 .order-info {
   /* border-bottom: 1px solid #eee; */
-}
-
-.order-info-price {
-  display: block;
-  padding: 10upx 20upx;
-  width: 600rpx;
-  border-top: 1px solid #eee;
-
-  .price-notice {
-    font-size: 12upx;
-    color: red;
-  }
 }
 
 .order-info-item {

@@ -1,5 +1,6 @@
 <template>
 	<view class="messageDetail">
+    <global-loading />
 		<h3 class="detailTit">{{messageDateils.noticeTitle}}</h3>
 		<view class="detailTime" v-if="messageDateils.createTime">时间：{{messageDateils.createTime}}</view>
 		<view class="detailInfo">
@@ -11,11 +12,13 @@
 
 <script>
 	import parse from 'mini-html-parser2';
+  import GlobalLoading from "../../components/GlobalLoading";
 	const NET = require('../../utils/request')
 	const API = require('../../config/api')
 	export default {
 		name: "messageDetail",
-		data() {
+    components: {GlobalLoading},
+    data() {
 			return {
 				onlyid: 0,
 				messageDateils: {},
@@ -68,9 +71,9 @@
 				})
 			},
 			getNotice() {
-				uni.showLoading({
-					title: '加载中...',
-				})
+				// uni.showLoading({
+				// 	title: '加载中...',
+				// })
 				NET.request(API.readNotice, {
 					noticeId: this.onlyid
 				}, 'POST').then(res => {

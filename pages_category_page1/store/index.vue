@@ -1,6 +1,8 @@
 <template>
 	<view class="container">
-		<!-- 店铺首页 -->
+    <global-loading />
+
+    <!-- 店铺首页 -->
 		<view class="content" v-if="id">
 			<view class="shop-top" :style="{'padding-top': topHeight + 'px'}">
 				<image src="https://ceres.zkthink.com/static/images/back_img04.png" class="back" @click="back"></image>
@@ -239,10 +241,10 @@
 					pageSize: this.pageSize,
 					groupId: this.classifyId
 				}
-				uni.showLoading({
-					title: '加载中...',
-					mask: true
-				});
+				// uni.showLoading({
+				// 	title: '加载中...',
+				// 	mask: true
+				// });
 				NET.request(API.GetStore, data, 'GET').then(res => {
 					uni.hideLoading()
 					if (res.data.page.list.length == 0) {

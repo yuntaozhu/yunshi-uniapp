@@ -1,6 +1,8 @@
 <template>
 	<view class="container">
-		<!-- 追加评论 -->
+    <global-loading />
+
+    <!-- 追加评论 -->
 		<view class="addEvaluate-box flex-items-plus flex-column-plus">
 			<view class="addEvaluate flex-column-plus">
 				<view class="addEvaluateTitle-box flex-row-plus mar-top-20 mar-left-20">
@@ -79,9 +81,9 @@
 					})
 					return
 				}
-				uni.showLoading({
-				    title: '提交中...',
-				})
+				// uni.showLoading({
+				//     title: '提交中...',
+				// })
 				if(this.fileList.length>0){
 					this.commentImgsFlag = true
 					for(let i=0;i<this.fileList.length;i++){

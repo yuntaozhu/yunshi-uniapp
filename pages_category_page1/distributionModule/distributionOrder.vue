@@ -1,6 +1,8 @@
 <template>
 	<view>
-		<view v-if="FindMySalesData.total>0">
+    <global-loading />
+
+    <view v-if="FindMySalesData.total>0">
 			<view  class="flex-center clientList-box" v-for="(item, index) in FindMySalesDatalist" :key="index">
 				<view class="directAward-box font-color-656 fs26">
 					<view class="directAward-icon flex-row-plus flex-items flex-sp-between" @click="arrowTypeChange(index)">
@@ -64,9 +66,9 @@
 		},
 		methods: {
 			getSalesOrderPage() {
-				uni.showLoading({
-					title: '加载中...'
-				})
+				// uni.showLoading({
+				// 	title: '加载中...'
+				// })
 				NET.request(API.FindMySalesPage, {
 					shopId: this.shopId,
 					distributorId: this.distributorId,

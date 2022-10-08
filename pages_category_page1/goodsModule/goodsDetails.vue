@@ -1,663 +1,870 @@
 <template>
-  <view class="container"
+  <view>
+    <global-loading/>
+
+    <view
+        class="container"
         v-if="ifShow"
-        @scroll="onDetailScroll">
-    <!-- 商品详情 -->
-    <view>
-      <swiper class="goodsImgswiper-box"
-              :indicator-dots="true"
-              :autoplay="true">
-        <swiper-item v-for="(imgItem, index) in productData.images"
-                     :key="index">
-          <image class="goodsImg default-img"
-                 :src='imgItem'></image>
-        </swiper-item>
-      </swiper>
-    </view>
-    <view class="share-box flex-items-plus"
-          @click="clickShare">
-      <image class="share-img"
-             src="https://ceres.zkthink.com/static/images/shareBut.png"></image>
-      <label class="fs24 mar-left-5">分享</label>
-    </view>
-    <view class="goodgDes-box flex-start flex-column">
-      <view v-if="selectedSku.activityType === 0"
-            class="priceBuyNum-box flex-display flex-sp-between mar-left-30">
-        <view>
-          <label class="fs36 font-color-C83732">¥</label>
-          <label class="fs36 fs-bold font-color-C83732 mar-left-10">{{ selectedSku.price || 0 }}</label>
-          <label class="fs24 font-color-999 discountsPriceLine mar-left-20">¥
-                                                                            {{ selectedSku.originalPrice || 0 }}</label>
-        </view>
-        <label class="fs24 font-color-999">{{ productData.users || 0 }}人付款</label>
+        @scroll="onDetailScroll"
+    >
+      <!-- 商品详情 -->
+      <view>
+        <swiper
+            class="goodsImgswiper-box"
+            :indicator-dots="true"
+            :autoplay="true"
+        >
+          <swiper-item
+              v-for="(imgItem, index) in productData.images"
+              :key="index"
+          >
+            <image
+                class="goodsImg default-img"
+                :src='imgItem'
+            ></image>
+          </swiper-item>
+        </swiper>
       </view>
-      <view v-else-if="selectedSku.activityType === 8"
-            class="sceneMarketingBox">
-        <view class="flex-row-plus flex-items-plus mar-left-30 mar-top-10">
-          <label class="fs30 font-color-FFF">¥</label>
-          <label class="fs42 mar-left-5 font-color-FFF">{{ selectedSku.price || 0 }}</label>
-          <label class="fs28 mar-left-10 discountsPriceLine font-color-CCC">¥
-                                                                            {{ selectedSku.originalPrice || 0 }}</label>
-        </view>
-        <view class="sceneNameBox">{{ productData.sceneName }}</view>
+      <view
+          class="share-box flex-items-plus"
+          @click="clickShare"
+      >
+        <image
+            class="share-img"
+            src="https://ceres.zkthink.com/static/images/shareBut.png"
+        ></image>
+        <label class="fs24 mar-left-5">分享</label>
       </view>
-      <view v-else
-            class="seckill-box">
-        <view class="flex-items flex-sp-between"
-              v-if="selectedSku.activityType === 9 ">
-          <view class="vipImg flex-items">
-            <image class="vip-icon"
-                   src="https://ceres.zkthink.com/static/images/vipDetail.png"
-                   mode="">
-            </image>
+      <view class="goodgDes-box flex-start flex-column">
+        <view
+            v-if="selectedSku.activityType === 0"
+            class="priceBuyNum-box flex-display flex-sp-between mar-left-30"
+        >
+          <view>
+            <label class="fs36 font-color-C83732">¥</label>
+            <label class="fs36 fs-bold font-color-C83732 mar-left-10">{{ selectedSku.price || 0 }}</label>
+            <label class="fs24 font-color-999 discountsPriceLine mar-left-20">¥
+              {{ selectedSku.originalPrice || 0 }}</label>
           </view>
+          <label class="fs24 font-color-999">{{ productData.users || 0 }}人付款</label>
+        </view>
+        <view
+            v-else-if="selectedSku.activityType === 8"
+            class="sceneMarketingBox"
+        >
           <view class="flex-row-plus flex-items-plus mar-left-30 mar-top-10">
             <label class="fs30 font-color-FFF">¥</label>
             <label class="fs42 mar-left-5 font-color-FFF">{{ selectedSku.price || 0 }}</label>
-            <label class="fs28 mar-left-10 discountsPriceLine font-color-999">¥
-                                                                              {{ selectedSku.originalPrice || 0
-                                                                              }}</label>
+            <label class="fs28 mar-left-10 discountsPriceLine font-color-CCC">¥
+              {{ selectedSku.originalPrice || 0 }}</label>
           </view>
+          <view class="sceneNameBox">{{ productData.sceneName }}</view>
         </view>
-        <view v-else
-              class="flex-items flex-row flex-sp-between">
-          <view class="flex-column-plus">
-            <image v-if="[2,4].includes(selectedSku.activityType)"
-                   class="seckill-icon"
-                   src="https://ceres.zkthink.com/static/images/seckillicon.png"
-                   mode=""></image>
-            <image v-if="[3,5].includes(selectedSku.activityType)"
-                   class="discount-icon"
-                   src="https://ceres.zkthink.com/static/images/discounticon.png"
-                   mode=""></image>
-            <image v-if="selectedSku.activityType === 1"
-                   class="spell-icon"
-                   src="https://ceres.zkthink.com/static/images/spellicon.png"
-                   mode=""></image>
-            <view class="flex-row-plus flex-items mar-top-10">
+        <view
+            v-else
+            class="seckill-box"
+        >
+          <view
+              class="flex-items flex-sp-between"
+              v-if="selectedSku.activityType === 9 "
+          >
+            <view class="vipImg flex-items">
+              <image
+                  class="vip-icon"
+                  src="https://ceres.zkthink.com/static/images/vipDetail.png"
+                  mode=""
+              >
+              </image>
+            </view>
+            <view class="flex-row-plus flex-items-plus mar-left-30 mar-top-10">
               <label class="fs30 font-color-FFF">¥</label>
               <label class="fs42 mar-left-5 font-color-FFF">{{ selectedSku.price || 0 }}</label>
               <label class="fs28 mar-left-10 discountsPriceLine font-color-999">¥
-                                                                                {{ selectedSku.originalPrice || 0
-                                                                                }}</label>
+                {{
+                  selectedSku.originalPrice || 0
+                }}</label>
             </view>
           </view>
-          <view v-if="[1,2,3,4,5].includes(selectedSku.activityType)"
-                class="countdown flex-column-plus">
-            <view v-if="timeActivetype">
-              <label class="fs28">距离结束剩余</label>
-              <view class="flex-row-plus fs34 flex-items-plus mar-top-10">
-                <view class="countdown-box flex-items-plus">{{ hou }}</view>
-                <view class="font-color-999">:</view>
-                <view class="countdown-box flex-items-plus">{{ min }}</view>
-                <view class="font-color-999">:</view>
-                <view class="countdown-box flex-items-plus">{{ sec }}</view>
+          <view
+              v-else
+              class="flex-items flex-row flex-sp-between"
+          >
+            <view class="flex-column-plus">
+              <image
+                  v-if="[2,4].includes(selectedSku.activityType)"
+                  class="seckill-icon"
+                  src="https://ceres.zkthink.com/static/images/seckillicon.png"
+                  mode=""
+              ></image>
+              <image
+                  v-if="[3,5].includes(selectedSku.activityType)"
+                  class="discount-icon"
+                  src="https://ceres.zkthink.com/static/images/discounticon.png"
+                  mode=""
+              ></image>
+              <image
+                  v-if="selectedSku.activityType === 1"
+                  class="spell-icon"
+                  src="https://ceres.zkthink.com/static/images/spellicon.png"
+                  mode=""
+              ></image>
+              <view class="flex-row-plus flex-items mar-top-10">
+                <label class="fs30 font-color-FFF">¥</label>
+                <label class="fs42 mar-left-5 font-color-FFF">{{ selectedSku.price || 0 }}</label>
+                <label class="fs28 mar-left-10 discountsPriceLine font-color-999">¥
+                  {{
+                    selectedSku.originalPrice || 0
+                  }}</label>
+              </view>
+            </view>
+            <view
+                v-if="[1,2,3,4,5].includes(selectedSku.activityType)"
+                class="countdown flex-column-plus"
+            >
+              <view v-if="timeActivetype">
+                <label class="fs28">距离结束剩余</label>
+                <view class="flex-row-plus fs34 flex-items-plus mar-top-10">
+                  <view class="countdown-box flex-items-plus">{{ hou }}</view>
+                  <view class="font-color-999">:</view>
+                  <view class="countdown-box flex-items-plus">{{ min }}</view>
+                  <view class="font-color-999">:</view>
+                  <view class="countdown-box flex-items-plus">{{ sec }}</view>
+                </view>
+              </view>
+              <view v-else>
+                <label class="fs28 mar-right-20">即将开始：{{ selectedSku.startTime }}</label>
+                <!--              <view class="fs28 mar-right-20 mar-top-20">{{productData.startTime}}</view>-->
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="nameContainer">
+          <view class="goodsName-box overflowNoDot mar-top-30 mar-left-30">
+            <label class="goodsName fs32 mar-left-20">{{ productData.productName }}</label>
+          </view>
+          <view
+              class="collectBox"
+              @click="collectProduct"
+          >
+            <image
+                v-if="productData.ifCollect === 1"
+                class="store-icon"
+                src="https://ceres.zkthink.com/static/images/shoucangActive1.png"
+            ></image>
+            <image
+                v-else
+                class="store-icon"
+                src="https://ceres.zkthink.com/static/images/shoucang2x.png"
+            >
+            </image>
+            <label class="fs22">收藏</label>
+          </view>
+        </view>
+        <view
+            v-if="markTools.length>0 || shopMarkTools.length>0"
+            class="activity-box mar-top-10"
+            @click="couponShowClick"
+        >
+          <label class="fs24 font-color-999">优惠</label>
+          <view class="activity-content mar-left-30 flex-items flex-sp-between flex-row">
+            <view
+                class="fs20 overflow"
+                style="width: 500rpx;"
+            >
+              {{ productData.couponSplicing }}
+            </view>
+            <view class="flex-items">
+              <label class="fs24 font-color-C5AA7B">领券</label>
+              <image
+                  class="coupon-arrow"
+                  src="https://ceres.zkthink.com/static/img/user/arrow.png"
+              ></image>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="express-box flex-items flex-row fs24">
+        <label class="fs24 font-color-999 mar-right-20">发货</label>
+        <image
+            src="https://ceres.zkthink.com/static/images/mapIcon.png"
+            v-if="productData.receive && productData.receive.receiveAdress"
+        ></image>
+        <label
+            class="mar-left-10 mapName mar-right-30"
+            v-if="productData.receive && productData.receive.receiveAdress"
+        >{{
+            productData.receive.receiveAdress
+          }}</label>
+        <label>快递：¥ {{ productData.logisticsPrice || 0 }}</label>
+      </view>
+      <view
+          class="fs24 chooseSize-box flex-start"
+          @click="goodsDetailShowClick(6)"
+      >
+        <view class="chooseSize-content flex-items flex-row flex-sp-between">
+          <view class="flex-row-plus">
+            <label class="fs26 mar-left-30 font-color-999">选择</label>
+            <view class="valueBox mar-left-20 flex-items">
+              <view
+                  class="mar-right-10"
+                  v-for="(item, index) of currentSuk"
+                  :key="index"
+              >{{ item.skuText }}
+              </view>
+            </view>
+          </view>
+          <image
+              class="arrow-icon"
+              src="https://ceres.zkthink.com/static/img/user/arrow.png"
+          ></image>
+        </view>
+      </view>
+      <!--结合销售-->
+      <combined-sales
+          :pid="productId"
+          :productData="productData"
+      ></combined-sales>
+      <!--拼团-->
+      <view
+          v-if="selectedSku.activityType === 1"
+          class="borRig-line-20"
+      ></view>
+      <view
+          v-if="selectedSku.activityType === 1&&topThreeCollageOrders.length > 0"
+          class="goodsDiscount"
+      >
+        <view class="questionTit mar-left-30 flex-items flex-row flex-sp-between">
+          <label class="">这些人正在拼单</label>
+          <view class="allMoreBox">
+            <view
+                v-if="topThreeCollageOrders.length > 0"
+                class="allMore"
+                @click="openAllBuy"
+            >查看全部
+            </view>
+            <view
+                v-else
+                class="allMore"
+                @click="openAllBuyTwo"
+            >查看全部
+            </view>
+            <image
+                class="evaluateAllArrow-icon mar-left-10"
+                src="https://ceres.zkthink.com/static/img/user/arrow.png"
+            ></image>
+          </view>
+        </view>
+        <view
+            class="groupBuy"
+            v-for="(Gitem, index) in topThreeCollageOrders"
+            :key="index"
+        >
+          <view
+              class="groupBuyList"
+              v-if="Gitem.time > 0"
+          >
+            <view class="groupBuyItem">
+              <view class="leftAvatar">
+                <img
+                    :src="Gitem.headImage"
+                    alt=""
+                >
+                <span>{{ Gitem.name }}</span>
+              </view>
+              <view class="rightInfo">
+                <view
+                    class="groupBuyTime"
+                    style="width: 70%;"
+                >
+                  <view class="needPeople flex-row-plus">还差<b>{{ Gitem.person }}人</b>拼成</view>
+                  <view class="endDate">剩余{{ timeChange(Gitem.time) }}</view>
+                </view>
+                <view
+                    class="groupBuyBtn"
+                    @click="getGroupShow(Gitem.collageId)"
+                >和Ta拼
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <!--    组合支付-->
+      <view class="borRig-line-20"></view>
+      <view class="evaQaTab flex-items flex-sp-around">
+        <view
+            :class="{active: activeTab === 1}"
+            class="evaBtn"
+            @click="changeTabs(1)"
+        >
+          <view class="tabTit">宝贝评价（{{ commentListLength }}）</view>
+        </view>
+        <view
+            :class="{active: activeTab === 2}"
+            class="qaBtn"
+            @click="changeTabs(2)"
+        >
+          <view class="tabTit">商品问答（{{ problemsListLength }}）</view>
+        </view>
+      </view>
+      <view
+          class="evaluate-box flex-start flex-column"
+          v-show="activeTab === 1"
+      >
+        <view
+            class="evaluateTag-box"
+            v-if="commentListLength>0"
+        >
+          <view class="evaluateTag-text">
+            全部({{ commentListLength }})
+          </view>
+        </view>
+        <view
+            class="evaluate-contentbox mar-top-30"
+            v-for="(commentItem, index) in commentList"
+            :key="index"
+        >
+          <view class="evaluate-content flex-items flex-row flex-sp-between">
+            <view class="flex-items">
+              <image
+                  class="user-headSmallImg"
+                  :src="commentItem.headImage"
+              ></image>
+              <label class="fs28 mar-left-20">{{ commentItem.name }}</label>
+            </view>
+            <label class="font-color-999 fs22">{{ commentItem.createTime }}</label>
+          </view>
+          <view class="evaluateDes-box">
+            <label class="evaluateDes">{{ commentItem.comment }}</label>
+          </view>
+          <view
+              class="item-image-box"
+              v-if="commentItem.image"
+          >
+            <view
+                v-for="(ItemImg, cindex) in commentImgData(commentItem.image)"
+                :key="cindex"
+            >
+              <image
+                  @click='previewImg(index,cindex)'
+                  class="img-item"
+                  :src="ItemImg"
+              ></image>
+            </view>
+          </view>
+          <view class="item-line"></view>
+          <view
+              class="item-like-box"
+              v-if="commentItem.addComment !== ''"
+          >
+            <view class="addEvaluate">
+              <view>追加评价：{{ commentItem.addComment }}</view>
+              <view
+                  class="item-image-box"
+                  v-if="commentItem.addImages"
+              >
+                <view
+                    v-for="(itemAddImg, imgIndex) in commentItem.addImages"
+                    :key="imgIndex"
+                >
+                  <image
+                      @click='previewAddImg(index,imgIndex)'
+                      class="img-item"
+                      :src="itemAddImg"
+                  >
+                  </image>
+                </view>
+              </view>
+            </view>
+          </view>
+          <view class="like-box">
+            <image
+                class="like-img"
+                @click="zanTap(index, commentItem.commentId,0)"
+                src="https://ceres.zkthink.com/static/images/praiseActiveIcon.png"
+                v-if="commentItem.ifLike === 1"
+            ></image>
+            <image
+                class="like-img"
+                @click="zanTap(index, commentItem.commentId,1)"
+                src="https://ceres.zkthink.com/static/images/praiseIcon.png"
+                v-else
+            ></image>
+            <view class="like-num">{{ commentItem.likes }}</view>
+          </view>
+        </view>
+        <view
+            class="moreBox"
+            v-if="commentListLength>0"
+            @click="commentAll"
+        >
+          <label class="fs24">查看全部</label>
+          <image
+              class="evaluateAllArrow-icon mar-left-10"
+              src="https://ceres.zkthink.com/static/img/user/arrow.png"
+          ></image>
+        </view>
+      </view>
+      <!--    评价END-->
+      <!--    问答-->
+      <view class="borRig-line-20"></view>
+      <view
+          class="questions"
+          v-show="activeTab === 2"
+      >
+        <view class="questionInfo flex-items flex-row flex-sp-between">
+          <view class="infoTit">宝贝好不好，问问已买过的人</view>
+          <view
+              class="putQuestion"
+              @click="goToQuestions"
+          >去提问
+          </view>
+        </view>
+        <view class="listBox">
+          <view
+              class="itemBox"
+              v-for="(pitem,index) in getProblemsList"
+              :key="index"
+          >
+            <view class="itemAsk">
+              <i>问</i><span>{{ pitem.problem }}</span>
+            </view>
+            <view v-if="pitem.answers.length>0">
+              <view
+                  class="answer"
+                  v-for="(witem,index) in twonumansers(pitem.answers)"
+                  :key="index"
+              >
+                <view class="answerBox">
+                  <i>答</i><span>{{ witem.answer }}</span>
+                </view>
+                <view
+                    class="answerBtn"
+                    v-if="pitem.ifAnswer === 1"
+                    @click="seeAllFn(pitem.problemId)"
+                >立即回答
+                </view>
               </view>
             </view>
             <view v-else>
-              <label class="fs28 mar-right-20">即将开始：{{ selectedSku.startTime }}</label>
-              <!--              <view class="fs28 mar-right-20 mar-top-20">{{productData.startTime}}</view>-->
-            </view>
-          </view>
-        </view>
-      </view>
-      <view class="nameContainer">
-        <view class="goodsName-box overflowNoDot mar-top-30 mar-left-30">
-          <label class="goodsName fs32 mar-left-20">{{ productData.productName }}</label>
-        </view>
-        <view class="collectBox"
-              @click="collectProduct">
-          <image v-if="productData.ifCollect === 1"
-                 class="store-icon"
-                 src="https://ceres.zkthink.com/static/images/shoucangActive1.png"></image>
-          <image v-else
-                 class="store-icon"
-                 src="https://ceres.zkthink.com/static/images/shoucang2x.png">
-          </image>
-          <label class="fs22">收藏</label>
-        </view>
-      </view>
-      <view v-if="markTools.length>0 || shopMarkTools.length>0"
-            class="activity-box mar-top-10"
-            @click="couponShowClick">
-        <label class="fs24 font-color-999">优惠</label>
-        <view class="activity-content mar-left-30 flex-items flex-sp-between flex-row">
-          <view class="fs20 overflow"
-                style="width: 500rpx;">
-            {{ productData.couponSplicing }}
-          </view>
-          <view class="flex-items">
-            <label class="fs24 font-color-C5AA7B">领券</label>
-            <image class="coupon-arrow"
-                   src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
-          </view>
-        </view>
-      </view>
-    </view>
-    <view class="express-box flex-items flex-row fs24">
-      <label class="fs24 font-color-999 mar-right-20">发货</label>
-      <image src="https://ceres.zkthink.com/static/images/mapIcon.png"
-             v-if="productData.receive && productData.receive.receiveAdress"></image>
-      <label class="mar-left-10 mapName mar-right-30"
-             v-if="productData.receive && productData.receive.receiveAdress">{{ productData.receive.receiveAdress
-                                                                             }}</label>
-      <label>快递：¥ {{ productData.logisticsPrice || 0 }}</label>
-    </view>
-    <view class="fs24 chooseSize-box flex-start"
-          @click="goodsDetailShowClick(6)">
-      <view class="chooseSize-content flex-items flex-row flex-sp-between">
-        <view class="flex-row-plus">
-          <label class="fs26 mar-left-30 font-color-999">选择</label>
-          <view class="valueBox mar-left-20 flex-items">
-            <view class="mar-right-10"
-                  v-for="(item, index) of currentSuk"
-                  :key="index">{{ item.skuText }}
-            </view>
-          </view>
-        </view>
-        <image class="arrow-icon"
-               src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
-      </view>
-    </view>
-    <!--结合销售-->
-    <combined-sales :pid="productId"
-                    :productData="productData"></combined-sales>
-    <!--拼团-->
-    <view v-if="selectedSku.activityType === 1"
-          class="borRig-line-20"></view>
-    <view v-if="selectedSku.activityType === 1&&topThreeCollageOrders.length > 0"
-          class="goodsDiscount">
-      <view class="questionTit mar-left-30 flex-items flex-row flex-sp-between">
-        <label class="">这些人正在拼单</label>
-        <view class="allMoreBox">
-          <view v-if="topThreeCollageOrders.length > 0"
-                class="allMore"
-                @click="openAllBuy">查看全部
-          </view>
-          <view v-else
-                class="allMore"
-                @click="openAllBuyTwo">查看全部
-          </view>
-          <image class="evaluateAllArrow-icon mar-left-10"
-                 src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
-        </view>
-      </view>
-      <view class="groupBuy"
-            v-for="(Gitem, index) in topThreeCollageOrders"
-            :key="index">
-        <view class="groupBuyList"
-              v-if="Gitem.time > 0">
-          <view class="groupBuyItem">
-            <view class="leftAvatar">
-              <img :src="Gitem.headImage"
-                   alt="">
-              <span>{{ Gitem.name }}</span>
-            </view>
-            <view class="rightInfo">
-              <view class="groupBuyTime"
-                    style="width: 70%;">
-                <view class="needPeople flex-row-plus">还差<b>{{ Gitem.person }}人</b>拼成</view>
-                <view class="endDate">剩余{{ timeChange(Gitem.time) }}</view>
-              </view>
-              <view class="groupBuyBtn"
-                    @click="getGroupShow(Gitem.collageId)">和Ta拼
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-    <!--    组合支付-->
-    <view class="borRig-line-20"></view>
-    <view class="evaQaTab flex-items flex-sp-around">
-	  <view :class="{active: activeTab === 1}"
-	        class="evaBtn"
-	        @click="changeTabs(1)">
-	    <view class="tabTit">宝贝评价（{{ commentListLength }}）</view>
-	  </view>
-      <view :class="{active: activeTab === 2}"
-            class="qaBtn"
-            @click="changeTabs(2)">
-        <view class="tabTit">商品问答（{{ problemsListLength }}）</view>
-      </view>
-    </view>
-    <view class="evaluate-box flex-start flex-column"
-          v-show="activeTab === 1">
-      <view class="evaluateTag-box"
-            v-if="commentListLength>0">
-        <view class="evaluateTag-text">
-          全部({{ commentListLength }})
-        </view>
-      </view>
-      <view class="evaluate-contentbox mar-top-30"
-            v-for="(commentItem, index) in commentList"
-            :key="index">
-        <view class="evaluate-content flex-items flex-row flex-sp-between">
-          <view class="flex-items">
-            <image class="user-headSmallImg"
-                   :src="commentItem.headImage"></image>
-            <label class="fs28 mar-left-20">{{ commentItem.name }}</label>
-          </view>
-          <label class="font-color-999 fs22">{{ commentItem.createTime }}</label>
-        </view>
-        <view class="evaluateDes-box">
-          <label class="evaluateDes">{{ commentItem.comment }}</label>
-        </view>
-        <view class="item-image-box"
-              v-if="commentItem.image">
-          <view v-for="(ItemImg, cindex) in commentImgData(commentItem.image)"
-                :key="cindex">
-            <image @click='previewImg(index,cindex)'
-                   class="img-item"
-                   :src="ItemImg"></image>
-          </view>
-        </view>
-        <view class="item-line"></view>
-        <view class="item-like-box"
-              v-if="commentItem.addComment !== ''">
-          <view class="addEvaluate">
-            <view>追加评价：{{ commentItem.addComment }}</view>
-            <view class="item-image-box"
-                  v-if="commentItem.addImages">
-              <view v-for="(itemAddImg, imgIndex) in commentItem.addImages"
-                    :key="imgIndex">
-                <image @click='previewAddImg(index,imgIndex)'
-                       class="img-item"
-                       :src="itemAddImg">
-                </image>
-              </view>
-            </view>
-          </view>
-        </view>
-        <view class="like-box">
-          <image class="like-img"
-                 @click="zanTap(index, commentItem.commentId,0)"
-                 src="https://ceres.zkthink.com/static/images/praiseActiveIcon.png"
-                 v-if="commentItem.ifLike === 1"></image>
-          <image class="like-img"
-                 @click="zanTap(index, commentItem.commentId,1)"
-                 src="https://ceres.zkthink.com/static/images/praiseIcon.png"
-                 v-else></image>
-          <view class="like-num">{{ commentItem.likes }}</view>
-        </view>
-      </view>
-      <view class="moreBox"
-            v-if="commentListLength>0"
-            @click="commentAll">
-        <label class="fs24">查看全部</label>
-        <image class="evaluateAllArrow-icon mar-left-10"
-               src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
-      </view>
-    </view>
-    <!--    评价END-->
-    <!--    问答-->
-    <view class="borRig-line-20"></view>
-    <view class="questions"
-          v-show="activeTab === 2">
-      <view class="questionInfo flex-items flex-row flex-sp-between">
-        <view class="infoTit">宝贝好不好，问问已买过的人</view>
-        <view class="putQuestion"
-              @click="goToQuestions">去提问
-        </view>
-      </view>
-      <view class="listBox">
-        <view class="itemBox"
-              v-for="(pitem,index) in getProblemsList"
-              :key="index">
-          <view class="itemAsk">
-            <i>问</i><span>{{ pitem.problem }}</span>
-          </view>
-          <view v-if="pitem.answers.length>0">
-            <view class="answer"
-                  v-for="(witem,index) in twonumansers(pitem.answers)"
-                  :key="index">
-              <view class="answerBox">
-                <i>答</i><span>{{ witem.answer }}</span>
-              </view>
-              <view class="answerBtn"
+              <view class="answer">
+                <view class="answerBox">
+                  <i>答</i><span>暂无答复</span>
+                </view>
+                <view
+                    class="answerBtn"
                     v-if="pitem.ifAnswer === 1"
-                    @click="seeAllFn(pitem.problemId)">立即回答
+                    @click="seeAllFn(pitem.problemId)"
+                >立即回答
+                </view>
+              </view>
+            </view>
+            <view
+                v-if="pitem.answers.length>1"
+                class="seeAll"
+                @click="seeAllFn(pitem.problemId)"
+            >查看全部答复
+            </view>
+          </view>
+          <view
+              class="moreBox"
+              v-if="problemsListLength>0"
+              @click="seeAllQa"
+          >
+            <label class="fs24">查看全部</label>
+            <image
+                class="evaluateAllArrow-icon mar-left-10"
+                src="https://ceres.zkthink.com/static/img/user/arrow.png"
+            ></image>
+          </view>
+        </view>
+      </view>
+      <view class="inStore-box flex-items flex-row flex-sp-between">
+        <view class="flex-display flex-row">
+          <view>
+            <image
+                @click="goStore"
+                class="inStore-logo default-img"
+                :src="productData.shopLogo"
+            ></image>
+          </view>
+          <view class="flex-display flex-column mar-left-20">
+            <label @click="goStore">{{ productData.shopName }}</label>
+            <view class="flex-display flex-row fs24 font-color-999 mar-top-5">
+              <label>商品总类：{{ productData.classifyNumber }}</label>
+              <label class="mar-left-30">已售：{{ productData.number }}件</label>
+            </view>
+          </view>
+        </view>
+        <view
+            class="inStore-but"
+            @click="goStore"
+        >去逛逛
+        </view>
+      </view>
+      <view class="goodsDetails-box">
+        <view class="goodsDetails-title">
+          <view class="goodsDetails-Line"></view>
+          <label class="goodsDetails-text">宝贝详情</label>
+          <view class="goodsDetails-Line"></view>
+        </view>
+        <view class="goodsDetailsimg-box">
+          <view class="">
+            <rich-text :nodes="sellDescList"></rich-text>
+          </view>
+        </view>
+      </view>
+      <view class="buygoods-box">
+        <view
+            class="buygoodsBut-box flex-row-plus"
+            :style="{'height':(isIphone === true? 160:130)+'rpx'}"
+        >
+          <view class="btns_container">
+            <view
+                class="btns flex-column-plus"
+                @click="goStore"
+            >
+              <image
+                  class="store-icon"
+                  src="https://ceres.zkthink.com/static/images/storeIcon.png"
+              ></image>
+              <label class="fs22">店铺</label>
+            </view>
+            <!-- #ifdef MP-WEIXIN -->
+            <view
+                v-if="hasService"
+                class="btns flex-column-plus mar-left-10"
+                @click="flyToService"
+            >
+              <image
+                  class="store-icon"
+                  src="https://ceres.zkthink.com/static/images/service-product-detail.png"
+              ></image>
+              <label class="fs22">客服</label>
+            </view>
+            <!-- #endif -->
+            <view
+                class="btns flex-column-plus mar-left-10 flex-items Cart"
+                @click="goshopCart"
+            >
+              <view
+                  class="cartAllNum"
+                  v-if="allCartNum>0"
+              >{{ allCartNum }}
+              </view>
+              <image
+                  class="store-icon"
+                  src="https://ceres.zkthink.com/static/images/gouwuche.png"
+              ></image>
+              <label class="fs22">购物车</label>
+            </view>
+          </view>
+          <view class="btns_container">
+            <view
+                class="flex-row-plus offShelf"
+                v-if="productData.shelveState === 0"
+            >
+              商品已下架
+            </view>
+            <view
+                class="flex-row-plus flex-items"
+                v-else-if="selectedSku.activityType === 1"
+            >
+              <view
+                  class="joinShopCartBut"
+                  @click="goodsDetailShowClick(4)"
+              >单独购买
+              </view>
+              <view
+                  class="buyNowBut"
+                  @click="goodsDetailShowClick(3)"
+              >我要开团
+              </view>
+            </view>
+            <view
+                class="flex-row-plus flex-items"
+                v-else
+            >
+              <view
+                  class="joinShopCartBut"
+                  @click="goodsDetailShowClick(1)"
+              >加入购物车
+              </view>
+              <view
+                  class="buyNowBut"
+                  @click="goodsDetailShowClick(2)"
+              >立即购买
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="returnTopService-box">
+        <view
+            class="returnTop-box flex-items-plus flex-column"
+            @click="top"
+            :style="{'display':(returnTopFlag===true? 'flex':'none')}"
+        >
+          <image
+              class="returnTopImg"
+              src="https://ceres.zkthink.com/static/images/backTop.png"
+          ></image>
+        </view>
+      </view>
+      <!-- 商品详情 -->
+      <u-popup
+          v-model="goodsDetailShowFlag"
+          mode="bottom"
+          border-radius="14"
+      >
+        <view class="goosDetailshow-box">
+          <view class="detailImg-box flex-row-plus">
+            <image
+                class="detailImg"
+                :src="selectedSku.image"
+            ></image>
+            <view class="flex-column-plus mar-left-40">
+              <view class="font-color-C5AA7B">
+                <label class="fs24">¥</label>
+                <label
+                    class="fs36 mar-left-10"
+                    v-text="selectedSku.activityType === 1 && btnType === 4 ? selectedSku.originalPrice : selectedSku.price"
+                ></label>
+              </view>
+              <label class="fs24 font-color-999 mar-top-20">库存 {{ selectedSku.stockNumber }} 件</label>
+              <label class="fs24 mar-top-20">已选</label>
+            </view>
+          </view>
+          <view class="color-box flex-column-plus">
+            <view
+                v-for="(attritem,index) in productData.names"
+                :key="index"
+            >
+              <label
+                  class="fs26 font-color-333"
+                  v-if="attritem.nameCode"
+              >{{ attritem.skuName }}</label>
+              <view class="colorName-box">
+                <view
+                    class="pad-bot-30"
+                    v-for="(attrRes, resIndex) in attritem.values"
+                    :key="resIndex"
+                >
+                  <view
+                      class="colorName"
+                      :class="{'colorName-on' : selectedAttr[attritem.nameCode] == attrRes.valueCode}"
+                      @click="nameCodeValueCodeClick(attritem.nameCode, attrRes.valueCode, true)"
+                  >
+                    {{ attrRes.skuValue }}
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+          <view class="goodsNumCent">
+            <view
+                class="goodsNum-box flex-row-plus flex-sp-between"
+                :class="{'bottom-line' :supportHuabei}"
+            >
+              <label class="font-color-333 fs26">数量</label>
+              <view class="goodsNum">
+                <view
+                    class="item subtract"
+                    @click="numSub()"
+                >-
+                </view>
+                <view
+                    class="item goodsNumber"
+                    v-model="buyNum"
+                >{{ buyNum }}
+                </view>
+                <view
+                    class="item add"
+                    @click="numAdd()"
+                >+
+                </view>
+              </view>
+            </view>
+          </view>
+          <view
+              class="huabei-box flex-column-plus"
+              v-if="supportHuabei"
+          >
+            <label class="font-color-999 fs24">花呗分期</label>
+            <scroll-view
+                class="fenqi-box"
+                scroll-x="true"
+            >
+              <view
+                  class="huabei-item"
+                  :class="[{'fenqi-on' :fenqiIndex === 0},{'disabled' :disableFenqiList[0]}]"
+                  @click="selectFenqi(0)"
+              >
+                <label class="huabei-period">分3期(含手续费)</label>
+                <label class="huabei-money">￥{{ fenqiMoneyList[0] }}/期</label>
+              </view>
+              <view
+                  class="huabei-item"
+                  :class="[{'fenqi-on' :fenqiIndex === 1},{'disabled' :disableFenqiList[1]}]"
+                  @click="selectFenqi(1)"
+              >
+                <label class="huabei-period">分6期(含手续费)</label>
+                <label class="huabei-money">￥{{ fenqiMoneyList[1] }}/期</label>
+              </view>
+              <view
+                  class="huabei-item"
+                  :class="[{'fenqi-on' :fenqiIndex === 2},{'disabled' :disableFenqiList[2]}]"
+                  @click="selectFenqi(2)"
+              >
+                <label class="huabei-period">分12期(含手续费)</label>
+                <label class="huabei-money">￥{{ fenqiMoneyList[2] }}/期</label>
+              </view>
+            </scroll-view>
+          </view>
+          <view
+              v-if="ifSkuSelect"
+              class="skuSelectBtn"
+          >
+            <view
+                class="flex-row-plus offShelf"
+                v-if="productData.shelveState === 0"
+            >
+              商品已下架
+            </view>
+            <view
+                class="flex-row-plus flex-items flex-sp-around"
+                v-else-if="selectedSku.activityType === 1"
+            >
+              <view
+                  class="selectJoinShop selectBtn font-color-333"
+                  @click="addFast(2)"
+              >单独购买
+              </view>
+              <view
+                  class="selectBuyNow selectBtn font-color-FFEBC4"
+                  @click="getGroupSettlement(1)"
+              >我要开团
+              </view>
+            </view>
+            <view
+                class="flex-row-plus flex-items flex-sp-around"
+                v-else
+            >
+              <view
+                  class="selectJoinShop selectBtn font-color-333"
+                  @click="addCart"
+              >加入购物车
+              </view>
+              <view
+                  class="selectBuyNow selectBtn font-color-FFEBC4"
+                  @click="addFast(2)"
+              >立即购买
               </view>
             </view>
           </view>
           <view v-else>
-            <view class="answer">
-              <view class="answerBox">
-                <i>答</i><span>暂无答复</span>
-              </view>
-              <view class="answerBtn"
-                    v-if="pitem.ifAnswer === 1"
-                    @click="seeAllFn(pitem.problemId)">立即回答
-              </view>
-            </view>
-          </view>
-          <view v-if="pitem.answers.length>1"
-                class="seeAll"
-                @click="seeAllFn(pitem.problemId)">查看全部答复
-          </view>
-        </view>
-        <view class="moreBox"
-              v-if="problemsListLength>0"
-              @click="seeAllQa">
-          <label class="fs24">查看全部</label>
-          <image class="evaluateAllArrow-icon mar-left-10"
-                 src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
-        </view>
-      </view>
-    </view>
-    <view class="inStore-box flex-items flex-row flex-sp-between">
-      <view class="flex-display flex-row">
-        <view>
-          <image @click="goStore"
-                 class="inStore-logo default-img"
-                 :src="productData.shopLogo"></image>
-        </view>
-        <view class="flex-display flex-column mar-left-20">
-          <label @click="goStore">{{ productData.shopName }}</label>
-          <view class="flex-display flex-row fs24 font-color-999 mar-top-5">
-            <label>商品总类：{{ productData.classifyNumber }}</label>
-            <label class="mar-left-30">已售：{{ productData.number }}件</label>
-          </view>
-        </view>
-      </view>
-      <view class="inStore-but"
-            @click="goStore">去逛逛
-      </view>
-    </view>
-    <view class="goodsDetails-box">
-      <view class="goodsDetails-title">
-        <view class="goodsDetails-Line"></view>
-        <label class="goodsDetails-text">宝贝详情</label>
-        <view class="goodsDetails-Line"></view>
-      </view>
-      <view class="goodsDetailsimg-box">
-        <view class="">
-          <rich-text :nodes="sellDescList"></rich-text>
-        </view>
-      </view>
-    </view>
-<!--    拼团滚动-->
-    <view class="news-box">
-      <view class="news-bg">
-        <swiper class="goodsImgswiper-box"
-                :vertical="true"
-                :circular="true"
-                interval="8000"
-                duration="2000"
-                :autoplay="true">
-          <swiper-item v-for="(item, index) of broadCastList" :key="index">
-            <view class="news-item flex-items">
-              <image class="item-avatar" :src="item.headImage"></image>
-              <view class="news-item-user">{{item.name}}</view>
-              <view class="news-item-info">{{item.timeStr}}</view>
-              <view class="news-item-info" v-if="item.type === 1">给了好评</view>
-              <view class="news-item-info" v-if="item.type === 2">正在拼单</view>
-              <view class="news-item-info" v-if="item.type === 3">拼单成功</view>
-              <view class="news-item-info" v-if="item.type === 4">下单</view>
-            </view>
-          </swiper-item>
-        </swiper>
-      </view>
-    </view>
-    <view class="buygoods-box">
-<!--      底部去拼团按钮-->
-      <view v-if="selectedSku.activityType === 1&&topThreeCollageOrders.length > 0">
-        <view class="groupByInfo" v-for="(Gitem, index) in topThreeCollageOrders">
-          <view v-if="Gitem.time > 0" class="flex-items flex-sp-between groupByInfoBox">
-            <view class="groupByLeft flex-items">
-              <view class="groupByAvatar flex-items">
-                <img :src="Gitem.headImage"
-                     alt="">
-                <span class="fs26">{{ Gitem.name }}</span>
-              </view>
-              <view class="groupByNum fs26">还差<b>{{ Gitem.person }}人</b>拼成</view>
-              <view class="groupByTime">
-                <view class="endDate fs26">剩余{{ timeChange(Gitem.time) }}</view>
-              </view>
-            </view>
-            <view class="groupByRight">
-              <view class="groupByBtn" @click="getGroupShow(Gitem.collageId)">去拼单</view>
-            </view>
-          </view>
-        </view>
-      </view>
-      <view class="buygoodsBut-box flex-row-plus"
-            :style="{'height':(isIphone === true? 160:130)+'rpx'}">
-        <view class="btns_container">
-          <view class="btns flex-column-plus"
-                @click="goStore">
-            <image class="store-icon"
-                   src="https://ceres.zkthink.com/static/images/storeIcon.png"></image>
-            <label class="fs22">店铺</label>
-          </view>
-          <!-- #ifdef MP-WEIXIN || APP-PLUS -->
-          <view v-if="hasService"
-                class="btns flex-column-plus mar-left-10"
-                @click="flyToService">
-            <image class="store-icon"
-                   src="https://ceres.zkthink.com/static/images/service-product-detail.png"></image>
-            <label class="fs22">客服</label>
-          </view>
-          <!-- #endif -->
-          <view class="btns flex-column-plus mar-left-10 flex-items Cart"
-                @click="goshopCart">
-            <view class="cartAllNum"
-                  v-if="allCartNum>0">{{ allCartNum }}
-            </view>
-            <image class="store-icon"
-                   src="https://ceres.zkthink.com/static/images/gouwuche.png"></image>
-            <label class="fs22">购物车</label>
-          </view>
-        </view>
-        <view class="btns_container">
-          <view class="flex-row-plus offShelf"
-                v-if="productData.shelveState === 0">
-            商品已下架
-          </view>
-          <view class="flex-row-plus flex-items"
-                v-else-if="selectedSku.activityType === 1">
-            <view class="joinShopCartBut"
-                  @click="goodsDetailShowClick(4)">单独购买
-            </view>
-            <view class="buyNowBut"
-                  @click="goodsDetailShowClick(3)">我要开团
-            </view>
-          </view>
-          <view class="flex-row-plus flex-items"
-                v-else>
-            <view class="joinShopCartBut"
-                  @click="goodsDetailShowClick(1)">加入购物车
-            </view>
-            <view class="buyNowBut"
-                  @click="goodsDetailShowClick(2)">立即购买
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-    <view class="returnTopService-box">
-      <view class="returnTop-box flex-items-plus flex-column"
-            @click="top"
-            :style="{'display':(returnTopFlag===true? 'flex':'none')}">
-        <image class="returnTopImg"
-               src="https://ceres.zkthink.com/static/images/backTop.png"></image>
-      </view>
-    </view>
-    <!-- 商品详情 -->
-    <u-popup v-model="goodsDetailShowFlag"
-             mode="bottom"
-             border-radius="14">
-      <view class="goosDetailshow-box">
-        <view class="detailImg-box flex-row-plus">
-          <image class="detailImg"
-                 :src="selectedSku.image"></image>
-          <view class="flex-column-plus mar-left-40">
-            <view class="font-color-C5AA7B">
-              <label class="fs24">¥</label>
-              <label class="fs36 mar-left-10"
-                     v-text="selectedSku.activityType === 1 && btnType === 4 ? selectedSku.salePrice : selectedSku.price"></label>
-            </view>
-            <label class="fs24 font-color-999 mar-top-20">库存 {{ selectedSku.stockNumber }} 件</label>
-            <label class="fs24 mar-top-20">已选</label>
-          </view>
-        </view>
-        <view class="color-box flex-column-plus">
-          <view v-for="(attritem,index) in productData.names"
-                :key="index">
-            <label class="fs26 font-color-333"
-                   v-if="attritem.nameCode">{{ attritem.skuName }}</label>
-            <view class="colorName-box">
-              <view class="pad-bot-30"
-                    v-for="(attrRes, resIndex) in attritem.values"
-                    :key="resIndex">
-                <view class="colorName"
-                      :class="{'colorName-on' : selectedAttr[attritem.nameCode] == attrRes.valueCode}"
-                      @click="nameCodeValueCodeClick(attritem.nameCode, attrRes.valueCode, true)">
-                  {{ attrRes.skuValue }}
-                </view>
-              </view>
-            </view>
-          </view>
-        </view>
-        <view class="goodsNumCent">
-          <view class="goodsNum-box flex-row-plus flex-sp-between"
-                :class="{'bottom-line' :supportHuabei}">
-            <label class="font-color-333 fs26">数量</label>
-            <view class="goodsNum">
-              <view class="item subtract"
-                    @click="numSub()">-
-              </view>
-              <view class="item goodsNumber"
-                    v-model="buyNum">{{ buyNum }}
-              </view>
-              <view class="item add"
-                    @click="numAdd()">+
-              </view>
-            </view>
-          </view>
-        </view>
-        <view class="huabei-box flex-column-plus"
-              v-if="supportHuabei">
-          <label class="font-color-999 fs24">花呗分期</label>
-          <scroll-view class="fenqi-box"
-                       scroll-x="true">
-            <view class="huabei-item"
-                  :class="[{'fenqi-on' :fenqiIndex === 0},{'disabled' :disableFenqiList[0]}]"
-                  @click="selectFenqi(0)">
-              <label class="huabei-period">分3期(含手续费)</label>
-              <label class="huabei-money">￥{{ fenqiMoneyList[0] }}/期</label>
-            </view>
-            <view class="huabei-item"
-                  :class="[{'fenqi-on' :fenqiIndex === 1},{'disabled' :disableFenqiList[1]}]"
-                  @click="selectFenqi(1)">
-              <label class="huabei-period">分6期(含手续费)</label>
-              <label class="huabei-money">￥{{ fenqiMoneyList[1] }}/期</label>
-            </view>
-            <view class="huabei-item"
-                  :class="[{'fenqi-on' :fenqiIndex === 2},{'disabled' :disableFenqiList[2]}]"
-                  @click="selectFenqi(2)">
-              <label class="huabei-period">分12期(含手续费)</label>
-              <label class="huabei-money">￥{{ fenqiMoneyList[2] }}/期</label>
-            </view>
-          </scroll-view>
-        </view>
-        <view v-if="ifSkuSelect"
-              class="skuSelectBtn">
-          <view class="flex-row-plus offShelf"
-                v-if="productData.shelveState === 0">
-            商品已下架
-          </view>
-          <view class="flex-row-plus flex-items flex-sp-around"
-                v-else-if="selectedSku.activityType === 1">
-            <view class="selectJoinShop selectBtn font-color-333"
-                  @click="addFast(2)">单独购买
-            </view>
-            <view class="selectBuyNow selectBtn font-color-FFEBC4"
-                  @click="getGroupSettlement(1)">我要开团
-            </view>
-          </view>
-          <view class="flex-row-plus flex-items flex-sp-around"
-                v-else>
-            <view class="selectJoinShop selectBtn font-color-333"
-                  @click="addCart">加入购物车
-            </view>
-            <view class="selectBuyNow selectBtn font-color-FFEBC4"
-                  @click="addFast(2)">立即购买
-            </view>
-          </view>
-        </view>
-        <view v-else>
-          <view v-if="selectedSku.activityType === 1 && collageId !== 0"
+            <view
+                v-if="selectedSku.activityType === 1 && collageId !== 0"
                 class="goosDetailbut-box flex-items-plus"
-                :style="{'padding-bottom':(isIphone === true? 60:20)+'rpx'}">
-            <view class="joinbuyBut"
-                  @click="getGroupSettlement(2)">确定
+                :style="{'padding-bottom':(isIphone === true? 60:20)+'rpx'}"
+            >
+              <view
+                  class="joinbuyBut"
+                  @click="getGroupSettlement(2)"
+              >确定
+              </view>
             </view>
-          </view>
-          <view v-else-if="selectedSku.activityType === 1 && btnType === 3"
+            <view
+                v-else-if="selectedSku.activityType === 1 && btnType === 3"
                 class="goosDetailbut-box flex-row-plus"
-                :style="{'padding-bottom':(isIphone === true? 60:20)+'rpx'}">
-            <view class="buyNowBut"
-                  @click="getGroupSettlement(1)">去拼团
+                :style="{'padding-bottom':(isIphone === true? 60:20)+'rpx'}"
+            >
+              <view
+                  class="buyNowBut"
+                  @click="getGroupSettlement(1)"
+              >去拼团
+              </view>
             </view>
-          </view>
-          <view v-else
+            <view
+                v-else
                 class="goosDetailbut-box flex-row-plus"
-                :style="{'padding-bottom':(isIphone === true? 60:20)+'rpx'}">
-            <view v-if="btnType === 1"
+                :style="{'padding-bottom':(isIphone === true? 60:20)+'rpx'}"
+            >
+              <view
+                  v-if="btnType === 1"
                   class="buyNowBut"
-                  @click="addCart">确认
-            </view>
-            <view v-else
+                  @click="addCart"
+              >确认
+              </view>
+              <view
+                  v-else
                   class="buyNowBut"
-                  @click="addFast(2)">确认
+                  @click="addFast(2)"
+              >确认
+              </view>
             </view>
           </view>
         </view>
-      </view>
-    </u-popup>
-    <!-- 优惠券弹框 -->
-    <coupon-popup ref="couponPopup"
-                  :markTools="markTools"
-                  :shopMarkTools="shopMarkTools"
-                  :setTop="topLeft"
-                  :currentActive="currentActive"></coupon-popup>
-    <!-- 拼单弹框 -->
-    <u-popup class="popupDiscount"
-             v-model="showGroupBuyList"
-             mode="center"
-             border-radius="14"
-             close-icon-pos="top-right"
-             close-icon-size="20">
-      <view class="popupDiscountTit">这些人正在拼单</view>
-      <view class="groupBuy">
-        <view class="groupBuyList">
-          <scroll-view style="height: 480upx;"
-                       scroll-y>
-            <view class="groupBuyItem1"
+      </u-popup>
+      <!-- 优惠券弹框 -->
+      <coupon-popup
+          ref="couponPopup"
+          :markTools="markTools"
+          :shopMarkTools="shopMarkTools"
+          :setTop="topLeft"
+          :currentActive="currentActive"
+      ></coupon-popup>
+      <!-- 拼单弹框 -->
+      <u-popup
+          class="popupDiscount"
+          v-model="showGroupBuyList"
+          mode="center"
+          border-radius="14"
+          close-icon-pos="top-right"
+          close-icon-size="20"
+      >
+        <view class="popupDiscountTit">这些人正在拼单</view>
+        <view class="groupBuy">
+          <view class="groupBuyList">
+            <scroll-view
+                style="height: 480upx;"
+                scroll-y
+            >
+              <view
+                  class="groupBuyItem1"
                   v-for="(aitem,index) in selectedSku.collageOrders"
-                  :key="index">
-              <view class="leftAvatar"
-                    v-if="aitem.time > 0">
-                <img :src="aitem.headImage"
-                     alt="">
-                <view class="groupBuyTime">
-                  <view class="needPeople"><span>{{ aitem.name }}</span>还差<b>{{ aitem.person }}人</b>
+                  :key="index"
+              >
+                <view
+                    class="leftAvatar"
+                    v-if="aitem.time > 0"
+                >
+                  <img
+                      :src="aitem.headImage"
+                      alt=""
+                  >
+                  <view class="groupBuyTime">
+                    <view class="needPeople"><span>{{ aitem.name }}</span>还差<b>{{ aitem.person }}人</b>
+                    </view>
+                    <view class="endDate">剩余{{ timeChange(aitem.time) }}</view>
                   </view>
-                  <view class="endDate">剩余{{ timeChange(aitem.time) }}</view>
+                </view>
+                <view
+                    class="rightInfo"
+                    v-if="aitem.time > 0"
+                >
+                  <view
+                      class="groupBuyBtn"
+                      @click="getGroupShow(aitem.collageId)"
+                  >和Ta拼
+                  </view>
                 </view>
               </view>
-              <view class="rightInfo"
-                    v-if="aitem.time > 0">
-                <view class="groupBuyBtn"
-                      @click="getGroupShow(aitem.collageId)">和Ta拼
-                </view>
-              </view>
-            </view>
-          </scroll-view>
+            </scroll-view>
+          </view>
         </view>
-      </view>
-    </u-popup>
+      </u-popup>
+    </view>
   </view>
 </template>
 
@@ -764,7 +971,14 @@ export default {
       ifShow: false,
       topLeft: 0,
       currentActive: 0,
-      broadCastList: []
+      // 埋点对象
+      pointOption: {
+        inTime: null,
+        data: {
+          eventType: 1,
+          productIds: '',
+        }
+      }
     }
   },
   computed: {
@@ -773,6 +987,7 @@ export default {
     }
   },
   created() {
+
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval)
     }
@@ -786,10 +1001,14 @@ export default {
       this.allCartNum = '...'
     }
   },
-	onShow() {
-		this.getProblems()
-	},
+  beforeDestroy() {
+
+  },
+  onShow() {
+    this.getProblems()
+  },
   onLoad(options) {
+    this.pointOption.inTime = new Date().getTime()
     this.isIphone = getApp().globalData.isIphone;
     if (getApp().globalData.productShareItem) {
       const item = getApp().globalData.productShareItem
@@ -799,6 +1018,7 @@ export default {
       this.salesId = parseInt(item.salesId)
       getApp().globalData.productShareItem = undefined
     } else {
+      console.log(options, '001001')
       this.shopId = parseInt(options.shopId)
       this.productId = options.productId
       this.paramSkuId = options.skuId
@@ -813,9 +1033,15 @@ export default {
     this.getProblems()
     this.allCartNum = uni.getStorageSync('allCartNum')
     this.getServiceUrl()
-    this.getBroadCastListFn()
   },
   onUnload() {
+    // 判断是否要埋点
+    const nowTime = new Date().getTime()
+    if (nowTime - this.pointOption.inTime >= 5000) {
+      // 埋点
+      this.pointOption.data.productIds = this.productId
+      this.$store.dispatch('doPointer', this.pointOption.data)
+    }
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval)
     }
@@ -825,6 +1051,7 @@ export default {
     if (this.funtimeOut) {
       clearTimeout(this.funtimeOut)
     }
+    console.log('onUnload')
   },
   mounted() {
     // 获取手机的屏幕高度
@@ -839,17 +1066,10 @@ export default {
     this.topLeft = e.scrollTop
   },
   methods: {
-    getBroadCastListFn() {
-      NET.request(API.GetBroadCastList, {
-        productId: this.productId,
-        shopGroupWorkId: this.shopGroupWorkId,
-      }, 'GET').then(res => {
-        this.broadCastList = res.data
-      }).catch(res => {
-      })
-    },
     onDetailScroll(e) {
+      console.log(e)
       this.topLeft = e.scrollTop
+      console.log(this.topLeft)
     },
     previewImg(index, cindex) {
       let img = this.commentList[index].images[cindex]
@@ -1177,6 +1397,7 @@ export default {
       if (skuId) {
         let mapinfo = this.productData.map
         for (var key in mapinfo) {
+          console.log(skuId, mapinfo[key].skuId, 'test')
           if (parseInt(mapinfo[key].skuId) === parseInt(skuId)) {
             this.selectedSku = mapinfo[key]
             // 选中sku对应的规格
@@ -1262,6 +1483,7 @@ export default {
       this.$forceUpdate(); // 重绘
     },
     selectSkuPostProcessor() {
+      console.log('selectSkuPostProcessor')
       const ifEnable = this.selectedSku.ifEnable
       if (this.selectedSku.activityType === 1 && ifEnable === 0) {
         this.topThreeCollageOrders = this.selectedSku.collageOrders.slice(0, 3)
@@ -1306,10 +1528,10 @@ export default {
     },
     //获取商品详情
     queryProductDetail() {
-      uni.showLoading({
-        title: '加载中...',
-        mask: true
-      })
+      // uni.showLoading({
+      //   title: '加载中...',
+      //   mask: true
+      // })
       let postData = {
         shopId: this.shopId,
         productId: this.productId,
@@ -1440,14 +1662,19 @@ export default {
             icon: "none"
           })
         } else {
-          uni.showLoading({
-            mask: true,
-            title: '添加中...',
-          })
+          // uni.showLoading({
+          //   mask: true,
+          //   title: '添加中...',
+          // })
           NET.request(API.ShoppingaddCart, {
             skuId: this.selectedSku.skuId,
             number: this.buyNum,
           }, 'POST').then(res => {
+            // 埋点
+            this.$store.dispatch('doPointer', {
+              eventType: 2,
+              productIds: this.productId
+            })
             // 给购物车小图标赋值数量
             let newallCartNum = uni.getStorageSync('allCartNum') + this.buyNum
             uni.setStorageSync('allCartNum', newallCartNum)
@@ -1481,10 +1708,10 @@ export default {
     },
     //点赞
     zanTap(index, likeId, actionType) {
-      uni.showLoading({
-        mask: true,
-        title: '提交中...',
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '提交中...',
+      // })
       NET.request(API.LikeOrUnLikeComment, {
         commentId: likeId,
         ifLike: actionType
@@ -1526,10 +1753,10 @@ export default {
       // #ifdef MP-ALIPAY
       var system = 4
       // #endif
-      uni.showLoading({
-        mask: true,
-        title: '请稍候...'
-      })
+      // uni.showLoading({
+      //   mask: true,
+      //   title: '请稍候...'
+      // })
       NET.request(API.getSharePic, {
         productId: this.productData.productId,
         shopId: this.productData.shopId,
@@ -1707,7 +1934,7 @@ export default {
     },
     flyToService() {
       let self = this
-      // #ifdef MP-WEIXIN
+      console.log(self.serviceURL, self.corpId)
       if (!self.serviceURL || !self.corpId) {
         self.hasService = false
         return
@@ -1722,39 +1949,6 @@ export default {
         fail(err) {
         }
       })
-      // #endif
-      // #ifdef APP-PLUS
-      try {
-        let sweixin = null
-        plus.share.getServices(res=>{
-          sweixin = res.find(i => i.id === 'weixin')
-          if(sweixin){
-            sweixin.openCustomerServiceChat({
-              corpid: self.corpId,
-              url: self.serviceURL,
-            },success=>{
-              console.log("success",JSON.stringify(success))
-            },err=>{
-              console.log("error",JSON.stringify(err))
-            })
-          }else{
-            plus.nativeUI.alert('当前环境不支持微信操作!')
-          }
-        },function(err){
-          console.log(err)
-          uni.showToast({title: "获取服务失败，不支持该操作。"+JSON.stringify(e), icon: 'error'})
-        })
-      } catch (err) {
-        console.log(err)
-        uni.showToast({title: "调用失败，不支持该操作。"+JSON.stringify(err), icon: 'error'})
-      }
-      /*plus.runtime.openURL(self.serviceURL, function(res) {
-        uni.showToast({
-          title: JSON.stringify(res),
-          icon: "success"
-        })
-      })*/
-      // #endif
     },
   }
 }
@@ -1783,8 +1977,8 @@ export default {
 }
 
 .couponItemimg {
-  width: 150upx;
-  height: 60upx;
+  width: 150rpx;
+  height: 60rpx;
 }
 
 .tabsbox {
@@ -1794,76 +1988,76 @@ export default {
 }
 
 .joinbuyBut {
-  width: 190upx;
-  height: 80upx;
+  width: 190rpx;
+  height: 80rpx;
   background: #333333;
   color: #FFEBC4;
-  font-size: 28upx;
-  line-height: 80upx;
+  font-size: 28rpx;
+  line-height: 80rpx;
   text-align: center;
-  margin-left: 30upx;
+  margin-left: 30rpx;
 }
 
 .checkimg {
-  width: 40upx;
-  height: 40upx;
-  margin-right: 30upx;
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 30rpx;
 }
 
 .container {
-  padding-bottom: 180upx;
+  padding-bottom: 180rpx;
 
   .arrow-icon {
-    width: 16upx;
-    height: 24upx;
+    width: 16rpx;
+    height: 24rpx;
   }
 
   .goodsImgswiper-box {
-    width: 750upx;
-    height: 750upx;
+    width: 750rpx;
+    height: 750rpx;
 
     .goodsImg {
-      width: 750upx;
-      height: 750upx;
+      width: 750rpx;
+      height: 750rpx;
     }
   }
 
   .share-box {
-    width: 200upx;
-    height: 60upx;
+    width: 200rpx;
+    height: 60rpx;
     background-color: #FFFFFF;
-    border-radius: 30upx 0 0 30upx;
+    border-radius: 30rpx 0 0 30rpx;
     position: absolute;
-    top: 30upx;
+    top: 30rpx;
     right: 0;
     z-index: 99;
 
     .share-img {
-      width: 36upx;
-      height: 36upx;
+      width: 36rpx;
+      height: 36rpx;
     }
   }
 
   .goodgDes-box {
     background-color: #FFFFFF;
     width: 100%;
-    padding-bottom: 25upx;
+    padding-bottom: 25rpx;
 
     .priceBuyNum-box {
-      width: 677upx;
-      margin-top: 30upx;
+      width: 677rpx;
+      margin-top: 30rpx;
     }
 
     .nameContainer {
       display: flex;
 
       .goodsName-box {
-        width: 677upx;
-        height: 85upx;
+        width: 677rpx;
+        height: 85rpx;
 
         .img618-cion {
-          width: 70upx;
-          height: 36upx;
+          width: 70rpx;
+          height: 36rpx;
         }
       }
 
@@ -1877,20 +2071,20 @@ export default {
       }
 
       .store-icon {
-        width: 48upx;
-        height: 48upx;
+        width: 48rpx;
+        height: 48rpx;
       }
     }
 
     .discounts-box {
-      margin-top: 20upx;
+      margin-top: 20rpx;
 
       .discounts-text {
-        margin-left: 10upx;
+        margin-left: 10rpx;
         color: #FF7800;
         background-color: #FFE4CC;
-        padding: 6upx 12upx;
-        border-radius: 4upx;
+        padding: 6rpx 12rpx;
+        border-radius: 4rpx;
       }
     }
 
@@ -1899,29 +2093,29 @@ export default {
       flex-direction: row;
       justify-content: center;
       align-items: flex-end;
-      border-top: 1upx solid #EDEDED;
+      border-top: 1rpx solid #EDEDED;
 
       .activity-content {
-        width: 614upx;
-        padding-top: 20upx;
+        width: 614rpx;
+        padding-top: 20rpx;
 
         .activity-text {
           color: #FF7700;
-          border: 1upx solid #FF7700;
-          padding: 6upx 23upx;
+          border: 1rpx solid #FF7700;
+          padding: 6rpx 23rpx;
         }
 
         .coupon-arrow {
-          width: 16upx;
-          height: 24upx;
-          margin-left: 15upx;
+          width: 16rpx;
+          height: 24rpx;
+          margin-left: 15rpx;
         }
       }
     }
   }
 
   .express-box {
-    height: 100upx;
+    height: 100rpx;
     background-color: #FFFFFF;
     padding-left: 30rpx;
     border-top: 12rpx solid #F8F8F8;
@@ -1933,8 +2127,8 @@ export default {
     }
 
     .expressSite-icon {
-      width: 30upx;
-      height: 30upx;
+      width: 30rpx;
+      height: 30rpx;
     }
 
     .mapName {
@@ -1954,49 +2148,49 @@ export default {
   }
 
   .chooseSize-box {
-    height: 90upx;
+    height: 90rpx;
     background-color: #FFFFFF;
 
     .chooseSize-content {
-      width: 720upx;
+      width: 720rpx;
     }
   }
 
   .evaluate-box {
     background-color: #FFFFFF;
-    margin-top: 20upx;
+    margin-top: 20rpx;
 
     .evaluate {
-      width: 690upx;
-      padding: 20upx 0;
-      border-bottom: 1upx solid #EDEDED;
+      width: 690rpx;
+      padding: 20rpx 0;
+      border-bottom: 1rpx solid #EDEDED;
     }
 
     .evaluateTitle-box {
-      width: 690upx;
-      border-bottom: 1upx solid #EDEDED;
-      padding-bottom: 20upx;
+      width: 690rpx;
+      border-bottom: 1rpx solid #EDEDED;
+      padding-bottom: 20rpx;
     }
 
     .evaluateAllArrow-icon {
-      width: 18upx;
-      height: 24upx;
+      width: 18rpx;
+      height: 24rpx;
     }
 
     .evaluateTag-box {
-      margin-top: 10upx;
-      margin-left: 10upx;
-      padding-bottom: 10upx;
+      margin-top: 10rpx;
+      margin-left: 10rpx;
+      padding-bottom: 10rpx;
       display: flex;
       flex-wrap: wrap;
 
       .evaluateTag-text {
         background-color: #F4F4F4;
-        border-radius: 6upx;
-        padding: 16upx 14upx;
+        border-radius: 6rpx;
+        padding: 16rpx 14rpx;
         color: #656565;
-        margin-left: 20upx;
-        margin-top: 20upx;
+        margin-left: 20rpx;
+        margin-top: 20rpx;
       }
     }
 
@@ -2004,52 +2198,52 @@ export default {
       display: flex;
       justify-content: center;
       flex-direction: column;
-      margin-left: 30upx;
+      margin-left: 30rpx;
       // border-bottom: 1upx solid #EDEDED;
-      padding-bottom: 50upx;
+      padding-bottom: 50rpx;
 
       .evaluate-content {
-        width: 670upx;
+        width: 670rpx;
         display: flex;
         justify-content: space-between;
 
         .user-headSmallImg {
-          width: 46upx;
-          height: 46upx;
+          width: 46rpx;
+          height: 46rpx;
           border-radius: 50%;
         }
       }
 
       .evaluateDes-box {
-        width: 670upx;
-        margin-top: 30upx;
+        width: 670rpx;
+        margin-top: 30rpx;
 
         .evaluateDes {
-          width: 670upx;
+          width: 670rpx;
         }
       }
 
       .addEvaluate {
-        padding-top: 30upx;
+        padding-top: 30rpx;
       }
     }
   }
 
   .questions {
     .questionInfo {
-      padding: 0 30upx;
-      min-height: 150upx;
+      padding: 0 30rpx;
+      min-height: 150rpx;
 
       .infoTit {
-        font-size: 28upx;
+        font-size: 28rpx;
       }
 
       .putQuestion {
-        width: 140upx;
-        height: 60upx;
+        width: 140rpx;
+        height: 60rpx;
         background: #333333;
-        line-height: 60upx;
-        font-size: 24upx;
+        line-height: 60rpx;
+        font-size: 24rpx;
         color: #FFEBC4;
         padding-left: 20rpx;
         position: relative;
@@ -2068,13 +2262,13 @@ export default {
     }
 
     .listBox {
-      padding: 0 30upx;
-      border-bottom: 20upx solid #EEEEEE;
+      padding: 0 30rpx;
+      border-bottom: 20rpx solid #EEEEEE;
 
       .itemBox {
-        padding-bottom: 30upx;
-        border-bottom: 1upx solid #EEEEEE;
-        margin-bottom: 30upx;
+        padding-bottom: 30rpx;
+        border-bottom: 1rpx solid #EEEEEE;
+        margin-bottom: 30rpx;
 
         &:last-child {
           border-bottom: none;
@@ -2083,23 +2277,23 @@ export default {
         .itemAsk {
           display: flex;
           align-items: center;
-          margin-bottom: 42upx;
+          margin-bottom: 42rpx;
 
           i {
             font-style: normal;
-            width: 38upx;
-            height: 38upx;
-            line-height: 38upx;
+            width: 38rpx;
+            height: 38rpx;
+            line-height: 38rpx;
             background: #C5AA7B;
             display: block;
-            margin-right: 30upx;
-            font-size: 24upx;
+            margin-right: 30rpx;
+            font-size: 24rpx;
             color: #FFFFFF;
             text-align: center;
           }
 
           span {
-            font-size: 28upx;
+            font-size: 28rpx;
             color: #333333;
           }
         }
@@ -2108,7 +2302,7 @@ export default {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 30upx;
+          margin-bottom: 30rpx;
 
           .answerBox {
             display: flex;
@@ -2116,37 +2310,37 @@ export default {
 
             i {
               font-style: normal;
-              width: 38upx;
-              height: 38upx;
-              line-height: 38upx;
+              width: 38rpx;
+              height: 38rpx;
+              line-height: 38rpx;
               background: #C5AA7B;
               display: block;
               text-align: center;
-              margin-right: 30upx;
+              margin-right: 30rpx;
               font-size: 24rpx;
               color: #FFFFFF;
             }
 
             span {
-              font-size: 26upx;
+              font-size: 26rpx;
               color: #666666;
             }
           }
 
           .answerBtn {
-            width: 130upx;
-            height: 50upx;
-            line-height: 50upx;
+            width: 130rpx;
+            height: 50rpx;
+            line-height: 50rpx;
             border: #333333 2rpx solid;
             text-align: center;
             color: #333;
-            font-size: 24upx;
+            font-size: 24rpx;
           }
         }
 
         .seeAll {
-          margin-left: 68upx;
-          font-size: 28upx;
+          margin-left: 68rpx;
+          font-size: 28rpx;
           color: #C5AA7B;
         }
       }
@@ -2154,88 +2348,88 @@ export default {
   }
 
   .questionTit {
-    height: 90upx;
-    border-bottom: 1upx solid #EEEEEE;
-    margin-right: 35upx;
+    height: 90rpx;
+    border-bottom: 1rpx solid #EEEEEE;
+    margin-right: 35rpx;
     color: #333333;
-    font-size: 30upx;
+    font-size: 30rpx;
 
     .allMoreBox {
       display: flex;
       align-items: center;
       color: #999999;
-      font-size: 24upx;
+      font-size: 24rpx;
 
       .evaluateAllArrow-icon {
-        width: 18upx;
-        height: 24upx;
+        width: 18rpx;
+        height: 24rpx;
       }
     }
   }
 
   .shopEvaList {
     display: flex;
-    padding: 30upx;
+    padding: 30rpx;
     flex-wrap: wrap;
-    border-bottom: 20upx solid #EEEEEE;
+    border-bottom: 20rpx solid #EEEEEE;
 
     .shopEvaItem {
-      padding: 0 14upx;
-      height: 60upx;
+      padding: 0 14rpx;
+      height: 60rpx;
       background: #ffe4cc;
-      border-radius: 6upx;
-      line-height: 60upx;
+      border-radius: 6rpx;
+      line-height: 60rpx;
       text-align: center;
-      font-size: 28upx;
+      font-size: 28rpx;
       color: #666666;
-      margin: 0 20upx 20upx 0;
+      margin: 0 20rpx 20rpx 0;
     }
   }
 
   .storeEvaluate-box {
     background-color: #FFFFFF;
-    margin-top: 20upx;
+    margin-top: 20rpx;
 
     .storeEvaluate {
-      width: 690upx;
-      padding: 20upx 0;
-      border-bottom: 1upx solid #EDEDED;
+      width: 690rpx;
+      padding: 20rpx 0;
+      border-bottom: 1rpx solid #EDEDED;
     }
 
     .storeEvaluateTag-box {
-      margin-top: 10upx;
-      margin-left: 10upx;
-      padding-bottom: 30upx;
+      margin-top: 10rpx;
+      margin-left: 10rpx;
+      padding-bottom: 30rpx;
       display: flex;
       flex-wrap: wrap;
 
       .storeEvaluateTag-text {
         background-color: #FFE4CC;
-        border-radius: 6upx;
-        padding: 16upx 14upx;
+        border-radius: 6rpx;
+        padding: 16rpx 14rpx;
         color: #656565;
-        margin-left: 20upx;
-        margin-top: 20upx;
+        margin-left: 20rpx;
+        margin-top: 20rpx;
       }
     }
   }
 
   .inStore-box {
     background-color: #FFFFFF;
-    margin-top: 20upx;
-    padding: 20upx 30upx;
+    margin-top: 20rpx;
+    padding: 20rpx 30rpx;
 
     .inStore-logo {
-      width: 70upx;
-      height: 70upx;
+      width: 70rpx;
+      height: 70rpx;
     }
 
     .inStore-but {
-      width: 140upx;
-      height: 60upx;
-      line-height: 60upx;
+      width: 140rpx;
+      height: 60rpx;
+      line-height: 60rpx;
       text-align: left;
-      font-size: 24upx;
+      font-size: 24rpx;
       color: #FFEBC4;
       background: #333333;
       padding-left: 20rpx;
@@ -2256,8 +2450,8 @@ export default {
 
   .goodsDetails-box {
     background-color: #FFFFFF;
-    margin-top: 20upx;
-    padding: 20upx 30upx;
+    margin-top: 20rpx;
+    padding: 20rpx 30rpx;
 
     .goodsDetails-title {
       display: flex;
@@ -2265,12 +2459,12 @@ export default {
       align-items: center;
 
       .goodsDetails-Line {
-        width: 265upx;
-        border-bottom: 1upx solid #EDEDED;
+        width: 265rpx;
+        border-bottom: 1rpx solid #EDEDED;
       }
 
       .goodsDetails-text {
-        padding: 0 22upx;
+        padding: 0 22rpx;
       }
     }
 
@@ -2280,8 +2474,8 @@ export default {
 
   .priceExplain-box {
     background-color: #FFFFFF;
-    margin-top: 20upx;
-    padding: 20upx 30upx;
+    margin-top: 20rpx;
+    padding: 20rpx 30rpx;
 
     .priceExplain-title {
       display: flex;
@@ -2289,19 +2483,19 @@ export default {
       align-items: center;
 
       .priceExplain-Line {
-        width: 265upx;
-        border-bottom: 1upx solid #EDEDED;
+        width: 265rpx;
+        border-bottom: 1rpx solid #EDEDED;
       }
 
       .priceExplain-text {
-        padding: 0 22upx;
+        padding: 0 22rpx;
       }
     }
 
     .priceExplain-dot {
-      width: 9upx;
-      height: 9upx;
-      border: 1upx solid #FF7700;
+      width: 9rpx;
+      height: 9rpx;
+      border: 1rpx solid #FF7700;
       border-radius: 50%;
       background-color: #FF7700;
     }
@@ -2309,48 +2503,14 @@ export default {
 
   .buygoods-box {
     position: fixed;
-    bottom: 0upx;
+    bottom: 0rpx;
     box-sizing: border-box;
-    .groupByInfo {
-      background: #fffbe9;
-      padding:  0 30rpx;
-      height: 80rpx;
-      .groupByInfoBox {
-        height: 80rpx;
-      }
-      .groupByLeft {
-        .groupByAvatar {
-          margin-right: 15rpx;
-        }
-        img {
-          width: 50rpx;
-          height: 50rpx;
-        }
-        .name {
-          font-size: 24rpx;
-        }
-        .groupByNum {
-          margin-right: 10rpx;
-        }
-        .groupByTime {
-          color: #333333;
-        }
-      }
-      .groupByBtn {
-        height: 60rpx;
-        background: #333333;
-        color: #FFEBC4;
-        font-size: 14rpx;
-        line-height: 60rpx;
-        text-align: center;
-        padding: 0 20rpx;
-      }
-    }
+
     .buygoodsBut-box {
       background-color: #FFFFFF;
-      width: 750upx;
-      padding: 20upx 32upx;
-      box-shadow: 0upx 0upx 10upx 1upx #EDEDED;
+      width: 750rpx;
+      padding: 20rpx 32rpx;
+      box-shadow: 0rpx 0rpx 10rpx 1rpx #EDEDED;
       box-sizing: border-box;
       display: flex;
       justify-content: space-between;
@@ -2405,41 +2565,41 @@ export default {
       }
 
       .store-icon {
-        width: 48upx;
-        height: 48upx;
+        width: 48rpx;
+        height: 48rpx;
       }
 
       .joinShopCartBut {
-        width: 190upx;
-        height: 80upx;
+        width: 190rpx;
+        height: 80rpx;
         background-color: #FFFFFF;
         color: #333333;
-        font-size: 28upx;
-        line-height: 80upx;
+        font-size: 28rpx;
+        line-height: 80rpx;
         border: 2rpx solid #333333;
         text-align: center;
-        margin-left: 40upx;
+        margin-left: 40rpx;
         box-sizing: border-box;
       }
 
       .buyNowBut {
-        width: 190upx;
-        height: 80upx;
+        width: 190rpx;
+        height: 80rpx;
         background: #333333;
         color: #FFEBC4;
-        font-size: 28upx;
-        line-height: 80upx;
+        font-size: 28rpx;
+        line-height: 80rpx;
         text-align: center;
-        margin-left: 16upx;
+        margin-left: 16rpx;
       }
 
       .offShelf {
         background: #b7b7b7;
-        border-radius: 50upx;
-        width: 360upx;
-        margin-left: 50upx;
-        line-height: 80upx;
-        height: 80upx;
+        border-radius: 50rpx;
+        width: 360rpx;
+        margin-left: 50rpx;
+        line-height: 80rpx;
+        height: 80rpx;
         justify-content: center;
         color: #333333;
       }
@@ -2448,35 +2608,36 @@ export default {
 
   .returnTopService-box {
     position: fixed;
-    bottom: 240upx;
-    right: 30upx;
+    bottom: 160rpx;
+    right: 30rpx;
 
     .fs16 {
-      font-size: 16upx;
+      font-size: 16rpx;
     }
 
     .returnTop-box {
-      width: 88upx;
-      height: 88upx;
+      width: 88rpx;
+      height: 88rpx;
       border-radius: 50%;
       background: #FFFFFF;
       opacity: 0.8;
+
       .returnTopImg {
-        width: 58upx;
-        height: 58upx;
+        width: 58rpx;
+        height: 58rpx;
       }
     }
 
     .serviceImg-box {
-      width: 90upx;
-      height: 90upx;
+      width: 90rpx;
+      height: 90rpx;
       border-radius: 50%;
       background-color: #FFFFFF;
-      box-shadow: 0upx 0upx 5upx 3upx #999999;
+      box-shadow: 0rpx 0rpx 5rpx 3rpx #999999;
 
       .serviceImg {
-        width: 36upx;
-        height: 36upx;
+        width: 36rpx;
+        height: 36rpx;
         display: block;
         background: url("https://ceres.zkthink.com/static/images/serviceImg.png") no-repeat center center;
         background-size: contain;
@@ -2486,22 +2647,23 @@ export default {
 
   .goosDetailshow-box {
     margin-bottom: -5upx;
+
     .detailImg-box {
-      margin-top: 30upx;
-      margin-left: 30upx;
-      border-bottom: 1upx solid #EDEDED;
-      padding-bottom: 20upx;
-      width: 690upx;
+      margin-top: 30rpx;
+      margin-left: 30rpx;
+      border-bottom: 1rpx solid #EDEDED;
+      padding-bottom: 20rpx;
+      width: 690rpx;
 
       .detailImg {
-        width: 180upx;
-        height: 180upx;
+        width: 180rpx;
+        height: 180rpx;
       }
     }
 
     .color-box {
-      padding: 30upx 30upx;
-      width: 690upx;
+      padding: 30rpx 30rpx;
+      width: 690rpx;
 
       .colorName-box {
         display: flex;
@@ -2509,14 +2671,14 @@ export default {
         flex-direction: row;
         justify-content: flex-start;
         align-items: center;
-        margin-top: 30upx;
+        margin-top: 30rpx;
         margin-left: -30upx;
 
         .colorName {
           background-color: #FFFFFF;
-          margin-left: 30upx;
-          padding: 10upx 32upx;
-          font-size: 26upx;
+          margin-left: 30rpx;
+          padding: 10rpx 32rpx;
+          font-size: 26rpx;
           border: 2rpx solid #E4E5E6;
           z-index: 2;
           color: #333333;
@@ -2525,9 +2687,9 @@ export default {
         .colorName-on {
           box-shadow: 0 0 20rpx rgba(0, 0, 0, 0.1);
           color: #C5AA7B;
-          margin-left: 30upx;
-          padding: 10upx 32upx;
-          font-size: 26upx;
+          margin-left: 30rpx;
+          padding: 10rpx 32rpx;
+          font-size: 26rpx;
           text-align: center;
           z-index: 1;
           border: none;
@@ -2537,9 +2699,9 @@ export default {
     }
 
     .modelNum-box {
-      padding: 30upx 30upx;
-      border-bottom: 1upx solid #EDEDED;
-      width: 690upx;
+      padding: 30rpx 30rpx;
+      border-bottom: 1rpx solid #EDEDED;
+      width: 690rpx;
 
       .modelNumName-box {
         display: flex;
@@ -2547,32 +2709,32 @@ export default {
         flex-direction: row;
         justify-content: flex-start;
         align-items: center;
-        margin-top: 30upx;
+        margin-top: 30rpx;
         margin-left: -30upx;
 
         .modelNumName-on {
           background-color: #FFE4D0;
           color: #FF7800;
-          margin-left: 30upx;
-          padding: 10upx 32upx;
-          border-radius: 28upx;
-          border: 1upx solid #FF7800;
-          font-size: 26upx;
+          margin-left: 30rpx;
+          padding: 10rpx 32rpx;
+          border-radius: 28rpx;
+          border: 1rpx solid #FF7800;
+          font-size: 26rpx;
           text-align: center;
         }
 
         .modelNumName {
           background-color: #F5F5F5;
-          margin-left: 30upx;
-          padding: 10upx 32upx;
-          border-radius: 28upx;
-          font-size: 26upx;
+          margin-left: 30rpx;
+          padding: 10rpx 32rpx;
+          border-radius: 28rpx;
+          font-size: 26rpx;
         }
       }
     }
 
     .goodsNumCent {
-      padding: 0 30upx;
+      padding: 0 30rpx;
 
       .goodsNum-box {
         width: 100%;
@@ -2580,20 +2742,20 @@ export default {
         border-top: 2rpx solid #EDEDED;
 
         .goodsNum {
-          height: 50upx;
+          height: 50rpx;
           display: flex;
           align-items: center;
 
           .item {
-            width: 50upx;
-            height: 50upx;
+            width: 50rpx;
+            height: 50rpx;
             line-height: 48rpx;
-            border: 1upx solid #999999;
+            border: 1rpx solid #999999;
             text-align: center;
           }
 
           .subtract {
-            border-right: 0upx;
+            border-right: 0rpx;
           }
 
           .goodsNumber {
@@ -2601,32 +2763,32 @@ export default {
           }
 
           .add {
-            border-left: 0upx;
+            border-left: 0rpx;
           }
         }
       }
     }
 
     .bottom-line {
-      border-bottom: 1upx solid #EDEDED;
+      border-bottom: 1rpx solid #EDEDED;
     }
 
     .huabei-box {
-      padding: 30upx 30upx;
-      width: 690upx;
+      padding: 30rpx 30rpx;
+      width: 690rpx;
 
       .fenqi-box {
-        margin-top: 15upx;
+        margin-top: 15rpx;
         width: 120%;
 
         .huabei-item {
           display: inline-block;
           background: #f3f3f3;
-          padding: 16upx 24upx;
-          margin: 5upx 10upx;
-          border-radius: 15upx;
+          padding: 16rpx 24rpx;
+          margin: 5rpx 10rpx;
+          border-radius: 15rpx;
           text-align: center;
-          font-size: 7upx;
+          font-size: 7rpx;
 
           .huabei-period {
             display: block;
@@ -2648,23 +2810,23 @@ export default {
       justify-content: center;
 
       .joinShopCartBut {
-        width: 343upx;
-        height: 80upx;
-        border-radius: 40upx 0 0 40upx;
+        width: 343rpx;
+        height: 80rpx;
+        border-radius: 40rpx 0 0 40rpx;
         background-color: #FFC300;
         color: #FFFEFE;
-        font-size: 28upx;
-        line-height: 80upx;
+        font-size: 28rpx;
+        line-height: 80rpx;
         text-align: center;
-        margin-left: 30upx;
+        margin-left: 30rpx;
       }
 
       .buyNowBut {
         width: 90%;
-        height: 90upx;
+        height: 90rpx;
         background-color: #333333;
-        font-size: 28upx;
-        line-height: 90upx;
+        font-size: 28rpx;
+        line-height: 90rpx;
         text-align: center;
         color: #FFEBC4;
       }
@@ -2675,28 +2837,28 @@ export default {
     .parameter-title {
       width: 100%;
       text-align: center;
-      padding-bottom: 36upx;
+      padding-bottom: 36rpx;
     }
 
     .parameter-modle {
-      width: 690upx;
-      padding-bottom: 36upx;
-      font-size: 26upx;
+      width: 690rpx;
+      padding-bottom: 36rpx;
+      font-size: 26rpx;
     }
 
     .parameterTruebut-box {
       background-color: #FFFFFF;
-      padding: 20upx 0;
+      padding: 20rpx 0;
 
       .parameterTruebut {
-        width: 690upx;
-        height: 80upx;
+        width: 690rpx;
+        height: 80rpx;
         background-image: linear-gradient(135deg, #FFA100 10%, #FF7911 100%);
         color: #FFFFFF;
-        border-radius: 40upx;
-        line-height: 80upx;
+        border-radius: 40rpx;
+        line-height: 80rpx;
         text-align: center;
-        font-size: 26upx;
+        font-size: 26rpx;
       }
     }
   }
@@ -2712,27 +2874,27 @@ export default {
 
       .coupon-title-active {
         color: #FF7700;
-        border-bottom: 2upx solid #FF7700;
-        padding-bottom: 30upx;
+        border-bottom: 2rpx solid #FF7700;
+        padding-bottom: 30rpx;
       }
 
       .usableCoupon-content {
-        padding: 30upx 0;
+        padding: 30rpx 0;
 
         .usableCoupon-box {
-          width: 690upx;
-          height: 140upx;
-          border-radius: 10upx;
+          width: 690rpx;
+          height: 140rpx;
+          border-radius: 10rpx;
           background-color: #FFE9D8;
 
           .immediateUse-but {
             color: #FF7800;
-            border-radius: 30upx;
-            padding: 0 40upx;
-            border-left: 3upx solid #EBD7C7;
-            height: 140upx;
-            border-radius: 60upx;
-            line-height: 140upx;
+            border-radius: 30rpx;
+            padding: 0 40rpx;
+            border-left: 3rpx solid #EBD7C7;
+            height: 140rpx;
+            border-radius: 60rpx;
+            line-height: 140rpx;
             font-weight: bold;
           }
         }
@@ -2742,19 +2904,19 @@ export default {
 
   .succeedShow-box {
     position: absolute;
-    top: 220upx;
-    left: 185upx;
+    top: 220rpx;
+    left: 185rpx;
 
     .succeedShow {
       background-color: #7F7F7F;
-      width: 380upx;
-      height: 280upx;
-      border-radius: 10upx;
+      width: 380rpx;
+      height: 280rpx;
+      border-radius: 10rpx;
       opacity: 0.8;
 
       .couponSucceedImg {
-        width: 200upx;
-        height: 130upx;
+        width: 200rpx;
+        height: 130rpx;
       }
     }
   }
@@ -2830,7 +2992,7 @@ export default {
 
 .activity-box .title-box {
   width: 100%;
-  height: 100upx;
+  height: 100rpx;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -2852,15 +3014,15 @@ export default {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding: 30upx;
+  padding: 30rpx;
 }
 
 .tag-box {
   width: 100%;
   box-sizing: border-box;
-  height: 80upx;
-  line-height: 80upx;
-  font-size: 28upx;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 28rpx;
   font-weight: 500;
   color: #FF7911;
 }
@@ -2872,22 +3034,22 @@ export default {
 }
 
 .coupon-item {
-  width: 690upx;
-  height: 120upx;
-  border-radius: 10upx;
+  width: 690rpx;
+  height: 120rpx;
+  border-radius: 10rpx;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20upx;
+  margin-top: 20rpx;
   flex-shrink: 0;
   background-color: #FFE9D8;
 }
 
 .money-box {
-  width: 160upx;
+  width: 160rpx;
   box-sizing: border-box;
-  padding-left: 30upx;
+  padding-left: 30rpx;
   font-weight: 500;
   color: #FF7911;
 }
@@ -2900,19 +3062,19 @@ export default {
 }
 
 .receive-btn {
-  width: 200upx;
-  height: 120upx;
+  width: 200rpx;
+  height: 120rpx;
   background: rgba(255, 233, 216, 1);
-  box-shadow: 0px 0px 5upx 0px rgba(102, 102, 102, 0.35);
-  line-height: 120upx;
+  box-shadow: 0px 0px 5rpx 0px rgba(102, 102, 102, 0.35);
+  line-height: 120rpx;
   text-align: center;
-  font-size: 28upx;
+  font-size: 28rpx;
   font-weight: bold;
   color: rgba(255, 121, 17, 1);
-  border-bottom-right-radius: 10upx;
-  border-top-right-radius: 10upx;
-  border-top-left-radius: 120upx;
-  border-bottom-left-radius: 120upx;
+  border-bottom-right-radius: 10rpx;
+  border-top-right-radius: 10rpx;
+  border-top-left-radius: 120rpx;
+  border-bottom-left-radius: 120rpx;
 }
 
 .received {
@@ -2922,31 +3084,31 @@ export default {
 
 
 .item-image-box {
-  width: 700upx;
+  width: 700rpx;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
 
 .img-item {
-  width: 223upx;
-  height: 223upx;
-  border-radius: 10upx;
-  margin-right: 10upx;
-  margin-top: 10upx;
+  width: 223rpx;
+  height: 223rpx;
+  border-radius: 10rpx;
+  margin-right: 10rpx;
+  margin-top: 10rpx;
 }
 
 .item-line {
-  width: 690upx;
+  width: 690rpx;
   height: 1px;
   background: rgba(238, 238, 238, 1);
-  margin-top: 20upx;
+  margin-top: 20rpx;
 }
 
 .item-like-box {
   display: flex;
   flex-direction: row;
-  width: 690upx;
+  width: 690rpx;
   align-items: center;
   justify-content: space-between;
 }
@@ -2954,22 +3116,22 @@ export default {
 .like-box {
   display: flex;
   flex-direction: row;
-  padding-top: 30upx;
+  padding-top: 30rpx;
   align-items: center;
   justify-content: flex-end;
-  margin-right: 50upx;
+  margin-right: 50rpx;
 }
 
 .like-img {
-  width: 48upx;
-  height: 48upx;
+  width: 48rpx;
+  height: 48rpx;
 }
 
 .like-num {
-  font-size: 28upx;
+  font-size: 28rpx;
   font-weight: 500;
   color: rgba(51, 51, 51, 1);
-  margin-left: 30upx;
+  margin-left: 30rpx;
 }
 
 .sceneMarketingBox {
@@ -3042,12 +3204,12 @@ export default {
   .groupBuy {
     .groupBuyList {
       .groupBuyItem {
-        padding: 0 30upx;
-        height: 116upx;
+        padding: 0 30rpx;
+        height: 116rpx;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-bottom: 1upx solid #EEEEEE;
+        border-bottom: 1rpx solid #EEEEEE;
 
         .leftAvatar {
           display: flex;
@@ -3055,9 +3217,9 @@ export default {
           width: 50%;
 
           img {
-            width: 72upx;
-            height: 72upx;
-            margin-right: 10upx;
+            width: 72rpx;
+            height: 72rpx;
+            margin-right: 10rpx;
             border-radius: 50%;
           }
         }
@@ -3069,9 +3231,9 @@ export default {
 
           .groupBuyTime {
             .needPeople {
-              font-size: 28upx;
+              font-size: 28rpx;
               color: #333333;
-              margin-bottom: 10upx;
+              margin-bottom: 10rpx;
               font-weight: 400;
 
               b {
@@ -3086,9 +3248,9 @@ export default {
           }
 
           .groupBuyBtn {
-            width: 140upx;
-            height: 60upx;
-            line-height: 60upx;
+            width: 140rpx;
+            height: 60rpx;
+            line-height: 60rpx;
             background: #333333;
             text-align: center;
             color: #FFEBC4;
@@ -3101,52 +3263,52 @@ export default {
 }
 
 .popupDiscount {
-  padding-bottom: 70upx;
+  padding-bottom: 70rpx;
 
   .popupDiscountTit {
-    font-size: 36upx;
+    font-size: 36rpx;
     color: #333333;
-    height: 105upx;
-    line-height: 105upx;
+    height: 105rpx;
+    line-height: 105rpx;
     text-align: center;
-    border-bottom: 1upx solid #EEEEEE;
+    border-bottom: 1rpx solid #EEEEEE;
   }
 
   .groupBuy {
-    padding-bottom: 80upx;
+    padding-bottom: 80rpx;
 
     .groupBuyList {
       .groupBuyItem1 {
-        padding: 0 30upx;
-        height: 116upx;
+        padding: 0 30rpx;
+        height: 116rpx;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-bottom: 1upx solid #EEEEEE;
+        border-bottom: 1rpx solid #EEEEEE;
 
         .leftAvatar {
           display: flex;
           align-items: center;
 
           img {
-            width: 72upx;
-            height: 72upx;
-            margin-right: 10upx;
+            width: 72rpx;
+            height: 72rpx;
+            margin-right: 10rpx;
             border-radius: 50%;
           }
 
           .groupBuyTime {
-            margin-right: 80upx;
-            margin-bottom: 10upx;
-            width: 320upx;
+            margin-right: 80rpx;
+            margin-bottom: 10rpx;
+            width: 320rpx;
 
             .needPeople {
-              font-size: 26upx;
+              font-size: 26rpx;
               color: #333333;
 
               span {
                 color: #333333;
-                padding-right: 10upx;
+                padding-right: 10rpx;
               }
 
               b {
@@ -3168,9 +3330,9 @@ export default {
           align-items: center;
 
           .groupBuyBtn {
-            width: 140upx;
-            height: 70upx;
-            line-height: 70upx;
+            width: 140rpx;
+            height: 70rpx;
+            line-height: 70rpx;
             background: #333333;
             text-align: center;
             color: #FFEBC4;
@@ -3320,33 +3482,5 @@ export default {
   //    }
   //  }
   //}
-}
-//拼团提示
-.news-box {
-  position: fixed;
-  left: 20rpx;
-  top: 200rpx;
-  .news-bg {
-    height: 70rpx;
-    overflow: hidden;
-    .news-item {
-      background: rgba(0, 0, 0, 0.75);
-      border-radius: 16rpx;
-      height: 70rpx;
-      color: #FFFFFF;
-      font-size: 24rpx;
-      padding: 0 20rpx;
-      display: inline-flex;
-      .item-avatar {
-        width: 50rpx;
-        height: 50rpx;
-        border-radius: 50%;
-        margin-right: 20rpx;
-      }
-      .news-item-user {
-        margin-right: 8rpx;
-      }
-    }
-  }
 }
 </style>

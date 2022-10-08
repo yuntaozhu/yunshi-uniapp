@@ -1,7 +1,8 @@
 <!-- 售后列表 -->
 <template>
 	<view>
-		<view class="content">
+    <global-loading />
+    <view class="content">
 			<view class="order-list-box">
 				<view>
 					<view class="item" v-for="item in FindReturnDatalist">
@@ -163,14 +164,14 @@
 			},
 			// 获取售后列表数据
 			getFindReturn() {
-				uni.showLoading({
-					title:'加载中...'
-				})
+				// uni.showLoading({
+				// 	title:'加载中...'
+				// })
 				NET.request(API.FindReturnList, {
 					page: this.page,
 					pageSize:this.pageSize,
 				}, 'GET').then(res => {
-					uni.hideLoading()
+					// uni.hideLoading()
 					if(res.data.list.length == 0){
 						this.loadingType = 1
 						this.page = this.page
@@ -181,7 +182,7 @@
           }
 					this.FindReturnData = res.data
 				}).catch(res => {
-					uni.hideLoading()
+					// uni.hideLoading()
 
 				})
 			},
@@ -192,13 +193,13 @@
       },
       delRecordFn () {
         this.delRecord = false
-        uni.showLoading({
-          title:'正在删除...'
-        })
+        // uni.showLoading({
+        //   title:'正在删除...'
+        // })
         NET.request(API.deleteAfter, {
           id: this.currentAfterId,
         }, 'POST').then(res => {
-          uni.hideLoading()
+          // uni.hideLoading()
           uni.showToast({
             title:'删除成功',
             icon:'none',
@@ -211,7 +212,7 @@
             this.getFindReturn()
           }, 2000);
         }).catch(res => {
-          uni.hideLoading()
+          // uni.hideLoading()
         })
       },
 			// 撤销申请
@@ -220,14 +221,14 @@
 			},
 			// 退款
 			Delete(item){
-				uni.showLoading({
-					title:'正在撤销退款...'
-				})
+				// uni.showLoading({
+				// 	title:'正在撤销退款...'
+				// })
 				NET.request(API.CancelRefund, {
 					afterId:item.afterId,
 					orderId:item.orderId
 				}, 'POST').then(res => {
-					uni.hideLoading()
+					// uni.hideLoading()
 					uni.showToast({
 						title:'撤销成功',
 						icon:'none',
@@ -239,7 +240,7 @@
 					  this.getFindReturn()
 					}, 2500);
 				}).catch(res => {
-					uni.hideLoading()
+					// uni.hideLoading()
 				})
 			},
 			// 撤销退货

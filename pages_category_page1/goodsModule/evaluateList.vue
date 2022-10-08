@@ -1,7 +1,9 @@
 <template>
 	<view class="container">
 		<!-- 查看全部评论 -->
-		<view class="evaluateTag-box"  >
+    <global-loading />
+
+    <view class="evaluateTag-box"  >
 			<view class="evaluateTag-text">
 				全部({{commentListLength}})
 			</view>
@@ -19,7 +21,7 @@
             </view>
 					</view>
 				</view>
-				<view class="fs26 pad-topbot-20 font-color-333">{{item.comment}}。</view>
+				<view class="fs26 pad-topbot-20 font-color-333">{{item.comment}}</view>
 				<view class="evaluateImg-box">
 					<view v-for="(commentItemImg, cindex) in item.images" :key="cindex">
 						<image @click="previewImg(commentItemImg)" class="img-item" :src="commentItemImg"></image>
@@ -78,10 +80,10 @@
 			},
 			//点赞
 			zanTap(index, likeId, actionType) {
-				uni.showLoading({
-          mask: true,
-					title: '提交中...',
-				})
+				// uni.showLoading({
+        //   mask: true,
+				// 	title: '提交中...',
+				// })
 				NET.request(API.LikeOrUnLikeComment, {
 					commentId: likeId,
 					ifLike: actionType

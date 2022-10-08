@@ -1,5 +1,7 @@
 <template>
   <view class="container">
+    <global-loading />
+
     <view class="content"
           style="padding-bottom:200upx;">
       <view class="order-list-box"
@@ -110,7 +112,8 @@
     <u-popup v-model="cargoStatusShowFalg"
              mode="center"
              border-radius="14"
-             width="80%">
+             width="80%"
+             closeable="true">
       <view class="alert-box">
         <view class="afterSale-status-box">
           <view class="status-title">货物状态</view>
@@ -151,7 +154,8 @@
     <u-popup v-model="reasonShowFalg"
              mode="center"
              border-radius="14"
-             width="80%">
+             width="80%"
+             closeable="true">
       <view class="alert-box">
         <view class="afterSale-status-box"
               scroll-y>
@@ -225,18 +229,41 @@ export default {
   },
   async onLoad(option) {
     this.retundlist = JSON.parse(decodeURIComponent(option.list))
+    console.log(option,'this.retundlist')
 
     this.orderId = option.orderId
     this.isAllSelect = option.isAllSelect
+    // console.log(this.retundlist, 'retundlist')
     this.retundlist.forEach(el => {
-      this.sellPriceitem = this.sellPriceitem + el.actualPrice
+      this.sellPriceitem = this.sellPriceitem + el.number * el.price
     })
     this.getReasonEnums()
+    this.sellPriceitem = await this.HandleGetRefundMoney()
   },
   methods: {
+    // 算钱
+    HandleGetRefundMoney() {
+      return new Promise((resolve, reject) => {
+        // uni.showLoading({
+        //   title: "计算中..."
+        // })
+        let postData = {
+          orderId: this.orderId,
+          isAllSelect: this.isAllSelect==1 ? 1 : 0,
+          skus: this.retundlist,
+          afterType:2,
+          goodsState:this.ReturnMoneyQuery.goodsState
+        }
+        NET.request(API.GetRefundMoney, postData, "POST").then(res => {
+          uni.hideLoading()
+          resolve (parseFloat(res.json))
+        }).catch(err=>{
+          uni.hideLoading()
+        })
+      })
+    },
     confirmTap() {
       if (this.fileList.length > 0) {
-        this.commentImgs=''
         this.commentImgsFlag = true
         for (let i = 0; i < this.fileList.length; i++) {
           this.commentImgs += this.fileList[i].response.data.url + ','
@@ -265,10 +292,10 @@ export default {
           icon: 'none'
         });
       } else {
-        uni.showLoading({
-          mask: true,
-          title: '正在提交...',
-        })
+        // uni.showLoading({
+        //   mask: true,
+        //   title: '正在提交...',
+        // })
         let skusobjdata = []
         this.retundlist.forEach((i) => {
           let skusobj = {}
@@ -318,13 +345,7 @@ export default {
     },
     async closeStatusSelect() {
       this.cargoStatusShowFalg = false
-      this.sellPriceitem = 0
-      this.retundlist.forEach(el => {
-        this.sellPriceitem += el.actualPrice
-        if (this.ReturnMoneyQuery.goodsState === 0) {
-          this.sellPriceitem += el.logisticsPrice
-        }
-      })
+      this.sellPriceitem = await this.HandleGetRefundMoney()
     },
     closeReasonSelect() {
       this.reasonShowFalg = false
@@ -691,7 +712,7 @@ export default {
 }
 
 .afterSale-status-box .item-box {
-  padding: 0 0 10upx 0;
+  padding: 0 0 60upx 0;
 }
 
 .afterSale-status-box .status-select-title {
