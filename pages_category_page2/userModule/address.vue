@@ -178,7 +178,10 @@
 									.addData)
 							})
 						}, 500);
-					}
+					},
+          fail:(res)=>{
+            console.log('err---选择地址',res)
+          }
 				})
 			}
 		}

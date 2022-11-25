@@ -1,98 +1,148 @@
 <template>
-  <view class="content" :animation="animationData">
+  <view class="content">
+    <!-- 骨架屏 -->
+    <u-skeleton
+        el-color="#efefef"
+        bg-color="#fff"
+        :loading="loading && isFirstComeIn"
+        :animation="true"
+    ></u-skeleton>
     <global-loading />
     <!-- 购物车 -->
-    <view v-if="dataList.length !== 0">
-      <view class="cart-bg">
-        <view class="cart-num-box">
-          <image src="https://ceres.zkthink.com/static/images/logoTop.png"></image>
-          <text class="btn-box"
-                @click="btnTypeClick(1)"
-                v-if="btnType == 0">管理
-          </text>
-          <text class="btn-box"
-                @click="btnTypeClick(0)"
-                v-if="btnType == 1">完成
-          </text>
-        </view>
-        <view>
-          <text class="num-box">共
-            <text class="num">{{ allNum }}</text>
-                                件宝贝
-          </text>
-        </view>
-      </view>
-      <view class="cart-list-box">
-        <view class="itemBox"
+    <view class="u-skeleton">
+      <view v-if="!isEmpty">
+        <u-sticky bg-color="#fff">
+          <view class="cart-bg  u-skeleton-fillet">
+            <view class="cart-num-box">
+              <image
+                  class="  u-skeleton-fillet"
+                  src="https://ceres.zkthink.com/static/images/logoTop.png"
+              ></image>
+              <text
+                  class="btn-box "
+                  @click="showManage = !showManage"
+                  v-if="!showManage"
+              >管理
+              </text>
+              <text
+                  class="btn-box"
+                  @click="showManage = !showManage"
+                  v-if="showManage"
+              >完成
+              </text>
+            </view>
+            <view>
+              <text class="num-box u-skeleton-fillet">共
+                <text class="num">{{ settleAccountsObj.allNum }}</text>
+                件宝贝
+              </text>
+            </view>
+          </view>
+        </u-sticky>
+        <view class="cart-list-box">
+          <view
+              class="itemBox"
               v-for="(item, index) in dataList"
-              :key="item.shopId">
-          <view class="item"
-                v-if="item.skus.length !== 0">
-            <view class="shop-box">
-              <image mode="aspectFill"
-                     v-if="item.selected === 1"
-                     src="https://ceres.zkthink.com/static/images/selectActive.png"
-                     class="cart-select-img"
-                     @click.stop="updateShopSel(index,0)"></image>
-              <image mode="aspectFill"
-                     v-else
-                     src="https://ceres.zkthink.com/static/images/selectEmpty.png"
-                     class="cart-select-img"
-                     @click.stop="updateShopSel(index,1)"></image>
-              <view class="shop-name-box"
-                    @click="goStore(index)">
-                <image src="https://ceres.zkthink.com/static/images/orderStoreIcon.png"
-                       class="shop-img"></image>
-                <text class="shop-name">{{ item.shopName }}</text>
-                <image src="https://ceres.zkthink.com/static/images/arrowRight.png"
-                       class="arrow-right-img"></image>
+              :key="item.shopId"
+          >
+            <view
+                class="item"
+                v-if="item.skus.length >0"
+            >
+              <view class="shop-box">
+                <image
+                    mode="aspectFill  u-skeleton-fillet"
+                    v-if="item.selected === 1"
+                    src="https://ceres.zkthink.com/static/images/selectActive.png"
+                    class="cart-select-img"
+                    @click.stop="handleSelectShop(index,0)"
+                ></image>
+                <image
+                    mode="aspectFill  u-skeleton-fillet"
+                    v-else
+                    src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                    class="cart-select-img"
+                    @click.stop="handleSelectShop(index,1)"
+                ></image>
+                <view
+                    class="shop-name-box  u-skeleton-fillet"
+                    @click="$jump(`${jumpObj.store}?storeId=${item.shopId}`)"
+                >
+                  <image
+                      src="https://ceres.zkthink.com/static/images/orderStoreIcon.png"
+                      class="shop-img"
+                  ></image>
+                  <text class="shop-name">{{ item.shopName }}</text>
+                  <image
+                      src="https://ceres.zkthink.com/static/images/arrowRight.png"
+                      class="arrow-right-img"
+                  ></image>
+                </view>
               </view>
-            </view>
-            <view class="rulesBox flex-items"
-                  v-if="item.currentRules.number">
-              <image class="mar-right-20"
-                     src="https://ceres.zkthink.com/static/images/zuheIcon.png"></image>
-              <view class="fs24 font-color-C83732">
-                已满足【{{ item.currentRules.price }}元任选{{ item.currentRules.number }}件】！
+              <view
+                  class="rulesBox flex-items"
+                  v-if="item.currentRules && item.currentRules.number"
+              >
+                <image
+                    class="mar-right-20"
+                    src="https://ceres.zkthink.com/static/images/zuheIcon.png"
+                ></image>
+                <view class="fs24 font-color-C83732">
+                  已满足【{{ item.currentRules.price }}元任选{{ item.currentRules.number }}件】！
+                </view>
               </view>
-            </view>
-            <view v-for="(skuItem, cIndex) in dataList[index].skus"
-                  class="product-list-box">
-              <view class="pro-item"
-                    @click="goodsDateils(item.shopId,skuItem.productId,skuItem.skuId)">
-                <image mode="aspectFill"
-                       v-if="skuItem.selected == 1"
-                       src="https://ceres.zkthink.com/static/images/selectActive.png"
-                       @click.stop="cartItemSel(index,cIndex,0)"
-                       class="cart-select-img"></image>
-                <image mode="aspectFill"
-                       v-else
-                       src="https://ceres.zkthink.com/static/images/selectEmpty.png"
-                       @click.stop="cartItemSel(index,cIndex,1)"
-                       class="cart-select-img"></image>
-                <view class="pro-r">
-                  <image :src="skuItem.image"
-                         class="pro-img default-img"></image>
-                  <view class="pro-r-r">
-                    <view class="pro-name">{{ skuItem.productName }}</view>
-                    <view class="sku-box">
-                      <text v-if="skuItem.value">{{ skuItem.value }}</text>
-                      <text v-else>默认规格</text>
-                      <!-- <text></text> -->
-                    </view>
-                    <view class="pro-price-num-box">
-                      <view class="pro-price-box">
-                        <text class="fuhao">￥</text>
-                        <text>{{ skuItem.price }}</text>
+              <view
+                  v-for="(skuItem, cIndex) in dataList[index].skus"
+                  class="product-list-box "
+              >
+                <view
+                    class="pro-item"
+                    @click="$jump(`${jumpObj.detail}?shopId=${item.shopId}&productId=${skuItem.productId}&skuId=${skuItem.skuId}`)"
+                >
+                  <image
+                      mode="aspectFill  u-skeleton-fillet"
+                      v-if="skuItem.selected == 1"
+                      src="https://ceres.zkthink.com/static/images/selectActive.png"
+                      @click.stop="handleSelectSku(index,cIndex,0)"
+                      class="cart-select-img"
+                  ></image>
+                  <image
+                      mode="aspectFill  u-skeleton-fillet"
+                      v-else
+                      src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                      @click.stop="handleSelectSku(index,cIndex,1)"
+                      class="cart-select-img"
+                  ></image>
+                  <view class="pro-r">
+                    <image
+                        :src="skuItem.image"
+                        class="pro-img default-img  u-skeleton-fillet"
+                    ></image>
+                    <view class="pro-r-r  u-skeleton-fillet">
+                      <view class="pro-name">{{ skuItem.productName }}</view>
+                      <view class="sku-box">
+                        <text v-if="skuItem.value">{{ skuItem.value }}</text>
+                        <text v-else>默认规格</text>
+                        <!-- <text></text> -->
                       </view>
-                      <view class="pro-num-box">
-                        <text class="num-btn r"
-                              @click.stop="numSub(index,cIndex)">-
-                        </text>
-                        <text class="num">{{ skuItem.number }}</text>
-                        <text class="num-btn l"
-                              @click.stop="numAdd(index,cIndex)">+
-                        </text>
+                      <view class="pro-price-num-box">
+                        <view class="pro-price-box">
+                          <text class="fuhao">￥</text>
+                          <text>{{ skuItem.price }}</text>
+                        </view>
+                        <view class="pro-num-box">
+                          <text
+                              class="num-btn r"
+                              @click.stop="handleSubSkuNumber(index,cIndex)"
+                          >-
+                          </text>
+                          <text class="num">{{ skuItem.number }}</text>
+                          <text
+                              class="num-btn l"
+                              @click.stop="handleAddSkuNumber(index,cIndex)"
+                          >+
+                          </text>
+                        </view>
                       </view>
                     </view>
                   </view>
@@ -101,295 +151,207 @@
             </view>
           </view>
         </view>
-      </view>
 
-      <!-- 商品详情 -->
-      <u-popup v-model="goodsDetailShowFlag"
-               mode="bottom"
-               border-radius="14">
-        <view class="goosDetailshow-box">
-          <view class="detailImg-box flex-row-plus">
-            <image class="detailImg"
-                   :src="selectedSku.image"></image>
-            <view class="flex-column-plus mar-left-40">
-              <view class="font-color-C5AA7B">
-                <label class="fs24">¥</label>
-                <label class="fs36 mar-left-10"
-                       v-text="selectedSku.activityType === 1 && btnType === 4 ? selectedSku.originalPrice : selectedSku.price"></label>
-              </view>
-              <label class="fs24 font-color-999 mar-top-20">库存 {{ selectedSku.stockNumber }} 件</label>
-              <label class="fs24 mar-top-20">已选</label>
-            </view>
-          </view>
-          <view class="color-box flex-column-plus">
-            <view v-for="(attritem,index) in productData.names"
-                  :key="index"
-                  class="skuStyle">
-              <label class="fs24 font-color-999">{{ attritem.skuName }}</label>
-              <view class="colorName-box">
-                <view class="pad-bot-30"
-                      v-for="(attrRes, resIndex) in attritem.values"
-                      :key="resIndex">
-                  <view class="colorName"
-                        :class="{'colorName-on' : selectedAttr[attritem.nameCode] == attrRes.valueCode}"
-                        @click="nameCodeValueCodeClick(attritem.nameCode, attrRes.valueCode, true)">
-                    {{ attrRes.skuValue }}
-                  </view>
-                </view>
-              </view>
-            </view>
-          </view>
-          <view class="goodsNum-box flex-row-plus flex-sp-between"
-                :class="{'bottom-line' :supportHuabei}">
-            <label class="font-color-999 fs24">数量</label>
-            <view class="goodsNum">
-              <text class="subtract"
-                    @click="updateNumSub()">-
-              </text>
-              <text class="goodsNumber"
-                    v-model="buyNum">{{ buyNum }}
-              </text>
-              <text class="add"
-                    @click.stop="updateNumAdd()">+
-              </text>
-            </view>
-          </view>
-          <view class="goosDetailbut-box flex-items-plus">
-            <button type="default"
-                    @click="goodsDateils(shopId,productId,skuId)">查看详情
-            </button>
-            <button type="default"
-                    class="submitBtn"
-                    @click="submitBtn()">确认
-            </button>
-          </view>
-        </view>
-      </u-popup>
-
-      <!-- #ifdef H5 -->
-      <view class="cart-bottom-box-h5">
-        <!-- #endif -->
-        <!-- #ifndef H5 -->
-        <view class="cart-bottom-box-app">
+        <!-- #ifdef H5 -->
+        <view class="cart-bottom-box-h5">
           <!-- #endif -->
-          <view class="cart-bottom">
-            <view class="left">
-              <image mode="aspectFill"
-                     v-if="isAllCheck"
-                     src="https://ceres.zkthink.com/static/images/selectActive.png"
-                     class="cart-select-img"
-                     @click="allSel(0)"></image>
-              <image mode="aspectFill"
-                     v-else
-                     src="https://ceres.zkthink.com/static/images/selectEmpty.png"
-                     class="cart-select-img"
-                     @click="allSel(1)"></image>
-              <text>全选</text>
-            </view>
-            <view class="right"
-                  v-if="btnType == 0">
-              <view class="price-box">
-                <text>合计：</text>
-                <text class="price">¥{{ checkMoney }}</text>
+          <!-- #ifndef H5 -->
+          <view class="cart-bottom-box-app">
+            <!-- #endif -->
+            <view class="cart-bottom">
+              <view class="left">
+                <image
+                    mode="aspectFill"
+                    v-if="settleAccountsObj.isAllCheck"
+                    src="https://ceres.zkthink.com/static/images/selectActive.png"
+                    class="cart-select-img"
+                    @click="handleSelectAll(0)"
+                ></image>
+                <image
+                    mode="aspectFill"
+                    v-else
+                    src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                    class="cart-select-img"
+                    @click="handleSelectAll(1)"
+                ></image>
+                <text>全选</text>
               </view>
-              <view class="btn-confirm"
-                    @click="settlementTap">结算（{{ checkNum }}）
+              <view
+                  class="right"
+                  v-if="!showManage"
+              >
+                <view class="price-box">
+                  <text>合计：</text>
+                  <text class="price">¥{{ settleAccountsObj.checkMoney }}</text>
+                </view>
+                <view
+                    class="btn-confirm"
+                    @click="settlementTap"
+                >结算（{{ settleAccountsObj.checkNum }}）
+                </view>
               </view>
-            </view>
-            <view class="right"
-                  v-if="btnType == 1">
-              <view class="btn-delete"
-                    @click="cartDel">删除
+              <view
+                  class="right"
+                  v-if="showManage"
+              >
+                <view
+                    class="btn-delete"
+                    @click="handleOpenDelete"
+                >删除
+                </view>
               </view>
             </view>
           </view>
         </view>
       </view>
       <!-- 购物车为空 -->
-      <view v-if="isEmpty"
-            class="emptyCart-box flex-items-plus flex-column">
-        <image class="emptyCart-img"
-               src="https://ceres.zkthink.com/static/images/cartEmpty.png"></image>
+      <view
+          v-if="isEmpty"
+          class="emptyCart-box flex-items-plus flex-column"
+      >
+        <image
+            class="emptyCart-img"
+            src="https://ceres.zkthink.com/static/images/cartEmpty.png"
+        ></image>
         <label class="font-color-999 fs26 mar-top-30">你的购物车还没有宝贝哦</label>
         <label class="font-color-999 fs26 mar-top-10">快去首页选一个吧～</label>
-        <view class="goToShopping"
-              @click="goToShopping">去购物
+        <view
+            class="goToShopping"
+            @click="$jumpToTabbar(jumpObj.shopping)"
+        >去购物
         </view>
       </view>
 
       <!-- 热门推荐 -->
-      <HotTemplate/>
+      <HotTemplate v-if="!loading" />
 
-      <view style="width: 100%;height: 100rpx;background-color:#efefef;"></view>
+      <view style="width: 100%;height: 120rpx;background-color:#fff;"></view>
+
       <!-- 删除确认弹窗 -->
-      <tui-modal :show="cardModal"
-                 :custom="true"
-                 :fadein="true">
-        <view class="Put-box1">
-          <view class="text-align fs34 fs-bold">
-            温馨提示
-          </view>
-          <view class="mar-top-40 text-align">
-            您确定删除选中的商品吗？
-          </view>
-          <view class="flex-display flex-sp-between">
-            <view class="btn"
-                  @click="cardModal = false">
-              点错了
-            </view>
-            <view class="btn submit"
-                  @click="doDelete">
-              确认删除
-            </view>
-          </view>
-        </view>
-      </tui-modal>
+      <DeleteModal
+          v-model="showDeleteModal"
+          @confirm="handleDoDelete"
+      ></DeleteModal>
     </view>
   </view>
 </template>
 
 <script>
-import tuiModal from "@/components/modal/modal";
-import HotTemplate from '@/components/hoteRecommed/index.vue'
+import HotTemplate from '../../../components/hoteRecommed/index.vue'
+import DeleteModal from "./components/DeleteModal";
 import api from "../../../components/canvasShow/config/api";
-
+import { defaultCartList, getCartNumberBySelect, getPriceBySelect } from "./cartUtils";
+import lodash from 'lodash'
+let cacheKey = ''
 const NET = require('../../../utils/request')
 const API = require('../../../config/api')
-const animation = uni.createAnimation({
-  duration: 500,
-  timingFunction: "ease-in-out",
-  delay: 0
-})
-
 export default {
   components: {
-    tuiModal,
-    HotTemplate
+    HotTemplate,
+    DeleteModal
   },
   data() {
     return {
-      animationData:{},
-      goodsDetailShowFlag: false,
-      OriginalSelectedSku: {},
-      selectedSku: {},
-      productData: [],
-      shopId: 0,
-      productId: 0,
-      skuId: 0,
-      selectedAttr: {},
-      supportHuabei: false,
-
-      title: 'Hello',
-      btnType: 0,
-      dataList: [],
-      goosDetailshowFlag: false,
-      colorActiveId: 1,
-      colorList: [{
-        id: 1,
-        color: '复古蓝色'
-      }, {
-        id: 2,
-        color: '马卡龙粉色'
-      }],
-      modelNumActiveId: 1,
-      modelNumList: [{
-        id: 1,
-        modelNum: '小号'
-      }, {
-        id: 2,
-        modelNum: '中号'
-      }, {
-        id: 3,
-        modelNum: '大号'
-      }],
-      skuItemList: [],
-      buyNum: 1,
-      allNum: 0,
-      checkNum: 0,
-      checkMoney: 0,
-      isAllCheck: true,
-      skuProdList: {},
-      item: {},
-      cardModal: false,
-      isEmpty: false
-    }
-  },
-  computed: {
-    // 计算显示tabBar购物车数量
-    getCartNum() {
-      let cartNum = 0
-      this.updateMoneyAndNum()
-      cartNum = this.allNum
-      if (cartNum > 0) {
-        uni.setTabBarBadge({
-          index: 2,
-          text: cartNum.toString()
-        })
-      } else {
-        uni.removeTabBarBadge({
-          index: 2
-        })
+      isFirstComeIn:true, // 是否是首次进入
+      loading: true, // 是否在加载
+      showManage: false, // 是否开启管理
+      dataList: [
+        {skus: []}
+      ], // 购物车数据
+      showDeleteModal: false, // 是否展示删除
+      isEmpty: false, // 购物车是否为空
+      userInfo: {}, // 用户信息
+      // 跳转对象
+      jumpObj: {
+        store: '/pages_category_page1/store/index',
+        detail: '/pages_category_page1/goodsModule/goodsDetails',
+        shopping: '/pages/tabbar/index/index'
+      },
+      // 底部结算条对象
+      settleAccountsObj: {
+        allNum: 0,// 所有sku数量（头部）
+        checkNum: 0, // 选中sku的数量
+        checkMoney: 0, // 选中sku的总价
+        isAllCheck: false, // 是否宣布选中
       }
-      uni.setStorageSync('allCartNum', cartNum)
-      console.log(uni.getStorageSync('allCartNum'), '1111')
     }
-  },
-  onLoad() {
-
   },
   onShow() {
-    animation.opacity(1).step()
-    this.animationData = animation.export()
-    //判断是否登录
-    /* let item = {}
-    if(uni.getStorageSync('storage_key')){
-      item = uni.getStorageSync('storage_key');
-    }
-    console.dir(item) */
-    /* if(JSON.stringify(item) == '{}'){
-      uni.navigateTo({
-        url:'../../../pages_category_page2/userModule/login'
-      })
-    }else{ */
+    this.isFirstComeIn = true
+    this.loading = true
+    this.userInfo = uni.getStorageSync('storage_key')
+    cacheKey = this.userInfo.buyerUserId + "cart_info"
+    this.dataList = defaultCartList
     this.isEmpty = false
-    this.dataList = []
     this.getDataList()
-    /* } */
   },
-  onHide(){
-    animation.opacity(0).step()
-    this.animationData = animation.export()
-  },
-
   methods: {
-
-    // 提交更换商品规格
-    submitBtn() {
-      console.log(this.selectedSku.skuId, 'this.selectedSku.skuId')
-      console.log(this.skuId, 'this.skuId')
-      NET.request(API.UpdateSkuCart, {
-            skuId: this.skuId,
-            newSkuId: this.selectedSku.skuId,
-            number: this.buyNum
-          },
-          "POST").then(res => {
-        this.goodsDetailShowFlag = false
-        this.getDataList()
-      })
-    },
-
-    // 购物车修改属性样式时:数量减
-    updateNumSub() {
-      if (this.buyNum > 1) {
-        this.buyNum = this.buyNum - 1
-      } else {
-        uni.showToast({
-          title: '亲！至少一件哦！',
-          icon: "none"
+    /**
+     * 获取购物车列表
+     */
+    getDataList:lodash.debounce(async function () {
+      this.isEmpty = false
+      this.loading = true
+      try {
+        const res = await NET.request(API.ShoppingCart, {}, 'GET')
+        this.dataList = res.data
+        this.settleAccountsObj.allNum = this.dataList.length
+        console.log(this.dataList)
+        if (this.dataList.length === 0) {
+          this.isEmpty = true
+          uni.setStorageSync('allCartNum', 0)
+          uni.removeTabBarBadge({
+            index: 2
+          })
+        }
+        this.dataList.forEach((shopObj, shopIndex) => {
+          shopObj['currentIds'] = []
+          shopObj['priceNumber'] = 0
+          shopObj['rules'] = []
+          shopObj['currentRules'] = {}
+          shopObj['ids'] = 0
+          // 处理下架商品
+          for (let i = shopObj.skus.length - 1; i >= 0; i--) {
+            // shelveState是否上架
+            if (shopObj.skus[i].shelveState === 0) {
+              // 删掉下架商品
+              shopObj.skus.splice(i, 1)
+              continue
+            }
+            if (shopObj.skus[i].activityType === 6 && shopObj.skus[i].selected === 1) {
+              shopObj.currentIds.push(shopObj.skus[i].priceId)
+              shopObj.priceNumber += shopObj.skus[i].number
+            }
+          }
+          console.log(shopObj.skus.length)
+          this.isEmpty = shopObj.skus.length !== 0? false :true
+          for (let i = 0; i < shopObj.skus.length; i++) {
+            if (shopObj.skus[i].activityType === 6) {
+              shopObj.ids = shopObj.skus[i].priceId
+              break
+            }
+          }
+          // 根据店铺索引获取规则
+          this.getData(shopObj).then(res => {
+            shopObj.rules = res.data ? res.data[0].rules : {}
+            this.handleSetGroupGood(shopIndex)
+          })
         })
+        this.handleRenderCart()
+        // 数据回来就直接关闭骨架屏
+        this.loading = false
+        this.isFirstComeIn = false
+        await this.handleUpdateMoneyAndNum()
+      } finally {
+        uni.hideLoading()
       }
-    },
-    // 获取匹配组合定价价格
+    },500),
+
+    /**
+     * 获取组合定价
+     * @param item
+     * @return {Promise<unknown>}
+     */
     getData(item) {
       return new Promise(((resolve, reject) => {
         if (item.ids) {
@@ -400,802 +362,389 @@ export default {
             pageSize: 10
           }, 'GET').then(res => {
             resolve(res)
+          }).catch(e => {
+            reject(e)
           })
         } else {
           resolve([])
         }
       }))
     },
-    // 购物车修改属性样式时:数量加
-    updateNumAdd() {
-      if (this.buyNum < this.selectedSku.stockNumber) {
-        this.buyNum = this.buyNum + 1
-      } else {
-        uni.showToast({
-          title: '库存不足！',
-          icon: "none"
-        })
-      }
-    },
-    //获取商品详情
-    queryProductDetail() {
-      // uni.showLoading({
-      //   mask: true,
-      //   title: '加载中...'
-      // })
-      NET.request(API.QueryProductDetail, {
-            shopId: this.shopId,
-            productId: this.productId,
-            skuId: this.skuId,
-            terminal: 1
-          },
-          "GET").then(res => {
-        uni.hideLoading()
-        this.productData = res.data
 
-        this.markTools = res.data.markTools //平台优惠券
-        this.shopMarkTools = res.data.shopMarkTools //店铺优惠券
-
-        //如果是单款式商品，需要特殊处理productData.names
-        const mapKeys = Object.keys(this.productData.map)
-        if (mapKeys.length === 1 && mapKeys[0] === '单款项') {
-          this.productData.names[0].values.push({
-            skuValue: '单款项',
-            valueCode: '单款项'
-          })
-        }
-
-        //如果sku的图像为空，设置为商品的图像
-        for (var key in this.productData.map) {
-          let skuImage = this.productData.map[key].image
-          if (!skuImage) {
-            this.productData.map[key].image = this.productData.images[0]
-          }
-        }
-
-        //评价
-        this.commentList = res.data.comments
-        this.commentListLength = this.commentList.length
-        this.sellDescList = res.data.text.replace(/\<img/gi,
-            '<img style="max-width:100%;height:auto" ')
-        this.couponListLength = res.data.couponImages.length
-        this.showVOList = res.data.couponImages
-        this.couponList = res.data.markTools
-
-        //渲染商详之后，如果参数传了skuId，则选中该skuId，否则选中第一个规格
-        if (this.skuId) {
-          this.selectBySkuId(this.skuId)
-          console.log(this.skuId, 'this.skuId2222')
-        } else {
-          for (var attr in this.productData.names) {
-            this.nameCodeValueCodeClick(attr.nameCode, attr.values[0].valueCode, true)
-          }
-        }
-
-        this.beginTimer();
-      }).catch(res => {
-        uni.hideLoading()
-      })
-
-    },
-
-    selectBySkuId(skuId) {
-      if (skuId) {
-        let mapinfo = this.productData.map
-        for (var key in mapinfo) {
-          if (parseInt(mapinfo[key].skuId) === parseInt(skuId)) {
-            this.selectedSku = mapinfo[key]
-            // 选中sku对应的规格
-            const valueCodeList = key.split(',')
-            this.productData.names.forEach(attr => {
-              for (var index in attr.values) {
-                let valueCode = attr.values[index].valueCode
-                if (valueCodeList.includes(valueCode)) {
-                  this.nameCodeValueCodeClick(attr.nameCode, valueCode, false)
-                  break
-                }
-              }
-            })
-            break
-          }
-        }
-      }
-    },
-
-    nameCodeValueCodeClick(nameCode, valueCode, reSelectSku) {
-      this.selectedAttr[nameCode] = valueCode
-      if (reSelectSku) {
-        let attrList = []
-        for (var key in this.selectedAttr) {
-          attrList.push(this.selectedAttr[key])
-        }
-        const attrkey = attrList.join(',')
-        let mapinfo = this.productData.map
-        for (var key in mapinfo) {
-          if (attrkey === key) {
-            this.selectedSku = mapinfo[key]
-          }
-        }
-      }
-
-      // 选中sku之后，做一些相应的操作
-      // this.selectSkuPostProcessor()
-
-      this.$forceUpdate(); // 重绘
-    },
-
-    selectSkuPostProcessor() {
-      const ifEnable = this.selectedSku.ifEnable
-      if (this.selectedSku.activityType === 1 && ifEnable === 0) {
-        this.topThreeCollageOrders = this.selectedSku.collageOrders.slice(0, 3)
-      }
-      if ([1, 2, 3, 4, 5].includes(this.selectedSku.activityType) && ifEnable === 0) {
-        this.dateformat(this.selectedSku.endTime)
-        this.countDown();
-      }
-      this.timeActivetype = ifEnable === 0;
-      this.shopDiscountId = this.selectedSku.shopDiscountId
-      this.shopSeckillId = this.selectedSku.shopSeckillId
-    },
-
-    // 更换商品样式
-    changeSkuItemValue(skuItem, shopId) {
-      this.OriginalSelectedSku = skuItem
-      this.shopId = shopId
-      this.productId = skuItem.productId
-      this.skuId = skuItem.skuId
-      this.buyNum = this.OriginalSelectedSku.number
-      this.queryProductDetail()
-      setTimeout(() => {
-        this.goodsDetailShowFlag = true
-      }, 1000)
-    },
-    //逛店铺
-    goStore(index) {
-      uni.navigateTo({
-        url: '../../../pages_category_page1/store/index?storeId=' + this.dataList[index].shopId
-      })
-    },
-    //商品详情
-    goodsDateils(shopId, productId, skuId) {
-      uni.navigateTo({
-        url: '../../../pages_category_page1/goodsModule/goodsDetails?shopId=' + shopId +
-            '&productId=' + productId + '&skuId=' + skuId
-      })
-    },
-    // 去首页
-    goToShopping() {
-      uni.switchTab({
-        url: '../../../pages/tabbar/index/index'
-      })
-    },
-    btnTypeClick(type) {
-      this.btnType = type
-    },
-    getDataList() {
-      // uni.showLoading({
-      //   mask: true,
-      //   title: '加载中...',
-      // })
-      NET.request(API.ShoppingCart, {}, 'GET').then(res => {
-        uni.hideLoading()
-        this.dataList = res.data
-        this.allNum = this.dataList.length
-        if (this.dataList.length === 0) {
-          this.isEmpty = true
-		  uni.setStorageSync('allCartNum', 0)
-		  uni.removeTabBarBadge({
-		    index: 2
-		  })
-        }
-        let recheck = false
-        this.dataList.forEach((item, index) => {
-          item['currentIds'] = []
-          item['priceNumber'] = 0
-          item['rules'] = []
-          item['currentRules'] = {}
-          item['ids'] = 0
-          for (let i = item.skus.length - 1; i >= 0; i--) {
-            if (item.skus[i].shelveState === 0) {
-              item.skus.splice(i, 1)
-              if (item.skus.length === 0) {
-                recheck = true
-              }
-            } else {
-
-              if (item.skus[i].activityType === 6 && item.skus[i].selected === 1) {
-                item.currentIds.push(item.skus[i].priceId)
-                item.priceNumber += item.skus[i].number
-              }
-            }
-          }
-          for (let i = 0; i < item.skus.length; i++) {
-            if (item.skus[i].activityType === 6) {
-              item.ids = item.skus[i].priceId
-              break
-            }
-          }
-          this.getData(item).then(res => {
-            let rules = []
-            rules = res.data
-            this.dataList[index].rules = rules ? rules[0].rules : {}
-            for (let i = 0; i < this.dataList[index].rules.length; i++) {
-              // console.log(this.dataList[index].rules[i].number, this.dataList[index].priceNumber, 'fsdfsdfsdfs')
-              if (this.dataList[index].rules[i].number === this.dataList[index].priceNumber) {
-                this.dataList[index].currentRules = this.dataList[index].rules[i]
-                console.log(this.dataList[index].currentRules, '==', this.dataList[index].rules[i])
-                this.$forceUpdate()
-                break
-              } else if (this.dataList[index].rules[this.dataList[index].rules.length - 1].number < this.dataList[index].priceNumber) {
-                this.dataList[index].currentRules = this.dataList[index].rules[this.dataList[index].rules.length - 1]
-                this.$forceUpdate()
-                break
-              }
-            }
-
-            // 重新检查是不是全为空
-            if (recheck) {
-              let isEmpty = true
-              this.dataList.forEach((item, index) => {
-                if (item.skus.length !== 0) {
-                  isEmpty = false
-                }
-              })
-              this.isEmpty = isEmpty
-            }
-            this.updateMoneyAndNum()
-          })
-        })
-
-
-      }).catch(res => {
-        uni.hideLoading()
-      })
-    },
-    // 数量减
-    numSub(index, cIndex) {
-      this.dataList[index].priceNumber = 0
-      if (this.dataList[index].skus[cIndex].number > 1) {
-        this.dataList[index].skus[cIndex].number = this.dataList[index].skus[cIndex].number - 1
-        this.dataList[index].priceNumber = 0
-        this.priceFn(index)
-        this.updateCart(this.dataList[index].skus[cIndex].skuId, this.dataList[index].skus[cIndex].number)
-      } else {
-        uni.showToast({
+    /**
+     * 单个SKU数量减
+     * @param shopIndex 店铺索引
+     * @param skuIndex index店铺下sku商品索引
+     */
+    async handleSubSkuNumber(shopIndex, skuIndex) {
+      const selectSku = this.dataList[shopIndex].skus[skuIndex]
+      if (selectSku.number <= 1) {
+        return uni.showToast({
           title: '亲！至少一件哦！',
           icon: "none"
         })
       }
-    },
-    // 数量加
-    numAdd(index, cIndex) {
-      this.dataList[index].priceNumber = 0
-      if (this.dataList[index].skus[cIndex].number >= this.dataList[index].skus[cIndex].stockNumber) {
-        this.dataList[index].skus[cIndex].number = this.dataList[index].skus[cIndex].stockNumber
-        wx.showToast({
-          title: '库存不足！',
-          icon: 'none'
-        })
-        return;
-      }
-      if (this.dataList[index].skus[cIndex].number <= this.dataList[index].skus[cIndex].stockNumber) {
-        this.dataList[index].skus[cIndex].number = this.dataList[index].skus[cIndex].number + 1
-        this.dataList[index].priceNumber = 0
-        this.priceFn(index)
-        this.updateCart(this.dataList[index].skus[cIndex].skuId, this.dataList[index].skus[cIndex].number)
-      }
-    },
-    updateMoneyAndNum() {
-      this.isAllCheck = true
-      this.allNum = 0
-      this.checkNum = 0
-      // this.checkMoney = 0
-
-      for (let i = 0; i < this.dataList.length; i++) {
-        /** 判断是否存在组合促销*/
-            // 当前店铺
-        let shopObj = this.dataList[i]
-        // 当前店铺的组合优惠ID
-        let groupPriceId = shopObj.currentIds
-        // 当前店铺的组合优惠规则
-        let groupRule = shopObj.currentRules
-        let selectGroupSku = []
-        for (let j = 0; j < this.dataList[i].skus.length; j++) {
-          let item = this.dataList[i].skus[j]
-          this.allNum += item.number
-          if (item.selected == 1) {
-            // 是否在组合商品中
-            if (groupPriceId.includes(item.priceId)) {
-              selectGroupSku.push(item)
-            }
-            this.checkNum = this.checkNum + item.number
-            // this.checkMoney += parseFloat(item.price * item.number)
-          } else {
-            if (this.isAllCheck) {
-              this.isAllCheck = false
-            }
-          }
-        }
-
-      }
-      // 算钱
-      this.getPriceBySelect()
-      uni.setStorageSync('allCartNum', this.allNum)
-      if (this.allNum > 0) {
-        uni.setTabBarBadge({
-          index: 2,
-          text: (this.allNum).toString()
-        })
-      } else {
-        uni.removeTabBarBadge({
-          index: 2
-        })
-      }
-    },
-    updateShopSel(index, type) {
-      this.dataList[index].currentRules = {}
-      this.dataList[index].priceNumber = null
-      console.log(index, 'index', type, 'type')
-      let shopCarts = [{
-        shopId: '',
-        skus: []
-      }]
-      this.dataList[index].selected = type
-      let len = this.dataList[index].skus.length
-      for (let i = 0; i < len; i++) {
-        this.dataList[index].skus[i].selected = type
-        var skusobj = {};
-        skusobj["skuId"] = this.dataList[index].skus[i].skuId;
-        skusobj["selected"] = this.dataList[index].skus[i].selected
-        shopCarts[0].skus.push(skusobj);
-      }
-      shopCarts[0].shopId = this.dataList[index].shopId
-      this.priceFn(index)
-      this.updateSelected(shopCarts)
-      this.$forceUpdate()
-    },
-    //选中商品
-    updateSelected(shopCarts) {
-      this.updateMoneyAndNum()
-      NET.request(API.SelectedCart, {
-        shopCarts
-      }, 'POST').then(res => {
-      }).catch(res => {
-
-      })
-    },
-    updateCart(skuId, number) {
-      NET.request(API.UpdateNumberCart, {
-        skuId: skuId,
-        number: number
-      }, 'POST').then(res => {
-        this.updateMoneyAndNum()
-      }).catch(res => {
-
-      })
-    },
-    cartItemSel(index, cIndex, type) {
-      console.log(this.dataList)
-      this.dataList[index].currentRules = {}
-      this.dataList[index].priceNumber = 0
-      let shopCarts = [{
-        shopId: 0,
-        skus: []
-      }]
-      this.dataList[index].skus[cIndex].selected = type
-      if (type == 1) {
-        let len = this.dataList[index].skus.length
-        let shopType = 1
-        for (let i = 0; i < len; i++) {
-          if (this.dataList[index].skus[i].selected == 0) {
-            shopType = 0
-            break
-          }
-        }
-        this.dataList[index].selected = shopType
-      } else {
-        this.dataList[index].selected = type
-      }
-      this.priceFn(index)
-      shopCarts[0].shopId = this.dataList[index].shopId
-      var skusobj = {};
-      skusobj["skuId"] = this.dataList[index].skus[cIndex].skuId;
-      skusobj["selected"] = this.dataList[index].skus[cIndex].selected;
-      shopCarts[0].skus.push(skusobj);
-      this.updateSelected(shopCarts)
-    },
-    // 组合定价
-    priceFn(shopIndex) {
-      this.dataList[shopIndex].currentRules = {}
-      this.dataList[shopIndex].skus.forEach((item) => {
-        if (item.activityType === 6 && item.selected === 1) {
-          this.dataList[shopIndex].priceNumber += item.number
-        }
-      })
-      for (let i = 0; i < this.dataList[shopIndex].rules.length; i++) {
-        if (this.dataList[shopIndex].rules[i].number === this.dataList[shopIndex].priceNumber) {
-          this.dataList[shopIndex].currentRules = this.dataList[shopIndex].rules[i]
-          console.log(this.dataList[shopIndex].currentRules, '==', this.dataList[shopIndex].rules[i])
-          this.$forceUpdate()
-          break
-        } else if (this.dataList[shopIndex].rules[this.dataList[shopIndex].rules.length - 1].number < this.dataList[shopIndex].priceNumber) {
-          this.dataList[shopIndex].currentRules = this.dataList[shopIndex].rules[this.dataList[shopIndex].rules.length - 1]
-          this.$forceUpdate()
-          break
-        }
-      }
-    },
-    //全选
-    allSel(type) {
-      this.updateAllSel(type)
-    },
-    updateAllSel(type) {
-      console.log(type, 'type')
-      let len = this.dataList.length
-      for (let i = 0; i < len; i++) {
-        let len2 = this.dataList[i].skus.length
-        this.dataList[i].selected = type
-        let priceNum = 0
-        for (let j = 0; j < len2; j++) {
-          this.dataList[i].skus[j].selected = type
-          if (this.dataList[i].skus[j].selected === 1 && this.dataList[i].skus[j].activityType === 6) {
-            priceNum += this.dataList[i].skus[j].number
-          }
-        }
-        this.dataList[i].priceNumber = priceNum
-        if (JSON.stringify(this.dataList[i].rules) !== "{}" && this.dataList[i].rules.length > 0) {
-          this.dataList[i].rules.forEach((item => {
-            if (item.number <= this.dataList[i].priceNumber) {
-              this.dataList[i].currentRules = item
-            }
-          }))
-        }
-
-      }
-      if (type === 0) {
-        this.dataList.forEach((item) => {
-          item.currentRules = {}
-        })
-      }
-      let shopCarts = []
-      this.updateSelected(shopCarts)
-    },
-    //点击删除
-    cartDel() {
-      if (!this.checkNum) {
-        uni.showToast({
-          title: '请先选择对应商品',
-          icon: 'none'
-        })
-        return;
-      }
-      this.cardModal = true
-    },
-    //删除购物车
-    doDelete() {
-      this.cardModal = false
-      let cartList = []
-      let n = 0
-      let skus = []
-      let len = this.dataList.length
-      for (let i = 0; i < len; i++) {
-        let item = {}
-        let len2 = this.dataList[i].skus.length
-
-        for (let j = 0; j < len2; j++) {
-          let itemGoods = this.dataList[i].skus[j]
-          if (itemGoods.selected == 1) {
-            skus[n] = itemGoods.skuId
-            n = n + 1
-          }
-        }
-      }
-      NET.request(API.DeleteCart, {
-        ids: skus
-      }, 'POST').then(res => {
-        this.getDataList()
-
-      }).catch(res => {
-
-      })
-
+      --selectSku.number
+      await this.handleUpdateCart(selectSku.skuId, selectSku.number)
+      setTimeout(async ()=>{
+        await this.getDataList()
+      },500)
     },
 
     /**
-     * 获取结算数组（计算价格）
-     * @param needReturn 是否需要返回数组
-     * @returns {*[]}
+     * 单个SKU数量加
+     * @param shopIndex 店铺索引
+     * @param skuIndex index店铺下sku商品索引
      */
-    getPriceBySelect(needReturn=false){
-      // uni.showLoading({
-      //   title:"计算中..."
-      // })
-      let addCart = []
-      let len = this.dataList.length
-      for (let i = 0; i < len; i++) {
-        let shopObj = {}
-        shopObj["shopId"] = this.dataList[i].shopId
-        shopObj["skus"] = []
-        let len2 = this.dataList[i].skus.length
-        for (let j = 0; j < len2; j++) {
-          let skusObj = {}
-          skusObj["ifLogistics"] = this.dataList[i].skus[j].ifLogistics
-          skusObj["number"] = this.dataList[i].skus[j].number
-          skusObj["selected"] = this.dataList[i].skus[j].selected
-          skusObj["skuId"] = this.dataList[i].skus[j].skuId
-          shopObj.skus.push(skusObj)
-        }
-        addCart.push(shopObj)
-      }
-      let newArray = []
-      addCart.forEach((item, index) => {
-        newArray[index] = item
-        newArray[index].skus = item.skus.filter((item) => {
-          return item.selected == 1
+    async handleAddSkuNumber(shopIndex, skuIndex) {
+      const selectSku = this.dataList[shopIndex].skus[skuIndex]
+      if (selectSku.number >= selectSku.stockNumber) {
+        selectSku.number = selectSku.stockNumber
+        return uni.showToast({
+          title: '库存不足！',
+          icon: 'none'
         })
-        if (item.skus.length == 0) {
-          newArray.splice(index, 1);
+      }
+
+      if (selectSku.number < selectSku.stockNumber) {
+        ++selectSku.number
+        await this.handleUpdateCart(selectSku.skuId, selectSku.number)
+        setTimeout(async ()=>{
+          await this.getDataList()
+        },500)
+      }
+    },
+
+    /**
+     * 更新总价和总数（底部结算栏，头部总数）
+     * @return {Promise<void>}
+     */
+    async handleUpdateMoneyAndNum() {
+      const {allNumber, checkNumber, isAllCheck} = await getCartNumberBySelect(this.dataList)
+      const {money} = await getPriceBySelect(this.dataList)
+      this.settleAccountsObj.checkMoney = money
+      this.settleAccountsObj.isAllCheck = isAllCheck
+      this.settleAccountsObj.allNum = allNumber
+      this.settleAccountsObj.checkNum = checkNumber
+    },
+
+    /**
+     * 请求服务端更新购物车数量
+     * @param skuId :需要更新的skuId
+     * @param number: 数量
+     */
+    handleUpdateCart:lodash.debounce(async function(skuId, number) {
+      // 重新算钱和数量
+      await NET.request(API.UpdateNumberCart, {
+        skuId: skuId,
+        number: number
+      }, 'POST')
+    },500),
+
+
+    /**
+     * 选中店铺
+     * @param shopIndex 店铺索引
+     * @param type 0否1是
+     */
+    handleSelectShop(shopIndex, type) {
+      const shopObj = this.dataList[shopIndex]
+      const shopCarts = [{
+        shopId: shopObj.shopId,
+        skus: []
+      }]
+      shopObj.selected = type
+      // 设置当前店铺下的所有sku
+      shopObj.skus.forEach(skuObj => {
+        skuObj.selected = type
+        shopCarts[0].skus.push({
+          skuId: skuObj.skuId,
+          selected: skuObj.selected
+        })
+      })
+      this.handleSetGroupGood(shopIndex)
+      this.handleUpdateSelected(shopCarts)
+    }
+    ,
+
+    /**
+     * 商品单选
+     * @param shopIndex 店铺索引dataList
+     * @param skuIndex sku索引dataList[index].skus
+     * @param type 是否选中 0否1是
+     */
+    handleSelectSku(shopIndex, skuIndex, type) {
+      const shopObj = this.dataList[shopIndex]
+      const skuObj = this.dataList[shopIndex].skus[skuIndex]
+      skuObj.selected = type
+      let shopCarts = [{
+        shopId: shopObj.shopId,
+        skus: [{
+          skuId: skuObj.skuId,
+          selected: skuObj.selected,
+        }]
+      }]
+      if (type === 1) {
+        // 过滤店铺内未选择的sku
+        const noSelectSkuList = shopObj.skus.filter(sku => sku.selected === 0);
+        if (noSelectSkuList.length >= 0) {
+          shopObj.selected = 0
+        } else {
+          shopObj.selected = 1
+        }
+      } else {
+        shopObj.selected = type
+      }
+      // 渲染组合商品
+      this.handleSetGroupGood(shopIndex)
+      this.handleUpdateSelected(shopCarts)
+    }
+    ,
+
+
+    /**
+     * 全选
+     * @param type 是否选中 0否1是
+     */
+    handleSelectAll(type) {
+      this.dataList.forEach((shopObj, shopIndex) => {
+        // 组合支付商品数量
+        const goodsOfJointNumber = shopObj.skus.reduce((prev, skuObj) => {
+          skuObj.selected = type
+          // 如果是组合支付
+          if (skuObj.selected === 1 && skuObj.activityType === 6) {
+            return prev + skuObj.number
+          }
+        }, 0)
+        shopObj.selected = type
+        shopObj.priceNumber = goodsOfJointNumber
+        shopObj.currentRules = {}
+        // 处理选中的组合商品
+        if (type === 1) {
+          this.handleSetGroupGood(shopIndex)
         }
       })
-      newArray = newArray.filter(d => d)
-      let postData = {
-        type: 2,
-        shops: newArray
+      this.handleUpdateSelected([])
+    }
+    ,
+
+
+    /**
+     * 处理组合商品(设置currentRules渲染横幅)
+     * @param shopIndex
+     */
+    handleSetGroupGood(shopIndex) {
+      const shopObj = this.dataList[shopIndex]
+      shopObj.currentRules = {}
+      shopObj.priceNumber = 0
+      shopObj.skus.forEach((skuObj) => {
+        if (skuObj.activityType === 6 && skuObj.selected === 1) {
+          shopObj.priceNumber += skuObj.number
+        }
+      })
+      const shopRules = this.dataList[shopIndex].rules
+      for (let i = 0; i < shopRules.length; i++) {
+        if (shopRules[i].number === shopObj.priceNumber) {
+          shopObj.currentRules = shopRules[i]
+          break
+        } else if (shopRules[shopRules.length - 1].number < shopObj.priceNumber) {
+          shopObj.currentRules = shopRules[shopRules.length - 1]
+          break
+        }
       }
-      if(!needReturn){
-        NET.request(API.Settlement, postData, 'POST').then(res => {
-          let money = 0;
-          res.data.shops.forEach(item=>{
-            money+=item.total
+    }
+    ,
+
+    /**
+     * 更新缓存sku勾选和价格、数量显示
+     * @param shopCarts:{shopId:number,skus:{skuId:number,select:number}}[] 只有一个对象（店铺）全选传空数组
+     */
+    handleUpdateSelected(shopCarts) {
+      this.handleSetCache(shopCarts)
+      this.handleUpdateMoneyAndNum()
+    }
+    ,
+
+    /**
+     * 设置购物车本地缓存（先存入本地缓存，再调用handleRenderCart根据本地缓存渲染）
+     * @param shopCarts:{shopId:number,skus:{skuId:number,select:number}}[] 只有一个对象（店铺）全选传空数组
+     */
+    handleSetCache(shopCarts) {
+      let cartInfo = uni.getStorageSync(cacheKey);
+      if (cartInfo === '') {
+        // 全选
+        if (shopCarts.length <= 0) {
+          // 全选直接缓存整个列表
+          uni.setStorageSync(cacheKey, JSON.stringify(this.dataList))
+          // 渲染视图
+          this.handleRenderCart()
+          return
+        }
+        // 无购物车信息
+        cartInfo = shopCarts
+        uni.setStorageSync(cacheKey, JSON.stringify(cartInfo))
+      } else {
+        cartInfo = JSON.parse(cartInfo)
+        // 全选
+        if (shopCarts.length <= 0) {
+          // 全选直接缓存整个列表
+          uni.setStorageSync(cacheKey, JSON.stringify(this.dataList))
+          // 渲染视图
+          this.handleRenderCart()
+          return
+        }
+        // 看了代码逻辑结构，一次只会传一个商铺过来，大胆取0
+        const shopItem = shopCarts[0]
+        const cacheHaveInfo = cartInfo.findIndex(item => item.shopId === shopItem.shopId)
+        if (cacheHaveInfo < 0) {
+          // 如果缓存中不存在当前商店信息，写入缓存
+          cartInfo.push(shopItem)
+        } else {
+          // 获取到缓存项
+          const cacheShopItem = cartInfo[cacheHaveInfo]
+          // 判断传入的sku大小，sku length为1就是点单项，sku length>1就是点击了整个店铺
+          if (shopItem.skus.length > 1) {
+            // 点击整个店铺，直接赋值
+            cartInfo[cacheHaveInfo] = shopItem
+          } else {
+            // 点击单项sku，获取到sku // 数据结构只会传入一项
+            const shopItemSkuItem = shopItem.skus[0];
+            // 在缓存中寻找
+            const cacheShopItemSkuItemIndex = cacheShopItem.skus.findIndex(item => item.skuId === shopItemSkuItem.skuId);
+            cacheShopItemSkuItemIndex >= 0 ? cacheShopItem.skus[cacheShopItemSkuItemIndex] = shopItemSkuItem : cacheShopItem.skus.push(shopItemSkuItem)
+          }
+        }
+        // 逻辑处理完毕更新缓存
+        uni.setStorageSync(cacheKey, JSON.stringify(cartInfo))
+        // 渲染视图
+        this.handleRenderCart()
+      }
+    }
+    ,
+
+    /**
+     * 根据本地缓存渲染购物车勾选
+     * @constructor
+     */
+    handleRenderCart() {
+      // 取消所有勾选
+      this.dataList.forEach(shop => {
+        shop.selected = 0
+        shop.skus.forEach(sku => {
+          sku.selected = 0
+        })
+      })
+      // 校验缓存中的数据是否存在于购物车中
+      this.handleCheckCacheAndUpdate()
+      // 缓存内购物车信息
+      let cartInfo = uni.getStorageSync(cacheKey);
+      if (cartInfo === '') return
+      cartInfo = JSON.parse(cartInfo)
+
+      // 遍历购物车信息，寻找缓存比对
+      this.dataList.forEach(nowCartShopItem => {
+        let shopSelect = 1
+        const cacheCartShopItem = cartInfo.find(item => item.shopId === nowCartShopItem.shopId);
+        if (cacheCartShopItem) {
+          // 如果缓存中有当前店铺，遍历当前购物车sku
+          nowCartShopItem.skus.forEach(nowCartSkuItem => {
+            const cacheCartSkuItem = cacheCartShopItem.skus.find(item => item.skuId === nowCartSkuItem.skuId);
+            if (cacheCartSkuItem) {
+              // 如果有一个未选中当前店铺就不能全选
+              !cacheCartSkuItem.selected ? shopSelect = 0 : ''
+              nowCartSkuItem.selected = cacheCartSkuItem.selected
+            } else {
+              shopSelect = 0
+            }
           })
-          this.checkMoney = money.toFixed(2)
-          uni.hideLoading()
-        })
-      }else{
-        return newArray
-      }
-    },
-
-    //结算购物车
-    settlementTap() {
-      let newArray = this.getPriceBySelect(true)
-      uni.setStorageSync('skuItemDTOList', newArray)
-      uni.navigateTo({
-        url: '../../../pages_category_page1/orderModule/orderConfirm?type=2'
-      })
-    },
-    //商品尺寸弹窗
-    goosDetailshowClick(storeId, skuItemId) {
-      this.goosDetailshowFlag = true
-      this.colorActiveClick(storeId, skuItemId)
-    },
-    //颜色选中事件
-    colorActiveClick(storeId, attrItemId) {
-      this.colorActiveId = attrItemId
-      NET.request(API.QueryProductSku, {
-        productId: storeId,
-        skuValueIdList: [attrItemId]
-      }, 'POST').then(res => {
-        if (res.code === 0) {
-          this.skuProdList = res.data
-          this.skuProdId = res.data.id
-          this.skuImg = res.data.skuImg
-          this.skuNameStr = res.data.skuNameStr
-          this.skuPrice = res.data.skuPrice
+        } else {
+          shopSelect = 0
         }
-
-      }).catch(res => {
-
+        nowCartShopItem.selected = shopSelect
       })
-    },
+    }
+    ,
+
+    /**
+     * 比较缓存内数据和后端数据是否一致,并且更新缓存
+     * @constructor
+     */
+    handleCheckCacheAndUpdate() {
+      // 缓存内购物车信息
+      let cartInfo = uni.getStorageSync(cacheKey);
+      if (cartInfo === '') return
+      cartInfo = JSON.parse(cartInfo)
+      // 校验缓存中的数据是否存在于购物车中
+      cartInfo.forEach((cacheCartShopItem, cacheCartShopIndex) => {
+        const nowCartShopItem = this.dataList.find(item => item.shopId === cacheCartShopItem.shopId);
+        if (!nowCartShopItem) {
+          cartInfo.splice(cacheCartShopIndex, 1)
+        } else {
+          // 存在就校验缓存中的sku在不在后端返回的列表内
+          cacheCartShopItem.skus.forEach((cacheCartSkuItem, cacheCartSkuIndex) => {
+            const nowCartSkuItem = nowCartShopItem.skus.find(item => item.skuId === cacheCartSkuItem.skuId)
+            if (!nowCartSkuItem) {
+              cacheCartShopItem.skus.splice(cacheCartSkuIndex, 1)
+            }
+          })
+        }
+      })
+      uni.setStorageSync(cacheKey, JSON.stringify(cartInfo))
+    }
+    ,
+
+    /**
+     * 打开删除弹窗
+     */
+    handleOpenDelete() {
+      if (!this.settleAccountsObj.checkNum) return uni.showToast({
+        title: '请先选择对应商品',
+        icon: 'none'
+      })
+      this.showDeleteModal = true
+    }
+    ,
+
+    /**
+     * 执行删除
+     * @return {Promise<void>}
+     */
+    async handleDoDelete() {
+      let ids = []
+      for (const shopObj of this.dataList) {
+        ids = [...ids, ...shopObj.skus.filter(sku => (sku.selected === 1 || sku.selected === true)).map(sku => sku.skuId)]
+      }
+      await NET.request(API.DeleteCart, {ids}, 'POST')
+      this.showDeleteModal = false
+      await this.getDataList()
+    }
+    ,
+
+    /**
+     * 结算购物车
+     * @return {Promise<void>}
+     */
+    async settlementTap() {
+      const {shopList} = await getPriceBySelect(this.dataList)
+      uni.setStorageSync('skuItemDTOList', shopList)
+      this.$jump('/pages_category_page1/orderModule/orderConfirm?type=2')
+    }
   }
 }
 </script>
 
-<style lang="scss"
-       scoped>
-page {
-  // background: #f7f7f7;
-}
-
+<style
+    lang="scss"
+    scoped
+>
 .content {
-  overflow: hidden;
-  opacity: 0;
-
-  .goosDetailshow-box {
-    .detailImg-box {
-      margin-top: 30upx;
-      margin-left: 30upx;
-      border-radius: 10upx;
-      border-bottom: 1upx solid #EDEDED;
-      padding-bottom: 20upx;
-      width: 690upx;
-
-      .detailImg {
-        width: 180upx;
-        height: 180upx;
-      }
-    }
-
-    .color-box {
-      padding: 30upx 30upx;
-      border-bottom: 1upx solid #EDEDED;
-      width: 690upx;
-
-      .colorName-box {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: center;
-        margin-top: 30upx;
-        margin-left: -30upx;
-
-        .colorName {
-          background-color: #FFFFFF;
-          margin-left: 30upx;
-          padding: 10upx 32upx;
-          font-size: 26upx;
-          border: 2rpx solid #E4E5E6;
-          z-index: 2;
-          color: #333333;
-        }
-
-        .colorName-on {
-          box-shadow: 0 0 20rpx rgba(0, 0, 0, 0.1);
-          color: #C5AA7B;
-          margin-left: 30upx;
-          padding: 10upx 32upx;
-          font-size: 26upx;
-          text-align: center;
-          z-index: 1;
-          border: none;
-        }
-      }
-
-    }
-
-    .modelNum-box {
-      padding: 30upx 30upx;
-      border-bottom: 1upx solid #EDEDED;
-      width: 690upx;
-
-      .modelNumName-box {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: center;
-        margin-top: 30upx;
-        margin-left: -30upx;
-
-        .modelNumName-on {
-          background-color: #FFE4D0;
-          color: #FF7800;
-          margin-left: 30upx;
-          padding: 10upx 32upx;
-          border-radius: 28upx;
-          border: 1upx solid #FF7800;
-          font-size: 26upx;
-          text-align: center;
-        }
-
-        .modelNumName {
-          background-color: #F5F5F5;
-          margin-left: 30upx;
-          padding: 10upx 32upx;
-          border-radius: 28upx;
-          font-size: 26upx;
-        }
-      }
-    }
-
-    .goodsNum-box {
-      padding: 30upx 30upx;
-      width: 100%;
-      padding-bottom: 140upx;
-
-      .goodsNum {
-        height: 50upx;
-
-        text {
-          display: inline-block;
-          width: 50upx;
-          height: 50upx;
-          border: 1upx solid #999999;
-          text-align: center;
-          // line-height: 50upx;
-        }
-
-        .subtract {
-          border-right: 0upx;
-        }
-
-        .add {
-          border-left: 0upx;
-        }
-      }
-    }
-
-    .bottom-line {
-      border-bottom: 1upx solid #EDEDED;
-    }
-
-    .huabei-box {
-      padding: 30upx 30upx;
-      width: 690upx;
-
-      .fenqi-box {
-        margin-top: 15upx;
-        width: 120%;
-
-        .huabei-item {
-          display: inline-block;
-          background: #f3f3f3;
-          padding: 16upx 24upx;
-          margin: 5upx 10upx;
-          border-radius: 15upx;
-          text-align: center;
-          font-size: 7upx;
-
-          .huabei-period {
-            display: block;
-          }
-        }
-
-        .fenqi-on {
-          border: 1px solid #EF7F93;
-          color: #EF7F93;
-        }
-
-        .disabled {
-          color: #cacaca;
-        }
-      }
-    }
-
-    .goosDetailbut-box {
-      justify-content: center;
-      margin-bottom: 48rpx;
-
-      button {
-        width: 342rpx;
-        height: 100rpx;
-        line-height: 100rpx;
-        font-size: 28rpx;
-        border: 1px solid;
-        border-radius: 0;
-      }
-
-      .submitBtn {
-        color: #FFEBC4;
-        background: #333333;
-      }
-
-
-    }
-  }
-
-  .Put-box1 {
-    .btn {
-      text-align: center;
-      margin-top: 40rpx;
-      border: 1px solid #333333;
-      height: 80upx;
-      line-height: 80upx;
-      width: 240upx;
-      color: #333333;
-    }
-
-    .submit {
-      background-color: #333333;
-      color: #FFEBC4;
-    }
-  }
+  //overflow: hidden;
+  //opacity: 0;
 
   .cart-bg {
     width: 100%;
     height: 180rpx;
+    background-color: #fff;
 
     .cart-num-box {
       display: flex;
@@ -1234,6 +783,7 @@ page {
         border-bottom: 16rpx solid #F8F9FA;
 
         .shop-box {
+          margin-top: 5rpx;
           display: flex;
           flex-direction: row;
           align-items: center;
@@ -1289,6 +839,8 @@ page {
         }
 
         .product-list-box {
+          margin: 8rpx 0;
+
           .pro-item {
             display: flex;
             flex-direction: row;
@@ -1449,7 +1001,7 @@ page {
 
   .cart-bottom-box-h5 {
     position: fixed;
-    bottom: 74rpx;
+    bottom: 80rpx;
     width: 100%;
     z-index: 99;
   }
@@ -1522,151 +1074,6 @@ page {
       font-size: 28rpx;
       color: #FFFFFF;
       background: #C83732;
-    }
-  }
-
-  .goosDetailshow-box {
-    .detailImg-box {
-      margin-top: 30rpx;
-      margin-left: 30rpx;
-      border-radius: 10rpx;
-      border-bottom: 1rpx solid #EDEDED;
-      padding-bottom: 20rpx;
-      width: 690rpx;
-
-      .detailImg {
-        width: 180rpx;
-        height: 180rpx;
-      }
-    }
-
-    .color-box {
-      padding: 30rpx 30rpx;
-      border-bottom: 1rpx solid #EDEDED;
-      width: 690rpx;
-
-      .skuStyle {
-        padding: 20rpx 0;
-      }
-
-      .skuStyle:nth-child(2) {
-        border-top: 1px solid #F3F4F5;
-      }
-
-      .colorName-box {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: center;
-        margin-top: 30rpx;
-        margin-left: -30rpx;
-
-        .colorName-on {
-          background-color: #FFE5D0;
-          color: #C5AA7B;
-          margin-left: 30rpx;
-          padding: 10rpx 32rpx;
-          border-radius: 28rpx;
-          border: 1rpx solid #C5AA7B;
-          font-size: 26rpx;
-          text-align: center;
-          z-index: 1;
-        }
-
-        .colorName {
-          background-color: #F5F5F5;
-          margin-left: 30rpx;
-          padding: 10rpx 32rpx;
-          border-radius: 28rpx;
-          font-size: 26rpx;
-          z-index: 2;
-        }
-      }
-
-    }
-
-    .modelNum-box {
-      padding: 30rpx 30rpx;
-      border-bottom: 1rpx solid #EDEDED;
-      width: 690rpx;
-
-      .modelNumName-box {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: center;
-        margin-top: 30rpx;
-        margin-left: -30rpx;
-
-        .modelNumName-on {
-          background-color: #FFE4D0;
-          color: #C5AA7B;
-          margin-left: 30rpx;
-          padding: 10rpx 32rpx;
-          border-radius: 28rpx;
-          border: 1rpx solid #C5AA7B;
-          font-size: 26rpx;
-          text-align: center;
-        }
-
-        .modelNumName {
-          background-color: #F5F5F5;
-          margin-left: 30rpx;
-          padding: 10rpx 32rpx;
-          border-radius: 28rpx;
-          font-size: 26rpx;
-        }
-      }
-    }
-
-    .goodsNum-box {
-      padding: 30rpx 30rpx;
-      width: 690rpx;
-      padding-bottom: 140rpx;
-
-      .goodsNumber {
-        text-align: center;
-        border: 1rpx solid #999999;
-        padding: 3rpx 20rpx;
-      }
-
-      .subtract {
-        border: 1rpx solid #999999;
-        padding: 3rpx 20rpx;
-        margin-right: -1rpx;
-      }
-
-      .add {
-        border: 1rpx solid #999999;
-        padding: 3rpx 20rpx;
-        margin-left: -1rpx;
-      }
-    }
-
-    .goosDetailbut-box {
-      .joinShopCartBut {
-        width: 343rpx;
-        height: 80rpx;
-        background-color: #FFC300;
-        color: #FFFEFE;
-        font-size: 28rpx;
-        line-height: 80rpx;
-        text-align: center;
-        margin-left: 30rpx;
-      }
-
-      .buyNowBut {
-        width: 343rpx;
-        height: 80rpx;
-        border-radius: 0 40rpx 40rpx 0;
-        background-color: #FF6F00;
-        color: #FFFEFE;
-        font-size: 28rpx;
-        line-height: 80rpx;
-        text-align: center;
-      }
     }
   }
 }

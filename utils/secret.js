@@ -1,6 +1,6 @@
 const CryptoJS = require('crypto-js') // 引用AES源码js
-const key = CryptoJS.enc.Utf8.parse('1234125432ABCDEF') // 十六位十六进制数作为密钥
-const iv = CryptoJS.enc.Utf8.parse('ABCDEF1234125432') // 十六位十六进制数作为密钥偏移量
+const key = CryptoJS.enc.Utf8.parse('1234125432ABDDFF') // 十六位十六进制数作为密钥
+const iv = CryptoJS.enc.Utf8.parse('ABCDEF1234121134') // 十六位十六进制数作为密钥偏移量
 
 // 加密方法
 export function Encrypt (word) {

@@ -5,6 +5,7 @@
     "crypto-js": "^4.1.1",
     "image-tools": "^1.4.0",
     "jweixin-module": "^1.6.0",
+    "lodash": "^4.17.21",
     "mini-html-parser2": "^0.3.0",
     "swiper": "^5.4.5",
     "vue-awesome-swiper": "^4.1.1"

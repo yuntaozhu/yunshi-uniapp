@@ -1,54 +1,59 @@
 <template>
 	<view class="container">
-    <global-loading />
+		<global-loading />
 
-    <!-- 店铺首页 -->
+		<!-- 店铺首页 -->
 		<view class="content" v-if="id">
 			<view class="shop-top" :style="{'padding-top': topHeight + 'px'}">
 				<image src="https://ceres.zkthink.com/static/images/back_img04.png" class="back" @click="back"></image>
-        <view class="search-btn" @click="searchPro">
-          <image class="search-icon" src="https://ceres.zkthink.com/static/img/searchImg.png" mode="widthFix"></image>
-          <text class="fs24 font-color-999 mar-left-10">请输入您想要的宝贝</text>
-        </view>
+				<view class="search-btn" @click="searchPro">
+					<image class="search-icon" src="https://ceres.zkthink.com/static/img/searchImg.png" mode="widthFix">
+					</image>
+					<text class="fs24 font-color-999 mar-left-10">请输入您想要的宝贝</text>
+				</view>
 			</view>
-      <view class="stopInfo">
-        <view class="shop-top-content">
+			<view class="stopInfo">
+				<view class="shop-top-content">
 					<view class="contentLeft">
 						<image :src="storeInfo.shopLogo" class="photo-img"></image>
-            <view class="shop-info-top">
-              <view class="shop-name">
-                <text class="shop-name">{{storeInfo.shopName}}</text>
-                <text class="shop-num">粉丝数：{{fansNumber}}</text>
-              </view>
+						<view class="shop-info-top">
+							<view class="shop-name">
+								<text class="shop-name">{{storeInfo.shopName}}</text>
+								<text class="shop-num">粉丝数：{{fansNumber}}</text>
+							</view>
 							<!-- #ifdef MP-WEIXIN -->
 							<view v-if="hasService" class="btns flex-column-plus mar-left-10" @click="flyToService">
-								<image class="store-icon" src="https://ceres.zkthink.com/static/images/service-product-detail.png"></image>
+								<image class="store-icon"
+									src="https://ceres.zkthink.com/static/images/service-product-detail.png"></image>
 								<text>客服</text>
 							</view>
 							<!-- #endif -->
-            </view>
+						</view>
 					</view>
 					<view class="contentRight">
 						<view class="favorites-box cur-poi" @click="collectToggle">
-              <image v-if="ifCollect === 0" class="store-icon" src="https://ceres.zkthink.com/static/images/iconShoucang.png">
-              </image>
-              <image v-else class="store-icon" src="https://ceres.zkthink.com/static/images/shoucangActive.png"></image>
-              <text class="text">{{ifCollect === 0? '收藏' : '取消'}}</text>
-            </view>
+							<image v-if="ifCollect === 0" class="store-icon"
+								src="https://ceres.zkthink.com/static/images/iconShoucang.png">
+							</image>
+							<image v-else class="store-icon"
+								src="https://ceres.zkthink.com/static/images/shoucangActive.png"></image>
+							<text class="text">{{ifCollect === 0? '收藏' : '取消'}}</text>
+						</view>
 					</view>
-        </view>
-        <view class="distributorBox flex-items flex-sp-between" @click="applyForRecruit">
-          <view class="distributor">
-            <view class="flex-display flex-items">
-              <image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/fenxiao2.png" mode="widthFix"></image>
-              <view>成为分销员</view>
-            </view>
-          </view>
-          <view class="rightArrow">
-            <image src="https://ceres.zkthink.com/static/images/arrowRight.png"></image>
-          </view>
-        </view>
-      </view>
+				</view>
+				<view class="distributorBox flex-items flex-sp-between" @click="applyForRecruit">
+					<view class="distributor">
+						<view class="flex-display flex-items">
+							<image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/fenxiao2.png"
+								mode="widthFix"></image>
+							<view>成为分销员</view>
+						</view>
+					</view>
+					<view class="rightArrow">
+						<image src="https://ceres.zkthink.com/static/images/arrowRight.png"></image>
+					</view>
+				</view>
+			</view>
 			<view class="shopContent">
 				<view class="tabs-nav-warp">
 					<scroll-view class="tabs-nav" scroll-x="true">
@@ -63,7 +68,8 @@
 					</scroll-view>
 				</view>
 				<view v-if="activeTab=== 'index'">
-					<canvas-page :terminal="terminal" :typeId="3" :shopId="id"></canvas-page>
+					<canvas-page :componentsData="componentsData" :terminal="terminal" :typeId="3" :shopId="id">
+					</canvas-page>
 				</view>
 				<view v-else>
 					<view class="shop-banner-box" v-if="bannerInfo && bannerInfo.length > 0">
@@ -85,47 +91,63 @@
 						<!--						</view>-->
 						<!--					</view>-->
 						<block v-if='isShowGoods'>
-              <view class="navBox">
-                <view class="shop-list-nav">
-                  <view class="nav-item-sort" @click="sortTap(1)">
-                    <text class="nav-title" :class="{'active' : sortIndex == 1}">新品</text>
-                  </view>
-                  <view class="nav-item-sort" @click="sortTap(2)">
-                    <text class="nav-title" :class="{'active' : sortIndex == 2}">价格</text>
-                    <view class="r">
-                      <image src="https://ceres.zkthink.com/static/images/arrowSortUp.png" v-if="type == 1"
-                             class="arrow-img padd-t"></image>
-                      <image src="https://ceres.zkthink.com/static/images/arrowSortDown.png" v-if="type == 2"
-                             class="arrow-img padd-b"></image>
-                    </view>
-                  </view>
-                  <view class="nav-item-sort" @click="sortTap(3)">
-                    <text class="nav-title" :class="{'active' : sortIndex == 3}">销量</text>
-                    <view class="r">
-                      <image src="https://ceres.zkthink.com/static/images/arrowSortUp.png" v-if="volume == 1"
-                             class="arrow-img padd-t"></image>
-                      <image src="https://ceres.zkthink.com/static/images/arrowSortDown.png" v-if="volume == 2"
-                             class="arrow-img padd-b"></image>
-                    </view>
-                  </view>
-                </view>
-              </view>
+							<view class="navBox">
+								<view class="shop-list-nav">
+									<view class="nav-item-sort" @click="sortTap(1)">
+										<text class="nav-title" :class="{'active' : sortIndex == 1}">新品</text>
+									</view>
+									<view class="nav-item-sort" @click="sortTap(2)">
+										<text class="nav-title" :class="{'active' : sortIndex == 2}">价格</text>
+										<view class="r">
+											<image src="https://ceres.zkthink.com/static/images/arrowSortUp.png"
+												v-if="type == 1" class="arrow-img padd-t"></image>
+											<image src="https://ceres.zkthink.com/static/images/arrowSortDown.png"
+												v-if="type == 2" class="arrow-img padd-b"></image>
+										</view>
+									</view>
+									<view class="nav-item-sort" @click="sortTap(3)">
+										<text class="nav-title" :class="{'active' : sortIndex == 3}">销量</text>
+										<view class="r">
+											<image src="https://ceres.zkthink.com/static/images/arrowSortUp.png"
+												v-if="volume == 1" class="arrow-img padd-t"></image>
+											<image src="https://ceres.zkthink.com/static/images/arrowSortDown.png"
+												v-if="volume == 2" class="arrow-img padd-b"></image>
+										</view>
+									</view>
+								</view>
+							</view>
 							<view class="shop-list-box" v-if="total > 0">
 								<view class="item" v-for="(cItem, index) in storeInfolist" :key="index"
 									@click="goodsItemTap(cItem.productId,cItem.skuId)">
 									<image :src="cItem.image" class="product-img default-img"></image>
 									<view class="product-bottom-box">
 										<view class="product-name">{{cItem.productName}}</view>
-										<view class="product-num font-color-C5AA7B mar-top-10">已售{{cItem.number}}件</view>
+										<view class="product-num font-color-C5AA7B mar-top-10">已售{{cItem.number}}件
+										</view>
 										<view class="product-price-box">
-											<image v-if="cItem.activityType===1" class="iconImg" src="https://ceres.zkthink.com/static/images/groupBuyIcon.png" alt="拼团icon"></image>
-											<image v-if="cItem.activityType === 2" class="iconImg"  src="https://ceres.zkthink.com/static/images/spikeIcon.png" alt="秒杀活动"></image>
-											<image v-if="cItem.activityType === 3" class="iconImg discountIcon" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-03-14/38184785db4b4fbca767ada611097ae9_discount.png" alt="限时折扣活动"></image>
-											<image v-if="cItem.activityType === 4" class="iconImg" src="https://ceres.zkthink.com/static/images/spikeIcon.png" alt="平台秒杀"></image>
-											<image v-if="cItem.activityType===5" class="iconImg" src="https://ceres.zkthink.com/static/images/discountListIcon.png" alt="平台折扣"></image>
-											<image v-if="cItem.activityType===9" class="iconImg" src="https://ceres.zkthink.com/static/images/memberCenterIcon.png" alt="会员价"></image>
-											<image v-if="cItem.activityType === 8" class="iconImg" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png" alt="场景营销"></image>
-											<text class="price-box fs40 font-color-C83732 mar-right-20">￥{{cItem.price}}</text>
+											<image v-if="cItem.activityType===1" class="iconImg"
+												src="https://ceres.zkthink.com/static/images/groupBuyIcon.png"
+												alt="拼团icon"></image>
+											<image v-if="cItem.activityType === 2" class="iconImg"
+												src="https://ceres.zkthink.com/static/images/spikeIcon.png" alt="秒杀活动">
+											</image>
+											<image v-if="cItem.activityType === 3" class="iconImg discountIcon"
+												src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-03-14/38184785db4b4fbca767ada611097ae9_discount.png"
+												alt="限时折扣活动"></image>
+											<image v-if="cItem.activityType === 4" class="iconImg"
+												src="https://ceres.zkthink.com/static/images/spikeIcon.png" alt="平台秒杀">
+											</image>
+											<image v-if="cItem.activityType===5" class="iconImg"
+												src="https://ceres.zkthink.com/static/images/discountListIcon.png"
+												alt="平台折扣"></image>
+											<image v-if="cItem.activityType===9" class="iconImg"
+												src="https://ceres.zkthink.com/static/images/memberCenterIcon.png"
+												alt="会员价"></image>
+											<image v-if="cItem.activityType === 8" class="iconImg"
+												src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png"
+												alt="场景营销"></image>
+											<text
+												class="price-box fs40 font-color-C83732 mar-right-20">￥{{cItem.price}}</text>
 											<text class="price-through">￥{{cItem.originalPrice}}</text>
 										</view>
 									</view>
@@ -146,10 +168,12 @@
 <script>
 	const NET = require('../../utils/request')
 	const API = require('../../config/api')
+	import api from '@/components/canvasShow/config/api'
 	import canvasPage from '@/components/canvasShow/canvasShowPage.vue'
 	export default {
 		data() {
 			return {
+				componentsData: [],
 				navIndex: 0,
 				id: '',
 				price: 0,
@@ -175,8 +199,8 @@
 				collectId: 0,
 				ifCollect: 0,
 				salesId: 0, //分销员id
-        fansNumber: '', // 粉丝数
-        topHeight: 10,
+				fansNumber: '', // 粉丝数
+				topHeight: 10,
 				hasService: false,
 				isLoading: false,
 			}
@@ -185,15 +209,15 @@
 			canvasPage
 		},
 		onLoad(options) {
-      // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
-      let menuButtonInfo = uni.getMenuButtonBoundingClientRect()
-      this.topHeight = menuButtonInfo.top
-      console.log(this.topHeight, menuButtonInfo.top, 'fsfsfsfs')
-      // #endif
-      // #ifdef APP
-      this.topHeight = 50
-      // #endif
-      this.isIphone = getApp().globalData.isIphone;
+			// #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
+			let menuButtonInfo = uni.getMenuButtonBoundingClientRect()
+			this.topHeight = menuButtonInfo.top
+			console.log(this.topHeight, menuButtonInfo.top, 'fsfsfsfs')
+			// #endif
+			// #ifdef APP
+			this.topHeight = 50
+			// #endif
+			this.isIphone = getApp().globalData.isIphone;
 			if (getApp().globalData.shopShareItem) {
 				const item = getApp().globalData.shopShareItem
 				this.id = parseInt(item.storeId)
@@ -204,6 +228,7 @@
 				this.salesId = parseInt(options.salesId)
 			}
 			this.bindSalesCustomer(this.salesId, this.id)
+			this.canvasGet()
 			this.getTemplate()
 			this.getFindProductGroupList()
 			this.getShopBanner()
@@ -222,6 +247,31 @@
 			}
 		},
 		methods: {
+			// 读取画布
+			canvasGet() {
+				var _this = this
+				var apiUrl = api.getCanvas + '?terminal=' + this.terminal + '&type=' + 3
+				if (this.id) {
+					apiUrl += '&shopId=' + this.id
+				}
+				let params = {
+					url: apiUrl,
+					method: 'GET'
+				}
+				// uni.showLoading({
+				//   mask: true,
+				//   title: '加载中...',
+				// })
+				NET.request(apiUrl, {}, 'GET').then(res => {
+					if (JSON.stringify(res.data) !== '{}') {
+						var componentsData = JSON.parse(res.data.json)
+						this.componentsData = componentsData
+					}
+					uni.hideLoading()
+				}).catch(res => {
+					uni.hideLoading()
+				})
+			},
 			getShopBanner() {
 				NET.request(API.GetShopBanner, {
 					shopId: this.id
@@ -252,7 +302,7 @@
 						this.page = this.page
 					}
 					this.storeInfo = res.data;
-          console.log(this.storeInfo, '测试')
+					console.log(this.storeInfo, '测试')
 					this.total = res.data.page.total
 					this.storeInfolist = this.storeInfolist.concat(res.data.page.list)
 				}).catch(res => {
@@ -350,7 +400,7 @@
 								uni.navigateTo({
 									url: '../distributionModule/recruit?shopId=' + this.id
 								})
-							} else if (res.data.state === 1 ) {
+							} else if (res.data.state === 1) {
 								uni.showToast({
 									title: "您已申请成为该店铺的分销员",
 									icon: "none"
@@ -482,17 +532,19 @@
 			addBusinessBuyerUser() {
 				NET.request(API.AddBusinessBuyerUser, {
 					shopId: this.id
-				},"POST")
+				}, "POST")
 			},
-      // 查询产品
-      searchPro(key, type) {
-        uni.navigateTo({
-          url: `/pages_category_page1/search/index/index`
-        })
-      },
+			// 查询产品
+			searchPro(key, type) {
+				uni.navigateTo({
+					url: `/pages_category_page1/search/index/index`
+				})
+			},
 			// 获取客服url
 			getServiceUrl(id) {
-				if (this.isLoading || !id || id === 'null') { return }
+				if (this.isLoading || !id || id === 'null') {
+					return
+				}
 				const shopids = uni.getStorageSync('service_shopids') || []
 				const corpIds = uni.getStorageSync('service_corpIds') || []
 				const urls = uni.getStorageSync('service_urls') || []
@@ -551,473 +603,514 @@
 	}
 </script>
 <style lang="scss" scoped>
-page {
-  background: #F8F8F8;
-}
+	page {
+		background: #F8F8F8;
+	}
 </style>
 <style lang='scss' scoped>
-page {
-  background: #F8F8F8;
-}
-.shop-top {
-	background: #333333;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  position: fixed;
-  z-index: 99;
-  padding-bottom: 20rpx;
-}
-// #ifdef APP-PLUS
-.shop-top {
-  padding-top: 80rpx;
-}
-// #endif
-.stopInfo {
-  padding: 200rpx 20rpx 20rpx 20rpx;
-  background: #F8F8F8;
-}
-// 店铺头部
-.shop-top-content {
-	padding: 10rpx 30rpx;
-  background: #FFFFFF;
-	display: flex;
-	align-items: center;
-	.contentLeft{
-		flex: 9;
+	page {
+		background: #F8F8F8;
+	}
+
+	.shop-top {
+		background: #333333;
 		display: flex;
-		.photo-img {
-			width: 102rpx;
-			height: 102rpx;
-			border-radius: 10rpx;
-			margin-right: 10rpx;
-		}
-		.shop-info-top {
-			border-radius: 20rpx 20rpx 0 0;
-			position: relative;
+		align-items: center;
+		width: 100%;
+		position: fixed;
+		z-index: 99;
+		padding-bottom: 20rpx;
+	}
+
+	// #ifdef APP-PLUS
+	.shop-top {
+		padding-top: 80rpx;
+	}
+
+	// #endif
+	.stopInfo {
+		padding: 200rpx 20rpx 20rpx 20rpx;
+		background: #F8F8F8;
+	}
+
+	// 店铺头部
+	.shop-top-content {
+		padding: 10rpx 30rpx;
+		background: #FFFFFF;
+		display: flex;
+		align-items: center;
+
+		.contentLeft {
+			flex: 9;
 			display: flex;
-			align-items: center;
-			.shop-name {
+
+			.photo-img {
+				width: 102rpx;
+				height: 102rpx;
+				border-radius: 10rpx;
+				margin-right: 10rpx;
+			}
+
+			.shop-info-top {
+				border-radius: 20rpx 20rpx 0 0;
+				position: relative;
 				display: flex;
-				flex-direction: column;
-				justify-content: space-between;
-				font-size: 32rpx;
-				color: #333333;
-				.shop-num {
-					font-size: 26rpx;
+				align-items: center;
+
+				.shop-name {
+					display: flex;
+					flex-direction: column;
+					justify-content: space-between;
+					font-size: 32rpx;
 					color: #333333;
-				  opacity: 0.7;
-					margin-top: 15rpx;
-				}
-			}
-			.btns{
-				width: 100rpx;
-				height: 95%;
-				font-size: 24rpx;
-				text-align: center;
-				image{
-					max-width: 56rpx;
-					max-height: 56rpx;
-					margin: auto;
-				}
-			}
-		}
-	}
-	.contentRight{
-		flex: 3;
-		.favorites-box {
-			display: flex;
-		  width: 160rpx;
-		  height: 60rpx;
-		  background: #C83732;
-		  opacity: 1;
-		  border-radius: 46rpx;
-		  align-items: center;
-		  justify-content: center;
-			.store-icon {
-				width: 32rpx;
-				height: 32rpx;
-				margin-right: 8rpx;
-			}
-			.text {
-				font-size: 26rpx;
-				color: #fff;
-			}
-		}
-	}
-}
-.rightArrow {
-  image {
-    width: 18rpx;
-    height: 24rpx;
-  }
-}
-.distributorBox {
-  background: #FFFFFF;
-  margin-top: 20rpx;
-  height: 80rpx;
-  padding: 0 20rpx;
-  display: flex;
-  justify-items: center;
-  color: #333333;
-  font-size: 28rpx;
-}
-// 首页内容
-.shopContent {
-	width: 100%;
-	/* background: #fff; */
-	border-radius: 20rpx 20rpx 0 0;
-	.tabs-nav-warp {
-		padding: 0 20px;
-		.tabs-nav {
-			margin-top: 20upx;
-			.ul {
-				white-space: nowrap;
-				.li {
-					display: inline-block;
-					margin-left: 60upx;
-					font-size: 28upx;
-					color: #999999;
-					position: relative;
-					padding-bottom: 18upx;
-					&:first-child {
-						margin-left: 0;
+
+					.shop-num {
+						font-size: 26rpx;
+						color: #333333;
+						opacity: 0.7;
+						margin-top: 15rpx;
 					}
-					&.on {
-						&:after {
-							content: '';
-							width: 100%;
-							height: 4upx;
-							background: #C5AA7B;
-							position: absolute;
-							left: 0;
-							bottom: 0;
-						}
-						font-weight:bold;
-		        color: #333333;
+				}
+
+				.btns {
+					width: 100rpx;
+					height: 95%;
+					font-size: 24rpx;
+					text-align: center;
+
+					image {
+						max-width: 56rpx;
+						max-height: 56rpx;
+						margin: auto;
 					}
 				}
 			}
 		}
+
+		.contentRight {
+			flex: 3;
+
+			.favorites-box {
+				display: flex;
+				width: 160rpx;
+				height: 60rpx;
+				background: #C83732;
+				opacity: 1;
+				border-radius: 46rpx;
+				align-items: center;
+				justify-content: center;
+
+				.store-icon {
+					width: 32rpx;
+					height: 32rpx;
+					margin-right: 8rpx;
+				}
+
+				.text {
+					font-size: 26rpx;
+					color: #fff;
+				}
+			}
+		}
 	}
-	.shop-banner-box {
-		background: #f7f7f7;
-		padding: 20rpx 30rpx;
-		box-sizing: border-box;
+
+	.rightArrow {
+		image {
+			width: 18rpx;
+			height: 24rpx;
+		}
 	}
-	.shop-list-content {
+
+	.distributorBox {
+		background: #FFFFFF;
+		margin-top: 20rpx;
+		height: 80rpx;
+		padding: 0 20rpx;
+		display: flex;
+		justify-items: center;
+		color: #333333;
+		font-size: 28rpx;
+	}
+
+	// 首页内容
+	.shopContent {
 		width: 100%;
 		/* background: #fff; */
-		.navBox {
-		  padding: 0 20rpx;
-		  .shop-list-nav {
-		    display: flex;
-		    flex-direction: row;
-		    align-items: center;
-		    height: 80rpx;
-		    line-height: 76rpx;
-		    background: #fff;
-		  }
-		}
-		.shop-list-box {
-			width: 100%;
-			background: #f7f7f7;
-			padding: 16rpx 20rpx 0;
-			box-sizing: border-box;
-			display: flex;
-			flex-wrap: wrap;
-			.item {
-				width: 49%;
-				margin: 12rpx 0;
-				background: #d6d6d6;
-				border-radius: 10rpx;
-				display: flex;
-				flex-direction: column;
+		border-radius: 20rpx 20rpx 0 0;
+
+		.tabs-nav-warp {
+			padding: 0 20px;
+
+			.tabs-nav {
+				margin-top: 20upx;
+
+				.ul {
+					white-space: nowrap;
+
+					.li {
+						display: inline-block;
+						margin-left: 60upx;
+						font-size: 28upx;
+						color: #999999;
+						position: relative;
+						padding-bottom: 18upx;
+
+						&:first-child {
+							margin-left: 0;
+						}
+
+						&.on {
+							&:after {
+								content: '';
+								width: 100%;
+								height: 4upx;
+								background: #C5AA7B;
+								position: absolute;
+								left: 0;
+								bottom: 0;
+							}
+
+							font-weight:bold;
+							color: #333333;
+						}
+					}
+				}
 			}
-			.item:nth-of-type(2n) {
-				margin-left: 2%;
-				margin-right: 0;
+		}
+
+		.shop-banner-box {
+			background: #f7f7f7;
+			padding: 20rpx 30rpx;
+			box-sizing: border-box;
+		}
+
+		.shop-list-content {
+			width: 100%;
+
+			/* background: #fff; */
+			.navBox {
+				padding: 0 20rpx;
+
+				.shop-list-nav {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					height: 80rpx;
+					line-height: 76rpx;
+					background: #fff;
+				}
+			}
+
+			.shop-list-box {
+				width: 100%;
+				background: #f7f7f7;
+				padding: 16rpx 20rpx 0;
+				box-sizing: border-box;
+				display: flex;
+				flex-wrap: wrap;
+
+				.item {
+					width: 49%;
+					margin: 12rpx 0;
+					background: #d6d6d6;
+					border-radius: 10rpx;
+					display: flex;
+					flex-direction: column;
+				}
+
+				.item:nth-of-type(2n) {
+					margin-left: 2%;
+					margin-right: 0;
+				}
 			}
 		}
 	}
-}
 
-.shop-banner-img {
-	width: 100%;
-	height: 280rpx;
-	border-radius: 20rpx;
-}
+	.shop-banner-img {
+		width: 100%;
+		height: 280rpx;
+		border-radius: 20rpx;
+	}
 
-.nav-item {
-	flex: 1;
-	font-size: 30rpx;
-	color: #666;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	height: 80rpx;
-	line-height: 76rpx;
-}
+	.nav-item {
+		flex: 1;
+		font-size: 30rpx;
+		color: #666;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		height: 80rpx;
+		line-height: 76rpx;
+	}
 
-.nav-item.active {
-	color: #ff7911;
-}
+	.nav-item.active {
+		color: #ff7911;
+	}
 
-.nav-item .line {
-	display: inline-block;
-	width: 80rpx;
-	height: 4rpx;
-	background: #fff;
-	border-radius: 2rpx;
-}
+	.nav-item .line {
+		display: inline-block;
+		width: 80rpx;
+		height: 4rpx;
+		background: #fff;
+		border-radius: 2rpx;
+	}
 
-.nav-item.active .line {
-	background: linear-gradient(0deg, rgba(255, 162, 0, 1), rgba(255, 121, 17, 1));
-}
+	.nav-item.active .line {
+		background: linear-gradient(0deg, rgba(255, 162, 0, 1), rgba(255, 121, 17, 1));
+	}
 
-.nav-item.padd-l {
-	padding-left: 20%;
-	box-sizing: border-box;
-}
+	.nav-item.padd-l {
+		padding-left: 20%;
+		box-sizing: border-box;
+	}
 
-.nav-item.padd-r {
-	padding-right: 20%;
-	box-sizing: border-box;
-}
+	.nav-item.padd-r {
+		padding-right: 20%;
+		box-sizing: border-box;
+	}
 
-.nav-item-sort {
-	flex: 1;
-	font-size: 24rpx;
-	color: #222;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	height: 80rpx;
-	line-height: 80rpx;
+	.nav-item-sort {
+		flex: 1;
+		font-size: 24rpx;
+		color: #222;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		height: 80rpx;
+		line-height: 80rpx;
 
-	.r {
+		.r {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			margin-left: 5rpx;
+		}
+
+		.r .arrow-img {
+			width: 32rpx;
+			height: 32rpx;
+			padding: 7rpx;
+			box-sizing: border-box;
+		}
+	}
+
+
+	.product-img {
+		width: 347rpx;
+		height: 347rpx;
+	}
+
+	.product-bottom-box {
+		padding: 20rpx;
+		box-sizing: border-box;
+		background: #fff;
+	}
+
+	.product-name {
+		display: block;
+		font-size: 28rpx;
+		color: #333;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.product-num {
+		font-size: 24rpx;
+		margin-top: 15rpx;
+		border: 2rpx solid #E4E5E6;
+		padding: 10rpx;
+		display: inline-block;
+	}
+
+	.product-price-box {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		margin-top: 30rpx;
+
+		.iconImg {
+			width: 58rpx;
+			height: 36rpx;
+			margin-right: 10rpx;
+		}
+
+		.discountIcon {
+			width: 100rpx;
+		}
+	}
+
+	.product-price-box .price-through {
+		text-decoration: line-through;
+		font-size: 24rpx;
+		color: #CCC;
+	}
+
+	.shop-sort-list {
+		margin-top: 20rpx;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.shop-sort-list .item {
+		display: flex;
+		flex-direction: column;
+		background: #fff;
+		padding: 0 30rpx 20rpx;
+		box-sizing: border-box;
+		margin-bottom: 20rpx;
+	}
+
+	.shop-sort-list .item .sort-title {
+		font-size: 30rpx;
+		color: #333;
+		padding: 30rpx 0;
+	}
+
+	.sort-single-box {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		width: 100%;
+	}
+
+	.sort-single-box .single {
+		width: 340rpx;
+		height: 78rpx;
+		margin: 0 5rpx 10rpx 0;
+		background: #fff;
+		border: 1px solid #E5E5E5;
+		border-radius: 4rpx;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		margin-left: 5rpx;
-	}
-	.r .arrow-img {
-		width: 32rpx;
-		height: 32rpx;
-		padding: 7rpx;
+		font-size: 26rpx;
+		color: #333;
 		box-sizing: border-box;
 	}
-}
 
-
-.product-img {
-	width: 347rpx;
-	height: 347rpx;
-}
-
-.product-bottom-box {
-	padding: 20rpx;
-	box-sizing: border-box;
-	background: #fff;
-}
-
-.product-name {
-	display: block;
-	font-size: 28rpx;
-	color: #333;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-.product-num {
-	font-size: 24rpx;
-	margin-top: 15rpx;
-  border: 2rpx solid #E4E5E6;
-  padding: 10rpx;
-  display: inline-block;
-}
-
-.product-price-box {
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	margin-top: 30rpx;
-
-	.iconImg {
-		width: 58rpx;
-		height: 36rpx;
-		margin-right: 10rpx;
+	.sort-single-box .single:nth-of-type(2n) {
+		margin-left: 5rpx;
+		margin-right: 0;
 	}
-	.discountIcon{
-		width: 100rpx;
+
+	.back {
+		width: 50rpx;
+		height: 50rpx;
+		padding: 0 20rpx;
 	}
-}
-.product-price-box .price-through {
-	text-decoration: line-through;
-	font-size: 24rpx;
-	color: #CCC;
-}
 
-.shop-sort-list {
-	margin-top: 20rpx;
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-}
-
-.shop-sort-list .item {
-	display: flex;
-	flex-direction: column;
-	background: #fff;
-	padding: 0 30rpx 20rpx;
-	box-sizing: border-box;
-	margin-bottom: 20rpx;
-}
-
-.shop-sort-list .item .sort-title {
-	font-size: 30rpx;
-	color: #333;
-	padding: 30rpx 0;
-}
-
-.sort-single-box {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	width: 100%;
-}
-
-.sort-single-box .single {
-	width: 340rpx;
-	height: 78rpx;
-	margin: 0 5rpx 10rpx 0;
-	background: #fff;
-	border: 1px solid #E5E5E5;
-	border-radius: 4rpx;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	font-size: 26rpx;
-	color: #333;
-	box-sizing: border-box;
-}
-
-.sort-single-box .single:nth-of-type(2n) {
-	margin-left: 5rpx;
-	margin-right: 0;
-}
-
-.back {
-	width: 50rpx;
-	height: 50rpx;
-  padding: 0 20rpx;
-}
-
-.empty-container {
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-}
-
-.empty-container image {
-	width: 200rpx;
-	height: 200rpx;
-	margin-top: 150rpx;
-}
-
-.empty-container text {
-	font-size: 28rpx;
-	color: #999;
-	margin-top: 30rpx;
-	display: block;
-	width: 300rpx;
-	text-align: center;
-}
-
-.active {
-	color: #ff7911;
-}
-
-
-.distributor {
-	font-size: 26upx;
-	border-radius: 25upx;
-	display: flex;
-	align-items: center;
-
-	.item-btn-icon {
-		width: 40upx;
-		height: 40upx;
-		margin-right: 10upx;
+	.empty-container {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 	}
-}
-.search-btn {
-	height: 64rpx;
-	border-radius: 4rpx;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	margin-right: 30rpx;
-	width: 428rpx;
-	background: rgba(255, 255, 255, 0.1);
-	.search-icon {
-	  width: 44rpx;
-	  height: 44rpx;
-    margin-left: 10rpx;
-    margin-top: 8rpx;
+
+	.empty-container image {
+		width: 200rpx;
+		height: 200rpx;
+		margin-top: 150rpx;
 	}
-	.search-word {
-	  font-size: 26rpx;
-	  font-weight: 400;
-	  color: rgba(153, 153, 153, 1);
-	  margin-left: 10rpx;
+
+	.empty-container text {
+		font-size: 28rpx;
+		color: #999;
+		margin-top: 30rpx;
+		display: block;
+		width: 300rpx;
+		text-align: center;
 	}
-}
-// #ifdef H5 || APP-PLUS
-.search-btn {
-  width: 100%;
-}
-// #endif
-// #ifdef MP-ALIPAY
-.back {
-	width: 25rpx;
-	height: 25rpx;
-	margin-top: 15rpx;
-	padding: 10rpx;
-	display: none;
-}
 
-.shop-top {
-	margin-top: 0 !important;
-}
+	.active {
+		color: #ff7911;
+	}
 
-.shop-top-content {
-	padding-top: 80rpx;
-}
 
-.nav-item-sort .r .arrow-img {
-	width: 16rpx;
-	height: 16rpx;
-	padding: 4rpx;
-}
+	.distributor {
+		font-size: 26upx;
+		border-radius: 25upx;
+		display: flex;
+		align-items: center;
 
-.tabs-nav {
-	margin-top: 20upx;
+		.item-btn-icon {
+			width: 40upx;
+			height: 40upx;
+			margin-right: 10upx;
+		}
+	}
 
-	.ul {
-		.li {
-			&:first-child {
-				margin-left: 36upx;
+	.search-btn {
+		height: 64rpx;
+		border-radius: 4rpx;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		margin-right: 30rpx;
+		width: 428rpx;
+		background: rgba(255, 255, 255, 0.1);
+
+		.search-icon {
+			width: 44rpx;
+			height: 44rpx;
+			margin-left: 10rpx;
+			margin-top: 8rpx;
+		}
+
+		.search-word {
+			font-size: 26rpx;
+			font-weight: 400;
+			color: rgba(153, 153, 153, 1);
+			margin-left: 10rpx;
+		}
+	}
+
+	// #ifdef H5 || APP-PLUS
+	.search-btn {
+		width: 100%;
+	}
+
+	// #endif
+	// #ifdef MP-ALIPAY
+	.back {
+		width: 25rpx;
+		height: 25rpx;
+		margin-top: 15rpx;
+		padding: 10rpx;
+		display: none;
+	}
+
+	.shop-top {
+		margin-top: 0 !important;
+	}
+
+	.shop-top-content {
+		padding-top: 80rpx;
+	}
+
+	.nav-item-sort .r .arrow-img {
+		width: 16rpx;
+		height: 16rpx;
+		padding: 4rpx;
+	}
+
+	.tabs-nav {
+		margin-top: 20upx;
+
+		.ul {
+			.li {
+				&:first-child {
+					margin-left: 36upx;
+				}
 			}
 		}
 	}
-}
-// #endif
+
+	// #endif
 </style>

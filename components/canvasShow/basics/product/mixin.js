@@ -56,6 +56,7 @@ export const commonMixin = {
   methods: {
     getData(isFirst) {
       const _ = this
+      this.productData = [{},{},{},{},{},{},{},{}]
       if (_.componentContent.productData.sourceType === '1') {
         if(_.componentContent.productData.productIdList && _.componentContent.productData.productIdList.length>0){
           _.sendReq({
@@ -63,6 +64,7 @@ export const commonMixin = {
             method: 'GET'
           }, (proRes) => {
             _.productData = proRes.data.list
+            _.productData = _.productData.filter(item=>JSON.stringify(item) !== '{}')
             if(isFirst){
               _.componentContent.productData.imgTextData = _.productData
             }
@@ -77,6 +79,7 @@ export const commonMixin = {
             method: 'GET'
           }, (proRes) => {
             _.productData = proRes.data.list
+            _.productData = _.productData.filter(item=>JSON.stringify(item) !== '{}')
             if(isFirst){
               _.componentContent.productData.imgTextData = _.productData
             }

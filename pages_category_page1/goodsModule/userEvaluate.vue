@@ -200,10 +200,10 @@
 			},
 			//我的评价列表
 			getMyCommentList() {
-        uni.showLoading({
-          title: '加载中...',
-          mask: true
-        });
+        // uni.showLoading({
+        //   title: '加载中...',
+        //   mask: true
+        // });
 				NET.request(API.MyCommentList, {
 					page: this.page,
 					pageSize: this.pageSize,

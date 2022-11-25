@@ -1,396 +1,611 @@
 <!-- 订单中心 -->
 <template>
   <view class="container">
-    <global-loading/>
-
+    <global-loading />
+    <Skeleton
+        el-color="#efefef"
+        bg-color="#fff"
+        :loading="loading"
+        :animation="true"
+    />
     <view style="padding-bottom:68upx;">
-      <view>
-        <u-tabs :list="tabList"
-                :is-scroll="false"
-                active-color="#C5AA7B !important"
-                :current="type"
-                @change="orderStateChange"></u-tabs>
-      </view>
-      <view class="order-list-box">
-        <view>
-          <view class="item"
-                v-for="(item, index) in list"
-                :key="index"
-                @click="itemTap(item.orderId,item)">
-            <view class="order-list-top">
-              <view class="top-l"
-                    @click.stop="goShop(item.shopId)">
-                <image :src="item.shopLogo"
-                       class="shop-img"></image>
-                <text class="shop-name">{{ item.shopName }}</text>
-                <image src="https://ceres.zkthink.com/static/images/arrowRight.png"
-                       class="arrow-img"></image>
-              </view>
-              <!--订单状态： 退款中 交易关闭 待付款 待发货 待收货 已完成-->
-              <view class="order-status"
-                    v-if='item.state==1'>待付款
-              </view>
-              <view class="order-status"
-                    v-else-if='item.state==2'>待发货
-              </view>
-              <view class="order-status"
-                    v-else-if='item.state==3'>待收货
-              </view>
-              <view class="order-status"
-                    v-else-if='item.state==4'>已完成
-              </view>
-              <view class="order-status"
-                    v-else-if='item.state==5'>交易关闭
-              </view>
-              <view class="order-status"
-                    v-else-if='item.state==6'>待成团
-              </view>
-              <view class="order-status"
-                    v-else-if='item.returnType==1'>退款中
-              </view>
+      <u-sticky
+          bg-color="#fff"
+      >
+        <u-tabs
+            class="tabs"
+            :list="tabList"
+            disabled
+            :is-scroll="false"
+            active-color="#C5AA7B !important"
+            :current="tabCurrentType"
+            @change="handleTabChange"
+        />
+      </u-sticky>
+      <view class="order-list-box u-skeleton">
+        <view
+            class="item ske-loading u-skeleton-fillet"
+            v-for="(orderItem, orderIndex) in list"
+            :key="orderIndex"
+        >
+          <view class="order-list-top">
+            <view
+                class="top-l"
+                @click.stop="goShop(orderItem.shopId)"
+            >
+              <image
+                  :src="orderItem.shopLogo"
+                  class="shop-img"
+              />
+              <text class="shop-name">{{ orderItem.shopName }}</text>
+              <image
+                  src="https://ceres.zkthink.com/static/images/arrowRight.png"
+                  class="arrow-img"
+              />
             </view>
-            <view class="order-info-box">
-              <view class="order-info">
-                <view class="order-info-item"
-                      v-for="(proItem, pIndex) in item.skus"
-                      :key="pIndex">
-                  <image :src="proItem.image"
-                         class="product-img default-img"></image>
-                  <view class="info-box">
-                    <text class="product-name">{{ proItem.productName }}</text>
-                    <view class="product-sku">{{ proItem.value }}</view>
-                    <view class="price-sku-box">
-                      <view class="box-h flex-items-plus">
-                        <text class="product-price">
-                          <text
-                              class="fuhao">￥
-                          </text>
-                          {{ proItem.price }}
+            <view class="order-status">
+              {{ getOrderStatusLabel(orderItem.state, orderItem.returnType) }}
+            </view>
+          </view>
+          <view
+              class="order-info-box"
+              @click="goOrderDesc(orderItem)"
+          >
+            <view class="order-info">
+              <view
+                  class="order-info-item"
+                  v-for="(skuItem, skuIndex) in orderItem.skus"
+                  :key="skuIndex"
+              >
+                <image
+                    :src="skuItem.image"
+                    class="product-img default-img"
+                />
+                <view class="info-box">
+                  <text class="product-name">{{ skuItem.productName }}</text>
+                  <view class="product-sku">{{ skuItem.value }}</view>
+                  <view class="price-sku-box">
+                    <view class="box-h flex-items-plus">
+                      <text class="product-price">
+                        <text
+                            class="fuhao"
+                        >￥
                         </text>
-                        <text class="product-num">x {{ proItem.number }}</text>
-                      </view>
-                      <view v-if="proItem.commentId == 0 && item.state == 4"
-                            class="evaluate"
-                            @click.stop="evaluateTap(proItem,item.orderId)">立即评价
-                      </view>
-                      <view v-if="proItem.commentId != 0 && item.state == 4 && item.skus[0].ifAdd !== 1"
-                            class="evaluate2"
-                            @click.stop="evaluateTowTap(index,proItem.commentId)">追加评价
-                      </view>
+                        {{ skuItem.price }}
+                      </text>
+                      <text class="product-num">x {{ skuItem.number }}</text>
+                    </view>
+                    <view
+                        v-if="skuItem.commentId === 0 && orderItem.state === 4"
+                        class="evaluate"
+                        @click.stop="goEvaluate(skuItem,orderItem.orderId)"
+                    >立即评价
+                    </view>
+                    <view
+                        v-if="skuItem.commentId !== 0 && orderItem.state === 4 && orderItem.skus[0].ifAdd !== 1"
+                        class="evaluate2"
+                        @click.stop="goAdditionalEvaluation(orderIndex,skuItem.commentId)"
+                    >追加评价
                     </view>
                   </view>
                 </view>
-                <view class="total-price-box">
-                  总价¥{{ (item.orderPrice + item.logisticsPrice).toFixed(2) }},优惠¥{{ item.discountPrice }}
-                  <block v-if="item.price > 0">
-                    ，实付¥{{ item.price }}
-                  </block>
-                </view>
               </view>
-              <view class="btnBox flex-items"
-                    :class="{flexSpBetween: item.state==5 || item.state == 9}">
-                <view class="delIcon"
-                      v-if='item.state==5 || item.state == 9'
-                      @click.stop="delOrder(item.orderId)"></view>
-                <view class="order-btn-box">
-                  <text class="btn l"
-                        v-if='item.state==1|| item.state == 6'
-                        @click.stop="cancelOrder(item.orderId,index)">取消订单
-                  </text>
-                  <!-- <text class="btn l" v-if='item.state==2' >提醒发货</text> -->
-                  <text class="btn r"
-                        v-if='item.state==1'
-                        @click.stop="payOrder(item,index)">立即付款
-                  </text>
-                  <text class="btn l"
-                        v-if="(item.state==3 || item.state==4) && ( item.afterState == 0 || item.afterState == 6) && item.skus[0].ifAdd !== 1"
-                        @click.stop="applyTap(item,index)">申请售后
-                  </text>
-                  <text class="btn l"
-                        v-if='item.state==3 || item.state==4'
-                        @click.stop="goLogisticsTap(item.express,item.deliverFormid)">查看物流
-                  </text>
-                  <text class="btn r"
-                        v-if='item.state==3'
-                        @click.stop="confirmReceiptTap(item.orderId)">确认收货
-                  </text>
-                  <text class="btn l"
-                        v-if='item.returnType==1'
-                        @click.stop="refundDetail(item)">退款详情
-                  </text>
-                  <text class="btn r"
-                        v-if='item.state==6'
-                        @click.stop="goInviteSpll(item.collageId,item.orderId,item.skus[0].productId,item.skus[0].skuId,item.shopGroupWorkId)">
-                    邀请拼单
-                  </text>
-                  <text class="btn r"
-                        v-if='item.state==5'
-                        @click.stop="againCollage(item.skus[0].productId,item.shopId,item.skus[0].skuId,item.collageId!=0,item)">
-                    {{ item.collageId != 0 ? '再次开团' : '再次购买' }}
-                  </text>
-                </view>
+              <view class="total-price-box">
+                总价¥{{
+                  (orderItem.orderPrice + orderItem.logisticsPrice).toFixed(2)
+                }},优惠¥{{ orderItem.discountPrice }}
+                <span v-if="orderItem.price > 0">
+                      ，{{ orderItem.state === 1 ? '应付¥' : '实付¥' }}{{ orderItem.price }}
+                    </span>
+              </view>
+            </view>
+            <view
+                class="btnBox flex-items"
+                :class="{flexSpBetween: orderItem.state===5 || orderItem.state === 9}"
+            >
+              <view
+                  class="delIcon"
+                  v-if="orderItem.state===5 || orderItem.state === 9"
+                  @click.stop="handleDeleteOrder(orderItem)"
+              ></view>
+              <view class="order-btn-box">
+                <text
+                    :class="['btn',buttonItem.className] "
+                    v-for="buttonItem in getOrderOptionButtonObj(orderItem)"
+                    :key="buttonItem.name"
+                    @click.stop="handleOrderOptionButtonEvent(buttonItem)"
+                >
+                  {{ buttonItem.name }}
+                </text>
               </view>
             </view>
           </view>
         </view>
-        <view v-if="ifEmpty"
-              class="emptyOrder-box flex-items-plus flex-column">
-          <image class="emptyOrder-img"
-                 src="https://ceres.zkthink.com/static/images/emptyOrderImg.png"></image>
-          <label class="font-color-999 fs26 mar-top-30">你还没有订单哦～</label>
-        </view>
+        <NoMore :show="!isEmpty && list.length >=listTotal" />
+        <Empty
+            :show="isEmpty"
+            icon-url="https://ceres.zkthink.com/static/images/emptyOrderImg.png"
+        >您还没有订单哦~
+        </Empty>
       </view>
     </view>
-    <u-popup class="pay-type-popup"
-             v-model="showPayTypePopup"
-             mode="bottom"
-             border-radius="14"
-             close-icon-pos="top-right"
-             close-icon-size="20">
-      <view class="pay-type-item">
-        <radio-group @change="payTypeChange"
-                     v-model="paymentMode">
-          <view class="pay-type-radio">
-            <view class="pay-type-img">
-              <img class="pay-type-img-inner"
-                   src="https://ceres.zkthink.com/static/images/alipay.png"/>
-            </view>
-            <label class="pay-type-label">支付宝支付</label>
-            <radio class="pay-type-radio-item"
-                   style="transform:scale(0.7)"
-                   :checked="paymentMode == 2"
-                   value="2"/>
-          </view>
-          <view class="pay-type-radio">
-            <view class="pay-type-img">
-              <img class="pay-type-img-inner"
-                   src="https://ceres.zkthink.com/static/images/huabei.png"/>
-            </view>
-            <label class="pay-type-label">花呗分期</label>
-            <radio class="pay-type-radio-item"
-                   style="transform:scale(0.7)"
-                   :disabled="totalPrice < 0.03"
-                   :checked="paymentMode == 3"
-                   value="3"/>
-          </view>
-        </radio-group>
-        <view class="huabei-detail">
-          <radio-group @change="huabeiPeriodChange"
-                       v-model="huabeiPeriod">
-            <view class="period-radio">
-              <view class="period-amount">
-                <label class="period-each">￥ {{ fenqiFeeList[0]|clip2Decimal }}x3期</label>
-                <label class="period-each-charge">手续费￥{{ chargeFeeList[0]|clip2Decimal }}/期</label>
-              </view>
-              <radio class="period-type-radio-item"
-                     style="transform:scale(0.7)"
-                     :disabled="fenqiDisabledList[0]"
-                     :checked="huabeiPeriod == 3"
-                     value="3"/>
-            </view>
-            <view class="period-radio">
-              <view class="period-amount">
-                <label class="period-each">￥ {{ fenqiFeeList[1]|clip2Decimal }}x6期</label>
-                <label class="period-each-charge">手续费￥{{ chargeFeeList[1]|clip2Decimal }}/期</label>
-              </view>
-              <radio class="period-type-radio-item"
-                     style="transform:scale(0.7)"
-                     :disabled="fenqiDisabledList[1]"
-                     :checked="huabeiPeriod == 6"
-                     value="6"/>
-            </view>
-            <view class="period-radio">
-              <view class="period-amount">
-                <label class="period-each">￥ {{ fenqiFeeList[2]|clip2Decimal }}x12期</label>
-                <label class="period-each-charge">手续费￥{{ chargeFeeList[2]|clip2Decimal }}/期</label>
-              </view>
-              <radio class="period-type-radio-item"
-                     style="transform:scale(0.7)"
-                     :disabled="fenqiDisabledList[2]"
-                     :checked="huabeiPeriod == 12"
-                     value="12"/>
-            </view>
-          </radio-group>
-        </view>
-      </view>
-      <view class="paytype-confirm">
-        <view class="fenqi-total-amount"
-              v-if="totalPrice >= 0.03 && paymentMode == 3">
-          <label class="fenqi-all">分期总额 ￥{{ totalPrice|clip2Decimal }}</label>
-          <label class="charge-fee-all">手续费 ￥{{ chargeFee|clip2Decimal }}</label>
-        </view>
-        <view class="fenqi-total-amount"
-              v-if="paymentMode == 2">
-          <label class="order-amount">订单总额 ￥{{ totalPrice|clip2Decimal }}</label>
-        </view>
-        <view class="fenqi-confirm">
-          <text class="btn active"
-                @click="continuePay">确认
-          </text>
+    <!-- 支付 -->
+    <u-popup
+        v-model="payObj.showPayPopup"
+        border-radius="15"
+        closeable
+        mode="bottom"
+    >
+      <view class="pay-list-content">
+        <CashierList
+            :total-price="payObj.totalPrice"
+            @change="handleChangePayItem"
+        />
+        <view
+            class="pay-confirm-btn"
+            @click="handleGoPay"
+        >确认
         </view>
       </view>
     </u-popup>
-    <!-- 取消订单 -->
-    <tui-modal :show="closeTips"
-               :custom="true"
-               :fadein="true">
-      <view class="Put-box1">
-        <view class="text-align fs34 fs-bold">
-          温馨提示
-        </view>
-        <view class="mar-top-40 text-align">
-          您确定要取消该订单吗？
-        </view>
-        <view class="flex-display flex-sp-between">
-          <view class="btn"
-                @click="closeTips = false">
-            点错了
-          </view>
-          <view class="btn submit"
-                @click="doCancel">
-            确定取消
-          </view>
-        </view>
-      </view>
-    </tui-modal>
   </view>
 </template>
 
 <script>
-import tuiModal from "@/components/modal/modal";
+import CashierList from "../../components/CashierList";
+import AliHbPay from "../../components/AliHbPay";
+import NoMore from "../../components/NoMore";
+import Empty from "../../components/Empty";
+import { orderTabList, orderTypeEnum } from "./config/orderConfig";
+import { handleDoPay } from "../../utils/payUtil";
+import Skeleton from "../../components/Skeleton";
 
 const NET = require('../../utils/request')
 const API = require('../../config/api')
-// #ifdef H5
-var jweixin = require('jweixin-module')
-// #endif
+
 export default {
   components: {
-    tuiModal
+    AliHbPay,
+    NoMore,
+    Empty,
+    CashierList,
+    Skeleton
   },
   data() {
     return {
-      type: 0,
+      loading: false,
+      orderState: '',// 订单类型（params参数）
       page: 1,
       pageSize: 20,
-      list: [],
-      scrollLeft: 0,
-      tabList: [{
-        name: '全部',
-        number: 0
-      }, {
-        name: '待付款',
-        number: 1
-      }, {
-        name: '待发货',
-        number: 2
-      }, {
-        name: '待收货',
-        number: 3
-      }, {
-        name: '待评价',
-        number: 4
-      }, {
-        name: '待成团',
-        number: 6
-      },],
-      listTotal: 0,
-      loadingType: 0,
-      orderState: '',
-      paymentMode: 2,
-      showPayTypePopup: false,
-      chargeFee: 0,
-      totalPrice: 0,
-      huabeiPeriod: -1,
-      fenqiFeeList: [0, 0, 0],
-      chargeFeeList: [0, 0, 0],
-      fenqiDisabledList: [true, true, true],
-      huabeiChargeType: 1,
-      huabeiFeeRateList: [0, 0, 0],
-      alipayInfo: {},
-      ifEmpty: false,
-      closeTips: false,
-      currentOrderId: null,
-      currentIndex: null
+      list: [{}, {}, {}, {}, {}, {}],
+      listTotal: 0, // 用户订单总数
+      isEmpty: false, // 列表是否为空
+      tabList: orderTabList, // 顶部tabs
+      tabCurrentType: 0,// 选中tab的索引
+      // 支付相关
+      payObj: {
+        showPayPopup: false,
+        totalPrice: 0,
+        payInfo: {}
+      },
     }
   },
   onLoad(options) {
     if (options.type) {
-      this.type = options.type,
-          this.orderState = options.type
-      this.getListData()
-    } else {
-      this.getListData()
+      this.tabCurrentType = options.type
+      this.orderState = options.type
     }
-    this.getHuabeiFeeRateList()
+    this.handleRefreshList()
+  },
+  onShow(){
+    console.log("show")
+    // #ifdef H5
+    const pageList = getCurrentPages();//获取应用页面栈
+    const {options} = pageList[pageList.length - 1];//获取当前页面信息
+    if (options.type) {
+      this.tabCurrentType = options.type
+      this.orderState = options.type
+    }
+    this.handleRefreshList()
+    // #endif
   },
   onReachBottom() {
-    if (this.loadingType == 1) {
-      uni.stopPullDownRefresh()
-    } else {
-      this.page = this.page + 1
-      this.getListData()
-    }
+    ++this.page
+    this.handleGetOrderList()
   },
   onBackPress(e) {
     if (e && e.from === 'navigateBack') {
       return false;
     }
-    this.back();
+    this.goUserIndex();
     return true;
   },
   methods: {
-    //去商品详情
-    againCollage(productId, shopId, skuId, isStartAGroup, item) {
-      console.log(item)
-      if (isStartAGroup) {
-        uni.navigateTo({
-          url: '../goodsModule/goodsDetails?productId=' + productId + '&shopId=' + shopId + '&skuId=' +
-              skuId
-        })
-      } else {
-        // 跳转详情
-        this.buyAgain(item)
+    /**
+     * 重新加载列表
+     */
+    async handleRefreshList() {
+      this.loading = true
+      this.page = 1
+      this.list = [{}, {}, {}, {}, {}, {}]
+      this.isEmpty = false
+      await this.handleGetOrderList()
+    },
+
+
+    /**
+     * 切换tab
+     * @param tabIndex
+     */
+    async handleTabChange(tabIndex) {
+      if(this.loading)return
+      this.tabCurrentType = tabIndex;
+      this.orderState = this.tabList[tabIndex].number
+      await this.handleRefreshList()
+    },
+
+    /**
+     * 获取列表数据
+     * @return {Promise<void>}
+     */
+    async handleGetOrderList() {
+      this.$showLoading()
+      this.orderState === 0 ? this.orderState = '' : undefined
+      try {
+        const params = {
+          state: this.orderState,
+          page: this.page,
+          pageSize: this.pageSize
+        }
+        const {data: {list, total}} = await NET.request(API.FindOrderList, params, 'GET')
+        this.listTotal = total
+        this.list = this.list.concat(list)
+        this.list = this.list.filter(item => JSON.stringify(item) !== '{}')
+        if (this.list.length === 0) {
+          this.isEmpty = true
+        }
+      } finally {
+        this.loading = false
+        this.$hideLoading()
       }
     },
-    async buyAgain(item) {
-      // 循环sku，获取商品详情
+
+
+    /**
+     * 根据订单状态获取状态label
+     * @param state
+     * @param returnType 是否退款1是
+     * @return {string}
+     */
+    getOrderStatusLabel(state, returnType = 0) {
+      if (returnType) return '退款中'
+      return orderTypeEnum[state]
+    },
+
+    /**
+     * 根据订单Item获取按钮信息
+     * @param orderItem
+     * @return *[]
+     */
+    getOrderOptionButtonObj(orderItem) {
+      const {state, returnType, afterState, skus, collageId} = orderItem
+      const orderNeedBtnList = [] // 订单应有的btn
+      // 取消订单
+      if ([1, 6].includes(state)) {
+        orderNeedBtnList.push({
+          name: '取消订单',
+          className: 'l',
+          functionName: 'handleCancelOrder',
+          functionParams: [orderItem]
+        })
+      }
+      // 立即付款
+      if (state === 1) {
+        orderNeedBtnList.push({
+          name: '立即付款',
+          className: 'r',
+          functionName: 'handlePayOrder',
+          functionParams: [orderItem]
+        })
+      }
+      // 申请售后
+      if ([2, 3, 4].includes(state) && [0, 6].includes(Number(afterState)) && skus[0].ifAdd !== 1) {
+        orderNeedBtnList.push({
+          name: '申请售后',
+          className: 'l',
+          functionName: 'goAfterSalesService',
+          functionParams: [orderItem]
+        })
+      }
+      // 查看物流
+      if ([3, 4].includes(state)) {
+        orderNeedBtnList.push({
+          name: '查看物流',
+          className: 'l',
+          functionName: 'goLogisticsInformation',
+          functionParams: [orderItem]
+        })
+      }
+      // 确认收货
+      if ([3].includes(state)) {
+        orderNeedBtnList.push({
+          name: '确认收货',
+          className: 'r',
+          functionName: 'handleConfirmReceipt',
+          functionParams: [orderItem]
+        })
+      }
+      // 退款详情
+      if ([1].includes(returnType)) {
+        orderNeedBtnList.push({
+          name: '退款详情',
+          className: 'l',
+          functionName: 'goRefundDetail',
+          functionParams: [orderItem]
+        })
+      }
+      // 邀请拼单
+      if ([6].includes(state)) {
+        orderNeedBtnList.push({
+          name: '邀请拼单',
+          className: 'r',
+          functionName: 'goSpellGroup',
+          functionParams: [orderItem]
+        })
+      }
+      // 再次开团 | 再次购买
+      if ([5].includes(state)) {
+        orderNeedBtnList.push({
+          name: collageId !== 0 ? '再次开团' : '再次购买',
+          className: 'r',
+          functionName: 'handleBuyAgainEvent',
+          functionParams: [orderItem]
+        })
+      }
+      return orderNeedBtnList
+    },
+
+    /**
+     * 处理订单btn事件
+     * @param buttonItem 由getOrderOptionButtonObj生成的item项
+     */
+    handleOrderOptionButtonEvent(buttonItem) {
+      const {functionName, functionParams} = buttonItem
+      if (this[functionName]) {
+        this[functionName](...functionParams)
+      } else {
+        throw new Error(`${ buttonItem.name }的function在本VM中不存在`)
+      }
+    },
+
+    /**
+     * 取消订单
+     * @param orderItem
+     */
+    handleCancelOrder(orderItem) {
+      const modalOptions = {
+        title: '温馨提示',
+        content: '您确定要取消该订单吗？',
+        confirmText: '确定取消',
+        cancelText: '点错了',
+        success: ({confirm}) => {
+          confirm ? this.handleDoCancel(orderItem) : undefined
+        }
+      }
+      uni.showModal(modalOptions)
+    },
+
+    /**
+     * 确定取消订单
+     * @param orderItem
+     * @return {Promise<void>}
+     */
+    async handleDoCancel(orderItem) {
+      this.$showLoading()
+      try {
+        await NET.request(API.CancelOrder, {
+          orderId: orderItem.orderId
+        }, 'POST')
+        await this.handleRefreshList()
+        uni.showToast({
+          icon: 'none',
+          title: '取消成功'
+        })
+      } finally {
+        this.$hideLoading()
+      }
+    },
+
+    /**
+     * 确认收货
+     * @param orderItem
+     */
+    handleConfirmReceipt(orderItem) {
+      const modalOptions = {
+        title: '温馨提示',
+        content: '确定您已经收到货物，否则会造成财产损失',
+        confirmText: '确定收到',
+        cancelText: '点错了',
+        success: ({confirm}) => {
+          confirm ? this.handleDoConfirmReceipt(orderItem) : undefined
+        }
+      }
+      uni.showModal(modalOptions)
+    },
+
+    /**
+     * 确定确认收货
+     * @param orderItem
+     * @return {Promise<void>}
+     */
+    async handleDoConfirmReceipt(orderItem) {
+      this.$showLoading()
+      const {orderId} = orderItem
+      try {
+        await NET.request(API.ConfirmReceive, {
+          orderId: orderId
+        }, 'POST')
+        this.tabCurrentType = 4;
+        this.orderState = 4
+        await this.handleRefreshList()
+        uni.showToast({
+          icon: 'none',
+          title: '收货成功'
+        })
+      } finally {
+        this.$hideLoading()
+      }
+    },
+
+    /**
+     * 删除订单
+     * @param orderItem
+     */
+    handleDeleteOrder(orderItem) {
+      const modalOptions = {
+        title: '温馨提示',
+        content: '您确定要删除该订单吗？',
+        confirmText: '确定删除',
+        cancelText: '点错了',
+        success: ({confirm}) => {
+          confirm ? this.handleDoDeleteOrder(orderItem) : undefined
+        }
+      }
+      uni.showModal(modalOptions)
+    },
+
+    /**
+     * 确定删除订单
+     * @param orderItem
+     */
+    async handleDoDeleteOrder(orderItem) {
+      this.$showLoading()
+      const {orderId} = orderItem
+      try {
+        await NET.request(API.DelOrder, {orderId}, 'POST')
+        await this.handleRefreshList()
+        uni.showToast({
+          icon: 'none',
+          title: '删除成功'
+        })
+      } finally {
+        this.$hideLoading()
+      }
+
+    },
+
+    /**
+     * 再次购买 || 再次拼团
+     * @param orderItem
+     */
+    handleBuyAgainEvent(orderItem) {
+      const {skus, shopId, collageId} = orderItem
+      // 判断拼团ID是否为0
+      if (collageId !== 0) {
+        // 拼团直接跳回商品详情
+        const path = `../goodsModule/goodsDetails`
+        const params = {
+          productId: skus[0].productId,
+          shopId,
+          skuId: skus[0].skuId
+        }
+        this.$jump(path, params)
+      } else {
+        // 跳转详情
+        this.goBuyAgain(orderItem)
+      }
+    },
+
+    /**
+     * 处理选择支付方式
+     * @param params
+     */
+    handleChangePayItem(params) {
+      const {payObj: {payInfo}} = this
+      payInfo.paymentMode = params.paymentMode
+      payInfo.huabeiPeriod = params.huabeiPeriod
+    },
+
+    /**
+     * 处理下单支付
+     * @param orderItem
+     * @return {Promise<void>}
+     */
+    async handlePayOrder(orderItem) {
+      const {orderPrice, collageId, orderId} = orderItem
+      const {payObj} = this
+      payObj.totalPrice = orderPrice
+      payObj.payInfo = {
+        collageId: collageId,
+        money: orderPrice,
+        orderId: orderId,
+        type: 2
+      }
+      payObj.showPayPopup = true
+    },
+
+    /**
+     * 处理支付（选择支付方式以后）
+     */
+    async handleGoPay() {
+      const {payObj} = this
+      await handleDoPay(this.payObj.payInfo)
+      payObj.showPayPopup = false
+      payObj.totalPrice = 0
+      payObj.payInfo = {}
+    },
+
+    /**
+     * 去物流信息
+     * @param orderItem
+     */
+    goLogisticsInformation(orderItem) {
+      const {express, deliverFormid} = orderItem
+      const url = `logisticsInfo?express=${ express }&deliverFormid=${ deliverFormid }`
+      this.$jump(url)
+    },
+
+    /**
+     * 跳转再次购买
+     * @param orderItem
+     * @return {Promise<void>}
+     */
+    async goBuyAgain(orderItem) {
+      // 循环sku，获取商品详情，并且判断库存
       const postAjax = []
-      item.skus.forEach(e=>{
-        postAjax.push(this.queryProductDetail(e))
+      orderItem.skus.forEach(skuItem => {
+        postAjax.push(this.queryProductDetail(skuItem))
       })
       // 并发执行
       const skuDetailList = await Promise.all(postAjax);
       let canNotBuyNameList = []
       // 判断库存
-      skuDetailList.forEach(skuDetail=>{
+      skuDetailList.forEach(skuDetail => {
         for (const skuDetailSkuMapKey in skuDetail.map) {
           // 判断此SKU是否存在于传进来的item
-          const findSku = item.skus.find(findItem=>findItem.skuId === skuDetail.map[skuDetailSkuMapKey].skuId);
-          if(findSku){
-            const skuInfo = skuDetail.map[skuDetailSkuMapKey]
-            if(findSku.number > skuInfo.stockNumber){
-              canNotBuyNameList.push(findSku.productName)
-            }
+          const orderItemSku = orderItem.skus.find(skuItem => skuItem.skuId === skuDetail.map[skuDetailSkuMapKey].skuId);
+          if (!orderItemSku) continue
+          const dbSku = skuDetail.map[skuDetailSkuMapKey]
+          if (orderItemSku.number > dbSku.stockNumber) {
+            canNotBuyNameList.push(orderItemSku.productName)
           }
         }
       })
       // 如果有库存不足
-      if(canNotBuyNameList.length>0){
-        uni.showToast({
-          icon:'none',
-          title:canNotBuyNameList.join(",")+" 库存不足"
+      if (canNotBuyNameList.length > 0) {
+        return uni.showToast({
+          icon: 'none',
+          title: canNotBuyNameList.join(",") + " 库存不足"
         })
-        return;
       }
       // 制造数据
       const buyInfo = [{
-        ifWork: item.ifWork,
-        shopId: item.shopId,
-        shopName: item.shopName,
-        shopDiscountId: item.shopDiscountId,
-        shopSeckillId: item.shopSeckillId,
-        skus: item.skus
+        ifWork: orderItem.ifWork,
+        shopId: orderItem.shopId,
+        shopName: orderItem.shopName,
+        shopDiscountId: orderItem.shopDiscountId,
+        shopSeckillId: orderItem.shopSeckillId,
+        skus: orderItem.skus
       }]
       uni.setStorageSync('skuItemDTOList', buyInfo)
       uni.navigateTo({
@@ -398,580 +613,117 @@ export default {
       })
     },
 
-    //获取商品详情
-    async queryProductDetail(item) {
-      // uni.showLoading({
-      //   title: '加载中...',
-      //   mask: true
-      // })
-      this.$showLoading("加载中...")
+    /**
+     * 获取商品详情
+     * @param orderItem
+     * @return {Promise<*>}
+     */
+    async queryProductDetail(orderItem) {
+      const {shopId, productId, skuId} = orderItem
+      this.$showLoading()
       let postData = {
-        shopId: item.shopId,
-        productId: item.productId,
-        skuId: item.skuId,
+        shopId,
+        productId,
+        skuId,
         terminal: 1
       }
-      let productData
-      const res = await NET.request(API.QueryProductDetail, postData, "GET")
-      this.$hideLoading()
-      return res.data
-    },
-
-    goInviteSpll(collageId, orderId, productId, skuId, shopGroupWorkId) {
-      uni.navigateTo({
-        url: '../goodsModule/inviteSpell?collageId=' + collageId + '&orderId=' + orderId + '&type=1' +
-            '&productId=' + productId + '&skuId=' + skuId + '&shopGroupWorkId=' + shopGroupWorkId
-
-      })
-    },
-    back() {
-      uni.switchTab({
-        url: '../../pages/tabbar/user/index'
-      });
-    },
-    //退款详情
-    refundDetail(item) {
-      uni.navigateTo({
-        url: 'refundDetails?item=' + JSON.stringify(item)
-      })
-    },
-    orderStateChange(index) {
-      this.type = index;
-      this.orderState = this.tabList[index].number
-      this.page = 1
-      this.list = []
-      this.ifEmpty = false
-      this.getListData()
-    },
-    // 订单列表数据
-    getListData() {
-      if (this.orderState == 0) {
-        this.orderState = ''
+      try {
+        const res = await NET.request(API.QueryProductDetail, postData, "GET")
+        return res.data
+      } catch (e) {
+        throw new Error(e)
+      } finally {
+        this.$hideLoading()
       }
-      // uni.showLoading({
-      //   mask: true,
-      //   title: '加载中...',
-      // })
-      this.$showLoading("加载中...")
-      NET.request(API.FindOrderList, {
-        state: this.orderState,
-        page: this.page,
-        pageSize: this.pageSize
-      }, 'GET').then(res => {
-        if (res.data.list.length == 0) {
-          this.loadingType = 1
-          this.page = this.page
-        }
-        // uni.hideLoading()
-        this.$hideLoading()
-        this.listTotal = res.data.total
-        this.list = this.list.concat(res.data.list)
-        if (this.list.length === 0) {
-          this.ifEmpty = true
-        }
-      }).catch(res => {
-        // uni.hideLoading()
-        this.$hideLoading()
-      })
     },
-    cancelOrder(orderId, index) {
-      this.currentOrderId = orderId
-      this.currentIndex = index
-      this.closeTips = true
-    },
-    doCancel() {
-      this.closeTips = false
-      // uni.showLoading({
-      //   mask: true,
-      //   title: '提交中...',
-      // })
-      this.$showLoading("加载中...")
-      NET.request(API.CancelOrder, {
-        orderId: this.currentOrderId
-      }, 'POST').then(res => {
-        // uni.hideLoading()
-        this.$hideLoading()
 
-        uni.showToast({
-          title: '取消成功',
-        })
-        setTimeout(() => {
-          // this.type = 0
-          // this.orderState = 0
-          this.page = 1
-          this.list = []
-          this.currentOrderId = null
-          this.currentIndex = null
-          this.getListData()
-        }, 1500);
-
-      }).catch(res => {
-        // uni.hideLoading()
-        this.$hideLoading()
-
-      })
+    /**
+     * 邀请拼单
+     * @param orderItem
+     */
+    goSpellGroup(orderItem) {
+      const {collageId, orderId, skus, shopGroupWorkId} = orderItem
+      const url = `../goodsModule/inviteSpell?collageId=${ collageId }&orderId=${ orderId }&type=1&productId=${ skus[0].productId }&skuId=${ skus[0].skuId }&shopGroupWorkId=${ shopGroupWorkId }`
+      this.$jump(url)
     },
-    goLogisticsTap(express, deliverFormid) {
-      uni.navigateTo({
-        url: 'logisticsInfo?express=' + express + '&deliverFormid=' + deliverFormid
-      })
-    },
-    confirmReceiptTap(orderId) {
-      uni.showModal({
-        title: '温馨提示',
-        content: '确定您已经收到货物，否则会造成财产损失',
-        confirmText: '确定收到',
-        cancelText: '点错了',
-        success: res => {
-          if (res.confirm) {
-            this.doConfirm(orderId)
-          } else if (res.cancel) {
-            console.log('用户点击取消')
-          }
-        }
-      })
-    },
-    doConfirm(orderId) {
-      NET.request(API.ConfirmReceive, {
-        orderId: orderId
-      }, 'POST').then(res => {
-        // uni.hideLoading()
-        this.$hideLoading()
 
-        uni.showToast({
-          title: '确认成功',
-        })
-        setTimeout(() => {
-          this.type = 4;
-          this.orderState = 4
-          this.page = 1
-          this.list = []
-          this.getListData()
-        }, 1500);
-      }).catch(res => {
-        // uni.hideLoading()
-        this.$hideLoading()
-
-      })
+    /**
+     * 去用户中心
+     */
+    goUserIndex() {
+      this.$jumpToTabbar('../../pages/tabbar/user/index')
     },
-    delOrder(orderId) {
-      uni.showModal({
-        title: '温馨提示',
-        content: '您确定要删除该订单吗？',
-        confirmText: '确定删除',
-        cancelText: '点错了',
-        success: res => {
-          if (res.confirm) {
-            this.doDel(orderId)
-          } else if (res.cancel) {
-            console.log('用户点击取消')
-          }
-        }
-      })
-    },
-    doDel(orderId) {
-      // uni.showLoading({
-      //   title: '提交中...',
-      // })
-      this.$showLoading("加载中...")
-      NET.request(API.DelOrder, {
-        orderId: orderId
-      }, 'POST').then(res => {
-        // uni.hideLoading()
-        this.$hideLoading()
 
-        uni.showToast({
-          title: '删除成功',
-        })
-        setTimeout(() => {
-          // this.type = 0;
-          // this.orderState = 0
-          this.page = 1
-          this.list = []
-          this.getListData()
-        }, 1500);
-
-      }).catch(res => {
-        // uni.hideLoading()
-        this.$hideLoading()
-
-      })
+    /**
+     * 去退款详情
+     * @param orderItem
+     */
+    goRefundDetail(orderItem) {
+      this.$jump(`/pages_category_page2/orderModule/refundDetails?item=${ JSON.stringify(orderItem) }`)
     },
-    // 跳转订单详情
-    itemTap(orderId, item) {
-      uni.setStorageSync("afterapplyItem", item)
-      uni.navigateTo({
-        url: 'orderDetails?orderId=' + orderId
-      })
+
+    /**
+     * 跳转订单详情
+     * @param orderItem
+     */
+    goOrderDesc(orderItem) {
+      this.$jump(`orderDetails`, orderItem)
     },
+
+    /**
+     * 跳转店铺
+     * @param id
+     */
     goShop(id) {
-      uni.navigateTo({
-        url: "../store/index?storeId=" + id
-      })
+      this.$jump(`../store/index?storeId=${ id }`)
+    },
 
+    /**
+     * 申请售后
+     * @param orderItem
+     */
+    goAfterSalesService(orderItem) {
+      this.$jump(`afterSaleApply?item=${ JSON.stringify(orderItem) }`)
     },
-    applyTap(item, index) {
-      // 申请售后
-      uni.navigateTo({
-        url: 'afterSaleApply?item=' + JSON.stringify(item)
-      })
-    },
-    payOrder(item, index) {
-      // #ifdef MP-ALIPAY
-      this.showPayTypePopup = true
-      this.totalPrice = item.orderPrice
-      // #endif
-      // #ifndef MP-ALIPAY
-      // uni.showLoading({
-      //   title: '订单提交中...',
-      // })
-      this.$showLoading("加载中...")
-      // #endif
-      let submitResult = {
-        collageId: item.collageId,
-        money: item.orderPrice,
-        orderId: item.orderId,
-        type: 2
+
+    /**
+     * 立即评价
+     * @param type
+     * @param skuItem
+     * @param orderId
+     */
+    goEvaluate(type, skuItem, orderId) {
+      const params = {
+        commentData: skuItem,
+        orderId
       }
-      // #ifdef H5
-      let ua = navigator.userAgent.toLowerCase();
-      if (ua.match(/MicroMessenger/i) == "micromessenger") {
-        this.payRequest(submitResult)
-      } else {
-        NET.request(API.gotoH5Pay, submitResult, 'POST').then(res => {
-          //console.dir(res)
-          location.replace(res.data.mwebUrl)
-          // window.location.replace(url)
-          this.$hideLoading()
+      this.$jump('../goodsModule/evaluate', params)
+    },
 
-        }).catch(err => {
-          this.submitActive = true
-          // uni.hideLoading()
-          uni.showToast({
-            title: '支付失败',
-            icon: 'none'
-          })
-          this.$hideLoading()
-
-        })
+    /**
+     * 追加评价
+     * @param orderIndex
+     * @param commentId
+     */
+    goAdditionalEvaluation(orderIndex, commentId) {
+      const params = {
+        addCommentVOList: this.list[orderIndex],
+        commentId,
+        type: 1
       }
-      // #endif
-      // #ifdef MP-ALIPAY
-      this.alipayInfo = submitResult
-      // #endif
-      // #ifdef MP-WEIXIN
-      let that = this
-      NET.request(API.gotoPay, submitResult, 'POST').then(res => {
-        console.log(item, 'item订单提交9999')
-        console.log(res, 'res订单提交9999')
-        let param = {
-          orderId: item.orderId,
-          collageId: item.collageId
-        }
-        uni.requestPayment({
-          provider: 'wxpay',
-          timeStamp: res.data.timeStamp,
-          nonceStr: res.data.nonceStr,
-          package: res.data.package,
-          signType: res.data.signType,
-          paySign: res.data.paySign,
-          success: (payRes) => {
-            // 拼团支付成功回调
-            if (param.collageId) {
-              NET.request(API.paySuccess, param, 'POST').then(res => {
-                console.log(res, '支付成功')
-              })
-            }
-            uni.showToast({
-              icon: 'none',
-              title: '支付成功'
-            })
-            this.type = 0
-            this.page = 1
-            this.orderState = ''
-            this.list = []
-            this.getListData()
-            this.$hideLoading()
-          },
-          fail:  (err)=> {
-            uni.showToast({
-              icon: 'none',
-              title: '支付失败'
-            })
-            this.$hideLoading()
-          }
-        })
-      }).catch(err => {
-        // uni.hideLoading()
-        this.$hideLoading()
-
-        uni.showToast({
-          title: '支付失败',
-          icon: 'none'
-        })
-      })
-      // #endif
-      // #ifdef APP-PLUS
-      NET.request(API.gotoAppPay, submitResult, 'POST').then(res => {
-        console.log("支付返回---", res)
-        var obj = {
-          appid: res.data.appId,
-          noncestr: res.data.nonceStr,
-          package: 'Sign=WXPay',
-          prepayid: res.data.prepayId,
-          timestamp: res.data.timeStamp,
-          sign: res.data.paySign,
-          partnerid: res.data.partnerId
-        }
-        console.log(obj)
-        uni.requestPayment({
-          provider: 'wxpay',
-          orderInfo: obj,
-          success: (payRes) => {
-            uni.showToast({
-              icon: 'none',
-              title: '支付成功'
-            })
-            this.type = 0
-            this.page = 1
-            this.orderState = ''
-            this.list = []
-            this.$hideLoading()
-
-            this.getListData()
-
-          },
-          fail:(err)=> {
-            console.log(err)
-            uni.showToast({
-              icon: 'none',
-              title: '支付取消'
-            })
-            this.$hideLoading()
-          }
-        })
-      }).catch(err => {
-        // uni.hideLoading()
-        this.$hideLoading()
-
-        uni.showToast({
-          title: '支付失败',
-          icon: 'none'
-        })
-      })
-      // #endif
-    },
-    continuePay() {
-      // uni.showLoading({
-      //   title: '加载中...',
-      // })
-      this.$showLoading("加载中...")
-      const payInfo = Object.assign({}, this.alipayInfo, {
-        'paymentMode': this.paymentMode,
-        'huabeiPeriod': this.huabeiPeriod
-      });
-      this.aliPay(payInfo)
-    },
-    // 支付宝支付
-    aliPay(payInfo) {
-      NET.request(API.gotoPay, payInfo, 'POST').then(res => {
-        console.log('alipay gotoPay-----------')
-        uni.requestPayment({
-          provider: 'alipay',
-          orderInfo: res.data.tradeNo,
-          success: (payRes) => {
-            // uni.hideLoading()
-            this.$hideLoading()
-
-            if (payRes.resultCode == '6001') {
-              uni.showToast({
-                icon: 'none',
-                title: '取消支付'
-              })
-            }
-            if (payRes.resultCode == '9000') {
-              uni.showToast({
-                icon: 'none',
-                title: '支付成功'
-              })
-              uni.navigateTo({
-                url: 'index?type=0'
-              })
-            }
-          },
-          fail:  (err)=> {
-            this.$hideLoading()
-            uni.showToast({
-              icon: 'none',
-              title: '支付取消'
-            })
-          }
-        });
-      }).catch(err => {
-        // uni.hideLoading()
-        this.$hideLoading()
-
-        uni.showToast({
-          title: '支付失败',
-          icon: 'none'
-        })
-      })
-    },
-    // H5支付微信内置浏览器支付
-    payRequest(payInfo) {
-      payInfo.paymentMode = 1
-      NET.request(API.gotoPay, payInfo, 'POST').then(res => {
-        jweixin.config({
-          debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-          appId: res.data.appId, // 必填，公众号的唯一标识
-          timestamp: res.data.timeStamp, // 必填，生成签名的时间戳
-          nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
-          signature: res.data.paySign, // 必填，签名，见附录1
-          jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-        });
-        jweixin.ready(function () {
-          jweixin.checkJsApi({
-            jsApiList: ['chooseWXPay'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
-            success: function (res) {
-              // console.log('checkjsapi Success')
-              // console.log(res);
-            },
-            fail: function (res) {
-              // console.log('res')
-              // console.log(res);
-            }
-          });
-          jweixin.chooseWXPay({
-            timestamp: res.data
-                .timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-            nonceStr: res.data.nonceStr, // 支付签名随机串，不长于 32 位
-            package: res.data
-                .package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-            signType: res.data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-            paySign: res.data.paySign, // 支付签名
-            success: function (res) {
-              // 支付成功后的回调函数
-              uni.showToast({
-                icon: 'none',
-                title: '支付成功'
-              })
-              uni.navigateTo({
-                url: 'index?type=0'
-              })
-            },
-            cancel: function (r) {
-              uni.showToast({
-                icon: 'none',
-                title: '取消支付'
-              })
-            },
-            fail: function (res) {
-              uni.showToast({
-                icon: 'none',
-                title: '支付失败'
-              })
-            }
-          });
-        });
-        jweixin.error( (res)=> {
-          console.log('error')
-          console.log(res)
-          // uni.hideLoading()
-          this.$hideLoading()
-
-          uni.showToast({
-            icon: 'none',
-            title: '支付失败了',
-            duration: 3000
-          });
-        });
-      }).catch(err => {
-        // uni.hideLoading()
-        this.$hideLoading()
-
-      })
-    },
-    evaluateTap(item, orderId) {
-      uni.setStorageSync('evaluateItem', item)
-      uni.setStorageSync('orderId', orderId)
-      uni.navigateTo({
-        url: '../goodsModule/evaluate',
-      })
-    },
-    evaluateTowTap(index, commentId) {
-      console.log(commentId, 444)
-      uni.setStorageSync('addCommentVOList', this.list[index]);
-      uni.navigateTo({
-        url: '../goodsModule/addEvaluate?type=1&commentId=' + commentId
-      })
-    },
-    payTypeChange(event) {
-      this.paymentMode = event.target.value;
-      if (this.paymentMode == 2) {
-        this.huabeiPeriod = -1
-        this.fenqiDisabledList = [true, true, true]
-      } else {
-        this.huabeiPeriod = 3
-      }
-      this.recalcHuabei()
-    },
-    recalcHuabei() {
-      if (this.paymentMode == 3) {
-        this.fenqiFeeList[0] = this.totalPrice * (1 + this.huabeiFeeRateList[0] / 100) / 3
-        this.fenqiFeeList[1] = this.totalPrice * (1 + this.huabeiFeeRateList[1] / 100) / 6
-        this.fenqiFeeList[2] = this.totalPrice * (1 + this.huabeiFeeRateList[2] / 100) / 12
-
-        this.chargeFeeList[0] = this.totalPrice * (this.huabeiFeeRateList[0] / 100) / 3
-        this.chargeFeeList[1] = this.totalPrice * (this.huabeiFeeRateList[1] / 100) / 6
-        this.chargeFeeList[2] = this.totalPrice * (this.huabeiFeeRateList[2] / 100) / 12
-
-        var index = 0;
-        if (this.huabeiPeriod == 6) {
-          index = 1
-        } else if (this.huabeiPeriod == 12) {
-          index = 2
-        }
-        this.chargeFee = (this.totalPrice * (this.huabeiFeeRateList[index] / 100))
-            .toFixed(2)
-
-        if (this.totalPrice >= 0.03) {
-          this.fenqiDisabledList[0] = false
-        }
-        if (this.totalPrice >= 0.06) {
-          this.fenqiDisabledList[1] = false
-        }
-        if (this.totalPrice >= 0.12) {
-          this.fenqiDisabledList[2] = false
-        }
-      }
-    },
-    // 花呗分期数变更
-    huabeiPeriodChange(event) {
-      this.huabeiPeriod = event.target.value
-      this.recalcHuabei()
-    },
-    // 查询花呗分期配置
-    getHuabeiFeeRateList() {
-      NET.request(API.GetHuabeiConfig, {}, 'GET').then(res => {
-        this.huabeiChargeType = res.data.huabeiChargeType
-        if (this.huabeiChargeType == 2) {
-          this.huabeiFeeRateList = res.data.huabeiFeeRateList
-        }
-      })
+      this.$jump('../goodsModule/addEvaluate', params)
     }
-  },
-  filters: {
-    clip2Decimal(value) {
-      if (value === undefined || value === null) {
-        return "0.00"
-      }
-      return (parseInt(value * 100) / 100).toFixed(2)
-    }
+
   }
 }
 </script>
 
 <style lang="scss">
+.tabs {
+  position: relative;
+  z-index: 9999;
+}
+
 page {
   width: 100%;
   height: 100%;
@@ -1211,130 +963,6 @@ page {
   }
 }
 
-.pay-type-item {
-  .pay-type-radio {
-    background-color: white;
-    border-bottom: 1upx solid #EDEDED;
-    margin-bottom: 20upx;
-    padding: 24upx 20upx 24upx 20upx;
-
-    .pay-type-img {
-      display: inline-block;
-
-      .pay-type-img-inner {
-        width: 50upx;
-        height: 50upx;
-        vertical-align: middle;
-      }
-    }
-
-    .pay-type-label {
-      vertical-align: middle;
-      margin-left: 30upx;
-    }
-
-    .pay-type-radio-item {
-      float: right;
-      margin-right: 20upx;
-      width: 50upx;
-      height: 50upx;
-    }
-  }
-
-  .huabei-detail {
-    margin-top: 20upx;
-
-    .fenqi-wenzi {
-      display: inline-block;
-      margin-left: 64upx;
-    }
-
-    .fenqi-amount {
-      display: block;
-      margin-left: 64upx;
-      margin-top: 14upx;
-      color: #BABBBC;
-    }
-
-    .fenqi-charge-fee {
-      float: right;
-      margin-right: 68upx;
-      color: #BABBBC;
-    }
-
-    .fenqi-modal {
-      width: 40upx;
-      height: 40upx;
-      margin-left: 20upx;
-      float: right;
-      position: relative;
-      top: -80upx;
-    }
-  }
-}
-
-.paytype-confirm {
-  height: 120upx;
-  padding: 0upx 108upx 0upx 32upx;
-
-  .fenqi-all {
-    display: inline-block;
-    width: 100%;
-  }
-
-  .fenqi-total-amount {
-    width: 65%;
-    float: left;
-  }
-
-  .fenqi-confirm {
-    float: right;
-    width: 160upx;
-    padding: 0upx 20upx;
-
-    .btn {
-      width: 216upx;
-      height: 80upx;
-      line-height: 80upx;
-      border-radius: 40upx;
-      font-size: 28upx;
-      text-align: center;
-      background: linear-gradient(90deg, rgba(255, 162, 0, 1), rgba(255, 121, 17, 1));
-      color: #fff;
-      display: inline-block;
-      margin-right: 66upx;
-    }
-  }
-}
-
-.period-radio {
-  margin: 30upx;
-  padding-right: 100upx;
-  width: 95%;
-  border-bottom: 1px solid #EFEFEF;
-
-  .period-amount {
-    display: inline-block;
-
-    .period-each-charge {
-      display: inline-block;
-      margin-top: 12upx;
-      margin-left: 6upx;
-      font-size: 26upx;
-      color: #b7b7b7;
-      margin-bottom: 13upx;
-    }
-  }
-
-  .period-each {
-    display: block;
-  }
-
-  .period-type-radio-item {
-    float: right;
-  }
-}
-
 .Put-box1 {
   .btn {
     text-align: center;
@@ -1351,6 +979,28 @@ page {
     color: #FFEBC4;
   }
 }
+
+.pay-list-content {
+  width: 100%;
+  padding: 60rpx 30rpx 20rpx 30rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .pay-confirm-btn {
+    width: 80%;
+    height: 88rpx;
+    margin-top: 15rpx;
+    border-radius: 15rpx;
+    color: #fff;
+    background-color: #c5aa7b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 </style>
 <style scoped>
 .container /deep/ .u-tab-item {

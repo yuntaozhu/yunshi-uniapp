@@ -1,6 +1,12 @@
 <template>
 	<view class="footprint-box">
     <global-loading />
+    <u-skeleton
+        el-color="#efefef"
+        bg-color="#fff"
+        :loading="loading && isFirstComeIn"
+        :animation="true"
+    ></u-skeleton>
 		<view v-if="!tipsShow">
 			<view class="wid function-box">
 				<view class="finishbox" @click="finishClick" v-if="allCheckShow">完成</view>
@@ -9,11 +15,11 @@
 					<label class="mar-left-10">编辑</label>
 				</view>
 			</view>
-			<view class="swipe-box" v-for="(ditem, findex) in footprintList" :key="findex" >
-				<view class="daytime">
+			<view class="swipe-box  u-skeleton" v-for="(ditem, findex) in footprintList" :key="findex" >
+				<view class="daytime  u-skeleton-fillet">
 					<label class="mar-left-30">{{ditem.createTime}}</label>
 				</view>
-        <view class="listItem" :index="index" v-for="(item, index) in ditem.products" :key="item.footprintId" @click="click(index,findex)">
+        <view class="listItem u-skeleton-fillet" :index="index" v-for="(item, index) in ditem.products" :key="item.footprintId" @click="click(index,findex)">
           <u-swipe-action :show="item.show"  ref="footActionSwipe" :disabled="allCheckShow"
 		  @open="open(index,findex)" @click="delFootProduction(index,findex)" :options="options">
             <view class="itemBox">
@@ -88,6 +94,8 @@
 		},
 		data() {
 			return {
+        loading:false,
+        isFirstComeIn:true,
 				allCheckShow:false,
 				isAllCheck:false,
 				disabled: false,
@@ -105,7 +113,7 @@
 				page:1,
 				pageSize:5,
 				loadingType:0,
-				footprintList:[],
+				footprintList:[{products:[{},{},{},{},{},{},{}],isReady:1}],
 				footEmpty:false,
 				newTimeArr:[],
                 tipsShow: false,
@@ -215,6 +223,7 @@
         //     mask: true,
 				// 	  title: '加载中...',
 				// })
+        this.loading = true
 				NET.request(API.getFootprintList,
 				{
 					page:this.page,
@@ -226,10 +235,13 @@
 						this.page = this.page
 					}else{
 						this.footprintList = this.footprintList.concat(res.data.list)
-					}
+            this.footprintList = this.footprintList.filter(item=>{return item.isReady!==1})
+          }
 					if(this.footprintList.length === 0) {
 					  this.tipsShow = true
           }
+          this.loading=false
+          this.isFirstComeIn = false
 					uni.hideLoading()
 				}).catch(res => {
 					uni.hideLoading()
@@ -325,8 +337,10 @@ page {
 		height: 50rpx;
 	}
 	.swipe-box{
+    padding: 0 24rpx;
+
     .listItem {
-      padding: 0 24rpx;
+      //padding: 0 24rpx;
       background: #F8F8F8;
       margin-bottom: 20rpx;
     }

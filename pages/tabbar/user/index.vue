@@ -1,541 +1,269 @@
 <template>
-  <view class="content">
+  <view class="content u-skeleton">
+    <!-- 骨架屏 -->
+    <Skeleton
+        el-color="#efefef"
+        bg-color="#fff"
+        :loading="loading && isFirstComeIn"
+        :animation="true"
+    ></Skeleton>
     <!-- 我的 -->
-    <image class="top-bg"
-           src="https://ceres.zkthink.com/static/img/user/topBg.png"></image>
-    <view class="page-content">
-      <view class="user-info-box"
-            @click="gologin"
-            v-if="JSON.stringify(item) =='{}' ">
-        <image class="user-image"
-               src="https://ceres.zkthink.com/static/img/user/morentouxiang.png"
-               mode="widthFix"></image>
+    <image
+        class="top-bg"
+        src="https://ceres.zkthink.com/static/img/user/topBg.png"
+    ></image>
+    <view class="page-content" >
+      <!-- 用户未登录 -->
+      <view
+          class="user-info-box"
+          @click="$jump('../../../pages_category_page2/userModule/login')"
+          v-if="userItem.name===undefined "
+      >
+        <image
+            class="user-image u-skeleton-circle"
+            src="https://ceres.zkthink.com/static/img/user/morentouxiang.png"
+            mode="widthFix"
+        ></image>
         <view class="user-info">
-          <view class="user-logoin-title">点击登录</view>
-          <view class="user-logoin-lable">登录后享受更多权益~</view>
+          <view class="user-logoin-title u-skeleton-fillet">点击登录</view>
+          <view class="user-logoin-lable u-skeleton-fillet">登录后享受更多权益~</view>
         </view>
-        <image class="user-info-right"
-               src="https://ceres.zkthink.com/static/img/user/back.png"></image>
+        <image
+            class="user-info-right"
+            src="https://ceres.zkthink.com/static/img/user/back.png"
+        ></image>
         <view class="notice">
-          <view class="messNum"
-                v-if="useritem.notRead>0">{{ useritem.notRead }}
+          <view
+              class="messNum"
+              v-if="userItem.notRead>0"
+          >{{ userItem.notRead }}
           </view>
         </view>
       </view>
-      <view class="user-info-box"
-            v-else>
-        <image class="user-image"
-               @click="goinfo"
-               v-if="useritem.headImage"
-               :src="useritem.headImage"
-               mode="widthFix"
-               style="border-radius: 50%;"></image>
-        <image class="user-image"
-               v-else
-               src="https://ceres.zkthink.com/static/img/user/morentouxiang.png"
-               mode="widthFix">
+      <!-- 用户已登陆 -->
+      <view
+          class="user-info-box "
+          v-else
+      >
+        <image
+            class="user-image u-skeleton-fillet"
+            @click="handleJump('../../../pages_category_page2/userModule/personalDetails')"
+            v-if="userItem.headImage"
+            :src="userItem.headImage"
+            mode="widthFix"
+            style="border-radius: 50%;"
+        ></image>
+        <image
+            class="user-image"
+            v-else
+            src="https://ceres.zkthink.com/static/img/user/morentouxiang.png"
+            mode="widthFix"
+        >
         </image>
         <view class="user-info">
-          <view class="user-logoin-title"
-                v-if="useritem.name">{{ useritem.name }}
+          <view
+              class="user-logoin-title"
+              v-if="userItem.name"
+          >{{ userItem.name }}
           </view>
-          <view class="experience flex-items"
-                @click="goToMemberCenter">
+          <view
+              class="experience flex-items"
+              @click="handleJump('../../../pages_category_page1/memberCenter/index')"
+          >
             <label>成长值</label>
-            <view class="experienceValue">{{ useritem.growth || 0 }} / {{ useritem.nextLevelGrowth || 0 }}</view>
+            <view class="experienceValue">{{ userItem.growth || 0 }} / {{ userItem.nextLevelGrowth || 0 }}</view>
           </view>
         </view>
-        <view class="notice"
-              @click="toMessage">
-          <view class="messNum"
-                v-if="useritem.notRead>0">{{ useritem.notRead > 99 ? '99+' : useritem.notRead }}
+        <view
+            class="notice"
+            @click="handleJump('../../../pages_category_page2/userModule/messageCenter')"
+        >
+          <view
+              class="messNum"
+              v-if="userItem.notRead>0"
+          >{{ userItem.notRead > 99 ? '99+' : userItem.notRead }}
           </view>
         </view>
       </view>
+      <!-- 订单卡片 -->
       <view class="order-box">
-        <view class="order-item"
-              @click="orderTap(1)">
-          <image class="order-item-image"
-                 src="https://ceres.zkthink.com/static/img/user/daifukuan1.png"
-                 mode="widthFix">
+        <view
+            class="order-item"
+            v-for="orderCardItem in orderCardList"
+            :key="orderCardItem.id"
+            @click="handleJump(orderCardItem.jumpUrl)"
+        >
+          <image
+              class="order-item-image  u-skeleton-circle"
+              :src="orderCardItem.icon"
+              mode="widthFix"
+          >
           </image>
-          <view class="order-item-text">待付款</view>
-          <view class="quan"
-                v-if="useritem.waitPayOrderCount>0">
-            {{ useritem.waitPayOrderCount }}
+          <view class="order-item-text u-skeleton-fillet">{{ orderCardItem.label }}</view>
+          <view
+              class="quan"
+              v-if="userItem[orderCardItem.key]>0"
+          >
+            {{ userItem[orderCardItem.key] }}
           </view>
-        </view>
-        <view class="order-item"
-              @click="orderTap(2)">
-          <image class="order-item-image"
-                 src="https://ceres.zkthink.com/static/img/user/daifahuo1.png"
-                 mode="widthFix">
-          </image>
-          <view class="order-item-text">待发货</view>
-          <view class="quan"
-                v-if="useritem.waitSendOrderCount>0">
-            {{ useritem.waitSendOrderCount }}
-          </view>
-
-        </view>
-        <view class="order-item"
-              @click="orderTap(3)">
-          <image class="order-item-image"
-                 src="https://ceres.zkthink.com/static/img/user/daishouhuo.png"
-                 mode="widthFix">
-          </image>
-          <view class="order-item-text">待收货</view>
-          <view class="quan"
-                v-if="useritem.waitReceiveOrderCount>0">
-            {{ useritem.waitReceiveOrderCount }}
-          </view>
-
-        </view>
-        <view class="order-item"
-              @click="orderTap(0)">
-          <image class="order-item-image"
-                 src="https://ceres.zkthink.com/static/img/user/dingdan.png"
-                 mode="widthFix"></image>
-          <view class="order-item-text">全部订单</view>
         </view>
       </view>
-      <!--			<view class="item-btn mt20" @click="toMessage">-->
-      <!--				<image class="item-btn-icon" src="https://ceres.zkthink.com/static/images/mymessageIcon.png" mode="widthFix"></image>-->
-      <!--				<view class="item-btn-text flex-row-plus flex-items">-->
-      <!--					<label>消息中心</label>-->
-      <!--					<view class="messNum" v-if="useritem.notRead>0">{{useritem.notRead}}</view>-->
-      <!--				</view>-->
-      <!--				<image class="item-btn-right" src="https://ceres.zkthink.com/static/img/user/arrow.png" mode="widthFix"></image>-->
-      <!--			</view>-->
+      <!-- 第一个卡片 -->
       <view class="itemBox">
-        <view class="item-btn"
-              @click="toCollection">
-          <image class="item-btn-icon"
-                 src="https://ceres.zkthink.com/static/img/user/mycollectionIcon.png"
-                 mode="widthFix">
+        <view
+            class="item-btn"
+            v-for="item in fastCardOneList"
+            :key="item.id"
+            @click="handleJump(item.jumpUrl)"
+        >
+          <image
+              class="item-btn-icon u-skeleton-circle"
+              :src="item.icon"
+              mode="widthFix"
+          >
           </image>
-          <view class="item-btn-text">我的收藏</view>
-        </view>
-        <view class="item-btn"
-              @click="toQuestion">
-          <image class="item-btn-icon"
-                 src="https://ceres.zkthink.com/static/img/user/myQuestionIcon.png"
-                 mode="widthFix">
-          </image>
-          <view class="item-btn-text">我的问答</view>
-        </view>
-        <view class="item-btn"
-              @click="toFootprint">
-          <image class="item-btn-icon"
-                 src="https://ceres.zkthink.com/static/img/user/myfootprintIcon.png"
-                 mode="widthFix">
-          </image>
-          <view class="item-btn-text">浏览足迹</view>
-        </view>
-        <view class="item-btn"
-              @click="gouserEvaluate">
-          <image class="item-btn-icon"
-                 src="https://ceres.zkthink.com/static/img/user/pingjia.png"
-                 mode="widthFix"></image>
-          <view class="item-btn-text">我的评价</view>
-        </view>
-        <view class="item-btn"
-              @click="memberAccountClick">
-          <image class="item-btn-icon"
-                 src="https://ceres.zkthink.com/static/img/user/account.png"
-                 mode="widthFix"></image>
-          <view class="item-btn-text">我的账户</view>
-        </view>
-        <view class="item-btn"
-              @click="couponClick">
-          <image class="item-btn-icon"
-                 src="https://ceres.zkthink.com/static/img/user/kaquan.png"
-                 mode="widthFix"></image>
-          <view class="item-btn-text">我的卡券</view>
-        </view>
-        <view class="item-btn"
-              @click="godistribution">
-          <image class="item-btn-icon"
-                 src="https://ceres.zkthink.com/static/img/user/fenxiao.png"
-                 mode="widthFix"></image>
-          <view class="item-btn-text">分销中心</view>
-        </view>
-        <view class="item-btn"
-              @click="applySettle">
-          <image class="item-btn-icon"
-                 src="https://ceres.zkthink.com/static/img/user/Settled.png"
-                 mode="widthFix"></image>
-          <view class="item-btn-text">商家入驻</view>
+          <view class="item-btn-text u-skeleton-fillet">{{ item.label }}</view>
         </view>
       </view>
+      <!-- 第二个卡片 -->
       <view class="itemBox">
-        <view class="item-btn"
-              @click="addressClick">
-          <image class="item-btn-icon"
-                 src="https://ceres.zkthink.com/static/img/user/dizhi1.png"
-                 mode="widthFix"></image>
-          <view class="item-btn-text">地址管理</view>
+        <view
+            class="item-btn"
+            v-for="item in fastCardTwoList"
+            :key="item.id"
+            @click="handleJump(item.jumpUrl)"
+        >
+          <image
+              class="item-btn-icon u-skeleton-circle"
+              :src="item.icon"
+              mode="widthFix"
+          ></image>
+          <view class="item-btn-text u-skeleton-fillet">{{ item.label }}</view>
         </view>
-        <view class="item-btn"
-              @click="goafterSale">
-          <image class="item-btn-icon"
-                 src="https://ceres.zkthink.com/static/img/user/shouhou.png"
-                 mode="widthFix"></image>
-          <view class="item-btn-text">我的售后</view>
-        </view>
-        <view class="item-btn"
-              @click="goToMemberCenter">
-          <image class="item-btn-icon"
-                 src="https://ceres.zkthink.com/static/img/user/VIP.png"
-                 mode="widthFix"></image>
-          <view class="item-btn-text">会员中心</view>
-        </view>
-        <view class="item-btn"
-              @click="goBankcard">
-          <image class="item-btn-icon"
-                 src="https://ceres.zkthink.com/static/img/user/kaquan.png"
-                 mode="widthFix"></image>
-          <view class="item-btn-text">银行卡</view>
-        </view>
-        <view class="item-btn"
-              @click="goIntegral">
-          <image class="item-btn-icon"
-                 src="https://ceres.zkthink.com/static/img/user/myIntegral.png"
-                 mode="widthFix"></image>
-          <view class="item-btn-text">我的积分</view>
-        </view>
-        <view class="item-btn"
-              @click="goSign">
-          <image class="item-btn-icon"
-                 src="https://ceres.zkthink.com/static/img/user/signIcon.png"
-                 mode="widthFix"></image>
-          <view class="item-btn-text">签到</view>
-        </view>
-        <view class="item-btn"
-              @click="goCouponList">
-          <image class="item-btn-icon"
-                 src="https://ceres.zkthink.com/static/img/user/userCouponIcon.png"
-                 mode="widthFix"></image>
-          <view class="item-btn-text">优惠券</view>
-        </view>
-        <!-- <view class="item-btn">
-            <image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/service.png" mode="widthFix"></image>
-            <view class="item-btn-text">平台客服</view>
-          </view> -->
-        <button open-type="contact"
+<!--        <button open-type="contact"
                 class="item-btn btnNone">
           <image class="item-btn-icon"
                  src="https://ceres.zkthink.com/static/img/user/service.png"
                  mode="widthFix"></image>
           <view class="item-btn-text">平台客服</view>
-        </button>
-
-        <!-- <view class="item-btn" @click="toSuccess">
-          <image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/userCouponIcon.png" mode="widthFix"></image>
-          <view class="item-btn-text">成功测试</view>
-        </view> -->
-        <!--        <view class="item-btn" @click="goWxShop">-->
-        <!--          <image class="item-btn-icon" src="https://ceres.zkthink.com/static/img/user/kaquan.png" mode="widthFix"></image>-->
-        <!--          <view class="item-btn-text">测试</view>-->
-        <!--        </view>-->
+        </button>-->
       </view>
     </view>
     <view class="copyright">
-      <text>中科鑫智 版权所有</text>
-      <text>粤ICP备19086489号-3</text>
+      <text >中科鑫智 版权所有</text>
+      <text >粤ICP备19086489号-3</text>
     </view>
-
-    <Loading v-if="false"></Loading>
   </view>
 </template>
 
 <script>
-import Loading from "@/components/Loading"
+import Skeleton from "../../../components/Skeleton";
+import { fastCardOneList, fastCardTwoList, orderCardList } from "./index.data";
+import { Services } from '../../../utils/services'
+import { Encrypt } from '../../../utils/secret'
 
 const NET = require('../../../utils/request')
 const API = require('../../../config/api')
-const SECRET = require('../../../utils/secret')
 export default {
-  components:{Loading},
   data() {
     return {
-      item: {},
-      useritem: {},
-      isLoading: false,
-      corpId: null,
-      serviceURL: null,
+      isFirstComeIn: true,
+      loading: true,
+      orderCardList: orderCardList,
+      fastCardOneList: fastCardOneList,
+      fastCardTwoList: fastCardTwoList,
+      cacheUserItem: {},
+      userItem: {
+        headImage:'',
+        name:undefined
+      },
     }
   },
-  onLoad() {
-  },
+  components:{Skeleton},
   onShow() {
+    this.isFirstComeIn=true
     if (uni.getStorageSync('storage_key')) {
-      this.item = uni.getStorageSync('storage_key');
+      this.cacheUserItem = uni.getStorageSync('storage_key');
     }
-    this.GetUser()
+    this.handleGetUser()
   },
   methods: {
-    // goWxShop() {
-    //   uni.navigateTo({
-    //     url: `plugin-private://wxf0713a10bbae8732/pages/productDetail/productDetail?productId=59656518`,
-    //   })
-    // },
-    // 测试
-    // toSuccess() {
-    // 	uni.navigateTo({
-    // 		url: '../../../pages_category_page1/goodsModule/evaSuccessful'
-    // 		// url: '../../../pages_category_page1/orderModule/paySuccessful'
-    // 	})
-    // },
-    toMessage() {
-      if (JSON.stringify(this.item) == '{}') {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/login'
-        })
+    /**
+     * 处理跳转
+     * @param url
+     */
+    handleJump(url) {
+      if (JSON.stringify(this.cacheUserItem) === '{}') {
+        return this.$jump('../../../pages_category_page2/userModule/login')
+      }
+        console.log(url)
+      if (url.startsWith('function')) {
+        const [key, funcName] = url.split(':')
+        this[funcName]()
       } else {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/messageCenter'
-        })
+        this.$jump(url)
       }
     },
-    toCollection() {
-      if (JSON.stringify(this.item) == '{}') {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/login'
-        })
-      } else {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/collection'
-        })
-      }
-    },
-    toQuestion() {
-      if (JSON.stringify(this.item) == '{}') {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/login'
-        })
-      } else {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/questionList'
-        })
-      }
-    },
-    toFootprint() {
-      if (JSON.stringify(this.item) == '{}') {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/login'
-        })
-      } else {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/footprintList'
-        })
-      }
-    },
-    GetUser() {
+    /**
+     * 获取用户信息
+     */
+    handleGetUser() {
+      this.loading = true
       NET.request(API.GetUser, {}, 'GET').then(res => {
-        this.useritem = res.data
-        uni.setStorageSync('storage_userInfo', this.useritem);
-      }).catch(res => {
-
+        this.userItem = res.data
+        uni.setStorageSync('storage_userInfo', this.userItem);
+        this.isFirstComeIn=false
+        this.loading = true
       })
     },
-    // 个人信息  登录页面
-    gologin() {
-      uni.navigateTo({
-        url: '../../../pages_category_page2/userModule/login'
-      })
+    /**
+     * 客服
+     * @return {Promise<void>}
+     */
+    async flyToService() {
+      (await Services()).flyToService();
     },
-    goinfo() {
-      uni.navigateTo({
-        url: '../../../pages_category_page2/userModule/personalDetails'
-      })
-    },
-    // 我的评论
-    gouserEvaluate() {
-      if (JSON.stringify(this.item) == '{}') {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/login'
-        })
-      } else {
-        uni.navigateTo({
-          url: '../../../pages_category_page1/goodsModule/userEvaluate'
-        })
-      }
-
-    },
-    // 分销中心
-    godistribution() {
-      if (JSON.stringify(this.item) == '{}') {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/login'
-        })
-      } else {
-        uni.navigateTo({
-          url: '../../../pages_category_page1/distributionModule/index'
-        })
-      }
-    },
-    goToMemberCenter() {
-      uni.navigateTo({
-        url: '../../../pages_category_page1/memberCenter/index'
-      })
-    },
-    applySettle() {
+    /**
+     * 商家入驻
+     */
+    handleApplySettle() {
       const res = uni.getStorageSync('storage_key');
-      let token = SECRET.Encrypt(res.token)
-      let username = this.useritem.name
-      let test = SECRET.Decrypt(token)
+      let token = Encrypt(res.token)
+      let username = this.userItem.name
+      let url = null
       // #ifdef H5
       console.log('h5 test')
-      window.open(API.SettledMerchantPrefix + `/#/?username=${username}&user=${token}`)
+      window.open(API.SettledMerchantPrefix + `/#/?username=${ username }&user=${ token }`)
       // #endif
       // #ifdef APP-PLUS
-      plus.runtime.openURL(API.SettledMerchantPrefix + `/#/?username=${username}&user=${token}`, function (e) {
+      plus.runtime.openURL(API.SettledMerchantPrefix + `/#/?username=${ username }&user=${ token }`, function (e) {
         console.log(e);
       })
       // #endif
       // #ifdef MP-WEIXIN
-      var url = API.SettledMerchantPrefix
+      url = API.SettledMerchantPrefix
       uni.navigateTo({
-        url: `../../../pages_category_page1/linkOthers/index?url=${url}&username=${username}&user=${token}`
+        url: `../../../pages_category_page1/linkOthers/index?url=${ url }&username=${ username }&user=${ token }`
         // 此处的链接为小程序上面新建的webview页面路径，参数url为要跳转外链的地址
         // url: '../../../pages_category_page1/linkOthers/index?url=' + encodeURIComponent(url)
         // url:'../../../pages_category_page2/userModule/coupon'
       })
       // #endif
       // #ifdef MP-ALIPAY
-      var url = API.SettledMerchantPrefix
+      url = API.SettledMerchantPrefix
       uni.navigateTo({
-        url: `../../../pages_category_page1/linkOthers/index?url=${url}&username=${username}&user=${token}`
+        url: `../../../pages_category_page1/linkOthers/index?url=${ url }&username=${ username }&user=${ token }`
         // 此处的链接为小程序上面新建的webview页面路径，参数url为要跳转外链的地址
         // url: '../../../pages_category_page1/linkOthers/index?url=' + encodeURIComponent(url)
         // url:'../../../pages_category_page2/userModule/coupon'
       })
       // #endif
     },
-    //我的账户
-    memberAccountClick() {
-      if (JSON.stringify(this.item) == '{}') {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/login'
-        })
-      } else {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/memberAccount'
-        })
-      }
-    },
-    //我的优惠券
-    couponClick() {
-      if (JSON.stringify(this.item) == '{}') {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/login'
-        })
-      } else {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/coupon'
-        })
-      }
-    },
-    // 地址管理
-    addressClick() {
-      if (JSON.stringify(this.item) == '{}') {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/login'
-        })
-      } else {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/address'
-        })
-      }
-
-    },
-    // 我的售后
-    goafterSale() {
-      if (JSON.stringify(this.item) == '{}') {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/login'
-        })
-      } else {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/orderModule/afterSale'
-        })
-      }
-    },
-    // 我的银行卡
-    goBankcard() {
-      if (JSON.stringify(this.item) == '{}') {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/login'
-        })
-      } else {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/bankcard'
-        })
-      }
-    },
-    // 我的积分
-    goIntegral() {
-      if (JSON.stringify(this.item) == '{}') {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/login'
-        })
-      } else {
-        uni.navigateTo({
-          url: '../../../pages_category_page1/integral/index'
-        })
-      }
-    },
-    // 签到
-    goSign() {
-      if (JSON.stringify(this.item) == '{}') {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/login'
-        })
-      } else {
-        uni.navigateTo({
-          url: '../../../pages_category_page1/integral/sign'
-        })
-      }
-    },
-    goCouponList() {
-      if (JSON.stringify(this.item) == '{}') {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/login'
-        })
-      } else {
-        uni.navigateTo({
-          url: '../../../pages_category_page1/coupon/list'
-        })````
-      }
-    },
-    //判断是否是分销员
-    getApplyState() {
-      NET.request(API.HasApply, {
-        tenantCode: this.currentId
-      }, 'POST').then(res => {
-        uni.hideLoading()
-        this.slist = res.data
-      }).catch(res => {
-        uni.hideLoading()
-      })
-    },
-    orderTap(type) {
-      if (JSON.stringify(this.item) == '{}') {
-        uni.navigateTo({
-          url: '../../../pages_category_page2/userModule/login'
-        })
-      } else {
-        uni.navigateTo({
-          url: '../../../pages_category_page1/orderModule/index?type=' + type
-        })
-      }
-    },
   }
 }
 </script>
 
-<style lang='scss'>
+<style lang="scss">
 page {
   background: #f8f8f8;
 }

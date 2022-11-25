@@ -1,13 +1,14 @@
 <template>
   <view class="goodRecommend">
+    <!-- 骨架屏 -->
     <view class="product-list">
       <view class="product-list-box" >
         <view class="product-list-item-warp" v-for="(item,index) in productList" :key="index">
-          <view class="product-list-item">
+          <view class="product-list-item" v-if="JSON.stringify(item)!=='{}'">
             <view class="product-list-img" @click="jumpProductDetail(item)">
               <img v-show="item.image" class="img" :src="item.image">
             </view>
-            <view class="product-list-info">
+            <view class="product-list-info u-skeleton-fillet">
               <view class="product-name">{{item.productName}}</view>
               <view class="flex">
                 <view class="shop-box" @click.stop="jumpStore(item)">
@@ -44,6 +45,16 @@
               </div>
             </view>
           </view>
+          <view class="product-list-item ske-loading" v-else>
+            <view class="product-list-img child-loading">
+              <img v-show="item.image" class="img" :src="item.image">
+            </view>
+            <view class="product-list-info">
+              <view class="product-name child-loading" style="border-radius: 5rpx; margin-top: 10rpx;width: 100%;padding: 20rpx 0"></view>
+              <view class="product-name child-loading" style="border-radius: 5rpx; margin-top: 10rpx;width: 100%;padding: 20rpx 0"></view>
+            </view>
+          </view>
+
         </view>
       </view>
     </view>
@@ -76,14 +87,16 @@ name: "categoryShow",
     }
   },
   mounted () {
+    this.productList = [{},{},{},{},{},{},{},{}]
     this.getData();
   },
   methods:{
     getData(){
-      uni.showLoading({
-        mask: true,
-        title:'加载中...'
-      })
+      console.log('加载了getData')
+      // uni.showLoading({
+      //   mask: true,
+      //   title:'加载中...'
+      // })
       if (this.total!=0&&this.productList.length>=this.total){
         console.log("加载完了")
         return
@@ -94,6 +107,7 @@ name: "categoryShow",
         pageSize:this.pageSize
       }, 'GET').then(res => {
         this.productList = [...this.productList,...res.data.list]
+        this.productList = this.productList.filter(item=>JSON.stringify(item)!=='{}')
         this.total = res.data.total
         uni.hideLoading()
         if (this.productList.length ===0) {
@@ -136,6 +150,8 @@ name: "categoryShow",
   .product-list {
     position: relative;
     padding: 0 13upx;
+    width: 100%;
+    //min-height: 60vh;
     &-box {
       display: flex;
       flex-wrap: wrap;
@@ -155,6 +171,8 @@ name: "categoryShow",
       padding: 0 7upx;
       box-sizing: content-box;
     }
+
+
     &-img {
       width: 348upx;
       height: 348upx;
@@ -254,4 +272,5 @@ name: "categoryShow",
     }
   }
 }
+
 </style>

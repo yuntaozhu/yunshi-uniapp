@@ -42,8 +42,9 @@
 			  ifAnonymous:0
 			}
 		},
-		onLoad(options) {
-			this.qudata = JSON.parse(options.data)
+		onLoad(params) {
+      this.qudata = this.$getJumpParam(params);
+      console.log(this.qudata)
 		},
 		methods: {
 			seeAllFn () {

@@ -36,7 +36,8 @@
 				WXloginQuery: {
 					"code": "",
 					"salesId": 0,
-					"headImg": ''
+					"headImage": '',
+          "terminal":1
 				},
 				noMp: false,
 				// beforePage: undefined,
@@ -103,7 +104,7 @@
 				// 				}, 'POST').then(res => {
 				// 					let data = {
 				// 						wechatOpenId: wechatOpenId,
-				// 						headImg: avatarUrl
+				// 						headImage: avatarUrl
 				// 					}
 				// 					that.loginSuc(res.data, data)
 				// 				}).catch(res => {
@@ -139,11 +140,11 @@
 				uni.getUserProfile({
 					desc: '正在获取', //不写不弹提示框
 					success: function(res) {
-						that.WXloginQuery.headImg = res.userInfo.avatarUrl
+						that.WXloginQuery.headImage = res.userInfo.avatarUrl
 						NET.request(API.WxLogin, that.WXloginQuery, 'POST').then(res => {
 							let data = {
 								wechatOpenId: res.data.wechatOpenId,
-								headImg: res.data.headImage
+								headImage: res.data.headImage
 							}
 							that.loginSuc(res.data, data)
 						}).catch(err => {

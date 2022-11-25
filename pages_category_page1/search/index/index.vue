@@ -191,6 +191,7 @@ input {
 		width: 30upx;
 		height: 30upx;
 		margin-left: -50upx;
+    z-index: 99999;
 	}
 }
 // 热门搜索
@@ -237,6 +238,7 @@ input {
 	.historyIconBox{
 		width: 50upx;
 		.historySearDel-icon {
+      position: relative;
 			width: 16upx;
 			height: 16upx;
 		}

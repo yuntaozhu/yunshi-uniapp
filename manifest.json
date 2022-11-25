@@ -23,7 +23,7 @@
             "Share" : {}
         },
         "compatible" : {
-            "ignoreVersion" : true //true表示忽略版本检查提示框，HBuilderX1.9.0及以上版本支持  
+            "ignoreVersion" : true //true表示忽略版本检查提示框，HBuilderX1.9.0及以上版本支持
         },
         /* 模块配置 */
         "distribute" : {
@@ -119,11 +119,12 @@
     /* 快应用特有相关 */
     "mp-weixin" : {
         "appid" : "wxf0713a10bbae8732",
+        "requiredPrivateInfos" : [ "chooseLocation", "getLocation", "chooseAddress" ],
         "setting" : {
             "urlCheck" : false,
             "es6" : false,
             "postcss" : true,
-            "minified" : false
+            "minified" : true
         },
         // "usingComponents" : true,
         "component" : true,

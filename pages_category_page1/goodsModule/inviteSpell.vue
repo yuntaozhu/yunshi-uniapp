@@ -102,7 +102,8 @@
 				</view>
 			</view>
 		</u-popup>
-		<shareSpell ref="shareSpell" @shareCancel='shareCancel' :url="url"></shareSpell>
+		<shareSpell ref="shareSpell" @shareCancel='shareCancel' :url="url" :urlParms="urlParms" :img="inviteSpell.image" title="好友邀请您来拼单啦">
+		</shareSpell>
 	</view>
 </template>
 
@@ -151,8 +152,11 @@
 				attrList: [],
 				productDetail:{},
 				userInfo: {},
-				url:'',
-				shareTitle: ''
+				url: '',
+				shareTitle: '',
+				showJoinGroup: false,
+				showGroupText: '立即参团',
+        urlParms: ''
 			};
 		},
 		components:{
@@ -221,7 +225,7 @@
 		onLoad(options) {
 			console.log(options,'options')
 			this.isIphone = getApp().globalData.isIphone;
-			let item = getApp().globalData.inviteSpellShareItem
+			let item = getApp().globalData.inviteSpellShareIte
 			if (item) {
 				this.collageId = parseInt(item.collageId)
 				this.orderId = parseInt(item.orderId)
@@ -236,10 +240,18 @@
 				this.skuId = parseInt(options.skuId)
 				this.shopGroupWorkId = parseInt(options.shopGroupWorkId)
 			}
-			this.getProductSku()
-			this.queryProductDetail()
-			this.url = '/pages_category_page1/goodsModule/inviteSpell?collageId='
-					+ this.collageId +'&orderId='+ this.orderId+'&productId='+this.productId+'&skuId='+this.skuId+'&shopGroupWorkId='+this.shopGroupWorkId
+			// #ifdef MP-WEIXIN
+			this.url = '/pages_category_page1/goodsModule/inviteSpell?collageId=' +
+				this.collageId + '&orderId=' + this.orderId + '&productId=' + this.productId + '&skuId=' + this.skuId +
+				'&shopGroupWorkId=' + this.shopGroupWorkId
+      this.urlParms = this.collageId + '&orderId=' + this.orderId + '&productId=' + this.productId + '&skuId=' + this.skuId +
+          '&shopGroupWorkId=' + this.shopGroupWorkId
+			// #endif
+			// #ifndef MP-WEIXIN
+			this.url = '/h5/#/pages_category_page1/goodsModule/inviteSpell?collageId=' +
+				this.collageId + '&orderId=' + this.orderId + '&productId=' + this.productId + '&skuId=' + this.skuId +
+				'&shopGroupWorkId=' + this.shopGroupWorkId
+			// #endif
 		},
 		methods:{
 			getOffered(){

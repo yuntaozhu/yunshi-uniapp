@@ -53,21 +53,28 @@
 		},
 		onLoad(options) {
 			this.type = options.type;
-			if(options.type == 1){
-				this.addCommentVOList = uni.getStorageSync('addCommentVOList');
-				this.orderProductVO = this.addCommentVOList.skus[0]
-				this.productImage = this.orderProductVO.image
-			}else{
-				this.addCommentVOList = uni.getStorageSync('addCommentVOList');
-				this.orderProductVO = this.addCommentVOList
-				this.productImage = this.orderProductVO.productImage
-			}
-			if(options.commentId){
-				this.commentId = options.commentId
-			}
-			uni.removeStorageSync('addCommentVOList')
-			const res = uni.getStorageSync('storage_key');
-			this.headerToken.Authorization = res.token
+      if(options.detail){
+        const params = this.$getJumpParam(options)
+        this.addCommentVOList = params.addCommentVOList
+        this.orderProductVO = options.type===1?this.addCommentVOList.skus[0]:this.addCommentVOList
+        this.productImage = this.orderProductVO.image
+      }else{
+        if(options.type == 1){
+          this.addCommentVOList = uni.getStorageSync('addCommentVOList');
+          this.orderProductVO = this.addCommentVOList.skus[0]
+          this.productImage = this.orderProductVO.image
+        }else{
+          this.addCommentVOList = uni.getStorageSync('addCommentVOList');
+          this.orderProductVO = this.addCommentVOList
+          this.productImage = this.orderProductVO.productImage
+        }
+        uni.removeStorageSync('addCommentVOList')
+      }
+      if(options.commentId){
+        this.commentId = options.commentId
+      }
+      const res = uni.getStorageSync('storage_key');
+      this.headerToken.Authorization = res.token
 		},
 		onReady() {
 			this.fileList = this.$refs.uUpload.lists

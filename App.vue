@@ -70,6 +70,23 @@ export default {
 </script>
 
 <style lang="scss">
+@keyframes loading {
+  0%{
+    background: #e7e7e7;
+  }
+  50%{
+    background: #f8f8f8;
+  }
+  100%{
+    background: #e7e7e7;
+  }
+}
+// 自定义骨架屏
+.ske-loading{
+  .child-loading{
+    animation: loading 2s linear 0s infinite alternate;
+  }
+}
 /*每个页面公共css */
 @import "uview-ui/index.scss";
 
@@ -740,7 +757,7 @@ uni-checkbox:not([disabled]) .uni-checkbox-input:hover {
 }
 
 .u-drawer-content {
-  border-radius: 0 !important;
+  //border-radius: 0 !important;
 }
 </style>
 <style>

@@ -243,10 +243,11 @@
 					productId: productId,
 					problemId: problemId
 				}
-				uni.setStorageSync("seeAllFnData", data)
-				uni.navigateTo({
-					url: '../../pages_category_page1/goodsModule/qADetail'
-				})
+				// uni.setStorageSync("seeAllFnData", data)
+				// uni.navigateTo({
+				// 	url: '../../pages_category_page1/goodsModule/qADetail'
+				// })
+        this.$jump('/pages_category_page1/goodsModule/qADetail',data)
 			},
 			//确定批量删除
 			delClick() {

@@ -86,13 +86,19 @@
 
 			}
 		},
-		onLoad() {
-			this.commentData = uni.getStorageSync('evaluateItem'),
-			this.orderId = uni.getStorageSync('orderId')
-			uni.removeStorageSync('evaluateItem')
-			uni.removeStorageSync('orderId')
-			const res = uni.getStorageSync('storage_key');
-			this.headerToken.Authorization = res.token
+		onLoad(options) {
+      if(options.detail){
+        const params = this.$getJumpParam(options)
+        this.commentData = params.commentData
+        this.orderId = params.orderId
+      }else{
+        this.commentData = uni.getStorageSync('evaluateItem')
+        this.orderId = uni.getStorageSync('orderId')
+        uni.removeStorageSync('evaluateItem')
+        uni.removeStorageSync('orderId')
+      }
+      const res = uni.getStorageSync('storage_key');
+      this.headerToken.Authorization = res.token
 		},
 		onReady() {
 			this.fileList = this.$refs.uUpload.lists

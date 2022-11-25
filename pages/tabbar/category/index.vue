@@ -7,15 +7,15 @@
 		<view class="content">
 			<!-- 分类中心 -->
 			<scroll-view scroll-y class="left-aside">
-				<view v-for="(item,index) in flist" :key="item.classifyId" class="f-item b-b" :class="{active: index === currentIndex}" @click="tabtap(item,index)">
+				<view v-for="(item,index) in flist" :key="item.classifyId"  class="f-item b-b" :class="{active: index === currentIndex}" @click="tabtap(item,index)">
 					{{item.classifyName}}
 				</view>
 			</scroll-view>
 			<scroll-view scroll-with-animation scroll-y class="right-aside">
 				<view v-for="item in slist" :key="item.classifyId" class="s-list">
-			<view class="classBox flex-items-plus">
+			<view class="classBox flex-items-plus" v-if="item.childs.length>0">
 			  <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/images/classRight.png"></image>
-			  <text class="s-item">{{item.classifyName}}</text>
+			  <text class="s-item" >{{item.classifyName}}</text>
 			  <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/images/classLeft.png"></image>
 			</view>
 					<view class="t-list">

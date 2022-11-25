@@ -55,8 +55,8 @@
 				</view>
 				<view class="itemInfo">
 					<p>{{item.productName}}</p>
-					<view v-if="shopId" class="number">限量件 {{item.limitStockNumber}} / 剩余{{item.stockNumber}}件</view>
-					<view v-else class="number">限量件 {{item.limitNumber}} / 剩余{{item.stockNumber}}件</view>
+					<view v-if="shopId" class="number">限量件 {{item.discount}} / 剩余{{item.stockNumber}}件</view>
+					<view v-else class="number">限量件 {{item.discount}} / 剩余{{item.stockNumber}}件</view>
 					<view class="originalPrice">原价: ¥{{item.originalPrice}}</view>
 					<view class="price">
 						<view class="currentPrice flex-items font-color-FF7800">

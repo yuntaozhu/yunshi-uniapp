@@ -73,7 +73,7 @@
 				phone: '',
 				code: '',
 				wechatOpenId: '',
-				headImg: '',
+				headImage: '',
 				bindPhoneShow: false,
 				verifyType: 0,
 				buyerUserId: 0,
@@ -86,7 +86,7 @@
 			if (options.data) {
 				const bindPhoneData = JSON.parse(options.data)
 				this.wechatOpenId = bindPhoneData.wechatOpenId
-				this.headImg = bindPhoneData.headImg
+				this.headImage = bindPhoneData.headImage
 				this.buyerUserId = bindPhoneData.buyerUserId
 			}
 			// #ifdef MP
@@ -181,7 +181,7 @@
 									sessionKey: res1.data.sessionKey,
 									encryptedData: e.detail.encryptedData,
 									iv: e.detail.iv,
-									headImage: this.headImg
+									headImage: this.headImage
 								}, 'POST').then(res2 => {
 									const item = res2.data
 									uni.setStorageSync('storage_key', item);
@@ -212,8 +212,9 @@
 				NET.request(API.UpdateWxPhone, {
 					phone: this.phone,
 					wechatOpenId: this.wechatOpenId,
-					headImage: this.headImg,
-					verificationCode: this.code
+          headImage: this.headImage,
+					verificationCode: this.code,
+                    channelCode: this.channelCode
 				}, 'POST').then(res => {
 					const item = res.data
 					uni.setStorageSync('storage_key', item);

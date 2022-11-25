@@ -1,5 +1,5 @@
 // const DOMAIN_PREFIX = 'http://127.0.0.1:9007'
-const DOMAIN_PREFIX = 'https://ceresdev.zkthink.com/api'
+const DOMAIN_PREFIX = 'https://ceres.zkthink.com/api'
 
 // https://ceresdev.zkthink.com
 // #ifndef H5
@@ -152,6 +152,7 @@ module.exports = {
 	HasApply: WX_API_BASE + '/distributor/check', //  验证当前客户是否为分销员
 	BindSalesCustomer: WX_API_BASE + '/distributor/bind', //  绑定关系
 	getSharePic: WX_API_BASE + '/product/getSharePic', //  分享
+	getShareProductParam: WX_API_BASE + '/product/getShareProductParam', //  查询分享所需的参数
 	shopGetSharePic: WX_API_BASE + '/shop/getSharePic', //  推广店铺
 
 	//售后

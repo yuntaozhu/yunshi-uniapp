@@ -284,91 +284,88 @@
         </view>
       </view>
 
-      <!-- 待付款 待发货 待收货 已完成 退款成功 -->
-      <view class="order-details-btn" style="padding-top:30upx;"
-            :style="{'padding-bottom':(isIphone==true? 40:0)+'rpx'}">
-        <text class="btn-l" @click="cancelOrder" v-if="dataList.state==1 || dataList.state==6">取消订单</text>
-        <text class="btn btn-r" @click="payOrder" v-if="dataList.state==1">立即付款</text>
-        <text class="btn-l" @click="applyMoneyAllTap" v-if="dataList.state==2 || dataList.state==3">申请退款</text>
-        <text class="btn btn-r" @click="confirmReceiptTap" v-if="dataList.state==3">确认收货</text>
-        <text class="btn" @click="applyTap" v-if="dataList.state==4">申请售后</text>
-        <text class="btn btn-r"
-              @click="goInviteSpll(dataList.collageId,dataList.orderId,dataList.skus[0].productId,dataList.skus[0].skuId,dataList.shopGroupWorkId)"
-              v-if="dataList.state==6">邀请拼单
-        </text>
-        <text class="btn-l" @click="delOrder" v-if="dataList.state==5 && dataList.collageId == 0">删除订单</text>
-        <text class="btn btn-r"
-              @click="againCollage(dataList.skus[0].productId,dataList.shopId,dataList.skus[0].skuId)"
-              v-if="dataList.state==5 && dataList.collageId == 0">再次购买
-        </text>
-        <text class="btn" @click="againCollage(dataList.skus[0].productId,dataList.shopId,dataList.skus[0].skuId)"
-              v-if="dataList.state==5 && dataList.collageId != 0">再次开团
-        </text>
-      </view>
-      <u-popup class="pay-type-popup" v-model="showPayTypePopup" mode="bottom" border-radius="14"
-               close-icon-pos="top-right" close-icon-size="20">
-        <view class="pay-type-item">
-          <radio-group @change="payTypeChange" v-model="paymentMode">
-            <view class="pay-type-radio">
-              <view class="pay-type-img">
-                <img class="pay-type-img-inner" src="https://ceres.zkthink.com/static/images/alipay.png"/>
-              </view>
-              <label class="pay-type-label">支付宝支付</label>
-              <radio class="pay-type-radio-item" style="transform:scale(0.7)" :checked="paymentMode == 2"
-                     value="2"/>
-            </view>
-            <view class="pay-type-radio">
-              <view class="pay-type-img">
-                <img class="pay-type-img-inner" src="https://ceres.zkthink.com/static/images/huabei.png"/>
-              </view>
-              <label class="pay-type-label">花呗分期</label>
-              <radio class="pay-type-radio-item" style="transform:scale(0.7)" :disabled="totalPrice < 0.03"
-                     :checked="paymentMode == 3" value="3"/>
-            </view>
-          </radio-group>
-          <view class="huabei-detail">
-            <radio-group @change="huabeiPeriodChange" v-model="huabeiPeriod">
-              <view class="period-radio">
-                <view class="period-amount">
-                  <label class="period-each">￥ {{ fenqiFeeList[0]|clip2Decimal }}x3期</label>
-                  <label class="period-each-charge">手续费￥{{ chargeFeeList[0]|clip2Decimal }}/期</label>
-                </view>
-                <radio class="period-type-radio-item" style="transform:scale(0.7)"
-                       :disabled="fenqiDisabledList[0]" :checked="huabeiPeriod == 3" value="3"/>
-              </view>
-              <view class="period-radio">
-                <view class="period-amount">
-                  <label class="period-each">￥ {{ fenqiFeeList[1]|clip2Decimal }}x6期</label>
-                  <label class="period-each-charge">手续费￥{{ chargeFeeList[1]|clip2Decimal }}/期</label>
-                </view>
-                <radio class="period-type-radio-item" style="transform:scale(0.7)"
-                       :disabled="fenqiDisabledList[1]" :checked="huabeiPeriod == 6" value="6"/>
-              </view>
-              <view class="period-radio">
-                <view class="period-amount">
-                  <label class="period-each">￥ {{ fenqiFeeList[2]|clip2Decimal }}x12期</label>
-                  <label class="period-each-charge">手续费￥{{ chargeFeeList[2]|clip2Decimal }}/期</label>
-                </view>
-                <radio class="period-type-radio-item" style="transform:scale(0.7)"
-                       :disabled="fenqiDisabledList[2]" :checked="huabeiPeriod == 12" value="12"/>
-              </view>
-            </radio-group>
-          </view>
-        </view>
-        <view class="paytype-confirm">
-          <view class="fenqi-total-amount" v-if="totalPrice >= 0.03 && paymentMode == 3">
-            <label class="fenqi-all">分期总额 ￥{{ totalPrice|clip2Decimal }}</label>
-            <label class="charge-fee-all">手续费 ￥{{ chargeFee|clip2Decimal }}</label>
-          </view>
-          <view class="fenqi-total-amount" v-if="paymentMode == 2">
-            <label class="order-amount">订单总额 ￥{{ totalPrice|clip2Decimal }}</label>
-          </view>
-          <view class="fenqi-confirm">
-            <text class="btn active" @click="continuePay">确认</text>
-          </view>
-        </view>
-      </u-popup>
-    </view>
+		<!-- 待付款 待发货 待收货 已完成 退款成功 -->
+		<view class="order-details-btn" style="padding-top:30upx;"
+			:style="{'padding-bottom':(isIphone==true? 40:0)+'rpx'}">
+			<text class="btn-l" @click="cancelOrder" v-if="dataList.state==1 || dataList.state==6">取消订单</text>
+			<text class="btn btn-r" @click="payOrder" v-if="dataList.state==1">立即付款</text>
+			<text class="btn-l" @click="applyMoneyAllTap" v-if="dataList.state==2 || dataList.state==3">申请退款</text>
+			<text class="btn btn-r" @click="confirmReceiptTap" v-if="dataList.state==3">确认收货</text>
+			<text class="btn" @click="applyTap" v-if="dataList.state==4">申请售后</text>
+			<text class="btn btn-r"
+				@click="goInviteSpll(dataList.collageId,dataList.orderId,dataList.skus[0].productId,dataList.skus[0].skuId,dataList.shopGroupWorkId)"
+				v-if="dataList.state==6">邀请拼单</text>
+			<text class="btn-l" @click="delOrder" v-if="dataList.state==5 && dataList.collageId == 0">删除订单</text>
+			<text class="btn btn-r"
+				@click="againCollage(dataList.skus[0].productId,dataList.shopId,dataList.skus[0].skuId,dataList)"
+				v-if="dataList.state==5 && dataList.collageId == 0">再次购买</text>
+			<text class="btn" @click="againCollage(dataList.skus[0].productId,dataList.shopId,dataList.skus[0].skuId,dataList)"
+				v-if="dataList.state==5 && dataList.collageId != 0">再次开团</text>
+		</view>
+		<u-popup class="pay-type-popup" v-model="showPayTypePopup" mode="bottom" border-radius="14"
+			close-icon-pos="top-right" close-icon-size="20">
+			<view class="pay-type-item">
+				<radio-group @change="payTypeChange" v-model="paymentMode">
+					<view class="pay-type-radio">
+						<view class="pay-type-img">
+							<img class="pay-type-img-inner" src="https://ceres.zkthink.com/static/images/alipay.png" />
+						</view>
+						<label class="pay-type-label">支付宝支付</label>
+						<radio class="pay-type-radio-item" style="transform:scale(0.7)" :checked="paymentMode == 2"
+							value="2" />
+					</view>
+					<view class="pay-type-radio">
+						<view class="pay-type-img">
+							<img class="pay-type-img-inner" src="https://ceres.zkthink.com/static/images/huabei.png" />
+						</view>
+						<label class="pay-type-label">花呗分期</label>
+						<radio class="pay-type-radio-item" style="transform:scale(0.7)" :disabled="totalPrice < 0.03"
+							:checked="paymentMode == 3" value="3" />
+					</view>
+				</radio-group>
+				<view class="huabei-detail">
+					<radio-group @change="huabeiPeriodChange" v-model="huabeiPeriod">
+						<view class="period-radio">
+							<view class="period-amount">
+								<label class="period-each">￥ {{fenqiFeeList[0]|clip2Decimal}}x3期</label>
+								<label class="period-each-charge">手续费￥{{chargeFeeList[0]|clip2Decimal}}/期</label>
+							</view>
+							<radio class="period-type-radio-item" style="transform:scale(0.7)"
+								:disabled="fenqiDisabledList[0]" :checked="huabeiPeriod == 3" value="3" />
+						</view>
+						<view class="period-radio">
+							<view class="period-amount">
+								<label class="period-each">￥ {{fenqiFeeList[1]|clip2Decimal}}x6期</label>
+								<label class="period-each-charge">手续费￥{{chargeFeeList[1]|clip2Decimal}}/期</label>
+							</view>
+							<radio class="period-type-radio-item" style="transform:scale(0.7)"
+								:disabled="fenqiDisabledList[1]" :checked="huabeiPeriod == 6" value="6" />
+						</view>
+						<view class="period-radio">
+							<view class="period-amount">
+								<label class="period-each">￥ {{fenqiFeeList[2]|clip2Decimal}}x12期</label>
+								<label class="period-each-charge">手续费￥{{chargeFeeList[2]|clip2Decimal}}/期</label>
+							</view>
+							<radio class="period-type-radio-item" style="transform:scale(0.7)"
+								:disabled="fenqiDisabledList[2]" :checked="huabeiPeriod == 12" value="12" />
+						</view>
+					</radio-group>
+				</view>
+			</view>
+			<view class="paytype-confirm">
+				<view class="fenqi-total-amount" v-if="totalPrice >= 0.03 && paymentMode == 3">
+					<label class="fenqi-all">分期总额 ￥{{ totalPrice|clip2Decimal }}</label>
+					<label class="charge-fee-all">手续费 ￥{{ chargeFee|clip2Decimal }}</label>
+				</view>
+				<view class="fenqi-total-amount" v-if="paymentMode == 2">
+					<label class="order-amount">订单总额 ￥{{ totalPrice|clip2Decimal }}</label>
+				</view>
+				<view class="fenqi-confirm">
+					<text class="btn active" @click="continuePay">确认</text>
+				</view>
+			</view>
+		</u-popup>
+	</view>
   </view>
 </template>
 
@@ -382,7 +379,9 @@ import {
 var jweixin = require('jweixin-module')
 // #endif
 
-import uniSteps from "@/components/uni-steps/uni-steps.vue"
+	import uniSteps from "@/components/uni-steps/uni-steps.vue"
+  import { handleDoPay } from "../../utils/payUtil";
+  import { Services } from "../../utils/services";
 
 const NET = require('../../utils/request')
 const API = require('../../config/api')
@@ -436,11 +435,12 @@ export default {
 		},
 		onLoad(options) {
 			this.isIphone = getApp().globalData.isIphone;
+      if(options.detail){
+        options = this.$getJumpParam(options)
+      }
 			this.orderId = (parseInt(options.orderId))
-			if (uni.getStorageSync("afterapplyItem")) {
-				this.item = uni.getStorageSync("afterapplyItem")
-			}
-			if (options.noticeId) {
+      this.item = options
+      if (options.noticeId) {
 				this.noticeId = options.noticeId
 			}
 			this.getDataList(this.orderId)
@@ -465,7 +465,6 @@ export default {
 		methods: {
       //去商品详情
       againCollage(productId, shopId, skuId, isStartAGroup, item) {
-        console.log(item)
         if (isStartAGroup) {
           uni.navigateTo({
             url: '../goodsModule/goodsDetails?productId=' + productId + '&shopId=' + shopId + '&skuId=' +
@@ -796,17 +795,10 @@ export default {
 					// uni.hideLoading()
 				}).finally(()=>this.$hideLoading())
 			},
-			payOrder() {
+			async payOrder() {
 				// #ifdef MP-ALIPAY
 				this.showPayTypePopup = true
 				this.totalPrice = this.dataList.price
-				// #endif
-				// #ifndef MP-ALIPAY
-				// uni.showLoading({
-				// 	mask: true,
-				// 	title: '订单提交中...',
-				// })
-        this.$showLoading("加载中...")
 				// #endif
 				let submitResult = {
 					collageId: this.dataList.collageId,
@@ -814,270 +806,9 @@ export default {
 					orderId: this.dataList.orderId,
 					type: 2
 				}
-				// #ifdef H5
-				let ua = navigator.userAgent.toLowerCase();
-				if (ua.match(/MicroMessenger/i) == "micromessenger") {
-					this.payRequest(submitResult)
-				} else {
-					NET.request(API.gotoH5Pay, submitResult, 'POST').then(res => {
-						//console.dir(res)
-            this.$hideLoading()
-						location.replace(res.data.mwebUrl)
-						// window.location.replace(url)
-					}).catch(err => {
-						this.submitActive = true
-						// uni.hideLoading()
-            this.$hideLoading()
-						uni.showToast({
-							title: '支付失败',
-							icon: 'none'
-						})
-					})
-				}
-				// #endif
-				// #ifdef MP-WEIXIN
-				NET.request(API.gotoPay, submitResult, 'POST').then(res => {
-					uni.requestPayment({
-						provider: 'wxpay',
-						timeStamp: res.data.timeStamp,
-						nonceStr: res.data.nonceStr,
-						package: res.data.package,
-						signType: res.data.signType,
-						paySign: res.data.paySign,
-						success: function(payRes) {
-							uni.showToast({
-								icon: 'none',
-								title: '支付成功'
-							})
-							uni.navigateTo({
-								url: 'index?type=0'
-							})
-						},
-						fail: function(err) {
-							uni.showToast({
-								icon: 'none',
-								title: '支付失败'
-							})
-						}
-					})
-				}).catch(err => {
-					uni.hideLoading()
-					uni.showToast({
-						title: '支付失败',
-						icon: 'none'
-					})
-				})
-				// #endif
-				// #ifdef MP-ALIPAY
-				this.alipayInfo = submitResult
-				// #endif
-				// #ifdef APP-PLUS
-				NET.request(API.gotoAppPay, submitResult, 'POST').then(res => {
-					var obj = {
-					  appid: res.data.appId,
-					  noncestr: res.data.nonceStr,
-					  package: 'Sign=WXPay',
-					  prepayid: res.data.prepayId,
-					  timestamp: res.data.timeStamp,
-					  sign: res.data.paySign,
-					  partnerid: res.data.partnerId
-					}
-					uni.requestPayment({
-						provider: 'wxpay',
-						orderInfo: obj,
-						success: function(payRes) {
-							uni.showToast({
-								icon: 'none',
-								title: '支付成功'
-							})
-							uni.navigateTo({
-								url: 'index?type=0'
-							})
-						},
-						fail: function(err) {
-							console.log(err)
-							uni.showToast({
-								icon: 'none',
-								title: '支付取消'
-							})
-						}
-					})
-				}).catch(err => {
-					uni.hideLoading()
-					uni.showToast({
-						title: '支付失败',
-						icon: 'none'
-					})
-				})
-				// #endif
+        await handleDoPay.call(this,submitResult)
 			},
-			// 继续付款
-			continuePay() {
-				// uni.showLoading({
-				// 	mask: true,
-				// 	title: '加载中...',
-				// })
-        this.$showLoading("加载中...")
 
-        const payInfo = Object.assign({}, this.alipayInfo, {
-					'paymentMode': this.paymentMode,
-					'huabeiPeriod': this.huabeiPeriod
-				});
-				this.aliPay(payInfo)
-			},
-			// 支付宝支付
-			aliPay(payInfo) {
-				NET.request(API.gotoPay, payInfo, 'POST').then(res => {
-					uni.requestPayment({
-						provider: 'alipay',
-						orderInfo: res.data.tradeNo,
-						success: function(payRes) {
-							// uni.hideLoading()
-              this.$hideLoading()
-							if (payRes.resultCode == '6001') {
-								uni.showToast({
-									icon: 'none',
-									title: '取消支付'
-								})
-							}
-							if (payRes.resultCode == '9000') {
-								uni.showToast({
-									icon: 'none',
-									title: '支付成功'
-								})
-								uni.navigateTo({
-									url: 'index?type=0'
-								})
-							}
-						},
-						fail: function(err) {
-							uni.showToast({
-								icon: 'none',
-								title: '支付取消'
-							})
-						}
-					});
-				}).catch(err => {
-					// uni.hideLoading()
-          this.$hideLoading()
-					uni.showToast({
-						title: '支付失败',
-						icon: 'none'
-					})
-				})
-			},
-			// H5支付微信内置浏览器支付
-			payRequest(payInfo) {
-				payInfo.paymentMode = 1
-				NET.request(API.gotoPay, payInfo, 'POST').then(res => {
-          this.$hideLoading()
-					jweixin.config({
-						debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-						appId: res.data.appId, // 必填，公众号的唯一标识
-						timestamp: res.data.timeStamp, // 必填，生成签名的时间戳
-						nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
-						signature: res.data.paySign, // 必填，签名，见附录1
-						jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-					});
-					jweixin.ready(function() {
-						jweixin.checkJsApi({
-							jsApiList: ['chooseWXPay'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
-							success: function(res) {
-								// console.log('checkjsapi Success')
-								// console.log(res);
-							},
-							fail: function(res) {
-								// console.log('res')
-								// console.log(res);
-							}
-						});
-						jweixin.chooseWXPay({
-							timestamp: res.data
-								.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-							nonceStr: res.data.nonceStr, // 支付签名随机串，不长于 32 位
-							package: res.data
-								.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-							signType: res.data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-							paySign: res.data.paySign, // 支付签名
-							success: function(res) {
-								// 支付成功后的回调函数
-								uni.showToast({
-									icon: 'none',
-									title: '支付成功'
-								})
-								uni.navigateTo({
-									url: 'index?type=0'
-								})
-							},
-							cancel: function(r) {
-								uni.showToast({
-									icon: 'none',
-									title: '取消支付'
-								})
-							},
-							fail: function(res) {
-								uni.showToast({
-									icon: 'none',
-									title: '支付失败'
-								})
-							}
-						});
-					});
-					jweixin.error(function(res) {
-						console.log('error')
-						console.log(res)
-						uni.hideLoading()
-						uni.showToast({
-							icon: 'none',
-							title: '支付失败了',
-							duration: 3000
-						});
-					});
-				}).catch(err => {
-					// uni.hideLoading()
-          this.$hideLoading()
-				})
-			},
-			//立即付款
-			// payOrder() {
-			//     uni.showLoading({
-			//       title: '加载中...',
-			//     })
-			//     NET.request(API.ContinuePay, {
-			//       orderCode: this.dataList.orderCode
-			//     }, 'POST').then(res => {
-			//       uni.hideLoading()
-			//       let payInfo = res.data
-			//       uni.requestPayment({
-			//         timeStamp: payInfo.timeStamp,
-			//         nonceStr: payInfo.nonceStr,
-			//         package: payInfo.packageValue,
-			//         signType: payInfo.signType,
-			//         paySign: payInfo.paySign,
-			//         success: res => {
-			//           uni.showToast({
-			//             title: '支付成功',
-			//           })
-			//           setTimeout(() => {
-			//             this.getDataList(this.orderId)
-			//           }, 1500)
-
-			//         },
-			//         fail: res => {
-			//           uni.showToast({
-			//             title: '支付失败',
-			//             icon: 'none'
-			//           })
-			//         },
-			//         complete: res => {
-
-			//         }
-			//       })
-
-			//     }).catch(res => {
-			//       uni.hideLoading()
-			//     })
-			// },
 			//退款列表
 			Orderrefund() {
 				NET.request(API.Orderrefund, {
@@ -1227,81 +958,8 @@ export default {
 					}
 				})
 			},
-      openService(shopId){
-        console.log(shopId,"----------shopID")
-        this.isLoading = true
-        NET.request(API.CustomerService, {
-          id:shopId
-        }, 'get').then(res => {
-          console.log(res.data,"res.data")
-          if (res.code === '') {
-            this.corpId = res.data.corpId
-            this.serviceURL = res.data.url
-            this.flyToService({
-              corpId:res.data.corpId,
-              serviceURL:res.data.url
-            })
-          }
-          this.isLoading = false
-        }).catch(err => {
-          console.log(err)
-          this.isLoading = false
-        })
-      },
-      flyToService(data) {
-        let self = data
-        console.log(data,"flyToService")
-        // #ifdef MP-WEIXIN
-        if (!self.serviceURL || !self.corpId) {
-          self.hasService = false
-          return
-        }
-        wx.openCustomerServiceChat({
-          extInfo: {
-            url: self.serviceURL
-          },
-          corpId: self.corpId, // 企业ID
-          success(res) {
-          },
-          fail(err) {
-          }
-        })
-        // #endif
-        // #ifdef APP-PLUS
-        try {
-          let sweixin = null
-          plus.share.getServices(res=>{
-            sweixin = res.find(i => i.id === 'weixin')
-            if(sweixin){
-              sweixin.openCustomerServiceChat({
-                corpid: self.corpId,
-                url: self.serviceURL,
-              },suc=>{
-                console.log("success",JSON.stringify(res))
-              },err=>{
-                console.log("error",JSON.stringify(err))
-              })
-            }else{
-              plus.nativeUI.alert('当前环境不支持微信操作!')
-            }
-          },function(){
-            uni.showToast({title: "获取服务失败，不支持该操作。"+JSON.stringify(e), icon: 'error'})
-          })
-        } catch (err) {
-          uni.showToast({title: "调用失败，不支持该操作。"+JSON.stringify(err), icon: 'error'})
-        }
-        // #endif
-        /*	if (!this.serviceURL || !this.corpId) {
-            return
-          }
-          // 获取店铺id、客服链接
-          const extInfo = { // 客服信息
-            url: this.serviceURL // 客服链接
-          }
-          wx.openCustomerServiceChat({
-            extInfo,
-            corpId: this.corpId // 企业ID
-          })*/
+      async openService(shopId){
+        (await Services(shopId)).flyToService()
       }
     },
 		filters: {
@@ -1433,9 +1091,9 @@ page {
   margin-top: 20upx;
 
   .toService {
-    line-height: 40 rpx;
-    padding: 0 8 rpx;
-    border: 1 rpx solid #FAF6ED;
+    line-height: 40rpx;
+    padding: 0 8rpx;
+    border: 1rpx solid #FAF6ED;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1443,11 +1101,11 @@ page {
     .service-img {
       width: 60upx;
       height: 60upx;
-      margin-right: 12 rpx;
+      margin-right: 12rpx;
     }
 
     text {
-      line-height: 40 rpx;
+      line-height: 40rpx;
     }
   }
 }
@@ -1625,7 +1283,7 @@ page {
 
 .order-total-box .way-color {
   color: #333333;
-  font-size: 32 rpx;
+  font-size: 32rpx;
 }
 
 .order-details-information {
@@ -1696,18 +1354,18 @@ page {
 .order-details-btn .btn-l {
   width: 50%;
   height: 100upx;
-  border: 2 rpx solid #333333;
+  border: 2rpx solid #333333;
   font-size: 28upx;
   color: #333;
   text-align: center;
   line-height: 100upx;
   box-sizing: border-box;
-  margin-right: 10 rpx;
+  margin-right: 10rpx;
 }
 
 .order-details-btn .btn-r {
   width: 50%;
-  margin-left: 10 rpx;
+  margin-left: 10rpx;
 }
 
 .mt20 {

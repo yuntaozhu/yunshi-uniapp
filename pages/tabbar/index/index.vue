@@ -1,50 +1,67 @@
 <template>
   <div class="hom-page" :style="{'padding-top': height + 'px'}">
     <global-loading />
-    <!--&lt;!&ndash;  #ifdef MP-WEIXIN &ndash;&gt;-->
-    <!--<view class="header weiXinBox"-->
-          <!--:style="{'padding-top': topHeight + 'px'}">-->
-      <!--<view class="topBox"-->
-            <!--:style="{'height': height + 'px'}">-->
-        <!--<image class="logo"-->
-               <!--src="https://ceres.zkthink.com/static/assets/img/logo.png"-->
-               <!--mode="widthFix"></image>-->
-      <!--</view>-->
-    <!--</view>-->
-    <!--<view class="wxBtnBg"-->
-          <!--:style="{'padding-top': (topHeight + height + 10) + 'px'}">-->
-      <!--<view class="weiXinBoxBtn"-->
-            <!--@click="searchPro">-->
-        <!--<image class="search-icon"-->
-               <!--src="https://ceres.zkthink.com/static/images/searchImg.png"-->
-               <!--mode="widthFix">-->
-        <!--</image>-->
-        <!--<text>请输入您想要的宝贝</text>-->
-      <!--</view>-->
-    <!--</view>-->
-    <!--&lt;!&ndash; #endif &ndash;&gt;-->
-    <!--&lt;!&ndash; #ifdef H5 || APP-PLUS &ndash;&gt;-->
-    <!--<view class="header">-->
-      <!--<view class="topBox topWap">-->
-        <!--<image class="logo"-->
-               <!--src="https://ceres.zkthink.com/static/assets/img/logo.png"-->
-               <!--mode="widthFix"></image>-->
-        <!--<view class="search-btn"-->
-              <!--@click="searchPro">-->
-          <!--<image class="search-icon"-->
-                 <!--src="https://ceres.zkthink.com/static/img/search.png"-->
-                 <!--mode="widthFix">-->
-          <!--</image>-->
-        <!--</view>-->
-      <!--</view>-->
-    <!--</view>-->
-    <!--&lt;!&ndash; #endif &ndash;&gt;-->
-    <!--<category-list @tabChange='tabChange'></category-list>-->
-    <com-header  v-if="componentsData.length > 1 && componentsData[0].type==='header'"
-                :componentContent="componentsData[0].componentContent"
-                :terminal="terminal"
-                :typeId="1"
-                @tabChange="tabChange"></com-header>
+    <u-sticky offset-top="0" h5-nav-height="0" bg-color="#fff">
+      <view class="head">
+        <!-- #ifdef MP-WEIXIN -->
+        <view
+            class="header weiXinBox"
+            :style="{'padding-top': topHeight + 'px'}"
+        >
+          <view
+              class="topBox"
+              :style="{'height': height + 'px'}"
+          >
+            <image
+                class="logo"
+                src="https://ceres.zkthink.com/static/assets/img/logo.png"
+                mode="widthFix"
+            ></image>
+          </view>
+        </view>
+        <view
+            class="wxBtnBg"
+            :style="{'padding-top': (topHeight + height + 10) + 'px'}"
+        >
+          <view
+              class="weiXinBoxBtn"
+              @click="searchPro"
+          >
+            <image
+                class="search-icon"
+                src="https://ceres.zkthink.com/static/images/searchImg.png"
+                mode="widthFix"
+            >
+            </image>
+            <text>请输入您想要的宝贝</text>
+          </view>
+        </view>
+        <!-- #endif -->
+        <!-- #ifdef H5 || APP-PLUS -->
+        <view class="header">
+          <view class="topBox topWap">
+            <image
+                class="logo"
+                src="https://ceres.zkthink.com/static/assets/img/logo.png"
+                mode="widthFix"
+            ></image>
+            <view
+                class="search-btn"
+                @click="searchPro"
+            >
+              <image
+                  class="search-icon"
+                  src="https://ceres.zkthink.com/static/img/search.png"
+                  mode="widthFix"
+              >
+              </image>
+            </view>
+          </view>
+        </view>
+        <!-- #endif -->
+        <category-list @tabChange="tabChange"></category-list>
+      </view>
+    </u-sticky>
     <canvas-page ref="canvasPage"
                  :componentsData="componentsData"
                  v-if="activeTab==0"
@@ -93,12 +110,9 @@ import CategoryList from "@/components/basics/categoryList.vue"
 import CategoryShow from "@/components/basics/categoryShow.vue"
 import comHeader from '@/components/canvasShow/basics/header/app'
 import canvasPage from '@/components/canvasShow/canvasShowPage.vue'
-import GlobalLoading from "../../../components/GlobalLoading";
 
 export default {
   components: {
-    GlobalLoading,
-    comHeader,
     AdWindow,
     CategoryList,
     CategoryShow,
@@ -169,22 +183,22 @@ export default {
         uni.hideLoading()
       })
     },
-		// 分享到朋友圈
-		onShareTimeline: function() {
-		  return {
-		    title: this.miniHomeRemark,
-		    imageUrl: this.miniHomeImg,
-		    path: 'pages/tabbar/index/index',
-		  }
-		},
-		// 分享好友
-		onShareAppMessage: function() {
-			return {
-				title: this.miniHomeRemark,
-				imageUrl: this.miniHomeImg,
-				path: 'pages/tabbar/index/index',
-			}
-		},
+    // 分享到朋友圈
+    onShareTimeline: function() {
+      return {
+        title: this.miniHomeRemark,
+        imageUrl: this.miniHomeImg,
+        path: 'pages/tabbar/index/index',
+      }
+    },
+    // 分享好友
+    onShareAppMessage: function() {
+      return {
+        title: this.miniHomeRemark,
+        imageUrl: this.miniHomeImg,
+        path: 'pages/tabbar/index/index',
+      }
+    },
     /**
      * 请求非首页的子组件的下一页
      * */
@@ -206,7 +220,7 @@ export default {
         let pitchOnPage = this.$refs.categoryShow
         pitchOnPage.total = 0
         pitchOnPage.page=1
-        pitchOnPage.productList=[]
+        pitchOnPage.productList=[{},{},{},{},{},{},{},{}]
       }
     },
     tabChange(index, id) {
@@ -214,15 +228,26 @@ export default {
       this.activeTab = index
       this.categoryid = id
     },
+    // 查询产品
+    searchPro(key, type) {
+      uni.navigateTo({
+        url: `/pages_category_page1/search/index/index`
+      })
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-  .hom-page{
-    margin-top: calc(20rpx + var(--status-bar-height));
-  }
+.hom-page{
+  margin-top: calc(20rpx + var(--status-bar-height));
+}
+.head{
+  background: #fff;
+
+}
 .header {
+  background: #fff;
   .toLive {
     height: 40px;
     color: #FFF;

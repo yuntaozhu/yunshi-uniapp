@@ -303,10 +303,10 @@ export default {
 
   .coupon-list {
     width: 446rpx;
-    height: 450rpx;
+    height: 40%;
     overflow: auto;
     position: absolute;
-    top: 20rpx;
+    top: 40%;
     left: 50%;
     margin-left: -223rpx;
 
