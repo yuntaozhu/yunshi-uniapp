@@ -1,142 +1,155 @@
 <template>
 	<view class="container">
-		<!-- 我的评论 -->
-		<view class="evaluateTitle-box flex-row-plus flex-sp-around">
-			<view class="allEvaluate"
-				:class="{'evaluateTitle-on' : evaluateTitleFlag == 1}"
-				@click="evaluateTitleClick(1)"
-			>全部评价({{ myCommentList.total || 0}})</view>
-      <view class="centerLine">|</view>
-			<view
-				:class="{'evaluateTitle-on' : evaluateTitleFlag == 2}"
-				@click="evaluateTitleClick(2)"
-			>有图({{ myCommentList.imageTotal || 0}})</view>
-		</view>
-		<view v-if="evaluateTitleFlag == 1" class="mar-top-20">
-			<template>
-				<view
-					class="evaluate-contentbox"
-					v-for="(item, index) in commentVOList"
-					:key="index"
-					@click="commentDetails(index)"
-				>
-					<view class="evaluate-content flex-items flex-row flex-sp-between">
-						<view class="flex-items">
-							<image class="user-headSmallImg" v-if="item.headImage" :src="item.headImage"></image>
-							<image class="user-headSmallImg" src="https://ceres.zkthink.com/static/images/storeLogo.png" v-else></image>
-              <view class="skuValue">
-                <label class="fs28" v-if="item.name">{{item.name}}</label>
-                <label class="fs28" v-else>匿名</label>
-                <view class="fs22 font-color-999 mar-top-10">
-                  {{item.value}}
+    <!-- 骨架屏 -->
+    <Skeleton
+        el-color="#f1f3f4"
+        bg-color="#fff"
+        :loading="loading"
+        :animation="true"
+    ></Skeleton>
+    <global-loading />
+    <view class="u-skeleton">
+      <!-- 我的评论 -->
+      <view class="evaluateTitle-box flex-row-plus flex-sp-around u-skeleton-fillet">
+        <view class="allEvaluate"
+              :class="{'evaluateTitle-on' : evaluateTitleFlag == 1}"
+              @click="evaluateTitleClick(1)"
+        >全部评价({{ myCommentList.total || 0}})</view>
+        <view class="centerLine">|</view>
+        <view
+            :class="{'evaluateTitle-on' : evaluateTitleFlag == 2}"
+            @click="evaluateTitleClick(2)"
+        >有图({{ myCommentList.imageTotal || 0}})</view>
+      </view>
+      <view v-if="evaluateTitleFlag == 1" class="mar-top-20">
+        <template>
+          <view
+              class="evaluate-contentbox u-skeleton-fillet"
+              v-for="(item, index) in commentVOList"
+              :key="index"
+              @click="commentDetails(index)"
+          >
+            <view class="evaluate-content flex-items flex-row flex-sp-between ">
+              <view class="flex-items">
+                <image class="user-headSmallImg u-skeleton-circle" v-if="item.headImage" :src="item.headImage"></image>
+                <image class="user-headSmallImg u-skeleton-circle" src="https://ceres.zkthink.com/static/images/storeLogo.png" v-else></image>
+                <view class="skuValue u-skeleton-fillet">
+                  <label class="fs28" v-if="item.name">{{item.name}}</label>
+                  <label class="fs28" v-else>匿名</label>
+                  <view class="fs22 font-color-999 mar-top-10">
+                    {{item.value}}
+                  </view>
                 </view>
               </view>
-						</view>
-            <view class="addCommentsBut" v-if="item.addComment == ''" @click.stop="addCommentsClick(index)">追加评价</view>
-					</view>
-					<view class="fs26 pad-topbot-20">{{item.comment}}</view>
-					<view class="evaluateImg-box" v-if="item.image">
-						<view v-for="(cItem, index) in commentImgData(item.image)" :key="index">
-							<image class="evaluate-Img" :src="cItem"></image>
-						</view>
-					</view>
-					<view class="addComments-box flex-column-plus" v-if="item.addComment">
-						<label class="font-color-C5AA7B mar-top-30">用户追评</label>
-						<label class="mar-top-20">{{item.addComment}}</label>
-						<view class="evaluateImg-box mar-top-20" v-if="item.addImage">
-							<view v-for="(dItem, index) in commentImgData(item.addImage)" :key="index">
-								<image class="evaluate-Img" :src="dItem"></image>
-							</view>
-						</view>
-					</view>
-					<view class="goodsDes-box flex-column-plus mar-top-30">
-						<view class="flex-row-plus" @click.stop="goGoodsDetails(item.shopId,item.productId,item.skuId)">
-							<image class="goodsDes-img default-img" :src="item.productImage"></image>
-							<view class="goodsDesText-box">
-								<label class="fs26 goodsDes-text">{{item.productName}}</label>
-								<view class="mar-top-70">
-									<label>¥ {{item.productPrice}}</label>
-								</view>
-							</view>
-						</view>
-					</view>
-          <view class="flex-items flex-row mar-top-30 flex-sp-between">
-            <view class="font-color-999 fs22">{{item.createTime}}</view>
-            <view class="praise-box flex-items flex-row">
-              <image class="praise-icon" @click.stop="zanTap(index,item.commentId,0)" src="https://ceres.zkthink.com/static/images/praiseActiveIcon.png"
-                     v-if="item.ifLike"></image>
-              <image class="praise-icon" @click.stop="zanTap(index,item.commentId,1)" src="https://ceres.zkthink.com/static/images/addPraiseIcon.png"
-                     v-else></image>
-              <label class="mar-left-10">{{item.likes}}</label>
+              <view class="addCommentsBut" v-if="item.addComment == ''" @click.stop="addCommentsClick(index)">追加评价</view>
+            </view>
+            <view class="fs26 pad-topbot-20 u-skeleton-fillet" style="margin-top: 10rpx">{{item.comment}}</view>
+            <view class="evaluateImg-box" v-if="item.image">
+              <view v-for="(cItem, index) in commentImgData(item.image)" :key="index">
+                <image class="evaluate-Img" :src="cItem"></image>
+              </view>
+            </view>
+            <view class="addComments-box flex-column-plus" v-if="item.addComment">
+              <label class="font-color-C5AA7B mar-top-30">用户追评</label>
+              <label class="mar-top-20">{{item.addComment}}</label>
+              <view class="evaluateImg-box mar-top-20" v-if="item.addImage">
+                <view v-for="(dItem, index) in commentImgData(item.addImage)" :key="index">
+                  <image class="evaluate-Img" :src="dItem"></image>
+                </view>
+              </view>
+            </view>
+            <view class="goodsDes-box u-skeleton-fillet flex-column-plus mar-top-30">
+              <view class="flex-row-plus" @click.stop="goGoodsDetails(item.shopId,item.productId,item.skuId)">
+                <image class="goodsDes-img default-img" :src="item.productImage"></image>
+                <view class="goodsDesText-box">
+                  <label class="fs26 goodsDes-text">{{item.productName}}</label>
+                  <view class="mar-top-70">
+                    <label>¥ {{item.productPrice}}</label>
+                  </view>
+                </view>
+              </view>
+            </view>
+            <view class="flex-items flex-row mar-top-30 flex-sp-between">
+              <view class="font-color-999 fs22">{{item.createTime}}</view>
+              <view class="praise-box flex-items flex-row">
+                <image class="praise-icon" @click.stop="zanTap(index,item.commentId,0)" src="https://ceres.zkthink.com/static/images/praiseActiveIcon.png"
+                       v-if="item.ifLike"></image>
+                <image class="praise-icon" @click.stop="zanTap(index,item.commentId,1)" src="https://ceres.zkthink.com/static/images/addPraiseIcon.png"
+                       v-else></image>
+                <label class="mar-left-10">{{item.likes}}</label>
+              </view>
             </view>
           </view>
-				</view>
-			</template>
-			<view v-if="evaluateEmpty" class="emptyOrder-box flex-items-plus flex-column">
-				<image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
-				<label class="font-color-999 fs26 mar-top-30">你还没有评论哦～</label>
-			</view>
-		</view>
-		<view v-if="evaluateTitleFlag == 2" class="mar-top-20">
-			<template>
-			<view
-				class="evaluate-contentbox"
-				v-for="(item, index) in commentVOList"
-				:key="index"
-			>
-				<view class="evaluate-content flex-column" @click="commentDetails(index)" >
-					<view class="flex-items">
-						<image class="user-headSmallImg" v-if="item.headImage" :src="item.headImage"></image>
-						<image class="user-headSmallImg" src="https://ceres.zkthink.com/static/images/storeLogo.png" v-else></image>
-						<label class="fs28 mar-left-20" v-if="item.name">{{item.name}}</label>
-						<label class="fs28 mar-left-20" v-else>匿名</label>
-					</view>
-					<view class="fs22 font-color-999 mar-top-10">
-						{{item.value}}
-					</view>
-					<view class="fs26 pad-topbot-20">{{item.comment}}</view>
-					<view class="evaluateImg-box" v-if="item.image">
-						<view v-for="(cItem, index) in commentImgData(item.image)" :key="index">
-							<image class="evaluate-Img" :src="cItem"></image>
-						</view>
-					</view>
-					<view class="addComments-box flex-column-plus" v-if="item.addComment">
-						<label class="font-color-C5AA7B mar-top-30">用户追评</label>
-						<label class="mar-top-20">{{item.addComment}}</label>
-						<view class="evaluateImg-box mar-top-20" v-if="item.addImage">
-							<view v-for="(dItem, index) in commentImgData(item.addImage)" :key="index">
-								<image class="evaluate-Img" :src="dItem"></image>
-							</view>
-						</view>
-					</view>
+        </template>
+        <view v-if="evaluateEmpty" class="emptyOrder-box flex-items-plus flex-column">
+          <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
+          <label class="font-color-999 fs26 mar-top-30">你还没有评论哦～</label>
+        </view>
+      </view>
+      <view v-if="evaluateTitleFlag == 2" class="mar-top-20">
+        <template>
+          <view
+              class="evaluate-contentbox"
+              v-for="(item, index) in commentVOList"
+              :key="index"
+          >
+            <view class="evaluate-content flex-column" @click="commentDetails(index)" >
+              <view class="flex-items">
+                <image class="user-headSmallImg" v-if="item.headImage" :src="item.headImage"></image>
+                <image class="user-headSmallImg" src="https://ceres.zkthink.com/static/images/storeLogo.png" v-else></image>
+                <label class="fs28 mar-left-20" v-if="item.name">{{item.name}}</label>
+                <label class="fs28 mar-left-20" v-else>匿名</label>
+              </view>
+              <view class="fs22 font-color-999 mar-top-10">
+                {{item.value}}
+              </view>
+              <view class="fs26 pad-topbot-20">{{item.comment}}</view>
+              <view class="evaluateImg-box" v-if="item.image">
+                <view v-for="(cItem, index) in commentImgData(item.image)" :key="index">
+                  <image class="evaluate-Img" :src="cItem"></image>
+                </view>
+              </view>
+              <view class="addComments-box flex-column-plus" v-if="item.addComment">
+                <label class="font-color-C5AA7B mar-top-30">用户追评</label>
+                <label class="mar-top-20">{{item.addComment}}</label>
+                <view class="evaluateImg-box mar-top-20" v-if="item.addImage">
+                  <view v-for="(dItem, index) in commentImgData(item.addImage)" :key="index">
+                    <image class="evaluate-Img" :src="dItem"></image>
+                  </view>
+                </view>
+              </view>
 
-					<view class="flex-items flex-row mar-top-30 flex-sp-between">
-            <view class="font-color-999 fs22">{{item.createTime}}</view>
-						<view class="praise-box flex-items flex-row">
-							<image class="praise-icon" @click.stop="zanTap(index,item.commentId,0)" src="https://ceres.zkthink.com/static/images/praiseActiveIcon.png"
-							 v-if="item.ifLike"></image>
-							<image class="praise-icon" @click.stop="zanTap(index,item.commentId,1)" src="https://ceres.zkthink.com/static/images/praiseIcon.png"
-							 v-else></image>
-							<label class="mar-left-10">{{item.likes}}</label>
-						</view>
-					</view>
-				</view>
-			</view>
-			</template>
-			<view v-if="evaluateEmpty" class="emptyOrder-box flex-items-plus flex-column">
-				<image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
-				<label class="font-color-999 fs26 mar-top-30">你还没有评论哦～</label>
-			</view>
-		</view>
+              <view class="flex-items flex-row mar-top-30 flex-sp-between">
+                <view class="font-color-999 fs22">{{item.createTime}}</view>
+                <view class="praise-box flex-items flex-row">
+                  <image class="praise-icon" @click.stop="zanTap(index,item.commentId,0)" src="https://ceres.zkthink.com/static/images/praiseActiveIcon.png"
+                         v-if="item.ifLike"></image>
+                  <image class="praise-icon" @click.stop="zanTap(index,item.commentId,1)" src="https://ceres.zkthink.com/static/images/praiseIcon.png"
+                         v-else></image>
+                  <label class="mar-left-10">{{item.likes}}</label>
+                </view>
+              </view>
+            </view>
+          </view>
+        </template>
+        <view v-if="evaluateEmpty" class="emptyOrder-box flex-items-plus flex-column">
+          <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
+          <label class="font-color-999 fs26 mar-top-30">你还没有评论哦～</label>
+        </view>
+      </view>
+    </view>
 	</view>
 </template>
 
 <script>
-	const NET = require('../../utils/request')
+  import Skeleton from "../../components/Skeleton";
+  const NET = require('../../utils/request')
 	const API = require('../../config/api')
 	export default {
-		data() {
+    components: {Skeleton},
+    data() {
 			return {
+        loading:true,
 				evaluateTitleFlag: 1,
 				myCommentList: [],
 				commentVOList: [],
@@ -149,7 +162,27 @@
 			}
 		},
 		onShow(){
-			this.commentVOList = []
+			this.commentVOList = [{
+        isLoading:true,
+        name:'',
+        comment:''
+      },{
+        isLoading:true,
+        name:'',
+        comment:''
+      },{
+        isLoading:true,
+        name:'',
+        comment:''
+      },{
+        isLoading:true,
+        name:'',
+        comment:''
+      },{
+        isLoading:true,
+        name:'',
+        comment:''
+      }]
 			this.getMyCommentList()
 		},
 		// onLoad() {
@@ -200,10 +233,8 @@
 			},
 			//我的评价列表
 			getMyCommentList() {
-        // uni.showLoading({
-        //   title: '加载中...',
-        //   mask: true
-        // });
+        this.$showLoading()
+        this.loading = true
 				NET.request(API.MyCommentList, {
 					page: this.page,
 					pageSize: this.pageSize,
@@ -216,6 +247,7 @@
 					}
 					this.myCommentList = res.data
 					this.commentVOList = this.commentVOList.concat(res.data.page.list)
+          this.commentVOList = this.commentVOList.filter(item=>!item.isLoading)
           if (this.commentVOList.length === 0) {
             this.evaluateEmpty = true
           }
@@ -226,21 +258,26 @@
             duration: 2000,
             icon: 'none'
           });
-				})
+				}).finally(()=>{
+          this.loading = false
+          this.$hideLoading()
+        })
 			},
 			//点赞
 			zanTap(index, likeId, actionType) {
+        this.$showLoading()
 				NET.request(API.LikeOrUnLikeComment, {
 					commentId: likeId,
 					ifLike: actionType
 				}, 'POST').then(res => {
 					this.commentVOList[index].ifLike = !this.commentVOList[index].ifLike
 					this.commentVOList[index].likes = this.commentVOList[index].ifLike ? this.commentVOList[index].likes + 1 : this.commentVOList[index].likes - 1
-					this.commentVOList = []
-					this.page = 1
-					this.getMyCommentList()
+					// this.commentVOList = []
+					// this.page = 1
+					// this.getMyCommentList()
 				}).catch(res => {
-					uni.hideLoading()
+          this.$hideLoading()
+					// uni.hideLoading()
 				})
 			},
 			commentDetails(id) {
@@ -292,6 +329,7 @@ page {
 		justify-content: center;
 		flex-direction: column;
 		padding: 30upx 30upx;
+    margin: 10rpx 10rpx;
 		background-color: #FFFFFF;
     border-bottom: 2rpx solid #F3F4F5;
 		.evaluate-content {

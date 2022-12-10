@@ -40,6 +40,7 @@
           </view>
         </view>
 		  <view v-if="remainPerson !== 0">
+        {{ type }}
 			  <view class="mar-top-50 font-color-333">还差<label class="font-color-C5AA7B">{{remainPerson}}</label>人成团，距结束还剩{{hou}}:{{min}}:{{sec}}</view>
 			  <view v-if="type == 1" @click="shareClick" class="offered-but font-color-FFF flex-items-plus mar-top-60">邀请好友拼单</view>
 			  <view v-if="type == 0" @click="getOffered" class="offered-but font-color-FFF flex-items-plus mar-top-60">立即参团</view>
@@ -421,7 +422,7 @@
 					this.inviteSpell = res.data
 					this.type = 0
 					this.inviteSpell.personList.forEach(item=>{
-						if(item.name === this.userInfo.name){
+						if(item.buyerUserId === this.userInfo.buyerUserId){
 							this.type = 1
 						}
 					})

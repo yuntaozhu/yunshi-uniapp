@@ -73,18 +73,18 @@
 					// })
           this.$showLoading()
 					let that = this
-					setTimeout(function(){
+					setTimeout(()=>{
             // #ifdef H5 || MP-WEIXIN || APP-PLUS
 						uni.canvasToTempFilePath({ //把画布转化成临时文件进行保存
 							fileType: 'png', // 保存成的文件类型
 							quality: 0, // 图片质量
 							canvasId: 'posterCanvas', // 画布ID
-							success(res) {
+							success:(res)=> {
                 this.$hideLoading()
 							  console.log(res.tempFilePath, 'test0000')
                 that.saveDownload(res.tempFilePath)
 							},
-							fail() {
+							fail:()=> {
 								uni.showToast({
 									title: '保存失败，稍后再试',
 									duration: 2000,
@@ -118,7 +118,7 @@
                   },
                 })
               },
-              fail() {
+              fail:()=> {
                 this.$hideLoading()
                 uni.showToast({
                   title: '保存失败，稍后再试',
@@ -137,16 +137,17 @@
 					// })
           this.$showLoading()
 					let that = this
-					setTimeout(function(){
+					setTimeout(()=>{
 						uni.canvasToTempFilePath({ //把画布转化成临时文件进行保存
 							fileType: 'png', // 保存成的文件类型
 							quality: 0, // 图片质量
 							canvasId: 'posterCanvas', // 画布ID
-							success(res) {
+							success:(res)=> {
 								uni.downloadFile({
 									url: res.tempFilePath,//网络路径，下载下来
 									success: (res1) => {
                     this.$hideLoading()
+                    console.log(res1)
 										if (res1.statusCode === 200) {
 											// uni.hideLoading();
 											uni.showModal({
@@ -167,8 +168,7 @@
 									}
 								})
 							},
-							fail(err) {
-								console.log(err.errMsg)
+							fail:(err)=> {
                 this.$hideLoading()
 								uni.showToast({
 									title: '保存失败，稍后再试',

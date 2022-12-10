@@ -7,8 +7,8 @@
 					<image class="searchImg" src="https://ceres.zkthink.com/static/img/searchImg.png"></image>
 					<input class="search-box" v-model="keyWord" placeholder-class="searchboxPlace"
 						placeholder="请输入您想要的宝贝" />
-					<image class="searchClose-icon" @click="searchTextDel"
-						src="https://ceres.zkthink.com/static/img/index/searchClose_icon.png"></image>
+<!--					<image class="searchClose-icon" @click="searchTextDel"
+						src="https://ceres.zkthink.com/static/img/index/searchClose_icon.png"></image>-->
 				</view>
 				<view class="mar-left-40 fs26" @click="getList">搜索</view>
 			</view>

@@ -89,7 +89,7 @@
 			},
 
 			arrowTypeChange(arrowTypeId) {
-				this.FindMySalesData.list[arrowTypeId].ifOpen = this.FindMySalesData.list[arrowTypeId].ifOpen == true ? false : true
+				this.FindMySalesDatalist[arrowTypeId].ifOpen = this.FindMySalesDatalist[arrowTypeId].ifOpen == true ? false : true
 			}
 		}
 	}
