@@ -1,429 +1,441 @@
 <!-- 订单详情 -->
 <template>
-  <view>
-    <global-loading/>
-    <view v-if="ifShow">
-      <view class="content" style="padding-bottom:200upx;">
-        <view class="order-details-status">
-          <!--  待付款-->
-          <view class="status-title-box" v-if='dataList.state==1'>
-            <view class="l">
-              <text class="status">等待买家付款</text>
-              <!-- <text class="label">剩{{hou}}小时{{min}}分{{sec}}秒自动关闭</text> -->
-              <view style="color: #FFFFFF; margin-top: 20rpx;">
-                <text>剩</text>
-                <u-count-down :timestamp="remainingTime" fontSize="24rpx" :separator="zh"
-                              separatorColor="#FFFFFF" separatorSize="24rpx"></u-count-down>
-                <text>自动关闭</text>
-              </view>
-            </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaifukuan.png"></image>-->
-          </view>
-          <!--  待发货-->
-          <view class="status-title-box" v-else-if='dataList.state==2'>
-            <view class="l">
-              <text class="status">等待卖家发货</text>
-              <text class="label">付款后2-5个工作日发货</text>
-            </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaifahuo.png"></image>-->
-          </view>
-          <!--  待收货-->
-          <view class="status-title-box" v-else-if='dataList.state==3'>
-            <view class="l">
-              <text class="status">卖家已发货</text>
-              <!-- <text class="label">还剩5天21小时自动确认</text> -->
-            </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaishouhuo.png"></image>-->
-          </view>
-          <!-- 已完成 -->
-          <view class="status-title-box" v-else-if='dataList.state==4'>
-            <view class="l">
-              <text class="status">交易成功</text>
-              <text class="label">感谢您的使用</text>
-            </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaipingjia.png"></image>-->
-          </view>
-          <!--  拼团失败-->
-          <view class="status-title-box" v-else-if='dataList.state==5 && dataList.collageId != 0'>
-            <view class="l">
-              <text class="status">拼团失败</text>
-              <text class="label">剩余时间 00:00:00</text>
-            </view>
-            <view class="clusterback">
-              <!--						<image class='r' src="https://ceres.zkthink.com/static/images/staycluster.png"></image>-->
-            </view>
-          </view>
-          <!-- 交易关闭-->
-          <view class="status-title-box2" v-else-if='dataList.state==5'>
-            <text class="status">交易关闭</text>
-            <text class="label">您已关闭了这笔交易</text>
-          </view>
-          <!-- 退款成功-->
-          <view class="status-title-box2"
-                v-else-if='(dataList.returnType==1 && dataList.moneyReturnList.status==4) || (dataList.returnType==2 && dataList.moneyReturnList.status==6)'>
-            <text class="status">退款成功</text>
-            <text class="label">该笔订单 ¥{{ dataList.paySum }} 退款，已原路退回</text>
-          </view>
-          <!--  待成团-->
-          <view class="status-title-box" v-else-if='dataList.state==6'>
-            <view class="l">
-              <text class="status">待成团</text>
-              <!-- <text class="label">剩余时间{{hou}}小时{{min}}分{{sec}}秒</text> -->
-              <view style="color: #FFFFFF; margin-top: 20rpx;">
-                <text>剩余时间</text>
-                <u-count-down :timestamp="remainingTime" fontSize="24rpx" :separator="zh"
-                              separatorColor="#FFFFFF" separatorSize="24rpx"></u-count-down>
-              </view>
-            </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/clusterloss.png"></image>-->
-          </view>
-
-        </view>
-        <view class="order-details-info-box">
-          <view class="address-box">
-            <image src="https://ceres.zkthink.com/static/images/orderAddress.png" class="address-img"></image>
-            <view class="address-r">
-              <view class="address-name-box">
-                <text>{{ dataList.receiveName }}</text>
-                <text class="phone">{{ dataList.receivePhone }}</text>
-              </view>
-              <view class="address-info">
-                <text>{{ dataList.receiveAdress }} {{ dataList.address }}</text>
-              </view>
-            </view>
-            <image src="https://ceres.zkthink.com/static/images/arrowRight.png" v-if="false"
-                   class="arrow-right-img"></image>
-          </view>
-
-          <view class="order-list-box">
-            <view class="item">
-              <view class="order-list-top">
-                <view class="top-l" @click="goShop(dataList.shopId)">
-                  <image src="https://ceres.zkthink.com/static/images/orderStoreIcon.png"
-                         class="shop-img"></image>
-                  <text class="shop-name">{{ dataList.shopName }}</text>
-                  <image src="https://ceres.zkthink.com/static/images/arrowRight.png" class="arrow-img">
-                  </image>
-                </view>
-                <view class="toService" @click="openService">
-                  <image src="https://ceres.zkthink.com/static/images/serviceImg-order-detail.png"
-                         class="service-img"></image>
-                  <text>联系客服</text>
-                </view>
-              </view>
-              <view class="order-info-box">
-                <view class="order-info">
-                  <view class="order-info-item" v-for="proItem in dataList.skus" :key="proItem.productId"
-                        @click="goodsItemTap(proItem.productId,proItem.skuId)">
-                    <image :src="proItem.image" class="product-img default-img"></image>
-                    <view class="info-box">
-                      <text class="product-name">{{ proItem.productName }}</text>
-                      <view class="price-sku-box">
-                        <view class="product-sku">
-                          <view class="mar-left-20" v-for="vItem in proItem.values">
-                            <text>{{ vItem }}</text>
-                          </view>
-                        </view>
-                        <view class="product-num">x {{ proItem.number }}</view>
-                      </view>
-                      <view class="price-sku-box">
-                        <!--											<view class="price-box">-->
-                        <!--												<view class="product-price1">实付：<text-->
-                        <!--														class="fuhao">￥</text>{{proItem.price}}</view>-->
-                        <!--												&lt;!&ndash; <view class="product-price2">价格：<text class="fuhao">￥</text>{{proItem.price}}</view> &ndash;&gt;-->
-                        <!--											</view>-->
-
-                        <view
-                            v-if="(dataList.state === 3 || dataList.state === 4) && proItem.afterState == 0 && !proItem.returnType">
-                          <view class="item-applay-btn"
-                                v-if="proItem.returnStatus == null || (!proItem.canApplyIntervention && proItem.returnStatus == 2)"
-                                @click.stop="applayItemTap(proItem)">退款
-                          </view>
-                        </view>
-
-                        <view v-if="proItem.returnType == 1">
-                          <view class="item-applay-btn"
-                                @click="goApplyTap(proItem.returnCode,proItem.returnType)"
-                                v-if="proItem.returnStatus == 0 || proItem.returnStatus == 1 || proItem.returnStatus == 3 || proItem.returnStatus == 4">
-                            退款中
-                          </view>
-                          <view class="item-applay-btn"
-                                @click="goApplyTap(proItem.returnCode,proItem.returnType)"
-                                v-if="proItem.returnStatus == 4">已退款
-                          </view>
-                          <view class="item-applay-btn"
-                                @click="goApplyTap(proItem.returnCode,proItem.returnType)"
-                                v-if="proItem.returnStatus == 5">退款失败
-                          </view>
-                          <view class="item-applay-btn"
-                                @click="applyPlatform(proItem.returnCode,proItem.returnType)"
-                                v-if="proItem.canApplyIntervention">客服介入
-                          </view>
-                        </view>
-                        <view v-if="proItem.returnType == 2">
-                          <view class="item-applay-btn"
-                                @click="goApplyTap(proItem.returnCode,proItem.returnType)"
-                                v-if="proItem.returnStatus == 0 || proItem.returnStatus == 1 || proItem.returnStatus == 3 || proItem.returnStatus == 4">
-                            退货中
-                          </view>
-                          <view class="item-applay-btn"
-                                @click="goApplyTap(proItem.returnCode,proItem.returnType)"
-                                v-if="proItem.returnStatus == 6">已退款
-                          </view>
-                          <view class="item-applay-btn"
-                                @click="goApplyTap(proItem.returnCode,proItem.returnType)"
-                                v-if="proItem.returnStatus == 7">退款中
-                          </view>
-                          <view class="item-applay-btn"
-                                @click="goApplyTap(proItem.returnCode,proItem.returnType)"
-                                v-if="proItem.returnStatus == 5 || proItem.returnStatus == 8">退款失败
-                          </view>
-                          <view class="item-applay-btn"
-                                @click="applyPlatform(proItem.returnCode,proItem.returnType)"
-                                v-if="proItem.canApplyIntervention">客服介入
-                          </view>
-                        </view>
-
-                        <view v-if="proItem.commentStatus == 0" class="evaluate"
-                              @click="evaluateTap(pIndex)">立即评价
-                        </view>
-                        <view v-if="proItem.commentStatus == 1 && proItem.additionalComment != null"
-                              @click="evaluateTowTap(pIndex)" class="evaluate2">追加评价
-                        </view>
-
-                      </view>
-                    </view>
-                  </view>
-                  <view class="delivery-way-box">
-                    <view class="item">
-                      <text class="way">商品总价</text>
-                      <text class="way">¥{{ dataList.orderPrice }}</text>
-                    </view>
-                    <view class="item">
-                      <text class="way">快递运费</text>
-                      <text class="way">¥{{ dataList.logisticsPrice }}</text>
-                    </view>
-                    <view class="item">
-                      <text class="way">平台优惠</text>
-                      <text class="way">-¥{{ dataList.discountPrice }}</text>
-                    </view>
-                  </view>
-                </view>
-                <!-- 待发货 待收货 已完成 -->
-                <view class="order-total-box"
-                      v-if='dataList.state==2||dataList.state==3||dataList.state==4'>
-                  <text>实付款</text>
-                  <text class="way-color">¥{{ dataList.price }}</text>
-                </view>
-                <!-- 待付款 价格是橙色-->
-                <view class="order-total-box" v-else-if="dataList.state==1">
-                  <text>需付款</text>
-                  <text class="way-color">¥{{ dataList.price }}</text>
-                </view>
-                <!-- 退款成功 交易关闭 -->
-                <view class="order-total-box"
-                      v-else-if="(dataList.returnType==1 && dataList.moneyReturnList.status==4) || (dataList.returnType==2 && dataList.goodsReturn.status==6) || (dataList.state==5)">
-                  <text>需付款</text>
-                  <text>¥{{ dataList.price }}</text>
-                </view>
-              </view>
-            </view>
-          </view>
-        </view>
-        <view class="order-details-information padd">
-          <view class="order-title">
-            <text>订单信息</text>
-          </view>
-          <view class="info-box">
-            <!--都有  但是：待付款  待发货  退款成功 交易关闭  只有前两个item-->
-            <view class="item">
-              <text>订单编号：{{ dataList.orderFormid }}</text>
-              <text class="copy-color" :data-clipboard-text="dataList.orderFormid" @click="copy">复制</text>
-            </view>
-            <view class="item">
-              <text>创建时间：{{ dataList.createTime }}</text>
-            </view>
-            <!-- 待收货  有付款时间和发货时间 -->
-            <view class="item" v-if="dataList.state==3">
-              <text>付款时间：{{ dataList.paymentTime }}</text>
-            </view>
-            <view class="item" v-if="dataList.state == 3 || dataList.state == 4">
-              <text>发货时间：{{ dataList.dileveryTime }}</text>
-            </view>
-            <!-- 交易成功 有成交时间-->
-            <view class="item" v-if="dataList.state == 4">
-              <text>成交时间：{{ dataList.receiveTime }}</text>
-            </view>
-          </view>
-        </view>
-
-        <view v-if='dataList.state==3 || dataList.state==4'>
-          <view class="order-details-information mt20">
-            <view class="order-title-box" @click="wuLiuTap">
-              <view class="order-title padd-l">
-                <text class="line"></text>
-                <text>物流信息</text>
-              </view>
-              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/arrowDown.png"
-                     class="arrow-down-img" style="transform:rotate(180deg);" v-if="isShowWuLiu == true"></image>
-              <image mode="aspectFill" src="https://ceres.zkthink.com/static/images/arrowDown.png"
-                     class="arrow-down-img" v-else>
-              </image>
-            </view>
-          </view>
-          <!-- 暂无物流 -->
-          <view v-if="isShowWuLiu">
-            <view v-if="steps.length>0" class="logistics">
-              <uni-steps :options="steps" direction="column" :active="0"></uni-steps>
-            </view>
-            <view v-else class="emptyOrder-box flex-items-plus flex-column">
-              <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
-              <label class="font-color-999 fs26 mar-top-30">这里空空如也～</label>
-            </view>
-          </view>
-        </view>
-      </view>
-
-		<!-- 待付款 待发货 待收货 已完成 退款成功 -->
-		<view class="order-details-btn" style="padding-top:30upx;"
-			:style="{'padding-bottom':(isIphone==true? 40:0)+'rpx'}">
-			<text class="btn-l" @click="cancelOrder" v-if="dataList.state==1 || dataList.state==6">取消订单</text>
-			<text class="btn btn-r" @click="payOrder" v-if="dataList.state==1">立即付款</text>
-			<text class="btn-l" @click="applyMoneyAllTap" v-if="dataList.state==2 || dataList.state==3">申请退款</text>
-			<text class="btn btn-r" @click="confirmReceiptTap" v-if="dataList.state==3">确认收货</text>
-			<text class="btn" @click="applyTap" v-if="dataList.state==4">申请售后</text>
-			<text class="btn btn-r"
-				@click="goInviteSpll(dataList.collageId,dataList.orderId,dataList.skus[0].productId,dataList.skus[0].skuId,dataList.shopGroupWorkId)"
-				v-if="dataList.state==6">邀请拼单</text>
-			<text class="btn-l" @click="delOrder" v-if="dataList.state==5 && dataList.collageId == 0">删除订单</text>
-			<text class="btn btn-r"
-				@click="againCollage(dataList.skus[0].productId,dataList.shopId,dataList.skus[0].skuId,dataList)"
-				v-if="dataList.state==5 && dataList.collageId == 0">再次购买</text>
-			<text class="btn" @click="againCollage(dataList.skus[0].productId,dataList.shopId,dataList.skus[0].skuId,dataList)"
-				v-if="dataList.state==5 && dataList.collageId != 0">再次开团</text>
-		</view>
-		<u-popup class="pay-type-popup" v-model="showPayTypePopup" mode="bottom" border-radius="14"
-			close-icon-pos="top-right" close-icon-size="20">
-			<view class="pay-type-item">
-				<radio-group @change="payTypeChange" v-model="paymentMode">
-					<view class="pay-type-radio">
-						<view class="pay-type-img">
-							<img class="pay-type-img-inner" src="https://ceres.zkthink.com/static/images/alipay.png" />
+	<view>
+		<global-loading />
+		<view v-if="ifShow">
+			<view class="content" style="padding-bottom:200upx;">
+				<view class="order-details-status">
+					<!--  待付款-->
+					<view class="status-title-box" v-if='dataList.state==1'>
+						<view class="l">
+							<text class="status">等待买家付款</text>
+							<!-- <text class="label">剩{{hou}}小时{{min}}分{{sec}}秒自动关闭</text> -->
+							<view style="color: #FFFFFF; margin-top: 20rpx;">
+								<text>剩</text>
+								<u-count-down :timestamp="remainingTime" fontSize="24rpx" :separator="zh"
+									separatorColor="#FFFFFF" separatorSize="24rpx"></u-count-down>
+								<text>自动关闭</text>
+							</view>
 						</view>
-						<label class="pay-type-label">支付宝支付</label>
-						<radio class="pay-type-radio-item" style="transform:scale(0.7)" :checked="paymentMode == 2"
-							value="2" />
+						<!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaifukuan.png"></image>-->
 					</view>
-					<view class="pay-type-radio">
-						<view class="pay-type-img">
-							<img class="pay-type-img-inner" src="https://ceres.zkthink.com/static/images/huabei.png" />
+					<!--  待发货-->
+					<view class="status-title-box" v-else-if='dataList.state==2'>
+						<view class="l">
+							<text class="status">等待卖家发货</text>
+							<text class="label">付款后2-5个工作日发货</text>
 						</view>
-						<label class="pay-type-label">花呗分期</label>
-						<radio class="pay-type-radio-item" style="transform:scale(0.7)" :disabled="totalPrice < 0.03"
-							:checked="paymentMode == 3" value="3" />
+						<!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaifahuo.png"></image>-->
 					</view>
-				</radio-group>
-				<view class="huabei-detail">
-					<radio-group @change="huabeiPeriodChange" v-model="huabeiPeriod">
-						<view class="period-radio">
-							<view class="period-amount">
-								<label class="period-each">￥ {{fenqiFeeList[0]|clip2Decimal}}x3期</label>
-								<label class="period-each-charge">手续费￥{{chargeFeeList[0]|clip2Decimal}}/期</label>
-							</view>
-							<radio class="period-type-radio-item" style="transform:scale(0.7)"
-								:disabled="fenqiDisabledList[0]" :checked="huabeiPeriod == 3" value="3" />
+					<!--  待收货-->
+					<view class="status-title-box" v-else-if='dataList.state==3'>
+						<view class="l">
+							<text class="status">卖家已发货</text>
+							<!-- <text class="label">还剩5天21小时自动确认</text> -->
 						</view>
-						<view class="period-radio">
-							<view class="period-amount">
-								<label class="period-each">￥ {{fenqiFeeList[1]|clip2Decimal}}x6期</label>
-								<label class="period-each-charge">手续费￥{{chargeFeeList[1]|clip2Decimal}}/期</label>
-							</view>
-							<radio class="period-type-radio-item" style="transform:scale(0.7)"
-								:disabled="fenqiDisabledList[1]" :checked="huabeiPeriod == 6" value="6" />
+						<!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaishouhuo.png"></image>-->
+					</view>
+					<!-- 已完成 -->
+					<view class="status-title-box" v-else-if='dataList.state==4'>
+						<view class="l">
+							<text class="status">交易成功</text>
+							<text class="label">感谢您的使用</text>
 						</view>
-						<view class="period-radio">
-							<view class="period-amount">
-								<label class="period-each">￥ {{fenqiFeeList[2]|clip2Decimal}}x12期</label>
-								<label class="period-each-charge">手续费￥{{chargeFeeList[2]|clip2Decimal}}/期</label>
+						<!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaipingjia.png"></image>-->
+					</view>
+					<!--  拼团失败-->
+					<view class="status-title-box" v-else-if='dataList.state==5 && dataList.collageId != 0'>
+						<view class="l">
+							<text class="status">拼团失败</text>
+							<text class="label">剩余时间 00:00:00</text>
+						</view>
+						<view class="clusterback">
+							<!--						<image class='r' src="https://ceres.zkthink.com/static/images/staycluster.png"></image>-->
+						</view>
+					</view>
+					<!-- 交易关闭-->
+					<view class="status-title-box2" v-else-if='dataList.state==5'>
+						<text class="status">交易关闭</text>
+						<text class="label">您已关闭了这笔交易</text>
+					</view>
+					<!-- 退款成功-->
+					<view class="status-title-box2"
+						v-else-if='(dataList.returnType==1 && dataList.moneyReturnList.status==4) || (dataList.returnType==2 && dataList.moneyReturnList.status==6)'>
+						<text class="status">退款成功</text>
+						<text class="label">该笔订单 ¥{{ dataList.paySum }} 退款，已原路退回</text>
+					</view>
+					<!--  待成团-->
+					<view class="status-title-box" v-else-if='dataList.state==6'>
+						<view class="l">
+							<text class="status">待成团</text>
+							<!-- <text class="label">剩余时间{{hou}}小时{{min}}分{{sec}}秒</text> -->
+							<view style="color: #FFFFFF; margin-top: 20rpx;">
+								<text>剩余时间</text>
+								<u-count-down :timestamp="remainingTime" fontSize="24rpx" :separator="zh"
+									separatorColor="#FFFFFF" separatorSize="24rpx"></u-count-down>
 							</view>
-							<radio class="period-type-radio-item" style="transform:scale(0.7)"
-								:disabled="fenqiDisabledList[2]" :checked="huabeiPeriod == 12" value="12" />
+						</view>
+						<!--					<image class='r' src="https://ceres.zkthink.com/static/images/clusterloss.png"></image>-->
+					</view>
+
+				</view>
+				<view class="order-details-info-box">
+					<view class="address-box">
+						<image src="https://ceres.zkthink.com/static/images/orderAddress.png" class="address-img">
+						</image>
+						<view class="address-r">
+							<view class="address-name-box">
+								<text>{{ dataList.receiveName }}</text>
+								<text class="phone">{{ dataList.receivePhone }}</text>
+							</view>
+							<view class="address-info">
+								<text>{{ dataList.receiveAdress }} {{ dataList.address }}</text>
+							</view>
+						</view>
+						<image src="https://ceres.zkthink.com/static/images/arrowRight.png" v-if="false"
+							class="arrow-right-img"></image>
+					</view>
+
+					<view class="order-list-box">
+						<view class="item">
+							<view class="order-list-top">
+								<view class="top-l" @click="goShop(dataList.shopId)">
+									<image src="https://ceres.zkthink.com/static/images/orderStoreIcon.png"
+										class="shop-img"></image>
+									<text class="shop-name">{{ dataList.shopName }}</text>
+									<image src="https://ceres.zkthink.com/static/images/arrowRight.png"
+										class="arrow-img">
+									</image>
+								</view>
+								<view class="toService" @click="openService">
+									<image src="https://ceres.zkthink.com/static/images/serviceImg-order-detail.png"
+										class="service-img"></image>
+									<text>联系客服</text>
+								</view>
+							</view>
+							<view class="order-info-box">
+								<view class="order-info">
+									<view class="order-info-item" v-for="proItem in dataList.skus"
+										:key="proItem.productId" @click="goodsItemTap(proItem.productId,proItem.skuId)">
+										<image :src="proItem.image" class="product-img default-img"></image>
+										<view class="info-box">
+											<text class="product-name">{{ proItem.productName }}</text>
+											<view class="price-sku-box">
+												<view class="product-sku">
+													<view class="mar-left-20" v-for="vItem in proItem.values">
+														<text>{{ vItem }}</text>
+													</view>
+												</view>
+												<view class="product-num">x {{ proItem.number }}</view>
+											</view>
+											<view class="price-sku-box">
+												<!--											<view class="price-box">-->
+												<!--												<view class="product-price1">实付：<text-->
+												<!--														class="fuhao">￥</text>{{proItem.price}}</view>-->
+												<!--												&lt;!&ndash; <view class="product-price2">价格：<text class="fuhao">￥</text>{{proItem.price}}</view> &ndash;&gt;-->
+												<!--											</view>-->
+
+												<view
+													v-if="(dataList.state === 3 || dataList.state === 4) && proItem.afterState == 0 && !proItem.returnType">
+													<view class="item-applay-btn"
+														v-if="proItem.returnStatus == null || (!proItem.canApplyIntervention && proItem.returnStatus == 2)"
+														@click.stop="applayItemTap(proItem)">退款
+													</view>
+												</view>
+
+												<view v-if="proItem.returnType == 1">
+													<view class="item-applay-btn"
+														@click="goApplyTap(proItem.returnCode,proItem.returnType)"
+														v-if="proItem.returnStatus == 0 || proItem.returnStatus == 1 || proItem.returnStatus == 3 || proItem.returnStatus == 4">
+														退款中
+													</view>
+													<view class="item-applay-btn"
+														@click="goApplyTap(proItem.returnCode,proItem.returnType)"
+														v-if="proItem.returnStatus == 4">已退款
+													</view>
+													<view class="item-applay-btn"
+														@click="goApplyTap(proItem.returnCode,proItem.returnType)"
+														v-if="proItem.returnStatus == 5">退款失败
+													</view>
+													<view class="item-applay-btn"
+														@click="applyPlatform(proItem.returnCode,proItem.returnType)"
+														v-if="proItem.canApplyIntervention">客服介入
+													</view>
+												</view>
+												<view v-if="proItem.returnType == 2">
+													<view class="item-applay-btn"
+														@click="goApplyTap(proItem.returnCode,proItem.returnType)"
+														v-if="proItem.returnStatus == 0 || proItem.returnStatus == 1 || proItem.returnStatus == 3 || proItem.returnStatus == 4">
+														退货中
+													</view>
+													<view class="item-applay-btn"
+														@click="goApplyTap(proItem.returnCode,proItem.returnType)"
+														v-if="proItem.returnStatus == 6">已退款
+													</view>
+													<view class="item-applay-btn"
+														@click="goApplyTap(proItem.returnCode,proItem.returnType)"
+														v-if="proItem.returnStatus == 7">退款中
+													</view>
+													<view class="item-applay-btn"
+														@click="goApplyTap(proItem.returnCode,proItem.returnType)"
+														v-if="proItem.returnStatus == 5 || proItem.returnStatus == 8">
+														退款失败
+													</view>
+													<view class="item-applay-btn"
+														@click="applyPlatform(proItem.returnCode,proItem.returnType)"
+														v-if="proItem.canApplyIntervention">客服介入
+													</view>
+												</view>
+
+												<view v-if="proItem.commentStatus == 0" class="evaluate"
+													@click="evaluateTap(pIndex)">立即评价
+												</view>
+												<view
+													v-if="proItem.commentStatus == 1 && proItem.additionalComment != null"
+													@click="evaluateTowTap(pIndex)" class="evaluate2">追加评价
+												</view>
+
+											</view>
+										</view>
+									</view>
+									<view class="delivery-way-box">
+										<view class="item">
+											<text class="way">商品总价</text>
+											<text class="way">¥{{ dataList.orderPrice }}</text>
+										</view>
+										<view class="item">
+											<text class="way">快递运费</text>
+											<text class="way">¥{{ dataList.logisticsPrice }}</text>
+										</view>
+										<view class="item">
+											<text class="way">平台优惠</text>
+											<text class="way">-¥{{ dataList.discountPrice }}</text>
+										</view>
+									</view>
+								</view>
+								<!-- 待发货 待收货 已完成 -->
+								<view class="order-total-box"
+									v-if='dataList.state==2||dataList.state==3||dataList.state==4'>
+									<text>实付款</text>
+									<text class="way-color">¥{{ dataList.price }}</text>
+								</view>
+								<!-- 待付款 价格是橙色-->
+								<view class="order-total-box" v-else-if="dataList.state==1">
+									<text>需付款</text>
+									<text class="way-color">¥{{ dataList.price }}</text>
+								</view>
+								<!-- 退款成功 交易关闭 -->
+								<view class="order-total-box"
+									v-else-if="(dataList.returnType==1 && dataList.moneyReturnList.status==4) || (dataList.returnType==2 && dataList.goodsReturn.status==6) || (dataList.state==5)">
+									<text>需付款</text>
+									<text>¥{{ dataList.price }}</text>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+				<view class="order-details-information padd">
+					<view class="order-title">
+						<text>订单信息</text>
+					</view>
+					<view class="info-box">
+						<!--都有  但是：待付款  待发货  退款成功 交易关闭  只有前两个item-->
+						<view class="item">
+							<text>订单编号：{{ dataList.orderFormid }}</text>
+							<text class="copy-color" :data-clipboard-text="dataList.orderFormid" @click="copy">复制</text>
+						</view>
+						<view class="item">
+							<text>创建时间：{{ dataList.createTime }}</text>
+						</view>
+						<!-- 待收货  有付款时间和发货时间 -->
+						<view class="item" v-if="dataList.state==3">
+							<text>付款时间：{{ dataList.paymentTime }}</text>
+						</view>
+						<view class="item" v-if="dataList.state == 3 || dataList.state == 4">
+							<text>发货时间：{{ dataList.dileveryTime }}</text>
+						</view>
+						<!-- 交易成功 有成交时间-->
+						<view class="item" v-if="dataList.state == 4">
+							<text>成交时间：{{ dataList.receiveTime }}</text>
+						</view>
+					</view>
+				</view>
+
+				<view v-if='dataList.state==3 || dataList.state==4'>
+					<view class="order-details-information mt20">
+						<view class="order-title-box" @click="wuLiuTap">
+							<view class="order-title padd-l">
+								<text class="line"></text>
+								<text>物流信息</text>
+							</view>
+							<image mode="aspectFill" src="https://ceres.zkthink.com/static/images/arrowDown.png"
+								class="arrow-down-img" style="transform:rotate(180deg);" v-if="isShowWuLiu == true">
+							</image>
+							<image mode="aspectFill" src="https://ceres.zkthink.com/static/images/arrowDown.png"
+								class="arrow-down-img" v-else>
+							</image>
+						</view>
+					</view>
+					<!-- 暂无物流 -->
+					<view v-if="isShowWuLiu">
+						<view v-if="steps.length>0" class="logistics">
+							<uni-steps :options="steps" direction="column" :active="0"></uni-steps>
+						</view>
+						<view v-else class="emptyOrder-box flex-items-plus flex-column">
+							<image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
+							<label class="font-color-999 fs26 mar-top-30">这里空空如也～</label>
+						</view>
+					</view>
+				</view>
+			</view>
+
+			<!-- 待付款 待发货 待收货 已完成 退款成功 -->
+			<view class="order-details-btn" style="padding-top:30upx;"
+				:style="{'padding-bottom':(isIphone==true? 40:0)+'rpx'}">
+				<text class="btn-l" @click="cancelOrder" v-if="dataList.state==1 || dataList.state==6">取消订单</text>
+				<text class="btn btn-r" @click="payOrder" v-if="dataList.state==1">立即付款</text>
+				<text class="btn-l" @click="applyMoneyAllTap" v-if="dataList.state==2 || dataList.state==3">申请退款</text>
+				<text class="btn btn-r" @click="confirmReceiptTap" v-if="dataList.state==3">确认收货</text>
+				<text class="btn" @click="applyTap" v-if="dataList.state==4">申请售后</text>
+				<text class="btn btn-r"
+					@click="goInviteSpll(dataList.collageId,dataList.orderId,dataList.skus[0].productId,dataList.skus[0].skuId,dataList.shopGroupWorkId)"
+					v-if="dataList.state==6">邀请拼单</text>
+				<text class="btn-l" @click="delOrder" v-if="dataList.state==5 && dataList.collageId == 0">删除订单</text>
+				<text class="btn btn-r"
+					@click="againCollage(dataList.skus[0].productId,dataList.shopId,dataList.skus[0].skuId,dataList)"
+					v-if="dataList.state==5 && dataList.collageId == 0">再次购买</text>
+				<text class="btn"
+					@click="againCollage(dataList.skus[0].productId,dataList.shopId,dataList.skus[0].skuId,dataList)"
+					v-if="dataList.state==5 && dataList.collageId != 0">再次开团</text>
+			</view>
+			<u-popup class="pay-type-popup" v-model="showPayTypePopup" mode="bottom" border-radius="14"
+				close-icon-pos="top-right" close-icon-size="20">
+				<view class="pay-type-item">
+					<radio-group @change="payTypeChange" v-model="paymentMode">
+						<view class="pay-type-radio">
+							<view class="pay-type-img">
+								<img class="pay-type-img-inner"
+									src="https://ceres.zkthink.com/static/images/alipay.png" />
+							</view>
+							<label class="pay-type-label">支付宝支付</label>
+							<radio class="pay-type-radio-item" style="transform:scale(0.7)" :checked="paymentMode == 2"
+								value="2" />
+						</view>
+						<view class="pay-type-radio">
+							<view class="pay-type-img">
+								<img class="pay-type-img-inner"
+									src="https://ceres.zkthink.com/static/images/huabei.png" />
+							</view>
+							<label class="pay-type-label">花呗分期</label>
+							<radio class="pay-type-radio-item" style="transform:scale(0.7)"
+								:disabled="totalPrice < 0.03" :checked="paymentMode == 3" value="3" />
 						</view>
 					</radio-group>
+					<view class="huabei-detail">
+						<radio-group @change="huabeiPeriodChange" v-model="huabeiPeriod">
+							<view class="period-radio">
+								<view class="period-amount">
+									<label class="period-each">￥ {{fenqiFeeList[0]|clip2Decimal}}x3期</label>
+									<label class="period-each-charge">手续费￥{{chargeFeeList[0]|clip2Decimal}}/期</label>
+								</view>
+								<radio class="period-type-radio-item" style="transform:scale(0.7)"
+									:disabled="fenqiDisabledList[0]" :checked="huabeiPeriod == 3" value="3" />
+							</view>
+							<view class="period-radio">
+								<view class="period-amount">
+									<label class="period-each">￥ {{fenqiFeeList[1]|clip2Decimal}}x6期</label>
+									<label class="period-each-charge">手续费￥{{chargeFeeList[1]|clip2Decimal}}/期</label>
+								</view>
+								<radio class="period-type-radio-item" style="transform:scale(0.7)"
+									:disabled="fenqiDisabledList[1]" :checked="huabeiPeriod == 6" value="6" />
+							</view>
+							<view class="period-radio">
+								<view class="period-amount">
+									<label class="period-each">￥ {{fenqiFeeList[2]|clip2Decimal}}x12期</label>
+									<label class="period-each-charge">手续费￥{{chargeFeeList[2]|clip2Decimal}}/期</label>
+								</view>
+								<radio class="period-type-radio-item" style="transform:scale(0.7)"
+									:disabled="fenqiDisabledList[2]" :checked="huabeiPeriod == 12" value="12" />
+							</view>
+						</radio-group>
+					</view>
 				</view>
-			</view>
-			<view class="paytype-confirm">
-				<view class="fenqi-total-amount" v-if="totalPrice >= 0.03 && paymentMode == 3">
-					<label class="fenqi-all">分期总额 ￥{{ totalPrice|clip2Decimal }}</label>
-					<label class="charge-fee-all">手续费 ￥{{ chargeFee|clip2Decimal }}</label>
+				<view class="paytype-confirm">
+					<view class="fenqi-total-amount" v-if="totalPrice >= 0.03 && paymentMode == 3">
+						<label class="fenqi-all">分期总额 ￥{{ totalPrice|clip2Decimal }}</label>
+						<label class="charge-fee-all">手续费 ￥{{ chargeFee|clip2Decimal }}</label>
+					</view>
+					<view class="fenqi-total-amount" v-if="paymentMode == 2">
+						<label class="order-amount">订单总额 ￥{{ totalPrice|clip2Decimal }}</label>
+					</view>
+					<view class="fenqi-confirm">
+						<text class="btn active" @click="continuePay">确认</text>
+					</view>
 				</view>
-				<view class="fenqi-total-amount" v-if="paymentMode == 2">
-					<label class="order-amount">订单总额 ￥{{ totalPrice|clip2Decimal }}</label>
-				</view>
-				<view class="fenqi-confirm">
-					<text class="btn active" @click="continuePay">确认</text>
-				</view>
-			</view>
-		</u-popup>
+			</u-popup>
+		</view>
 	</view>
-  </view>
 </template>
 
 <script>
-import UCountDown from "../../uview-ui/components/u-count-down/u-count-down";
-import ClipboardJS from "clipboard";
-import {
-  hidden
-} from "../../utils/hidden";
-// #ifdef H5
-var jweixin = require('jweixin-module')
-// #endif
+	import UCountDown from "../../uview-ui/components/u-count-down/u-count-down";
+	import ClipboardJS from "clipboard";
+	import {
+		hidden
+	} from "../../utils/hidden";
+	// #ifdef H5
+	var jweixin = require('jweixin-module')
+	// #endif
 
 	import uniSteps from "@/components/uni-steps/uni-steps.vue"
-  import { handleDoPay } from "../../utils/payUtil";
-  import { Services } from "../../utils/services";
+	import {
+		handleDoPay
+	} from "../../utils/payUtil";
+	import {
+		Services
+	} from "../../utils/services";
 
-const NET = require('../../utils/request')
-const API = require('../../config/api')
-export default {
-  components: {
-    uniSteps,
-    UCountDown,
-  },
-  data() {
-    return {
-      canApplyIntervention: false,
-      dataList: {
-        orderFormid: null,
-        createTime: null,
-        orderPrice: 0,
-        logisticsPrice: 0,
-        discountPrice: 0
-      },
-      orderId: 0,
-      active: 0,
-      steps: [],
-      isShowWuLiu: false,
-      hou: "00",
-      min: "00",
-      sec: "00",
-      timeOut: undefined,
-      orderRefundList: [],
-      item: {},
-      isIphone: false,
-      noticeId: 0,
-      paymentMode: 2,
-      showPayTypePopup: false,
-      chargeFee: 0,
-      totalPrice: 0,
-      huabeiPeriod: -1,
-      fenqiFeeList: [0, 0, 0],
-      chargeFeeList: [0, 0, 0],
-      fenqiDisabledList: [true, true, true],
-      huabeiChargeType: 1,
-      huabeiFeeRateList: [0, 0, 0],
-      alipayInfo: {},
-      isAllSelect: 1, //是否为拆单售后
+	const NET = require('../../utils/request')
+	const API = require('../../config/api')
+	export default {
+		components: {
+			uniSteps,
+			UCountDown,
+		},
+		data() {
+			return {
+				canApplyIntervention: false,
+				dataList: {
+					orderFormid: null,
+					createTime: null,
+					orderPrice: 0,
+					logisticsPrice: 0,
+					discountPrice: 0
+				},
+				orderId: 0,
+				active: 0,
+				steps: [],
+				isShowWuLiu: false,
+				hou: "00",
+				min: "00",
+				sec: "00",
+				timeOut: undefined,
+				orderRefundList: [],
+				item: {},
+				isIphone: false,
+				noticeId: 0,
+				paymentMode: 2,
+				showPayTypePopup: false,
+				chargeFee: 0,
+				totalPrice: 0,
+				huabeiPeriod: -1,
+				fenqiFeeList: [0, 0, 0],
+				chargeFeeList: [0, 0, 0],
+				fenqiDisabledList: [true, true, true],
+				huabeiChargeType: 1,
+				huabeiFeeRateList: [0, 0, 0],
+				alipayInfo: {},
+				isAllSelect: 1, //是否为拆单售后
 
 				// 客服
 				serviceURL: '',
@@ -435,12 +447,12 @@ export default {
 		},
 		onLoad(options) {
 			this.isIphone = getApp().globalData.isIphone;
-      if(options.detail){
-        options = this.$getJumpParam(options)
-      }
+			if (options.detail) {
+				options = this.$getJumpParam(options)
+			}
 			this.orderId = (parseInt(options.orderId))
-      this.item = options
-      if (options.noticeId) {
+			this.item = options
+			if (options.noticeId) {
 				this.noticeId = options.noticeId
 			}
 			this.getDataList(this.orderId)
@@ -463,81 +475,83 @@ export default {
 			return true;
 		},
 		methods: {
-      //去商品详情
-      againCollage(productId, shopId, skuId, isStartAGroup, item) {
-        if (isStartAGroup) {
-          uni.navigateTo({
-            url: '../goodsModule/goodsDetails?productId=' + productId + '&shopId=' + shopId + '&skuId=' +
-                skuId
-          })
-        } else {
-          // 跳转详情
-          this.buyAgain(item)
-        }
-      },
-      async buyAgain(item) {
-        // 循环sku，获取商品详情
-        const postAjax = []
-        item.skus.forEach(e=>{
-          postAjax.push(this.queryProductDetail(e))
-        })
-        // 并发执行
-        const skuDetailList = await Promise.all(postAjax);
-        let canNotBuyNameList = []
-        // 判断库存
-        skuDetailList.forEach(skuDetail=>{
-          for (const skuDetailSkuMapKey in skuDetail.map) {
-            // 判断此SKU是否存在于传进来的item
-            const findSku = item.skus.find(findItem=>findItem.skuId === skuDetail.map[skuDetailSkuMapKey].skuId);
-            if(findSku){
-              const skuInfo = skuDetail.map[skuDetailSkuMapKey]
-              if(findSku.number > skuInfo.stockNumber){
-                canNotBuyNameList.push(findSku.productName)
-              }
-            }
-          }
-        })
-        // 如果有库存不足
-        if(canNotBuyNameList.length>0){
-          uni.showToast({
-            icon:'none',
-            title:canNotBuyNameList.join(",")+" 库存不足"
-          })
-          return;
-        }
-        // 制造数据
-        const buyInfo = [{
-          ifWork: item.ifWork,
-          shopId: item.shopId,
-          shopName: item.shopName,
-          shopDiscountId: item.shopDiscountId,
-          shopSeckillId: item.shopSeckillId,
-          skus: item.skus
-        }]
-        uni.setStorageSync('skuItemDTOList', buyInfo)
-        uni.navigateTo({
-          url: '../orderModule/orderConfirm?type=1',
-        })
-      },
+			//去商品详情
+			againCollage(productId, shopId, skuId, isStartAGroup, item) {
+				if (isStartAGroup) {
+					uni.navigateTo({
+						url: '../goodsModule/goodsDetails?productId=' + productId + '&shopId=' + shopId +
+							'&skuId=' +
+							skuId
+					})
+				} else {
+					// 跳转详情
+					this.buyAgain(item)
+				}
+			},
+			async buyAgain(item) {
+				// 循环sku，获取商品详情
+				const postAjax = []
+				item.skus.forEach(e => {
+					postAjax.push(this.queryProductDetail(e))
+				})
+				// 并发执行
+				const skuDetailList = await Promise.all(postAjax);
+				let canNotBuyNameList = []
+				// 判断库存
+				skuDetailList.forEach(skuDetail => {
+					for (const skuDetailSkuMapKey in skuDetail.map) {
+						// 判断此SKU是否存在于传进来的item
+						const findSku = item.skus.find(findItem => findItem.skuId === skuDetail.map[
+							skuDetailSkuMapKey].skuId);
+						if (findSku) {
+							const skuInfo = skuDetail.map[skuDetailSkuMapKey]
+							if (findSku.number > skuInfo.stockNumber) {
+								canNotBuyNameList.push(findSku.productName)
+							}
+						}
+					}
+				})
+				// 如果有库存不足
+				if (canNotBuyNameList.length > 0) {
+					uni.showToast({
+						icon: 'none',
+						title: canNotBuyNameList.join(",") + " 库存不足"
+					})
+					return;
+				}
+				// 制造数据
+				const buyInfo = [{
+					ifWork: item.ifWork,
+					shopId: item.shopId,
+					shopName: item.shopName,
+					shopDiscountId: item.shopDiscountId,
+					shopSeckillId: item.shopSeckillId,
+					skus: item.skus
+				}]
+				uni.setStorageSync('skuItemDTOList', buyInfo)
+				uni.navigateTo({
+					url: '../orderModule/orderConfirm?type=1',
+				})
+			},
 
-      //获取商品详情
-      async queryProductDetail(item) {
-        // uni.showLoading({
-        //   title: '加载中...',
-        //   mask: true
-        // })
-        this.$showLoading("加载中...")
-        let postData = {
-          shopId: item.shopId,
-          productId: item.productId,
-          skuId: item.skuId,
-          terminal: 1
-        }
-        let productData
-        const res = await NET.request(API.QueryProductDetail, postData, "GET")
-        this.$hideLoading()
-        return res.data
-      },
+			//获取商品详情
+			async queryProductDetail(item) {
+				// uni.showLoading({
+				//   title: '加载中...',
+				//   mask: true
+				// })
+				this.$showLoading("加载中...")
+				let postData = {
+					shopId: item.shopId,
+					productId: item.productId,
+					skuId: item.skuId,
+					terminal: 1
+				}
+				let productData
+				const res = await NET.request(API.QueryProductDetail, postData, "GET")
+				this.$hideLoading()
+				return res.data
+			},
 			goInviteSpll(collageId, orderId, productId, skuId, shopGroupWorkId) {
 				uni.navigateTo({
 					url: '../goodsModule/inviteSpell?collageId=' + collageId + '&orderId=' + orderId + '&type=1' +
@@ -637,91 +651,90 @@ export default {
 					let min = parseInt(this.min);
 					let sec = parseInt(this.sec);
 
-        let netxSec = sec - 1;
-        let netxMin = min
-        let netxHou = hou;
+					let netxSec = sec - 1;
+					let netxMin = min
+					let netxHou = hou;
 
-        if (netxHou == 0 && netxMin == 0 && netxSec == -1) {
-          clearTimeout(timeOut)
-          this.getDataList(this.orderId)
+					if (netxHou == 0 && netxMin == 0 && netxSec == -1) {
+						clearTimeout(timeOut)
+						this.getDataList(this.orderId)
 
-        } else {
-          if (netxSec == -1) {
-            netxSec = 59
-            netxMin = netxMin - 1;
-          }
-          if (netxMin == -1) {
-            netxMin = 59
-            netxHou = netxHou - 1
-          }
-          if (netxHou == -1) {
-            netxHou = 23
-          }
+					} else {
+						if (netxSec == -1) {
+							netxSec = 59
+							netxMin = netxMin - 1;
+						}
+						if (netxMin == -1) {
+							netxMin = 59
+							netxHou = netxHou - 1
+						}
+						if (netxHou == -1) {
+							netxHou = 23
+						}
 
-          this.hou = this.timeFormat(netxHou),
-              this.min = this.timeFormat(netxMin),
-              this.sec = this.timeFormat(netxSec),
-              this.timeOut = timeOut
-          this.countDown();
-        }
-      }, 1000)
-    },
-    //物流信息
-    getShippingTrace(express, deliverFormid) {
-      NET.request(API.ShippingTrace, {
-        express: express,
-        deliverFormid: deliverFormid
-      }, "GET").then(res => {
-        let traces = res.data
-        let len = traces.length
-        for (let i = 0; i < len; i++) {
-          let item = traces[i]
-          this.steps.push({
-            title: item.reason,
-            desc: item.time,
-          })
-        }
-        this.steps = this.steps.reverse()
-      }).catch(res => {
-      })
-    },
-    //删除订单
-    delOrder() {
-      uni.showModal({
-        title: '温馨提示',
-        content: '您确定要删除该订单吗？',
-        confirmText: '确定删除',
-        cancelText: '点错了',
-        success: res => {
-          if (res.confirm) {
-            this.doDel()
-          } else if (res.cancel) {
-            console.log('用户点击取消')
-          }
-        }
-      })
-    },
-    doDel() {
-      // uni.showLoading({
-      // 	mask: true,
-      // 	title: '提交中...',
-      // })
-      NET.request(API.DelOrder, {
-        orderId: this.orderId
-      }, 'POST').then(res => {
-        uni.hideLoading()
-        uni.showToast({
-          title: '删除成功',
-        })
-        setTimeout(() => {
-          uni.navigateTo({
-            url: 'index?type=0'
-          })
-        }, 1500);
+						this.hou = this.timeFormat(netxHou),
+							this.min = this.timeFormat(netxMin),
+							this.sec = this.timeFormat(netxSec),
+							this.timeOut = timeOut
+						this.countDown();
+					}
+				}, 1000)
+			},
+			//物流信息
+			getShippingTrace(express, deliverFormid) {
+				NET.request(API.ShippingTrace, {
+					express: express,
+					deliverFormid: deliverFormid
+				}, "GET").then(res => {
+					let traces = res.data
+					let len = traces.length
+					for (let i = 0; i < len; i++) {
+						let item = traces[i]
+						this.steps.push({
+							title: item.reason,
+							desc: item.time,
+						})
+					}
+					this.steps = this.steps.reverse()
+				}).catch(res => {})
+			},
+			//删除订单
+			delOrder() {
+				uni.showModal({
+					title: '温馨提示',
+					content: '您确定要删除该订单吗？',
+					confirmText: '确定删除',
+					cancelText: '点错了',
+					success: res => {
+						if (res.confirm) {
+							this.doDel()
+						} else if (res.cancel) {
+							console.log('用户点击取消')
+						}
+					}
+				})
+			},
+			doDel() {
+				// uni.showLoading({
+				// 	mask: true,
+				// 	title: '提交中...',
+				// })
+				NET.request(API.DelOrder, {
+					orderId: this.orderId
+				}, 'POST').then(res => {
+					uni.hideLoading()
+					uni.showToast({
+						title: '删除成功',
+					})
+					setTimeout(() => {
+						uni.navigateTo({
+							url: 'index?type=0'
+						})
+					}, 1500);
 
 				}).catch(res => {
 					// uni.hideLoading()
-				}).finally(()=>this.$hideLoading())
+				}).finally(() => this.$hideLoading())
 			},
 			//去店铺首页
 			goShop(id) {
@@ -731,8 +744,8 @@ export default {
 			},
 			//退款
 			applayItemTap(proItem) {
-				console.log(this.dataList.skus.length,'dataList99999')
-				if(this.dataList.skus.length>1){
+				console.log(this.dataList.skus.length, 'dataList99999')
+				if (this.dataList.skus.length > 1) {
 					this.isAllSelect = 0
 				}
 				uni.setStorageSync('applyItem', proItem)
@@ -779,7 +792,7 @@ export default {
 				// 	mask: true,
 				// 	title: '提交中...',
 				// })
-        this.$showLoading("加载中...")
+				this.$showLoading("加载中...")
 				NET.request(API.CancelOrder, {
 					orderId: this.orderId
 				}, 'POST').then(res => {
@@ -793,7 +806,7 @@ export default {
 
 				}).catch(res => {
 					// uni.hideLoading()
-				}).finally(()=>this.$hideLoading())
+				}).finally(() => this.$hideLoading())
 			},
 			async payOrder() {
 				// #ifdef MP-ALIPAY
@@ -806,7 +819,7 @@ export default {
 					orderId: this.dataList.orderId,
 					type: 2
 				}
-        await handleDoPay.call(this,submitResult)
+				await handleDoPay.call(this, submitResult)
 			},
 
 			//退款列表
@@ -820,12 +833,12 @@ export default {
 			//申请退款
 			applyMoneyAllTap() {
 				this.dataList.skus.map(item => {
-					if(item.afterState){
+					if (item.afterState) {
 						this.isAllSelect = 0
 						console.log('要拆单')
 					}
 				})
-				console.log(this.isAllSelect,'this.isAllSelect')
+				console.log(this.isAllSelect, 'this.isAllSelect')
 				if (this.orderRefundList.length === 0) {
 					uni.showToast({
 						title: '您所有商品已经申请退款，请勿重复申请',
@@ -859,13 +872,13 @@ export default {
 				// uni.showLoading({
 				// 	title: '确认中...',
 				// })
-        this.$showLoading("确认中...")
+				this.$showLoading("确认中...")
 
-        NET.request(API.ConfirmReceive, {
+				NET.request(API.ConfirmReceive, {
 					orderId: this.dataList.orderId
 				}, 'POST').then(res => {
 					// uni.hideLoading()
-          this.$hideLoading()
+					this.$hideLoading()
 					uni.showToast({
 						title: '确认成功',
 					})
@@ -874,7 +887,7 @@ export default {
 					})
 				}).catch(res => {
 					// uni.hideLoading()
-          this.$hideLoading()
+					this.$hideLoading()
 				})
 			},
 			// 申请售后
@@ -889,17 +902,17 @@ export default {
 				uni.setStorageSync('afterSaleApplyRefund', this.orderRefundList)
 				let productData = this.item
 				let isAllSelect = 1
-        let newArr = JSON.parse(JSON.stringify(productData))
-        newArr.skus.map((item,index) => {
-          console.log("item----",item)
-					if(item.afterState){
-            newArr.skus.splice(index,1)
+				let newArr = JSON.parse(JSON.stringify(productData))
+				newArr.skus.map((item, index) => {
+					console.log("item----", item)
+					if (item.afterState) {
+						newArr.skus.splice(index, 1)
 						isAllSelect = 0
 					}
 				})
-				console.log(isAllSelect,'00000000000')
+				console.log(isAllSelect, '00000000000')
 				uni.navigateTo({
-					url: 'afterSaleApply?item=' + JSON.stringify(newArr) + '&isAllSelect='+ isAllSelect
+					url: 'afterSaleApply?item=' + JSON.stringify(newArr) + '&isAllSelect=' + isAllSelect
 				})
 			},
 			// 支付类型变更
@@ -958,10 +971,10 @@ export default {
 					}
 				})
 			},
-      async openService(shopId){
-        (await Services(shopId)).flyToService()
-      }
-    },
+			async openService(shopId) {
+				(await Services(shopId)).flyToService()
+			}
+		},
 		filters: {
 			clip2Decimal(value) {
 				if (value === undefined || value === null) {
@@ -974,574 +987,574 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-page {
-  background: #f7f7f7;
-}
-
-.logistics {
-  padding: 20upx 20upx;
-}
-
-.content {
-  padding: 0 0 160upx 0;
-}
-
-.order-details-status {
-  width: 750upx;
-  height: 250upx;
-  background: #333333;
-}
-
-.status-title-box {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 40upx 30upx 0;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-.status-title-box2 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40upx 30upx 0;
-  box-sizing: border-box;
-}
-
-.status-title-box .l {
-  display: flex;
-  flex-direction: column;
-}
-
-.status-title-box .l .status,
-.status-title-box2 .status {
-  font-size: 30upx;
-  color: #fff;
-}
-
-.status-title-box .l .label,
-.status-title-box2 .label {
-  font-size: 24upx;
-  color: #fff;
-  margin-top: 14upx;
-}
-
-.status-title-box .r {
-  width: 80upx;
-  height: 80upx;
-}
-
-.order-details-info-box {
-  padding: 0 30upx;
-  box-sizing: border-box;
-  margin-top: -80upx;
-}
-
-.address-box {
-  margin-top: 20upx;
-  background: #fff;
-  width: 100%;
-  padding: 30upx;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.address-box .address-img {
-  width: 70upx;
-  height: 70upx;
-  margin-right: 20upx;
-}
-
-.address-box .address-r {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  font-size: 28upx;
-  color: #333;
-}
-
-.arrow-right-img {
-  width: 24upx;
-  height: 24upx;
-  margin-left: 20upx;
-}
-
-.address-name-box {
-  font-size: 30upx;
-  color: #333;
-}
-
-.phone {
-  font-size: 24upx;
-  color: #999;
-  margin-left: 20upx;
-}
-
-.address-info {
-  font-size: 28upx;
-  color: #333;
-  margin-top: 15upx;
-}
-
-.order-list-box {
-  margin-top: 20upx;
-
-  .toService {
-    line-height: 40rpx;
-    padding: 0 8rpx;
-    border: 1rpx solid #FAF6ED;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-
-    .service-img {
-      width: 60upx;
-      height: 60upx;
-      margin-right: 12rpx;
-    }
-
-    text {
-      line-height: 40rpx;
-    }
-  }
-}
-
-.order-list-box .item {
-  margin-bottom: 20upx;
-  background: #fff;
-}
-
-.order-list-top {
-  height: 96upx;
-  padding: 0 30upx;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #eee;
-}
-
-.top-l {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.shop-img {
-  width: 34upx;
-  height: 34upx;
-  margin-right: 10upx;
-}
-
-.shop-name {
-  font-size: 30upx;
-  color: #333;
-  font-weight: bold;
-}
-
-.arrow-img {
-  margin-left: 15upx;
-  width: 24upx;
-  height: 24upx;
-}
-
-.order-info-box {
-  padding: 0 30upx;
-  box-sizing: border-box;
-}
-
-.order-info {
-  border-bottom: 1px solid #eee;
-}
-
-.order-info-item {
-  display: flex;
-  flex-direction: row;
-  padding: 20upx 0;
-}
-
-.product-img {
-  width: 180upx;
-  height: 180upx;
-  border-radius: 10upx;
-  margin-right: 30upx;
-}
-
-.info-box {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.product-name {
-  font-size: 26upx;
-  color: #333;
-  height: 68upx;
-  line-height: 34upx;
-  display: -webkit-box;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-all;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.price-sku-box {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.product-sku {
-  font-size: 24upx;
-  color: #999;
-  display: inline-block;
-  margin-left: -20upx;
-  display: flex;
-  flex-direction: row;
-}
-
-.price-box {
-  display: flex;
-  flex-direction: column;
-}
-
-.product-price1 {
-  font-size: 24upx;
-  color: #333;
-  font-weight: 400;
-}
-
-.product-price2 {
-  font-size: 24upx;
-  color: #999;
-  text-decoration: line-through;
-  font-weight: 400;
-}
-
-.product-price .fuhao {
-  font-size: 28upx;
-}
-
-.item-applay-btn {
-  height: 50upx;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 0 30upx;
-  background: rgba(255, 255, 255, 1);
-  border: 1px solid rgba(187, 187, 187, 1);
-  border-radius: 25upx;
-  font-size: 24upx;
-  font-weight: 400;
-  color: rgba(51, 51, 51, 1);
-}
-
-.product-num {
-  font-size: 28upx;
-  color: #999;
-  display: inline-block;
-}
-
-.delivery-way-box {
-  display: flex;
-  flex-direction: column;
-  margin: 30upx 0 10upx;
-}
-
-.delivery-way-box .item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 26upx;
-  color: #333;
-}
-
-.delivery-way-box .item .way {
-  color: #999;
-}
-
-.order-total-box {
-  padding: 30upx 0;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 26upx;
-  color: #333;
-}
-
-.order-total-box .way-color {
-  color: #333333;
-  font-size: 32rpx;
-}
-
-.order-details-information {
-  background: #fff;
-}
-
-.order-details-information.padd {
-  padding: 30upx;
-  box-sizing: border-box;
-}
-
-.order-details-information .order-title {
-  font-size: 30upx;
-  color: #333;
-  font-weight: 500;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.order-details-information .info-box {
-  margin-top: 30upx;
-}
-
-.order-details-information .info-box .item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 24upx;
-  color: #666;
-  margin-bottom: 20upx;
-}
-
-.order-details-information .info-box .item .copy-color {
-  font-size: 24upx;
-  color: #C5AA7B;
-}
-
-.order-details-btn {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  min-height: 160upx;
-  background: #fff;
-  box-shadow: 0px 0px 10px 0px rgba(51, 51, 51, 0.1);
-  box-sizing: border-box;
-  display: flex;
-  padding: 0 30upx;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 10;
-}
-
-.order-details-btn .btn {
-  width: 100%;
-  height: 100upx;
-  background: #333333;
-  font-size: 28upx;
-  color: #FFEBC4;
-  text-align: center;
-  line-height: 100upx;
-  font-weight: 500upx;
-}
-
-.order-details-btn .btn-l {
-  width: 50%;
-  height: 100upx;
-  border: 2rpx solid #333333;
-  font-size: 28upx;
-  color: #333;
-  text-align: center;
-  line-height: 100upx;
-  box-sizing: border-box;
-  margin-right: 10rpx;
-}
-
-.order-details-btn .btn-r {
-  width: 50%;
-  margin-left: 10rpx;
-}
-
-.mt20 {
-  margin-top: 20upx;
-}
-
-.order-title-box {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.order-details-information .order-title-box .order-title.padd-l {
-  padding-left: 30upx;
-}
-
-.arrow-down-img {
-  width: 40upx;
-  height: 40upx;
-  margin: 30upx;
-  box-sizing: border-box;
-}
-
-.evaluate {
-  height: 56upx;
-  border-radius: 28upx;
-  text-align: center;
-  line-height: 56upx;
-  font-size: 26upx;
-  padding: 0 30upx;
-  border: 1px solid #C5AA7B;
-  color: #C5AA7B;
-}
-
-.evaluate2 {
-  height: 56upx;
-  border-radius: 28upx;
-  text-align: center;
-  line-height: 56upx;
-  font-size: 26upx;
-  padding: 0 30upx;
-  border: 1px solid #BBBBBB;
-  color: #333;
-}
-
-.emptyOrder-box {
-  padding: 70upx 0;
-
-  .emptyOrder-img {
-    width: 200upx;
-    height: 200upx;
-  }
-}
-
-.pay-type-item {
-  .pay-type-radio {
-    background-color: white;
-    border-bottom: 1upx solid #EDEDED;
-    margin-bottom: 20upx;
-    padding: 24upx 20upx 24upx 20upx;
-
-    .pay-type-img {
-      display: inline-block;
-
-      .pay-type-img-inner {
-        width: 50upx;
-        height: 50upx;
-        vertical-align: middle;
-      }
-    }
-
-    .pay-type-label {
-      vertical-align: middle;
-      margin-left: 30upx;
-    }
-
-    .pay-type-radio-item {
-      float: right;
-      margin-right: 20upx;
-      width: 50upx;
-      height: 50upx;
-    }
-  }
-
-  .huabei-detail {
-    margin-top: 20upx;
-
-    .fenqi-wenzi {
-      display: inline-block;
-      margin-left: 64upx;
-    }
-
-    .fenqi-amount {
-      display: block;
-      margin-left: 64upx;
-      margin-top: 14upx;
-      color: #BABBBC;
-    }
-
-    .fenqi-charge-fee {
-      float: right;
-      margin-right: 68upx;
-      color: #BABBBC;
-    }
-
-    .fenqi-modal {
-      width: 40upx;
-      height: 40upx;
-      margin-left: 20upx;
-      float: right;
-      position: relative;
-      top: -80upx;
-    }
-  }
-}
-
-.paytype-confirm {
-  height: 120upx;
-  padding: 0upx 108upx 0upx 32upx;
-
-  .fenqi-all {
-    display: inline-block;
-    width: 100%;
-  }
-
-  .fenqi-total-amount {
-    width: 65%;
-    float: left;
-  }
-
-  .fenqi-confirm {
-    float: right;
-    width: 160upx;
-    padding: 0upx 20upx;
-
-    .btn {
-      width: 216upx;
-      height: 80upx;
-      line-height: 80upx;
-      border-radius: 40upx;
-      font-size: 28upx;
-      text-align: center;
-      background: linear-gradient(90deg, rgba(255, 162, 0, 1), rgba(255, 121, 17, 1));
-      color: #fff;
-      display: inline-block;
-      margin-right: 66upx;
-    }
-  }
-}
-
-.period-radio {
-  margin: 30upx;
-  padding-right: 100upx;
-  width: 95%;
-  border-bottom: 1px solid #EFEFEF;
-
-  .period-amount {
-    display: inline-block;
-
-    .period-each-charge {
-      display: inline-block;
-      margin-top: 12upx;
-      margin-left: 6upx;
-      font-size: 26upx;
-      color: #b7b7b7;
-      margin-bottom: 13upx;
-    }
-  }
-
-  .period-each {
-    display: block;
-  }
-
-  .period-type-radio-item {
-    float: right;
-  }
-}
+	page {
+		background: #f7f7f7;
+	}
+
+	.logistics {
+		padding: 20upx 20upx;
+	}
+
+	.content {
+		padding: 0 0 160upx 0;
+	}
+
+	.order-details-status {
+		width: 750upx;
+		height: 250upx;
+		background: #333333;
+	}
+
+	.status-title-box {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		padding: 40upx 30upx 0;
+		box-sizing: border-box;
+		text-align: center;
+	}
+
+	.status-title-box2 {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 40upx 30upx 0;
+		box-sizing: border-box;
+	}
+
+	.status-title-box .l {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.status-title-box .l .status,
+	.status-title-box2 .status {
+		font-size: 30upx;
+		color: #fff;
+	}
+
+	.status-title-box .l .label,
+	.status-title-box2 .label {
+		font-size: 24upx;
+		color: #fff;
+		margin-top: 14upx;
+	}
+
+	.status-title-box .r {
+		width: 80upx;
+		height: 80upx;
+	}
+
+	.order-details-info-box {
+		padding: 0 30upx;
+		box-sizing: border-box;
+		margin-top: -80upx;
+	}
+
+	.address-box {
+		margin-top: 20upx;
+		background: #fff;
+		width: 100%;
+		padding: 30upx;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.address-box .address-img {
+		width: 70upx;
+		height: 70upx;
+		margin-right: 20upx;
+	}
+
+	.address-box .address-r {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		font-size: 28upx;
+		color: #333;
+	}
+
+	.arrow-right-img {
+		width: 24upx;
+		height: 24upx;
+		margin-left: 20upx;
+	}
+
+	.address-name-box {
+		font-size: 30upx;
+		color: #333;
+	}
+
+	.phone {
+		font-size: 24upx;
+		color: #999;
+		margin-left: 20upx;
+	}
+
+	.address-info {
+		font-size: 28upx;
+		color: #333;
+		margin-top: 15upx;
+	}
+
+	.order-list-box {
+		margin-top: 20upx;
+
+		.toService {
+			line-height: 40rpx;
+			padding: 0 8rpx;
+			border: 1rpx solid #FAF6ED;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+
+			.service-img {
+				width: 60upx;
+				height: 60upx;
+				margin-right: 12rpx;
+			}
+
+			text {
+				line-height: 40rpx;
+			}
+		}
+	}
+
+	.order-list-box .item {
+		margin-bottom: 20upx;
+		background: #fff;
+	}
+
+	.order-list-top {
+		height: 96upx;
+		padding: 0 30upx;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		border-bottom: 1px solid #eee;
+	}
+
+	.top-l {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.shop-img {
+		width: 34upx;
+		height: 34upx;
+		margin-right: 10upx;
+	}
+
+	.shop-name {
+		font-size: 30upx;
+		color: #333;
+		font-weight: bold;
+	}
+
+	.arrow-img {
+		margin-left: 15upx;
+		width: 24upx;
+		height: 24upx;
+	}
+
+	.order-info-box {
+		padding: 0 30upx;
+		box-sizing: border-box;
+	}
+
+	.order-info {
+		border-bottom: 1px solid #eee;
+	}
+
+	.order-info-item {
+		display: flex;
+		flex-direction: row;
+		padding: 20upx 0;
+	}
+
+	.product-img {
+		width: 180upx;
+		height: 180upx;
+		border-radius: 10upx;
+		margin-right: 30upx;
+	}
+
+	.info-box {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+
+	.product-name {
+		font-size: 26upx;
+		color: #333;
+		height: 68upx;
+		line-height: 34upx;
+		display: -webkit-box;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		word-break: break-all;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+	}
+
+	.price-sku-box {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.product-sku {
+		font-size: 24upx;
+		color: #999;
+		display: inline-block;
+		margin-left: -20upx;
+		display: flex;
+		flex-direction: row;
+	}
+
+	.price-box {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.product-price1 {
+		font-size: 24upx;
+		color: #333;
+		font-weight: 400;
+	}
+
+	.product-price2 {
+		font-size: 24upx;
+		color: #999;
+		text-decoration: line-through;
+		font-weight: 400;
+	}
+
+	.product-price .fuhao {
+		font-size: 28upx;
+	}
+
+	.item-applay-btn {
+		height: 50upx;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		padding: 0 30upx;
+		background: rgba(255, 255, 255, 1);
+		border: 1px solid rgba(187, 187, 187, 1);
+		border-radius: 25upx;
+		font-size: 24upx;
+		font-weight: 400;
+		color: rgba(51, 51, 51, 1);
+	}
+
+	.product-num {
+		font-size: 28upx;
+		color: #999;
+		display: inline-block;
+	}
+
+	.delivery-way-box {
+		display: flex;
+		flex-direction: column;
+		margin: 30upx 0 10upx;
+	}
+
+	.delivery-way-box .item {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		font-size: 26upx;
+		color: #333;
+	}
+
+	.delivery-way-box .item .way {
+		color: #999;
+	}
+
+	.order-total-box {
+		padding: 30upx 0;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		font-size: 26upx;
+		color: #333;
+	}
+
+	.order-total-box .way-color {
+		color: #333333;
+		font-size: 32rpx;
+	}
+
+	.order-details-information {
+		background: #fff;
+	}
+
+	.order-details-information.padd {
+		padding: 30upx;
+		box-sizing: border-box;
+	}
+
+	.order-details-information .order-title {
+		font-size: 30upx;
+		color: #333;
+		font-weight: 500;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.order-details-information .info-box {
+		margin-top: 30upx;
+	}
+
+	.order-details-information .info-box .item {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		font-size: 24upx;
+		color: #666;
+		margin-bottom: 20upx;
+	}
+
+	.order-details-information .info-box .item .copy-color {
+		font-size: 24upx;
+		color: #C5AA7B;
+	}
+
+	.order-details-btn {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		min-height: 160upx;
+		background: #fff;
+		box-shadow: 0px 0px 10px 0px rgba(51, 51, 51, 0.1);
+		box-sizing: border-box;
+		display: flex;
+		padding: 0 30upx;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		z-index: 10;
+	}
+
+	.order-details-btn .btn {
+		width: 100%;
+		height: 100upx;
+		background: #333333;
+		font-size: 28upx;
+		color: #FFEBC4;
+		text-align: center;
+		line-height: 100upx;
+		font-weight: 500upx;
+	}
+
+	.order-details-btn .btn-l {
+		width: 50%;
+		height: 100upx;
+		border: 2rpx solid #333333;
+		font-size: 28upx;
+		color: #333;
+		text-align: center;
+		line-height: 100upx;
+		box-sizing: border-box;
+		margin-right: 10rpx;
+	}
+
+	.order-details-btn .btn-r {
+		width: 50%;
+		margin-left: 10rpx;
+	}
+
+	.mt20 {
+		margin-top: 20upx;
+	}
+
+	.order-title-box {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.order-details-information .order-title-box .order-title.padd-l {
+		padding-left: 30upx;
+	}
+
+	.arrow-down-img {
+		width: 40upx;
+		height: 40upx;
+		margin: 30upx;
+		box-sizing: border-box;
+	}
+
+	.evaluate {
+		height: 56upx;
+		border-radius: 28upx;
+		text-align: center;
+		line-height: 56upx;
+		font-size: 26upx;
+		padding: 0 30upx;
+		border: 1px solid #C5AA7B;
+		color: #C5AA7B;
+	}
+
+	.evaluate2 {
+		height: 56upx;
+		border-radius: 28upx;
+		text-align: center;
+		line-height: 56upx;
+		font-size: 26upx;
+		padding: 0 30upx;
+		border: 1px solid #BBBBBB;
+		color: #333;
+	}
+
+	.emptyOrder-box {
+		padding: 70upx 0;
+
+		.emptyOrder-img {
+			width: 200upx;
+			height: 200upx;
+		}
+	}
+
+	.pay-type-item {
+		.pay-type-radio {
+			background-color: white;
+			border-bottom: 1upx solid #EDEDED;
+			margin-bottom: 20upx;
+			padding: 24upx 20upx 24upx 20upx;
+
+			.pay-type-img {
+				display: inline-block;
+
+				.pay-type-img-inner {
+					width: 50upx;
+					height: 50upx;
+					vertical-align: middle;
+				}
+			}
+
+			.pay-type-label {
+				vertical-align: middle;
+				margin-left: 30upx;
+			}
+
+			.pay-type-radio-item {
+				float: right;
+				margin-right: 20upx;
+				width: 50upx;
+				height: 50upx;
+			}
+		}
+
+		.huabei-detail {
+			margin-top: 20upx;
+
+			.fenqi-wenzi {
+				display: inline-block;
+				margin-left: 64upx;
+			}
+
+			.fenqi-amount {
+				display: block;
+				margin-left: 64upx;
+				margin-top: 14upx;
+				color: #BABBBC;
+			}
+
+			.fenqi-charge-fee {
+				float: right;
+				margin-right: 68upx;
+				color: #BABBBC;
+			}
+
+			.fenqi-modal {
+				width: 40upx;
+				height: 40upx;
+				margin-left: 20upx;
+				float: right;
+				position: relative;
+				top: -80upx;
+			}
+		}
+	}
+
+	.paytype-confirm {
+		height: 120upx;
+		padding: 0upx 108upx 0upx 32upx;
+
+		.fenqi-all {
+			display: inline-block;
+			width: 100%;
+		}
+
+		.fenqi-total-amount {
+			width: 65%;
+			float: left;
+		}
+
+		.fenqi-confirm {
+			float: right;
+			width: 160upx;
+			padding: 0upx 20upx;
+
+			.btn {
+				width: 216upx;
+				height: 80upx;
+				line-height: 80upx;
+				border-radius: 40upx;
+				font-size: 28upx;
+				text-align: center;
+				background: linear-gradient(90deg, rgba(255, 162, 0, 1), rgba(255, 121, 17, 1));
+				color: #fff;
+				display: inline-block;
+				margin-right: 66upx;
+			}
+		}
+	}
+
+	.period-radio {
+		margin: 30upx;
+		padding-right: 100upx;
+		width: 95%;
+		border-bottom: 1px solid #EFEFEF;
+
+		.period-amount {
+			display: inline-block;
+
+			.period-each-charge {
+				display: inline-block;
+				margin-top: 12upx;
+				margin-left: 6upx;
+				font-size: 26upx;
+				color: #b7b7b7;
+				margin-bottom: 13upx;
+			}
+		}
+
+		.period-each {
+			display: block;
+		}
+
+		.period-type-radio-item {
+			float: right;
+		}
+	}
 </style>

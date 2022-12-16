@@ -12,7 +12,7 @@
 
 <script>
 	import parse from 'mini-html-parser2';
-  import GlobalLoading from "../../components/GlobalLoading";
+  import GlobalLoading from "../../components/diyLoading";
 	const NET = require('../../utils/request')
 	const API = require('../../config/api')
 	export default {

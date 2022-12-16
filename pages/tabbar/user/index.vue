@@ -233,7 +233,7 @@ export default {
       let url = null
       // #ifdef H5
       console.log('h5 test')
-      window.open(API.SettledMerchantPrefix + `/#/?username=${ username }&user=${ token }`)
+      window.location.href = API.SettledMerchantPrefix + `/#/?username=${ username }&user=${ token }`
       // #endif
       // #ifdef APP-PLUS
       plus.runtime.openURL(API.SettledMerchantPrefix + `/#/?username=${ username }&user=${ token }`, function (e) {

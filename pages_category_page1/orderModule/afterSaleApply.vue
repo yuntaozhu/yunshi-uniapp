@@ -97,6 +97,9 @@ export default {
   onLoad(options) {
     this.item = JSON.parse(options.item)
     this.distribution = this.item.skus[0].distribution
+    if([2].includes(this.item.state)){
+      this.distribution = 1
+    }
     this.evaluated = options.isAllSelect
     // this.item.skus.forEach((item) => {
     //   this.number = this.number + item.number

@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import GlobalLoading from "../../components/GlobalLoading";
+import GlobalLoading from "../../components/diyLoading/index";
 const NET = require('../../utils/request')
 const API = require('../../config/api')
 export default {

@@ -1,4 +1,4 @@
-import { hideLoading, showLoading } from "../components/GlobalLoading";
+import { hideLoading, showLoading } from "../utils/plugIn/globalLoading.js";
 
 /**
  * @FileDescription:

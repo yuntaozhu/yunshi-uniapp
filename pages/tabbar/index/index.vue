@@ -1,5 +1,6 @@
 <template>
   <div class="hom-page" :style="{'padding-top': height + 'px'}">
+<!--    <gg></gg>-->
     <global-loading />
     <u-sticky offset-top="0" h5-nav-height="0" bg-color="#fff">
       <view class="head">
@@ -110,7 +111,6 @@ import CategoryList from "@/components/basics/categoryList.vue"
 import CategoryShow from "@/components/basics/categoryShow.vue"
 import comHeader from '@/components/canvasShow/basics/header/app'
 import canvasPage from '@/components/canvasShow/canvasShowPage.vue'
-
 export default {
   components: {
     AdWindow,

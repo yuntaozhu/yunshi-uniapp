@@ -4,7 +4,13 @@
       <h3>{{componentContent.title}}</h3>
       <div v-html="componentContent.mainBody"></div>
     </div>
-    <div class="videoRightBox">
+    <div class="videoRightBox" v-if="componentContent.coverImg && isPlay">
+      <video class="myVideo" id="myVideo" :src="componentContent.videoUrl" enable-danmu danmu-btn controls></video>
+    </div>
+    <div class="videoCoverBox" v-if="componentContent.coverImg && !isPlay" @click="handlePlayVideo">
+      <image :src="componentContent.coverImg" ></image>
+    </div>
+    <div class="videoRightBox" v-if="!componentContent.coverImg">
       <video class="myVideo" id="myVideo" :src="componentContent.videoUrl" enable-danmu danmu-btn controls></video>
     </div>
     <div class="clear"></div>
@@ -23,8 +29,24 @@ export default {
       type: Object
     }
   },
+  created(){
+    console.log('componentContent',this.componentContent)
+  },
+  mounted() {
+    this.videoContext = uni.createVideoContext('myVideo',this)
+  },
   data () {
     return {
+      isPlay:false,
+      videoContext:null
+    }
+  },
+  methods:{
+    handlePlayVideo(){
+      this.isPlay = true
+      setTimeout(()=>{
+        this.videoContext.play()
+      },500)
     }
   }
 }
@@ -71,6 +93,28 @@ export default {
      .videoRightBox {
        width: 100%;
      }
+   }
+ }
+ .videoCoverBox{
+   aspect-ratio: 16/9;
+   position: relative;
+   &:before{
+     content: '';
+     width: 0rpx;
+     height: 0rpx;
+     border-left:80rpx solid #fff;
+     border-right:50rpx solid transparent;
+     border-top:50rpx solid transparent;
+     border-bottom:50rpx solid transparent;
+    position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-30%,-50%);
+     z-index: 99;
+   }
+   image{
+     width: 100%;
+     height: 100%;
    }
  }
 </style>

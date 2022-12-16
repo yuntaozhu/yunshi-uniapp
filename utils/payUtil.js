@@ -118,6 +118,7 @@ async function h5Pay(payInfo) {
         await payH5InEquipment(payInfo)
     }
 }
+
 // #endif
 
 // #ifdef MP-ALIPAY
@@ -174,6 +175,7 @@ async function aliPay(payInfo) {
         uni.hideLoading()
     }
 }
+
 // #endif
 
 // #ifdef MP-WEIXIN
@@ -182,7 +184,8 @@ async function aliPay(payInfo) {
  * @param payInfo
  * @return {Promise<void>}
  */
-async function wechatPay(payInfo){
+async function wechatPay(payInfo) {
+    console.log('进入微信支付')
     try {
         const res = await NET.request(API.gotoPay, payInfo, 'POST')
         uni.requestPayment({
@@ -192,7 +195,7 @@ async function wechatPay(payInfo){
             package: res.data.package,
             signType: res.data.signType,
             paySign: res.data.paySign,
-            success:  async (payRes)=> {
+            success: async (payRes) => {
                 // 拼团微信支付成功回调
                 if (payInfo.collageId) {
                     await NET.request(API.paySuccess, {
@@ -219,7 +222,7 @@ async function wechatPay(payInfo){
                 })
             }
         })
-    }catch(e){
+    } catch (e) {
         uni.showToast({
             title: '微信支付拉起失败',
             icon: 'none'
@@ -229,6 +232,7 @@ async function wechatPay(payInfo){
         })
     }
 }
+
 // #endif
 
 // #ifdef APP-PLUS
@@ -237,7 +241,7 @@ async function wechatPay(payInfo){
  * @param payInfo
  * @return {Promise<void>}
  */
-async function appWechatPay(payInfo){
+async function appWechatPay(payInfo) {
     try {
         const res = await NET.request(API.gotoAppPay, payInfo, 'POST')
         const obj = {
@@ -284,30 +288,33 @@ async function appWechatPay(payInfo){
         uni.hideLoading()
     }
 }
+
 // #endif
 
 /**
  * 处理支付
  * @param submitResult 结算结果
  */
-export async function handleDoPay(submitResult){
+export async function handleDoPay(submitResult) {
     uni.showLoading({
         mask: true,
         title: '支付中...',
     })
+    console.log('进入支付')
     const {paymentMode} = submitResult
-    if(paymentMode === 1){
+    if (paymentMode === 1) {
         // 微信支付
         // #ifdef APP-PLUS
         await appWechatPay(submitResult)
         // #endif
         // #ifdef MP-WEIXIN
+        console.log('进入微信支付')
         await wechatPay(submitResult)
         // #endif
         // #ifdef H5
         await h5Pay(submitResult)
         // #endif
-    }else if([2,3].includes(paymentMode)){
+    } else if ([2, 3].includes(paymentMode)) {
         // 支付宝
         // #ifdef MP-ALIPAY
         await aliPay(submitResult)
@@ -318,8 +325,15 @@ export async function handleDoPay(submitResult){
         throw new Error('支付宝相关支付暂时只支持支付宝小程序')
         // #endif
     }
-    uni.navigateTo({
-        url: '/pages_category_page1/orderModule/index?type=2'
-    })
-    this.$hideLoading()
+    setTimeout(()=>{
+        uni.navigateTo({
+            url: '/pages_category_page1/orderModule/index?type=2'
+        })
+    },1000)
+    /*  uni.navigateTo({
+          url: '/pages_category_page1/orderModule/index?type=2'
+      })*/
+    // uni.hideLoading()
+
+
 }

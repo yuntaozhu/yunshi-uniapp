@@ -2,12 +2,7 @@
 <template>
   <view class="container">
     <global-loading />
-    <Skeleton
-        el-color="#efefef"
-        bg-color="#fff"
-        :loading="loading"
-        :animation="true"
-    />
+
     <view style="padding-bottom:68upx;">
       <u-sticky
           bg-color="#fff"
@@ -23,6 +18,12 @@
         />
       </u-sticky>
       <view class="order-list-box u-skeleton">
+        <Skeleton
+            el-color="#efefef"
+            bg-color="#fff"
+            :loading="loading"
+            :animation="true"
+        />
         <view
             class="item ske-loading u-skeleton-fillet"
             v-for="(orderItem, orderIndex) in list"
@@ -194,11 +195,11 @@ export default {
     if (options.type) {
       this.tabCurrentType = options.type
       this.orderState = options.type
+    }else{
+      this.orderState = ''
     }
-    this.handleRefreshList()
   },
-  onShow(){
-    console.log("show")
+  onShow() {
     // #ifdef H5
     const pageList = getCurrentPages();//获取应用页面栈
     const {options} = pageList[pageList.length - 1];//获取当前页面信息
@@ -206,8 +207,8 @@ export default {
       this.tabCurrentType = options.type
       this.orderState = options.type
     }
+    // #
     this.handleRefreshList()
-    // #endif
   },
   onReachBottom() {
     ++this.page
@@ -238,7 +239,7 @@ export default {
      * @param tabIndex
      */
     async handleTabChange(tabIndex) {
-      if(this.loading)return
+      if (this.loading) return
       this.tabCurrentType = tabIndex;
       this.orderState = this.tabList[tabIndex].number
       await this.handleRefreshList()
@@ -521,7 +522,7 @@ export default {
      * @param params
      */
     handleChangePayItem(params) {
-      const {payObj: {payInfo}} = this
+      const {payInfo} = this.payObj
       payInfo.paymentMode = params.paymentMode
       payInfo.huabeiPeriod = params.huabeiPeriod
     },
@@ -533,14 +534,12 @@ export default {
      */
     async handlePayOrder(orderItem) {
       const {orderPrice, collageId, orderId} = orderItem
-      const {payObj} = this
+      const {payObj} = this,payInfo = payObj.payInfo
       payObj.totalPrice = orderPrice
-      payObj.payInfo = {
-        collageId: collageId,
-        money: orderPrice,
-        orderId: orderId,
-        type: 2
-      }
+      payInfo.collageId =collageId
+      payInfo.money =orderPrice
+      payInfo.orderId =orderId
+      payInfo.type =2
       payObj.showPayPopup = true
     },
 
@@ -549,6 +548,7 @@ export default {
      */
     async handleGoPay() {
       const {payObj} = this
+      console.log('支付', payObj.payInfo)
       await handleDoPay(this.payObj.payInfo)
       payObj.showPayPopup = false
       payObj.totalPrice = 0
@@ -721,7 +721,7 @@ export default {
 <style lang="scss">
 .tabs {
   position: relative;
-  z-index: 9999;
+  z-index: 999999;
 }
 
 page {

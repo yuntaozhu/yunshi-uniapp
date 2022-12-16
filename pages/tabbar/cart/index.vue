@@ -223,7 +223,7 @@
       </view>
 
       <!-- 热门推荐 -->
-      <HotTemplate v-if="!loading" />
+      <HotTemplate class="u-skeleton-fillet"/>
 
       <view style="width: 100%;height: 120rpx;background-color:#fff;"></view>
 
@@ -304,6 +304,8 @@ export default {
             index: 2
           })
         }
+        // sku为空的山沟
+        const emptySkuShopArray = []
         this.dataList.forEach((shopObj, shopIndex) => {
           shopObj['currentIds'] = []
           shopObj['priceNumber'] = 0
@@ -315,6 +317,7 @@ export default {
             // shelveState是否上架
             if (shopObj.skus[i].shelveState === 0) {
               // 删掉下架商品
+              // todo 失效商品
               shopObj.skus.splice(i, 1)
               continue
             }
@@ -323,8 +326,6 @@ export default {
               shopObj.priceNumber += shopObj.skus[i].number
             }
           }
-          console.log(shopObj.skus.length)
-          this.isEmpty = shopObj.skus.length !== 0? false :true
           for (let i = 0; i < shopObj.skus.length; i++) {
             if (shopObj.skus[i].activityType === 6) {
               shopObj.ids = shopObj.skus[i].priceId
@@ -336,7 +337,9 @@ export default {
             shopObj.rules = res.data ? res.data[0].rules : {}
             this.handleSetGroupGood(shopIndex)
           })
+          shopObj.skus.length === 0?emptySkuShopArray.push(shopObj):undefined
         })
+        this.isEmpty = emptySkuShopArray.length >=this.dataList.length
         this.handleRenderCart()
         // 数据回来就直接关闭骨架屏
         this.loading = false

@@ -1,4 +1,4 @@
-import {showLoading,hideLoading} from "../components/GlobalLoading";
+import {showLoading,hideLoading} from "./plugIn/globalLoading";
 const request = (url, data, method = 'GET') => {
 	return new Promise((resolve, reject) => {
 		let header = {

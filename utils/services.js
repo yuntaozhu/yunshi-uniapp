@@ -78,7 +78,8 @@ export function Services(shopId) {
         }
         // #endif
         // #ifdef H5
-        window.open(serviceURL)
+        // window.open(serviceURL) safari浏览器不支持window.open
+        window.location.href = serviceURL
         // #endif
     }
 

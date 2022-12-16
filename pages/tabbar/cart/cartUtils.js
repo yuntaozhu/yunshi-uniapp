@@ -1,6 +1,6 @@
 const NET = require('../../../utils/request')
 const API = require('../../../config/api')
-import {showLoading,hideLoading} from "@/components/GlobalLoading";
+import {showLoading,hideLoading} from "@/utils/plugIn/globalLoading.js";
 
 /**
  * 根据选中的购物车数据获取价格和过滤后的用于结算购物车的post数据

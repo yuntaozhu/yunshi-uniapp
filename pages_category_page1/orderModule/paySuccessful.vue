@@ -81,7 +81,7 @@ export default {
   methods: {
     goToOrder() {
       uni.navigateTo({
-        url: '../orderModule/index?type=0'
+        url: '../orderModule/index'
       })
     },
     goToHome() {

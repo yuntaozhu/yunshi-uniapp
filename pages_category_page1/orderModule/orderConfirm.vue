@@ -410,71 +410,6 @@
           </view>
         </view>
       </u-popup>
-      <u-popup
-          class="huabei-popup"
-          v-model="showHuabeiPopup"
-          mode="bottom"
-          border-radius="14"
-          close-icon-pos="top-right"
-          close-icon-size="20"
-      >
-        <view class="huabei-box">
-          <radio-group
-              @change="huabeiPeriodChange"
-              v-model="huabeiPeriod"
-          >
-            <view class="period-radio">
-              <view class="period-amount">
-                <label class="period-each">￥ {{ fenqiFeeList[0]|clip2Decimal }}x3期</label>
-                <label class="period-each-charge">手续费￥{{ chargeFeeList[0]|clip2Decimal }}/期</label>
-              </view>
-              <radio
-                  class="period-type-radio-item"
-                  style="transform:scale(0.7)"
-                  :checked="huabeiPeriod == 3"
-                  value="3"
-              />
-            </view>
-            <view class="period-radio">
-              <view class="period-amount">
-                <label class="period-each">￥ {{ fenqiFeeList[1]|clip2Decimal }}x6期</label>
-                <label class="period-each-charge">手续费￥{{ chargeFeeList[1]|clip2Decimal }}/期</label>
-              </view>
-              <radio
-                  class="period-type-radio-item"
-                  style="transform:scale(0.7)"
-                  :checked="huabeiPeriod == 6"
-                  value="6"
-              />
-            </view>
-            <view class="period-radio">
-              <view class="period-amount">
-                <label class="period-each">￥ {{ fenqiFeeList[2]|clip2Decimal }}x12期</label>
-                <label class="period-each-charge">手续费￥{{ chargeFeeList[2]|clip2Decimal }}/期</label>
-              </view>
-              <radio
-                  class="period-type-radio-item"
-                  style="transform:scale(0.7)"
-                  :checked="huabeiPeriod == 12"
-                  value="12"
-              />
-            </view>
-          </radio-group>
-        </view>
-        <view class="huabei-confirm">
-          <view class="fenqi-total-amount">
-            <label class="fenqi-all">分期总额 ￥{{ (totalPrice - reduceMoney)|clip2Decimal }}</label>
-            <label class="charge-fee-all">手续费 ￥{{ chargeFee|clip2Decimal }}</label>
-          </view>
-          <view class="fenqi-confirm">
-            <text
-                class="btn active"
-                @click="showHuabeiPopup=false"
-            >确认
-            </text>
-          </view>
-        </view>
-      </u-popup>
     </view>
   </view>
 </template>
@@ -525,7 +460,6 @@ export default {
       shopCheckedType: true,
       discountPrice: 0,
       selectShopCoupon: [], // 已选择店铺优惠券
-      chargeFee: 0,  //花呗分期手续费，如果是商户支付手续费，则为0，否则默认计算3期手续费
       huabeiDetail: true,
       showHuabeiPopup: false,
       huabeiChargeType: 0,
@@ -559,7 +493,6 @@ export default {
     if (options.receiveId) {
       this.receiveId = options.receiveId
     }
-    this.decidePayType()
   },
   onShow() {
     if (uni.getStorageSync("receiveItem")) {
@@ -1045,7 +978,7 @@ export default {
       this.settlement.shops.forEach((item) => {
         this.totalPrice = this.totalPrice + (item.distribution.distributionPrice || 0)
       })
-      this.recalcHuabei()
+      //this.recalcHuabei()
     },
     calcCredit() {
       let shopsLen = this.settlement.shops.length
@@ -1158,25 +1091,6 @@ export default {
       }
       return skuRemainMap
     },
-    recalcHuabei() {
-      if (this.paymentMode === 3) {
-        this.fenqiFeeList[0] = this.totalPrice * (1 + this.huabeiFeerateList[0] / 100) / 3
-        this.fenqiFeeList[1] = this.totalPrice * (1 + this.huabeiFeerateList[1] / 100) / 6
-        this.fenqiFeeList[2] = this.totalPrice * (1 + this.huabeiFeerateList[2] / 100) / 12
-
-        this.chargeFeeList[0] = this.totalPrice * (this.huabeiFeerateList[0] / 100) / 3
-        this.chargeFeeList[1] = this.totalPrice * (this.huabeiFeerateList[1] / 100) / 6
-        this.chargeFeeList[2] = this.totalPrice * (this.huabeiFeerateList[2] / 100) / 12
-
-        var index = 0;
-        if (this.huabeiPeriod === 6) {
-          index = 1
-        } else if (this.huabeiPeriod === 12) {
-          index = 2
-        }
-        this.chargeFee = (this.totalPrice * (this.huabeiFeerateList[index] / 100)).toFixed(2)
-      }
-    },
     // 展示平台端优惠券
     showDiscount() {
       // let shopifAdd = 1
@@ -1221,31 +1135,6 @@ export default {
     onshopClose() {
       this.isShopCoupons = false
     },
-    huabeiPeriodChange(event) {
-      this.huabeiPeriod = event.target.value
-      var feeRate = this.huabeiFeerateList[2]
-      if (this.huabeiPeriod === 3) {
-        feeRate = this.huabeiFeerateList[0]
-      } else if (this.huabeiPeriod === 6) {
-        feeRate = this.huabeiFeerateList[1]
-      }
-      this.chargeFee = (this.totalPrice * feeRate / 100).toFixed(2)
-    },
-    showHuabeiDetail() {
-      this.showHuabeiPopup = true
-    },
-    decidePayType() {
-      // #ifdef H5 || MP-WEIXIN || APP-PLUS
-      this.showWechatPayType = true
-      this.paymentMode = 1
-      // #endif
-
-      // #ifdef MP-ALIPAY
-      this.showAlipayPayType = true
-      this.showHuabeiPayType = true
-      this.paymentMode = 2
-      // #endif
-    },
 
 
     /**
@@ -1253,7 +1142,7 @@ export default {
      * @return {boolean}
      */
     handleCheckOrderForm() {
-      if (this.paymentMode === 0) {
+      if (!this.payObj.paymentMode) {
         uni.showToast({
           title: '请选择支付方式',
           icon: 'none'
