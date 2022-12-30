@@ -207,7 +207,7 @@ export default {
       this.tabCurrentType = options.type
       this.orderState = options.type
     }
-    // #
+    // #endif
     this.handleRefreshList()
   },
   onReachBottom() {

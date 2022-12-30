@@ -8,7 +8,7 @@
 <template>
   <div class="content">
     <TuiModal
-        :show="show"
+        :show="isShow"
         :custom="true"
         :fadein="true"
     >
@@ -22,7 +22,7 @@
         <view class="flex-display flex-sp-between">
           <view
               class="btn"
-              @click="show = false"
+              @click="$emit('update:showTip',false)"
           >
             点错了
           </view>
@@ -44,26 +44,18 @@ export default {
   name: "DeleteModal",
   components:{TuiModal},
   data() {
-    return {}
-  },
-  model:{
-    prop: 'showDeleteModal',
-    event: 'change'
-  },
-  props:{
-    showDeleteModal:{
-      type:Boolean,
-      default:()=>false
+    return {
+      isShow:false
     }
   },
-  computed:{
-    show:{
-      get(){
-        return this.showDeleteModal
-      },
-      set(val){
-        this.$emit('change',val)
-      }
+  props:{
+    showTip:{
+      type:Boolean
+    }
+  },
+  watch:{
+    showTip(val){
+      this.isShow = val
     }
   },
   methods: {}

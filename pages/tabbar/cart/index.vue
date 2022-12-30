@@ -229,7 +229,7 @@
 
       <!-- 删除确认弹窗 -->
       <DeleteModal
-          v-model="showDeleteModal"
+          :showTip.sync="showDeleteModal"
           @confirm="handleDoDelete"
       ></DeleteModal>
     </view>
@@ -705,6 +705,8 @@ export default {
         icon: 'none'
       })
       this.showDeleteModal = true
+      console.log(123123,this.settleAccountsObj,this.showDeleteModal)
+
     }
     ,
 
