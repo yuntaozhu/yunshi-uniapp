@@ -222,6 +222,10 @@ name: "categoryShow",
           line-height: 40upx;
           display: inline-block;
           float: left;
+          max-width: 170rpx;
+          white-space: nowrap;
+          overflow:hidden;
+          text-overflow:ellipsis;
         }
         .shop-logo{
           border: 2upx solid #707070;
