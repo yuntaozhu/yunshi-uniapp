@@ -8,12 +8,15 @@
       <video class="myVideo" id="myVideo" :src="componentContent.videoUrl" enable-danmu danmu-btn controls></video>
     </div>
     <div class="videoCoverBox" v-if="componentContent.coverImg && !isPlay" @click="handlePlayVideo">
-      <image :src="componentContent.coverImg" ></image>
+      <image :src="componentContent.coverImg" />
     </div>
     <div class="videoRightBox" v-if="!componentContent.coverImg">
       <video class="myVideo" id="myVideo" :src="componentContent.videoUrl" enable-danmu danmu-btn controls></video>
     </div>
     <div class="clear"></div>
+<!--    <div style="width:100vw;height:200px">
+      <image :src="componentContent.coverImg" />
+    </div>-->
   </div>
 </template>
 
@@ -91,12 +94,15 @@ export default {
        margin-bottom: 20upx;
      }
      .videoRightBox {
-       width: 100%;
+       width: 100vw;
+       height: 56.25vw; //16:9
      }
    }
  }
  .videoCoverBox{
-   aspect-ratio: 16/9;
+   width: 100vw;
+   height: 56.25vw; //16:9
+
    position: relative;
    &:before{
      content: '';

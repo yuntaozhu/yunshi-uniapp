@@ -103,7 +103,7 @@ export const fastCardTwoList = [
         id:3,
         label:'会员中心',
         icon:'https://ceres.zkthink.com/static/img/user/VIP.png',
-        jumpUrl:'../../../pages_category_page2/userModule/memberAccount'
+        jumpUrl:'../../../pages_category_page1/memberCenter/index'
     },
     {
         id:4,
