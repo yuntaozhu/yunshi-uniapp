@@ -196,7 +196,6 @@ export default {
       if (JSON.stringify(this.cacheUserItem) === '{}') {
         return this.$jump('../../../pages_category_page2/userModule/login')
       }
-        console.log(url)
       if (url.startsWith('function')) {
         const [key, funcName] = url.split(':')
         this[funcName]()
@@ -232,12 +231,10 @@ export default {
       let username = this.userItem.name
       let url = null
       // #ifdef H5
-      console.log('h5 test')
       window.location.href = API.SettledMerchantPrefix + `/#/?username=${ username }&user=${ token }`
       // #endif
       // #ifdef APP-PLUS
       plus.runtime.openURL(API.SettledMerchantPrefix + `/#/?username=${ username }&user=${ token }`, function (e) {
-        console.log(e);
       })
       // #endif
       // #ifdef MP-WEIXIN

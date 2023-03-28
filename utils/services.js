@@ -61,19 +61,17 @@ export function Services(shopId) {
                         corpid: corpId,
                         url: serviceURL,
                     }, success => {
-                        console.log("success", JSON.stringify(success))
                     }, err => {
-                        console.log("error", JSON.stringify(err))
                     })
                 } else {
                     plus.nativeUI.alert('当前环境不支持微信操作!')
                 }
             },  err=>{
-                console.log(err)
+                console.error(err)
                 uni.showToast({title: "获取服务失败，不支持该操作。" + JSON.stringify(err), icon: 'none'})
             })
         } catch (err) {
-            console.log(err)
+            console.error(err)
             uni.showToast({title: "调用失败，不支持该操作。" + JSON.stringify(err), icon: 'none'})
         }
         // #endif

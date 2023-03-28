@@ -33,7 +33,6 @@ export default {
     }
   },
   created(){
-    console.log('componentContent',this.componentContent)
   },
   mounted() {
     this.videoContext = uni.createVideoContext('myVideo',this)

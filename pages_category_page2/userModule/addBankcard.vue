@@ -2,16 +2,16 @@
 	<view class="container flex-center flex-column">
 		<view class="addressBack-box">
 			<view class="consignee-box bor-line-F7F7F7">
-				<input v-model="username" class="fs28" placeholder-class="consignee" placeholder="姓名" />
+				<input v-model="username" maxlength="20" class="fs28" placeholder-class="consignee" placeholder="姓名" />
 			</view>
 			<view class="iphoneNum-box bor-line-F7F7F7">
-				<input type="number" v-model="phone" class="fs28" placeholder-class="iphoneNum" placeholder="手机号码" />
+				<input type="number" v-model="phone" maxlength="11" class="fs28" placeholder-class="iphoneNum" placeholder="手机号码" />
 			</view>
 			<view class="consignee-box bor-line-F7F7F7">
-				<input v-model="bankName" class="fs28" placeholder-class="consignee" placeholder="银行名称" />
+				<input v-model="bankName" maxlength="20" class="fs28" placeholder-class="consignee" placeholder="银行名称" />
 			</view>
 			<view class="cardnum">
-				<input type="number" class="fs28" v-model="cardNum" placeholder-class="detailAddress" placeholder="卡号" />
+				<input type="number" class="fs28" v-model="cardNum" maxlength="20" placeholder-class="detailAddress" placeholder="卡号" />
 			</view>
 		</view>
 		<view class="deleteBankcard-box" v-if="type == 2">
@@ -57,7 +57,6 @@
 				this.renderBankcard(this.bankcardId)
 				uni.removeStorageSync('bankcardId')
 			}
-		  console.log(this.type, 'type')
 		},
 		onShow() {
 
@@ -106,7 +105,6 @@
 				})
 				let phoneCodeVerification = /^[1][3-9][0-9]{9}$/;
 				const method = this.type == 1 ? 'POST' : 'PUT';
-				console.log(this.cardNum.length,333)
 				if (this.username == '') {
 					uni.showToast({
 						title: '请输入姓名！',

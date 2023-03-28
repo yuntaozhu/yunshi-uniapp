@@ -296,7 +296,6 @@ export default {
         const res = await NET.request(API.ShoppingCart, {}, 'GET')
         this.dataList = res.data
         this.settleAccountsObj.allNum = this.dataList.length
-        console.log(this.dataList)
         if (this.dataList.length === 0) {
           this.isEmpty = true
           uni.setStorageSync('allCartNum', 0)
@@ -705,7 +704,6 @@ export default {
         icon: 'none'
       })
       this.showDeleteModal = true
-      console.log(123123,this.settleAccountsObj,this.showDeleteModal)
 
     }
     ,

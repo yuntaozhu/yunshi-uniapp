@@ -70,6 +70,7 @@
           <view class="l">退款说明：</view>
           <view class="r-box r-box2">
             <input v-model="ReturnMoneyQuery.returnDesc"
+				   maxlength="200"
                    type="text"
                    placeholder="选填"
                    class="r-box-input"></input>
@@ -229,11 +230,9 @@ export default {
   },
   async onLoad(option) {
     this.retundlist = JSON.parse(decodeURIComponent(option.list))
-    console.log(option,'this.retundlist')
 
     this.orderId = option.orderId
     this.isAllSelect = option.isAllSelect
-    // console.log(this.retundlist, 'retundlist')
     this.retundlist.forEach(el => {
       this.sellPriceitem = this.sellPriceitem + el.number * el.price
     })
@@ -318,9 +317,11 @@ export default {
           uni.showToast({
             title: '提交成功'
           })
-          uni.navigateTo({
-            url: '../../pages_category_page2/orderModule/afterSale'
-          })
+          setTimeout(() => {
+            uni.redirectTo({
+              url:'/pages_category_page2/orderModule/afterSale'
+            })
+          }, 1500)
         }).catch(res => {
           uni.showToast({
             title: '商品已在售后，请勿重新操作！',

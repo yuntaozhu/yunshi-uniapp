@@ -116,6 +116,7 @@
           <view class="r-box r-box2">
             <input
                 v-model="ReturnMoneyQuery.returnDesc"
+				maxlength="200"
                 type="text"
                 placeholder="选填"
                 class="r-box-input"
@@ -360,17 +361,14 @@ export default {
     this.fileList = this.$refs.uUpload.lists
   },
   async onLoad(options) {
-    console.log(options, 'options')
     if (uni.getStorageSync('applyItem')) {
       this.afterRefund = uni.getStorageSync('applyItem')
       this.list.push(this.afterRefund)
     } else if (uni.getStorageSync('afterSaleApplyRefund')) {
       this.list = uni.getStorageSync('afterSaleApplyRefund')
     }
-    console.log(this.list, 'this.list')
     this.orderId = parseInt(options.orderId)
     this.isAllSelect = options.isAllSelect
-    console.log(this.isAllSelect, 'this.isAllSelect')
     const res = uni.getStorageSync('storage_key');
     this.headerToken.Authorization = res.token
     this.list.forEach(el => {
@@ -413,7 +411,6 @@ export default {
 
 
     confirmTap() {
-      console.log(this.fileList, 'commentImgs')
       if (this.fileList.length > 0) {
         this.commentImgsFlag = true
         for (let i = 0; i < this.fileList.length; i++) {
@@ -447,7 +444,6 @@ export default {
         //   title: '正在提交...',
         // })
         let skusobjdata = []
-        console.log(this.list)
         this.list.forEach((i) => {
           let skusobj = {}
           skusobj["skuId"] = i.skuId
@@ -475,10 +471,10 @@ export default {
             title: '提交成功'
           })
           setTimeout(() => {
-            uni.navigateTo({
-              url: '../../pages_category_page2/orderModule/afterSale'
+            uni.redirectTo({
+              url:'/pages_category_page2/orderModule/afterSale'
             })
-          }, 2000)
+          }, 1500)
         }).catch(res => {
           uni.showToast({
             title: '商品已在售后，请勿重新操作！',

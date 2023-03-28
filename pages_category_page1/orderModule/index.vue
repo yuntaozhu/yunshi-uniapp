@@ -63,8 +63,8 @@
                     class="product-img default-img"
                 />
                 <view class="info-box">
-                  <text class="product-name">{{ skuItem.productName }}</text>
-                  <view class="product-sku">{{ skuItem.value }}</view>
+                  <text class="product-name">{{ skuItem.productName&&skuItem.productName }}</text>
+                  <view class="product-sku">{{ skuItem.value&&skuItem.value }}</view>
                   <view class="price-sku-box">
                     <view class="box-h flex-items-plus">
                       <text class="product-price">
@@ -72,9 +72,9 @@
                             class="fuhao"
                         >￥
                         </text>
-                        {{ skuItem.price }}
+                        {{ skuItem.price && skuItem.price }}
                       </text>
-                      <text class="product-num">x {{ skuItem.number }}</text>
+                      <text class="product-num">x {{ skuItem.number&&skuItem.number }}</text>
                     </view>
                     <view
                         v-if="skuItem.commentId === 0 && orderItem.state === 4"
@@ -91,13 +91,16 @@
                   </view>
                 </view>
               </view>
-              <view class="total-price-box">
-                总价¥{{
-                  (orderItem.orderPrice + orderItem.logisticsPrice).toFixed(2)
-                }},优惠¥{{ orderItem.discountPrice }}
-                <span v-if="orderItem.price > 0">
+              <view class="total-price-box" >
+                <template v-if="orderItem.orderPrice!==undefined || orderItem.discountPrice!==undefined">
+                  总价¥{{
+                    (orderItem.orderPrice + orderItem.logisticsPrice).toFixed(2)
+                  }},优惠¥{{ orderItem.discountPrice }}
+
+                  <span v-if="orderItem.price > 0">
                       ，{{ orderItem.state === 1 ? '应付¥' : '实付¥' }}{{ orderItem.price }}
                     </span>
+                </template>
               </view>
             </view>
             <view
@@ -174,7 +177,7 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      loading: true,
       orderState: '',// 订单类型（params参数）
       page: 1,
       pageSize: 20,
@@ -200,15 +203,21 @@ export default {
     }
   },
   onShow() {
-    // #ifdef H5
     const pageList = getCurrentPages();//获取应用页面栈
     const {options} = pageList[pageList.length - 1];//获取当前页面信息
     if (options.type) {
       this.tabCurrentType = options.type
       this.orderState = options.type
+    }else{
+      this.orderState = ''
     }
-    // #endif
-    this.handleRefreshList()
+    if(Number(options.isJumpBack)===1){
+      setTimeout(()=>{
+        this.handleRefreshList()
+      },2000)
+    }else{
+      this.handleRefreshList()
+    }
   },
   onReachBottom() {
     ++this.page
@@ -280,7 +289,7 @@ export default {
      */
     getOrderStatusLabel(state, returnType = 0) {
       if (returnType) return '退款中'
-      return orderTypeEnum[state]
+      return orderTypeEnum[state] || ''
     },
 
     /**
@@ -548,7 +557,6 @@ export default {
      */
     async handleGoPay() {
       const {payObj} = this
-      console.log('支付', payObj.payInfo)
       await handleDoPay(this.payObj.payInfo)
       payObj.showPayPopup = false
       payObj.totalPrice = 0
@@ -688,15 +696,15 @@ export default {
 
     /**
      * 立即评价
-     * @param type
      * @param skuItem
      * @param orderId
      */
-    goEvaluate(type, skuItem, orderId) {
+    goEvaluate( skuItem, orderId) {
       const params = {
         commentData: skuItem,
         orderId
       }
+      console.log(params)
       this.$jump('../goodsModule/evaluate', params)
     },
 

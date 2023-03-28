@@ -149,7 +149,6 @@ export default {
                 text: cartNum.toString()
               })
             }
-            console.log(cartNum)
             uni.setStorageSync('allCartNum', cartNum)
           })
           if (this.inviteSpelltype == true) {
@@ -167,7 +166,6 @@ export default {
                 'pages_category_page2/userModule/accountLogin' &&
                 that.beforePage.route !== 'pages_category_page2/userModule/login' &&
                 that.beforePage.route !== 'pages_category_page2/userModule/register') {
-              console.log(19)
               uni.navigateBack({
                 delta: 1
               })
@@ -187,7 +185,6 @@ export default {
             }
           }
         }).catch(res => {
-          console.log('Login failed')
           console.dir(res)
           uni.hideLoading()
           uni.showToast({

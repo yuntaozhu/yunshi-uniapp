@@ -57,6 +57,7 @@
         <input
             class="uni-input"
             v-model="answerText"
+			 maxlength="200"
             focus
             placeholder="被邀请的用户才能回答"
         />

@@ -101,7 +101,6 @@ export default {
     }
   },
   onLoad(options) {
-    console.log(options,'options')
     this.params.productId = options.productId
     this.params.shopCouponId = options.shopCouponId
     this.params.shopId = options.shopId

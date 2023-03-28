@@ -199,7 +199,7 @@
              close-icon-size="20">
       <view class="interventionBox">
         <view class="intTit">申请平台介入</view>
-        <textarea class="textarea-text" v-model="reason" placeholder-style="color:#BBBBBB" placeholder="请输入介入原因"/>
+        <textarea class="textarea-text" v-model="reason" maxlength="200" placeholder-style="color:#BBBBBB" placeholder="请输入介入原因"/>
         <view class="btnBox">
           <button @click="interventionFn" class="primary">确定</button>
           <button @click="closeInterventionFn">取消</button>

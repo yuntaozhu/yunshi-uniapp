@@ -115,7 +115,6 @@ export default {
     }
   },
   onLoad(option) {
-    console.log(option.priceId, 'priceId')
     this.priceId = option.priceId
     this.getSelectByPriceId() // 获取定价
     this.getSelectProductListByPriceId()
@@ -200,7 +199,6 @@ export default {
         // this.skuImg = res.data.image
         this.skuPrice = res.data.price
         this.skuOriginalPrice = res.data.originalPrice
-        // console.log(this.skuOriginalPrice,333)
         this.stockNumber = res.data.stockNumber
         this.detailList.ifHuabei = res.data.ifHuabei
         //this.renderHuabei(this.skuPrice)
@@ -211,10 +209,6 @@ export default {
     //颜色选中事件
     colorActiveClick(res, index, resIndex) {
       let t = this;
-      console.log(res,index,resIndex)
-      console.log(this.selectArr)
-      console.log(this.subIndex)
-      console.log(this.attrItemIdArr)
       t.selectArr[index] = res;
       t.subIndex[index] = resIndex;
       t.attrItemIdArr[index] = res.valueCode
@@ -258,7 +252,6 @@ export default {
           }
         }
       }
-      //console.log(this.skuProdList, 'list')
     },
     checkItem() {
       var self = this;
@@ -284,7 +277,6 @@ export default {
     },
     // 数量减
     numSub() {
-      console.log('this.buyNum', this.buyNum)
       if (this.buyNum > 1) {
         this.buyNum = this.buyNum - 1
       } else {
@@ -341,7 +333,6 @@ export default {
                       url: '../../pages/tabbar/cart/index'
                     })
                   } else if (res.cancel) {
-                    console.log('用户点击取消')
                   }
                 }
               })

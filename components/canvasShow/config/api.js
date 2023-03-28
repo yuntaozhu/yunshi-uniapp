@@ -11,6 +11,7 @@ export const api = {
   fileUpload: BASEURL + '/file/upload', // 文件上传
   getClassify: BASEURL + '/canvas/getClassify', // 查询分类层级
   getProducts: BASEURL + '/canvas/getProducts', // 选择商品查询
+  getProductsV2: BASEURL + '/canvas/getProducts2', // 选择商品查询V2(2023.3.9 优化版本接口)
   saveCanvas: BASEURL + '/canvas/saveCanvas', // 保存画布
   getCanvas: BASEURL + '/canvas/getCanvas', // 读取画布
   getShops: BASEURL + '/canvas/getShops', // 选择店铺查询
@@ -19,7 +20,7 @@ export const api = {
   takeCoupon: BASEURL + '/coupon/takeCoupon', // 领取优惠券
   selectCanvasCustomList: BASEURL + '/canvas/selectCanvasCustomList', // 自定义页面查询
   getPlatformSeckills: `${BASEURL}/canvas/getPlatformSeckills`, // 平台秒杀活动
-  getSeckills: `${BASEURL}/renovation/getSeckills`, // 商家秒杀活动
+  getSeckills: `${BASEURL}/renovation/getSeckills`, // 商家秒杀活动w
   getMinDiscount: `${BASEURL}/canvas/getMinDiscount`, // 平台限时折扣
   getDiscounts: `${BASEURL}/renovation/getDiscounts`, // 商家限时折扣
   getAdminGroupWorks: `${BASEURL}/canvas/getGroupWorks`, // 平台拼团专区

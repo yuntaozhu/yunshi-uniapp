@@ -51,7 +51,8 @@
                 ]
             },
             "ios" : {
-                "idfa" : false
+                "idfa" : false,
+                "dSYMs" : false
             },
             /* ios打包配置 */
             "sdkConfigs" : {

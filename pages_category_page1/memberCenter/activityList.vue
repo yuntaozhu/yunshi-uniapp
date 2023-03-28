@@ -97,7 +97,6 @@ export default {
     }
   },
   onPageScroll(res) {
-    console.log(res,'ssssssssss')
       let scrollTop = res.scrollTop // 滚动条偏移量
       let offsetTop = this.boxFixedTop // 要滚动到顶部吸附的元素的偏移量
       this.isFixed = scrollTop > offsetTop ? true : false; // 如果滚动到顶部了，this.isFixed就为true
@@ -105,7 +104,6 @@ export default {
     onReady(){
         const query = uni.createSelectorQuery().in(this);
         query.select('#boxFixed').boundingClientRect(data => {
-            console.log(data,'boxFixed')
             this.boxFixedTop = data.top
         }).exec()
     },

@@ -180,17 +180,14 @@
 						// 转发成功之后的回调
 
 						if (res.errMsg == 'shareAppMessage:ok') {
-							console.log(res)
 
 						}
 					},
 					fail: function() {
 						// 转发失败之后的回调
 						if (res.errMsg == 'shareAppMessage:fail cancel') {
-							console.log(res)
 							// 用户取消转发
 						} else if (res.errMsg == 'shareAppMessage:fail') {
-							console.log(res)
 							// 转发失败，其中 detail message 为详细失败信息
 						}
 					},
@@ -201,7 +198,6 @@
 				// 来自页面内的按钮的转发
 				if (options.from == 'button') {
 					var eData = options.target.dataset;
-					console.log(eData.id); // shareBtn
 					// 此处可以修改 shareObj 中的内容
 					shareObj.path = '/pages_category_page1/store/index?storeId=' + this.shopId
 				}

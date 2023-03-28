@@ -8,7 +8,7 @@
 				<view class="item item-start">
 					<view class="l"><text class="font-color-C5AA7B">*</text>问题描述</view>
 				</view>
-		    <textarea v-model="reason" class="text-area" placeholder="填写相关问题" placeholder-style="color:#bbb;" bindinput="proofRemarkInput"></textarea>
+		    <textarea v-model="reason" maxlength="200" class="text-area" placeholder="填写相关问题" placeholder-style="color:#bbb;" bindinput="proofRemarkInput"></textarea>
 			</view>
 
 			<view class="afterSale-select-box mt20">

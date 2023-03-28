@@ -24,7 +24,6 @@
 		},
 		onLoad(options) {
 			this.avatarUrl = uni.getStorageSync('avatarUrl')
-			console.log(this.avatarUrl,8888)
 		},
 		onBackPress(options) {
 			this.back();
@@ -38,7 +37,6 @@
 			},
 			getPhoneNumber(e){
 				if(e.detail.errMsg === "getPhoneNumber:ok"){
-					console.log(e)
 					const that = this
 					uni.login({
 						provider: 'weixin',
@@ -56,7 +54,6 @@
 								},'POST').then(res2 => {
 									const item = res2.data
 									uni.setStorageSync('storage_key', item);
-									console.log(uni.getStorageSync('storage_key'))
 									setTimeout(function(){
 										uni.switchTab({
 											url:'../../pages/tabbar/user/index',
@@ -68,7 +65,6 @@
 								}).catch(res => {
 								})
 							}).catch(err => {
-								console.log(err,22222)
 							})
 						},
 						fail: () => {

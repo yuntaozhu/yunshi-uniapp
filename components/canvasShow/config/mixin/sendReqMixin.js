@@ -5,7 +5,7 @@ import request from './server'
 
 /* eslint-disable */
 export const sendReq = {
-  data () {
+  data() {
     return {
       // 加载中
       loading: false,
@@ -15,23 +15,27 @@ export const sendReq = {
     /*
      * 发送请求
      */
-    sendReq (params, callback) {
+    sendReq(params, callback) {
       let self = this
       request({
         method: params.method || 'POST',
         url: params.url,
         data: params.data || {},
-        withCredentials : true,
+        withCredentials: true,
         headers: {
-          'Content-type': params.contentType || 'application/json;charset=utf-8'
+          'Content-type':
+            params.contentType || 'application/json;charset=utf-8',
+        },
+      }).then(
+        (res) => {
+          if (res && res.data) {
+            callback && callback(res.data)
+          }
+        },
+        (error) => {
+          throw new Error(error)
         }
-      }).then((res) => {
-        if (res && res.data) {
-          callback && callback(res.data)
-        }
-      }, (error) => {
-        console.log(error)
-      })
-    }
-  }
+      )
+    },
+  },
 }

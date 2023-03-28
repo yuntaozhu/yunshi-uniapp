@@ -170,7 +170,6 @@ export default {
           "GET").then(res => {
         uni.hideLoading()
         this.skuProData = res.data
-        // console.log(this.skuProData,'this.skuProData', res.data)
         //如果是单款式商品，需要特殊处理productData.names
         const mapKeys = Object.keys(this.skuProData.map)
         if (mapKeys.length === 1 && mapKeys[0] === '单款项') {
@@ -219,7 +218,6 @@ export default {
         // 匹配不上就赋值第一个
         if(flag){
           for (var key in mapinfo) {
-            console.log(key,'key')
             this.selectedSku = mapinfo[key]
             break
           }
@@ -228,7 +226,6 @@ export default {
     },
     nameCodeValueCodeClick(nameCode, valueCode, reSelectSku) {
       this.selectedAttr[nameCode] = valueCode
-      console.log(this.selectedAttr, 'this.selectedAttr')
       if (reSelectSku) {
         let attrList = []
         for (var key in this.selectedAttr) {
@@ -246,7 +243,6 @@ export default {
     },
     // 提交更换商品规格
     submitBtn() {
-      console.log(this.selectedSku,'this.selectedSku')
       const curPro = this.selectComposeData[this.tabIndex].composeProductInfoList[this.curProIndex]
       for(let i=0;i<curPro.composeSkuInfoList.length;i++){
         if(curPro.composeSkuInfoList[i].skuId === this.selectedSku.skuId){
@@ -275,7 +271,6 @@ export default {
           this.composePrice = parseFloat(total * promote / 10).toFixed(2)
           break
       }
-      console.log(total, this.composePrice, 'total')
     },
     // 根据活动显示不同价格
     getPrice(item){

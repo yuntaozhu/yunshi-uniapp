@@ -166,28 +166,27 @@
             },
             // 领取优惠券回调
             sendcoupon(e){
-                console.log('领取了微信卡券', e)
                 const errcode = e.detail.errcode,resultList = e.detail.send_coupon_result
                 switch (errcode) {
                     case 'OK':
                         break
                     case 'PARAM_ERROR':
-                        console.log('参数错误，请开发者查看msg中具体的错误信息并进行修复处理')
+                        console.error('参数错误，请开发者查看msg中具体的错误信息并进行修复处理')
                         break
                     case 'USER_NOT_EXISTS':
-                        console.log('登录态获取失效')
+                        console.error('登录态获取失效')
                         break
                     case 'USER_GET_FAILED':
-                        console.log('登录态获取失败')
+                        console.error('登录态获取失败')
                         break
                     case 'SIGN_ERROR':
-                        console.log('签名错误')
+                        console.error('签名错误')
                         break
                     case 'SYSTEMERROR':
-                        console.log('发券超时')
+                        console.error('发券超时')
                         break
                     case 'FREQUENCY_LIMITED':
-                        console.log('发券频率过高')
+                        console.error('发券频率过高')
                         break
                 }
                 if(errcode === 'OK'){
@@ -204,61 +203,61 @@
                         })
                         switch (item.code) {
                             case 'FAILED':
-                                console.log('该张券发券失败，查看message中的具体错误信息')
+                                console.error('该张券发券失败，查看message中的具体错误信息')
                                 break
                             case 'NOTENOUGH':
                                 uni.showToast({
                                     title:cName + '优惠券已被领取完',
                                     icon:"none"
                                 })
-                                console.log('总预算用完')
+                                console.error('总预算用完')
                                 break
                             case 'DAYLIMIT':
                                 uni.showToast({
                                     title:cName + '优惠券领取张数已达到上限',
                                     icon:"none"
                                 })
-                                console.log('用户达到单天限领')
+                                console.error('用户达到单天限领')
                                 break
                             case 'NATURELIMIT':
                                 uni.showToast({
                                     title:cName + '优惠券领取张数已达到上限',
                                     icon:"none"
                                 })
-                                console.log('用户自然人限领')
+                                console.error('用户自然人限领')
                                 break
                             case 'MAXQUOTA':
                                 uni.showToast({
                                     title:cName + '优惠券领取张数已达到上限',
                                     icon:"none"
                                 })
-                                console.log('用户领取张数达到上限')
+                                console.error('用户领取张数达到上限')
                                 break
                             case 'DUPREQUEST':
                                 uni.showToast({
                                     title:cName + '优惠券领取张数已达到上限',
                                     icon:"none"
                                 })
-                                console.log('已通过该发券凭证给用户发券')
+                                console.error('已通过该发券凭证给用户发券')
                                 break
                             case 'NOTRUNNING':
-                                console.log('批次状态非运营中')
+                                console.error('批次状态非运营中')
                                 break
                             case 'EXPIRED':
                                 uni.showToast({
                                     title:cName + '优惠券已过期',
                                     icon:"none"
                                 })
-                                console.log('该批次已过期')
+                                console.error('该批次已过期')
                                 break
                             case 'NOTMONEY':
-                                console.log('账户余额不足')
+                                console.error('账户余额不足')
                                 break
                             case 'USERLIMIT':
-                                console.log('用户已超限领额度')
+                                console.error('用户已超限领额度')
                                 break
                             case 'FREQUENCYLIMIT':
-                                console.log('超过频率限制')
+                                console.error('超过频率限制')
                                 break
                         }
                     })
@@ -269,7 +268,6 @@
             },
             // 用户确认领券事件
             userconfirm(e){
-                console.log('用户确认领券', e)
                 this.$emit('closeAd')
             }
         }

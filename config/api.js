@@ -169,7 +169,7 @@ module.exports = {
 
 	// 画布模块
 	getProducts: WX_API_BASE + '/canvas/getProducts', // 选择商品查询
-
+	getProductsV2: WX_API_BASE + '/canvas/getProducts2', // 选择商品查询
 
 	//服务协议
 	Query: WX_API_BASE + '/dict/getByName', // 查询分类层级

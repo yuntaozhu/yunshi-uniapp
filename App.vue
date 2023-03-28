@@ -23,19 +23,6 @@ export default {
     const self = this
     uni.getSystemInfo({
       success: function (res) {
-        console.log(res, '检查机型')
-        // 根据 model 进行判断
-        // const iphoneModels = [
-        // 	'iPhone X',
-        // 	'iPhone XR',
-        // 	'iPhone XS Max',
-        // 	'iPhone 11',
-        // 	'iPhone 11 Pro',
-        // 	'iPhone 11 Pro Max',
-        // 	'iPhone 12/13 (Pro)',
-        // 	'iPhone 12/13 mini',
-        // 	'iPhone 12/13 Pro Max'
-        // ]
         if (res.safeArea.top > 20 && res.model.indexOf('iPhone') !== -1) {
           self.globalData.isIphone = true
         }
@@ -99,7 +86,7 @@ uni-rich-text img {
 	height: 100%;
 }
 .default-img {
-	background: url(./static/images/default.png) no-repeat center;
+	background: url('https://ceres.zkthink.com/static/root/default.png') no-repeat center;
 	background-size: 100% 100%;
 }
 

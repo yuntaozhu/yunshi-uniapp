@@ -1,5 +1,5 @@
 import api from '../../config/api'
-import {funMixin} from '../../config/mixin'
+import { funMixin } from '../../config/mixin'
 
 export const commonMixin = {
   name: 'headerComponent',
@@ -7,39 +7,41 @@ export const commonMixin = {
   props: {
     terminal: {
       type: Number,
-      default: 4
+      default: 4,
     },
     typeId: {
       type: Number,
-      default: 1
+      default: 1,
     },
     shopId: {
       type: Number,
-      default: 0
+      default: 0,
     },
     componentContent: {
-      type: Object
-    }
+      type: Object,
+    },
   },
-  data () {
+  data() {
     return {
-      classifyData: []
+      classifyData: [],
     }
   },
   mounted() {
-      this.getData()
+    this.getData()
   },
   methods: {
     getData() {
       const _ = this
-      _.sendReq({
-        url: `${api.getClassify}?page=1&pageSize=20`,
-        method: 'GET'
-      }, (res) => {
-        _.classifyData = res.data
-        console.log(_.classifyData)
-      },(err)=>{
-      })
-    }
-  }
+      _.sendReq(
+        {
+          url: `${api.getClassify}?page=1&pageSize=20`,
+          method: 'GET',
+        },
+        (res) => {
+          _.classifyData = res.data
+        },
+        (err) => {}
+      )
+    },
+  },
 }

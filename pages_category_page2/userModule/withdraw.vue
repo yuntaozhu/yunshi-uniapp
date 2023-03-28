@@ -2,7 +2,7 @@
 	<view class="container flex-center flex-column">
 		<view class="addressBack-box">
 			<view class="consignee-box bor-line-F7F7F7">
-				<input type="number" v-model="balance" @input="applycheck" class="fs28" placeholder-class="consignee" placeholder="提现金额(元)" />
+				<input type="number" v-model="balance" maxlength="9" @input="applycheck" class="fs28" placeholder-class="consignee" placeholder="提现金额(元)" />
 			</view>
 			<view @click="bankTagClick" class="bankTag-box bor-line-F7F7F7 flex-row-plus flex-sp-between flex-items">
 				<view class="fs28 addressTag">银行卡</view>

@@ -176,7 +176,8 @@
         v-else
         class="product-list"
     >
-      <div class="product-list-box">
+      <ProductSkeleton style="" v-if="isFirst" :loading="loading" :isFirst="isFirst" />
+      <div class="product-list-box" v-else>
         <div
             class="product-list-item-warp"
             v-for="(item,index) in productData"
@@ -185,7 +186,6 @@
           <div
               @click="jumpProductDetail(item)"
               class="product-list-item"
-              v-if="JSON.stringify(item)!=='{}'"
           >
             <div class="product-list-img">
               <img
@@ -292,22 +292,6 @@
               </div>
             </div>
           </div>
-          <!-- 自定义骨架屏 -->
-          <div
-              class="product-list-item ske-loading"
-              v-else
-          >
-            <div class="product-list-img child-loading">
-
-            </div>
-            <div class="product-list-info">
-              <label class="product-name child-loading"></label>
-              <div class="price-warp child-loading" style="padding: 5px 0">
-              </div>
-              <div class="price-warp child-loading" style="padding: 5px 0">
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -321,9 +305,12 @@
 
 <script>
 import { commonMixin } from '../mixin'
-
+import ProductSkeleton from "@/components/basics/components/ProductSkeleton";
 export default {
   mixins: [commonMixin],
+  components:{
+    ProductSkeleton
+  },
   data() {
     return {
       swiperCurrent: 0,

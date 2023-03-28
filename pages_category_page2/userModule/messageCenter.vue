@@ -90,15 +90,12 @@
 			GetUser() {
 				NET.request(API.GetUser, {}, 'GET').then(res => {
 					this.num = res.data.notRead
-					console.log(this.num,'this.num')
-					console.log(res.data,'res.data')
 				}).catch(res => {
 
 				})
 			},
 			parseText(html) {
 				parse(html, (err, htmlData) => {
-					console.log(htmlData)
 					return htmlData
 				})
 			},
@@ -187,7 +184,6 @@
 				}, 'post').then(res => {
 					uni.hideLoading()
 					if (res.code == 200) {
-						console.log(res)
 						this.page = 1
 						this.messageList = []
 						this.getAllMessage()

@@ -182,15 +182,12 @@ export default {
   },
   methods: {
     swiperChange(item) {
-      console.log(item.detail.current, 'index')
       this.activeIndex = item.detail.current
-      console.log(typeof this.activeIndex, typeof (this.memberListData.length - 1))
       let num = 0
       num = this.activeIndex + 1
       if (num === this.memberListData.length) {
         this.nextGrowth = this.memberListData[this.activeIndex].growth
       } else {
-        console.log('caonima ')
         this.nextGrowth = this.memberListData[this.activeIndex + 1].growth
       }
       this.equityList = this.memberListData[this.activeIndex].membershipList

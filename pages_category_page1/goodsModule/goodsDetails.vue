@@ -775,7 +775,6 @@ export default {
         shopId: storeId,
         distributorId: salesId
       }, 'POST').then(res => {
-        console.log('分销关系绑定成功！')
       })
     }
     ,

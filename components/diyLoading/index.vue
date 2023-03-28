@@ -6,7 +6,7 @@
     <!-- loading -->
     <view class="loading-gif">
       <view class="flex mask">
-        <image src="@/static/images/loading/loading.gif"></image>
+        <image src="https://ceres.zkthink.com/static/loading/loading.gif" />
 <!--        <p> {{ loadingInfo }} </p>-->
       </view>
     </view>
@@ -29,8 +29,7 @@ export default {
     }
   },
   mounted() {
-    console.log("+++++++++++++++++++__++++++++++++++++++++")
-    console.log(this.loadingFlag, this.loadingInfo)
+
   },
   computed: {
     ...mapGetters(["loadingFlag", "loadingInfo"])

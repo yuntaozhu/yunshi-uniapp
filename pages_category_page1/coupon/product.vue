@@ -60,7 +60,6 @@ export default {
     }
   },
   onLoad(options) {
-    console.log(options,'options')
     if (options.id) {
       this.cid = options.id
       this.getCoupon()

@@ -212,7 +212,6 @@
 			// #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
 			let menuButtonInfo = uni.getMenuButtonBoundingClientRect()
 			this.topHeight = menuButtonInfo.top
-			console.log(this.topHeight, menuButtonInfo.top, 'fsfsfsfs')
 			// #endif
 			// #ifdef APP
 			this.topHeight = 50
@@ -302,7 +301,6 @@
 						this.page = this.page
 					}
 					this.storeInfo = res.data;
-					console.log(this.storeInfo, '测试')
 					this.total = res.data.page.total
 					this.storeInfolist = this.storeInfolist.concat(res.data.page.list)
 				}).catch(res => {
@@ -572,7 +570,6 @@
 						}
 						this.isLoading = false
 					}).catch(err => {
-						console.log(err)
 						this.isLoading = false
 					})
 				} else {

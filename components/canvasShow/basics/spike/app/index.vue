@@ -1,6 +1,6 @@
 <template>
-  <div class="spike">
-    <div class="spike-card" v-if="productData.products && productData.products.length>0">
+  <div class="spike"  v-if="productData.products && productData.products.length>0">
+    <div class="spike-card">
       <div class="spike-card-top">
         <h2 class="spike-card-top-title">
           <!-- #ifdef MP-WEIXIN -->

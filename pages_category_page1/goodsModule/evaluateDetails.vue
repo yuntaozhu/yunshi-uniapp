@@ -108,11 +108,9 @@
 			},
 			commentImgData(imgData){
 				this.imageList = imgData.split(",");
-				console.log(this.imageList)
 			},
       imgDataResultData(imgData){
         this.imgDataResult = imgData.split(",");
-        console.log(this.imgDataResult)
       },
 			//点赞
 			zanTap(){
@@ -169,7 +167,6 @@
             imgsArray.push(this.imgDataResult[i]);
           }
         }
-			  console.log(imgsArray, 'imgs')
         uni.previewImage({
           current: index,
           urls: imgsArray,

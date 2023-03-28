@@ -32,7 +32,9 @@ export const commonMixin = {
   // },
   data () {
     return {
-      productData: []
+      productData: [1,2,3,4],
+      loading:true,
+      isFirst:true
     }
   },
   watch: {
@@ -54,33 +56,37 @@ export const commonMixin = {
     }
   },
   methods: {
-    getData(isFirst) {
+    getData() {
       const _ = this
-      this.productData = [{},{},{},{},{},{},{},{}]
+      // 纵向
+      _.loading=true
       if (_.componentContent.productData.sourceType === '1') {
         if(_.componentContent.productData.productIdList && _.componentContent.productData.productIdList.length>0){
           _.sendReq({
-            url: `${api.getProducts}?page=1&pageSize=99&ids=${_.componentContent.productData.productIdList}`,
+            url: `${api.getProductsV2}?page=1&pageSize=99&ids=${_.componentContent.productData.productIdList}`,
             method: 'GET'
           }, (proRes) => {
             _.productData = proRes.data.list
-            _.productData = _.productData.filter(item=>JSON.stringify(item) !== '{}')
-            if(isFirst){
+            if(_.isFirst){
               _.componentContent.productData.imgTextData = _.productData
             }
+            _.isFirst = false
+            _.loading = false
           })
         } else {
           _.productData = []
+          _.isFirst = false
+          _.loading = false
         }
       } else if(_.componentContent.productData.sourceType === '2'){
         if(_.componentContent.productData.categoryId) {
           _.sendReq({
-            url: `${api.getProducts}?page=1&pageSize=99&classifyId=${_.componentContent.productData.categoryId}`,
+            url: `${api.getProductsV2}?page=1&pageSize=99&classifyId=${_.componentContent.productData.categoryId}`,
             method: 'GET'
           }, (proRes) => {
             _.productData = proRes.data.list
             _.productData = _.productData.filter(item=>JSON.stringify(item) !== '{}')
-            if(isFirst){
+            if(_.isFirst){
               _.componentContent.productData.imgTextData = _.productData
             }
             // _.swiper.update()

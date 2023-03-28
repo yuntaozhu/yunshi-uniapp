@@ -56,10 +56,8 @@
 				}, 'GET').then(res => {
 					this.messageDateils = res.data
 					this.messageDateils.noticeContent = this.formatRichText(this.messageDateils.noticeContent)
-					console.log(this.messageDateils.noticeContent)
 					parse(this.messageDateils.noticeContent, (err, htmlData) => {
 						this.htmlData = htmlData
-						console.log(this.htmlData)
 					})
 					uni.hideLoading()
 				}).catch(res => {

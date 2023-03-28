@@ -90,7 +90,6 @@
 				}, 'GET').then(res => {
 					uni.hideLoading()
 					this.SalesCustomerDatalist = this.SalesCustomerDatalist.concat(res.data.list)
-					console.log(this.SalesCustomerDatalist)
 					this.SalesCustomerData = res.data
 					if (res.data.list.length == res.data.total) {
 						this.loadingType = 1

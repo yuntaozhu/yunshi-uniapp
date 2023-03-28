@@ -52,7 +52,6 @@ export default {
   // },
   computed: {
     imgList: function () {
-      console.log(this.componentContent)
       return this.componentContent.imgTextData.filter(function (item) {
         return item.img
       })

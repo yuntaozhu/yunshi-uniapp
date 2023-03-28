@@ -142,10 +142,8 @@ export default {
 
           // 今天日期
           if (that.currentMonth === selectMonth) {
-            console.log('currentMoth === selectMonth', that.currentMonth === selectMonth)
             that.continuousNum = that.signList[that.signList.length - 1].continueDay || 0;
             that.lastDay = that.signList[that.signList.length - 1].createTime.substring(0,10);
-            console.log('this.lastDay', that.lastDay)
           }
 
           // 今天周几
@@ -171,7 +169,6 @@ export default {
       }).catch(res => {})
     },
     signDate(event) {
-      console.log(event);
     },
     // 签到
     signInFn() {

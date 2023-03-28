@@ -709,7 +709,6 @@
 						if (res.confirm) {
 							this.doDel()
 						} else if (res.cancel) {
-							console.log('用户点击取消')
 						}
 					}
 				})
@@ -744,7 +743,6 @@
 			},
 			//退款
 			applayItemTap(proItem) {
-				console.log(this.dataList.skus.length, 'dataList99999')
 				if (this.dataList.skus.length > 1) {
 					this.isAllSelect = 0
 				}
@@ -782,7 +780,6 @@
 						if (res.confirm) {
 							this.doCancel()
 						} else if (res.cancel) {
-							console.log('用户点击取消')
 						}
 					}
 				})
@@ -835,10 +832,8 @@
 				this.dataList.skus.map(item => {
 					if (item.afterState) {
 						this.isAllSelect = 0
-						console.log('要拆单')
 					}
 				})
-				console.log(this.isAllSelect, 'this.isAllSelect')
 				if (this.orderRefundList.length === 0) {
 					uni.showToast({
 						title: '您所有商品已经申请退款，请勿重复申请',
@@ -862,7 +857,6 @@
 						if (res.confirm) {
 							this.confirmReceiveGooods()
 						} else if (res.cancel) {
-							console.log('用户点击取消')
 						}
 					}
 				})
@@ -904,13 +898,11 @@
 				let isAllSelect = 1
 				let newArr = JSON.parse(JSON.stringify(productData))
 				newArr.skus.map((item, index) => {
-					console.log("item----", item)
 					if (item.afterState) {
 						newArr.skus.splice(index, 1)
 						isAllSelect = 0
 					}
 				})
-				console.log(isAllSelect, '00000000000')
 				uni.navigateTo({
 					url: 'afterSaleApply?item=' + JSON.stringify(newArr) + '&isAllSelect=' + isAllSelect
 				})

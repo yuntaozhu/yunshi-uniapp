@@ -73,15 +73,15 @@
           </view>
          <view class="flex-items flex-row mar-top-60">
             <view class="fs26 font-color-656">真实姓名<label class="font-color-red">*</label></view>
-            <input class="recruitName mar-left-20 fs26" v-model="userName"/>
+            <input class="recruitName mar-left-20 fs26" maxlength="20" v-model="userName"/>
           </view>
           <view class="flex-items flex-row mar-top-30 phoneStyle">
             <label class="fs26 font-color-656">联系电话<label class="font-color-red">*</label></label>
-            <input class="recruitIphone mar-left-20 fs26" disabled="disabled" type="number" v-model="mobile"/>
+            <input class="recruitIphone mar-left-20 fs26" disabled="disabled" type="number" v-model="mobile" maxlength="11"/>
           </view>
           <view class="flex-items flex-row mar-top-30 mar-left-40">
             <label class="fs26 font-color-656">邀请码</label>
-            <input class="recruitIphone mar-left-20 fs26" v-model="inviteId"/>
+            <input class="recruitIphone mar-left-20 fs26" v-model="inviteId" maxlength="6"/>
           </view>
           <view class="flex-row-plus massageDes-but fs28">
             <view class="exitBut" @click="exitButClick">取消</view>

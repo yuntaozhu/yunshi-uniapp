@@ -15,7 +15,7 @@
 export const jump = (url, param, timeout = 0, type = "default") => {
     setTimeout(() => {
         if (param) {
-            url = `${url}?detail=${encodeURIComponent(JSON.stringify(param))}`
+            url = `${url}?detail=${encodeURIComponent((JSON.stringify(param))?.replace(/%/g, '%25'))}`
         }
         if (type === 'default') {
             uni.navigateTo({url})

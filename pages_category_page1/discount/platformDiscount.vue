@@ -115,7 +115,6 @@ export default {
 		// 	this.shopId = 0
 		// 	this.shopDiscountId = 0
 		// }
-    console.log(options.discountId, 'discountId---')
     this.discountId = options.discountId
 
 	},
@@ -136,7 +135,6 @@ export default {
       NET.request(API.queryPlatformDiscount,{
         discountId: this.discountId
       },'GET').then(res => {
-        console.log(res.data, 'data')
         this.discountInfo = res.data
         this.time = new Date(this.discountInfo.endTime).getTime() - new Date().getTime()
         this.dateformat(this.time)

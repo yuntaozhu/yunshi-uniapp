@@ -21,5 +21,4 @@ App.mpType = 'app'
 const app = new Vue({
     ...App
 })
-console.log(store)
 app.$mount()

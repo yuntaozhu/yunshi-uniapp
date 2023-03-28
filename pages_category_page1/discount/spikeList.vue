@@ -144,9 +144,7 @@
 			}
 		},
 		onLoad(options) {
-			console.log(options,'options有没有999')
 			this.currentTime = new Date().getTime();
-			console.log(this.currentTime, 'current')
 			if (options.shopId && options.shopSeckillId) {
 				this.shopId = options.shopId
 				this.shopSeckillId = options.shopSeckillId
@@ -165,7 +163,6 @@
 				this.getQueryPlatformSeckillData()
 			}else{
 				this.getShopSeckillList()
-				console.log('店铺')
 			}
 		},
 		onReachBottom() {
@@ -181,7 +178,6 @@
 		beforeDestroy(){
 			// 销毁前清楚定时器
 			clearInterval(this.ticker)
-			console.log('销毁前清楚定时器')
 		},
 		methods: {
 			changeTit(index, item) {
@@ -261,14 +257,11 @@
 						obj["time"] = item
 						let date = new Date(this.getCaption(item, 0).replace(/-/g, '/'))
 						let endDate = new Date(this.getCaption(item, 1).replace(/-/g, '/'))
-						console.log(date, 'date121212121')
 						obj["timestamp"] = date.getTime()
 						obj["endTime"] = endDate.getTime()
 						obj["startTime"] = item.substring(5, 16)
-						console.log(obj)
 						this.querySessionData.push(obj)
 					})
-					console.log(this.querySessionData, 'data')
 					this.session = this.querySessionData[0].time.substring(0, 16)
 					this.timestamp = this.querySessionData[0].timestamp
 					this.endTime = this.querySessionData[0].endTime
@@ -331,7 +324,6 @@
 			// 			this.page = this.page
 			// 		} else {
 			// 			this.spikeLikeList = this.spikeLikeList.concat(res.data.list)
-			// 			console.log(this.spikeLikeList, 'list')
 			// 		}
 			// 	}).catch(res => {
 			// 		uni.showToast({
@@ -374,7 +366,6 @@
 						this.page = this.page
 					} else {
 						this.spikeLikeList = this.spikeLikeList.concat(res.data.page.list)
-						console.log(this.spikeLikeList, 'classifies')
 					}
 				}).catch(res => {
 					uni.showToast({

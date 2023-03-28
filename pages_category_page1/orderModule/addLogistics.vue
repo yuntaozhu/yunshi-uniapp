@@ -16,7 +16,7 @@
 				<view class="item item-start">
 					<view class="l">物流编号：</view>
 					<view class="r-box r-box2">
-						<input v-model="SendReturnQuery.logisticsNum" type="text" placeholder-class="fs28" placeholder="请填写" class="r-box-input"></input>
+						<input v-model="SendReturnQuery.logisticsNum" maxlength="20" type="text" placeholder-class="fs28" placeholder="请填写" class="r-box-input"></input>
 					</view>
 				</view>
 			</view>
@@ -24,7 +24,7 @@
 				<view class="item item-start">
 					<view class="l">退款说明：</view>
 					<view class="r-box r-box2">
-						<input v-model="SendReturnQuery.returnGoodsDesc" type="text" placeholder-class="fs28" placeholder="选填" class="r-box-input"></input>
+						<input v-model="SendReturnQuery.returnGoodsDesc" maxlength="200" type="text" placeholder-class="fs28" placeholder="选填" class="r-box-input"></input>
 					</view>
 				</view>
 			</view>

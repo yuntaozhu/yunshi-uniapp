@@ -136,7 +136,6 @@ export default {
     },
     // 跳转到可用商品列表
     goProductList(item) {
-      console.log(item, 'test')
       uni.navigateTo({
         url: `../coupon/product?id=${ item.couponId }`
       })

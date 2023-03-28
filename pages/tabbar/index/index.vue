@@ -1,190 +1,115 @@
 <template>
-  <div class="hom-page" :style="{'padding-top': height + 'px'}">
-<!--    <gg></gg>-->
-    <global-loading />
-    <u-sticky offset-top="0" h5-nav-height="0" bg-color="#fff">
-      <view class="head">
-        <!-- #ifdef MP-WEIXIN -->
-        <view
-            class="header weiXinBox"
-            :style="{'padding-top': topHeight + 'px'}"
-        >
-          <view
-              class="topBox"
-              :style="{'height': height + 'px'}"
-          >
-            <image
-                class="logo"
-                src="https://ceres.zkthink.com/static/assets/img/logo.png"
-                mode="widthFix"
-            ></image>
-          </view>
-        </view>
-        <view
-            class="wxBtnBg"
-            :style="{'padding-top': (topHeight + height + 10) + 'px'}"
-        >
-          <view
-              class="weiXinBoxBtn"
-              @click="searchPro"
-          >
-            <image
-                class="search-icon"
-                src="https://ceres.zkthink.com/static/images/searchImg.png"
-                mode="widthFix"
-            >
-            </image>
-            <text>请输入您想要的宝贝</text>
-          </view>
-        </view>
-        <!-- #endif -->
-        <!-- #ifdef H5 || APP-PLUS -->
-        <view class="header">
-          <view class="topBox topWap">
-            <image
-                class="logo"
-                src="https://ceres.zkthink.com/static/assets/img/logo.png"
-                mode="widthFix"
-            ></image>
-            <view
-                class="search-btn"
-                @click="searchPro"
-            >
-              <image
-                  class="search-icon"
-                  src="https://ceres.zkthink.com/static/img/search.png"
-                  mode="widthFix"
-              >
-              </image>
-            </view>
-          </view>
-        </view>
-        <!-- #endif -->
-        <category-list @tabChange="tabChange"></category-list>
+  <div class="hom-page home_page_content">
+    <!-- 头部 -->
+    <FixedHead>
+      <category-list @tabChange="tabChange"></category-list>
+    </FixedHead>
+    <!-- 首页画布骨架屏 -->
+
+    <Skeleton v-if="isFirst" :loading="loading" :isFirst="isFirst" />
+    <template v-if="!isFirst">
+      <!-- 首页画布 -->
+      <view
+          id="home_canvas_page"
+          v-if="activeTab===0"
+      >
+        <canvas-page
+            ref="canvasPage"
+            :componentsData="componentsData"
+            :terminal="terminal"
+            :typeId="1"
+        />
       </view>
-    </u-sticky>
-    <canvas-page ref="canvasPage"
-                 :componentsData="componentsData"
-                 v-if="activeTab==0"
-                 :terminal="terminal"
-                 :typeId="1"
-    ></canvas-page>
-    <category-show ref="categoryShow"
-                   v-else
-                   :categoryid="categoryid"></category-show>
-    <ad-window ref="adWindow"
-               :triggerCondition="1"></ad-window>
-    <view class="reachBottom"
-          v-if="topLeft > 400">
-      <image class="reach-icon"
-             src="https://ceres.zkthink.com/static/img/reachBottom.png"
-             mode="widthFix">
-      </image>
-      <text class="reach-text">这里到底了哦~~</text>
-    </view>
-    <tui-modal :show="privacyShow"
-               :custom="true"
-               :fadein="true">
-      <view class="Put-box1">
-        <view class="text-align fs34 fs-bold">
-          协议与隐私政策
-        </view>
-        <p class="mar-top-20">欢迎来到cereshop！我们根据最新的法律、法规、监管政策要求，更新了cereshop隐私政策。</p>
-        <view class="flex-display flex-sp-between">
-          <view class="btn submit"
-                @click="privacyShow = false">
-            同意
-          </view>
-        </view>
-      </view>
-    </tui-modal>
+
+      <!-- 其他分类 -->
+      <category-show
+          ref="categoryShow"
+          v-else
+          :classifyId="classifyId"
+      />
+
+
+      <ListBottomTips
+          :loading="false"
+          v-if="activeTab===0 && scrollTop>400"
+      />
+
+      <Agreement />
+
+      <global-loading />
+
+      <ad-window
+          ref="adWindow"
+          :triggerCondition="1"
+      />
+
+    </template>
+
   </div>
 </template>
 
 <script>
-import tuiModal from "@/components/modal/modal";
 import AdWindow from "@/components/adWindow";
-const NET = require('@/utils/request')
-const API = require('../../../config/api')
 import api from '@/components/canvasShow/config/api'
 import CategoryList from "@/components/basics/categoryList.vue"
 import CategoryShow from "@/components/basics/categoryShow.vue"
-import comHeader from '@/components/canvasShow/basics/header/app'
 import canvasPage from '@/components/canvasShow/canvasShowPage.vue'
+import FixedHead from "./component/FixedHead";
+import ListBottomTips from "@/components/ListBottomTips";
+import Agreement from "./component/Agreement";
+import Skeleton from "./component/Skeleton";
+
+const NET = require('@/utils/request')
+const API = require('../../../config/api')
 export default {
   components: {
     AdWindow,
     CategoryList,
     CategoryShow,
     canvasPage,
-    tuiModal
+    FixedHead,
+    ListBottomTips,
+    Agreement,
+    Skeleton
   },
   data() {
     return {
+      loading: true,
+      isFirst: true,
+      classifyId: 0, // 分类ID
       terminal: API.terminal,
       activeTab: 0,
-      categoryid: 0,
-      topHeight: 0,
-      height: 0,
-      topLeft: 0,
-      privacyShow: false,
       componentsData: [],
-      typeId: 1
+      typeId: 1,
+      scrollTop: 0
     }
   },
   onReachBottom() {
     this.HandleLoadMoreProduct()
   },
   onLoad() {
-    if (!uni.getStorageSync('storage_key')) {
-      // #ifdef APP-PLUS
-      this.privacyShow = true
-      // #endif
-    }
-    this.$nextTick(() => {
-      this.canvasGet()
+    this.$nextTick(async () => {
+      await this.handleGetCanvas()
       this.$refs.adWindow.getAd()
     })
   },
-  onShow() {
-    // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
-    let menuButtonInfo = uni.getMenuButtonBoundingClientRect()
-    this.topHeight = menuButtonInfo.top
-    this.height = menuButtonInfo.height
-    // #endif
-
-  },
   onPageScroll(e) {
-    this.topLeft = e.scrollTop
+    this.scrollTop = e.scrollTop
   },
   methods: {
     // 读取画布
-    canvasGet() {
-      var _this = this
-      var apiUrl = api.getCanvas + '?terminal=' + this.terminal + '&type=' + this.typeId
-      if (this.shopId) {
-        apiUrl += '&shopId=' + this.shopId
+    async handleGetCanvas() {
+      this.loading = true
+      const apiUrl = api.getCanvas + '?terminal=' + this.terminal + '&type=' + this.typeId
+      const {data} = await NET.request(apiUrl, {}, 'GET')
+      if (JSON.stringify(data) !== '{}') {
+        this.componentsData = JSON.parse(data.json)
+        this.isFirst = false
+        this.loading = false
       }
-      let params = {
-        url: apiUrl,
-        method: 'GET'
-      }
-      // uni.showLoading({
-      //   mask: true,
-      //   title: '加载中...',
-      // })
-      NET.request(apiUrl, {}, 'GET').then(res => {
-        if (JSON.stringify(res.data) !== '{}') {
-          var componentsData = JSON.parse(res.data.json)
-          this.componentsData = componentsData
-        }
-        uni.hideLoading()
-      }).catch(res => {
-        uni.hideLoading()
-      })
     },
     // 分享到朋友圈
-    onShareTimeline: function() {
+    onShareTimeline: function () {
       return {
         title: this.miniHomeRemark,
         imageUrl: this.miniHomeImg,
@@ -192,7 +117,7 @@ export default {
       }
     },
     // 分享好友
-    onShareAppMessage: function() {
+    onShareAppMessage: function () {
       return {
         title: this.miniHomeRemark,
         imageUrl: this.miniHomeImg,
@@ -202,52 +127,32 @@ export default {
     /**
      * 请求非首页的子组件的下一页
      * */
-    HandleLoadMoreProduct(){
-      if (this.activeTab != 0) {
+    HandleLoadMoreProduct() {
+      if (this.activeTab !== 0) {
         let pitchOnPage = this.$refs.categoryShow
         if (pitchOnPage.total !== 0 && pitchOnPage.productList.length < pitchOnPage.total) {
           pitchOnPage.page++
-          pitchOnPage.getData()
+          pitchOnPage.handleGetProductData()
         }
       }
     },
-    /**
-     * 清空非首页的子组件商品数据
-     * 回滚请求参数到起始页
-     * */
-    HandleCleanActiveTabProduct(){
-      if(this.$refs.categoryShow){
-        let pitchOnPage = this.$refs.categoryShow
-        pitchOnPage.total = 0
-        pitchOnPage.page=1
-        pitchOnPage.productList=[{},{},{},{},{},{},{},{}]
-      }
-    },
+
     tabChange(index, id) {
-      this.HandleCleanActiveTabProduct()
       this.activeTab = index
-      this.categoryid = id
+      this.classifyId = id
     },
-    // 查询产品
-    searchPro(key, type) {
-      uni.navigateTo({
-        url: `/pages_category_page1/search/index/index`
-      })
-    }
+
   }
 };
 </script>
 
-<style lang="scss" scoped>
-.hom-page{
-  margin-top: calc(20rpx + var(--status-bar-height));
-}
-.head{
-  background: #fff;
-
-}
+<style
+    lang="scss"
+    scoped
+>
 .header {
   background: #fff;
+
   .toLive {
     height: 40px;
     color: #FFF;
@@ -259,12 +164,13 @@ export default {
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    height: 100%;
   }
 
   .logo {
     width: 280rpx;
-    height: 42rpx;
-    margin-top: -40rpx;
+    height: 100%;
+    //margin-top: -40rpx;
     // margin-left: 30rpx;
   }
 
@@ -332,9 +238,9 @@ export default {
 
 .weiXinBox {
   width: 100%;
-  position: fixed;
+  //position: fixed;
   background: #FFFFFF;
-  z-index: 99;
+  //z-index: 99;
 }
 
 .wxBtnBg {
@@ -390,7 +296,7 @@ export default {
 }
 
 .topWap {
-  padding-top: 60rpx;
+  padding-top: 30rpx;
 
   .logo {
     margin-top: 0 !important;
@@ -421,20 +327,13 @@ export default {
   }
 }
 
-.Put-box1 {
-  .btn {
-    text-align: center;
-    margin-top: 40rpx;
-    border: 1px solid #333333;
-    height: 80upx;
-    line-height: 80upx;
+
+// 优化兼容UI
+.home_page_content {
+  #home_canvas_page {
     width: 100%;
-    color: #333333;
+    position: relative;
   }
 
-  .submit {
-    background-color: #333333;
-    color: #FFEBC4;
-  }
 }
 </style>

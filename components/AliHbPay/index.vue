@@ -193,7 +193,6 @@ export default {
      */
     handleChangePeriods(event) {
       this.flowerObj.hbByStagesPeriods = event
-      console.log(event)
       this.handleHbStagesAndPrice()
     },
 

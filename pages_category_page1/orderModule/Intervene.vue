@@ -7,7 +7,7 @@
       <view class="addEvaluate flex-column-plus">
         <view class="fs26 mar-top-40 mar-left-20 addEvaluateText"><label>*</label>问题描述</view>
         <view class="textarea-box mar-top-20 mar-left-20">
-          <textarea class="textarea-text" v-model="commentText" placeholder-style="color:#BBBBBB" placeholder="填写相关问题"/>
+          <textarea class="textarea-text" v-model="commentText" maxlength="200" placeholder-style="color:#BBBBBB" placeholder="填写相关问题"/>
         </view>
         <view class="fs26 mar-top-40 mar-left-20 addEvaluateText"><label>*</label>举证照片</view>
         <view class="mar-left-10 mar-top-10 evaluateImg">

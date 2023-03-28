@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 
+ * @version: 1.0.0
+ * @Author: kahu
+ * @Date: 2022-10-12 11:48:03
+ * @LastEditors: kahu
+ * @LastEditTime: 2023-03-08 14:41:56
+-->
 <template>
   <view class="live-box">
     <view class="live-ongoing" v-if="liveData.liveStatus === 101" @click="toLive">
@@ -147,7 +155,6 @@ export default {
         _this.liveStatus = res.liveStatus
       })
       .catch(err => {
-          console.log('get live status', err)
       })
       this.timer = setInterval(() => {
         livePlayer.getLiveStatus({ room_id: this.liveData.roomId })
@@ -155,10 +162,9 @@ export default {
             // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
             _this.liveStatus = res.liveStatus
             this.countTime()
-            console.log('get live status', res.liveStatus)
           })
           .catch(err => {
-            console.log('get live status', err)
+            throw new Error(err)
           })
       }, 60000)
       // #endif
@@ -197,8 +203,6 @@ export default {
       }
     },
     toLive() {
-      console.log(liveAppid,'liveAppid')
-      console.log(this.liveData.roomId,'this.liveData.roomId')
 			if (!liveAppid || !this.liveData) { return }
 			// 跳转直播间携带路由参数
 			// let customParams = encodeURIComponent(JSON.stringify({ path: 'livePage/index', pid: 1 }))
@@ -229,7 +233,6 @@ export default {
                 }
               })
               .catch(err => {
-                console.log(err)
                 uni.showToast({
                   title: res.message || '订阅失败，请稍后再试！',
                   icon: "none"

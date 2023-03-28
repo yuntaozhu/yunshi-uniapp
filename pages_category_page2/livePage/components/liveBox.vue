@@ -141,7 +141,6 @@ export default {
         _this.liveStatus = res.liveStatus
       })
       .catch(err => {
-          console.log('get live status', err)
       })
       this.timer = setInterval(() => {
         livePlayer.getLiveStatus({ room_id: this.liveData.roomId })
@@ -149,10 +148,8 @@ export default {
             // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
             _this.liveStatus = res.liveStatus
             this.countTime()
-            console.log('get live status', res.liveStatus)
           })
           .catch(err => {
-            console.log('get live status', err)
           })
       }, 60000)
       // #endif
@@ -221,7 +218,6 @@ export default {
                 }
               })
               .catch(err => {
-                console.log(err)
                 uni.showToast({
                   title: res.message || '订阅失败，请稍后再试！',
                   icon: "none"

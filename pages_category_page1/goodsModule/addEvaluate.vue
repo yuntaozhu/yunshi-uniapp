@@ -19,7 +19,7 @@
 				</view>
 				<view class="fs26 mar-top-40 mar-left-20 addEvaluateText">追加评价</view>
 				<view class="textarea-box mar-top-20 mar-left-20">
-					<textarea class="textarea-text" v-model="commentText" placeholder-style="color:#BBBBBB" placeholder="亲，有什么需要追加的吗"/>
+					<textarea class="textarea-text" v-model="commentText" maxlength="200" placeholder-style="color:#BBBBBB" placeholder="亲，有什么需要追加的吗"/>
 				</view>
 				<view class="mar-left-10 mar-top-10 evaluateImg">
 					<u-upload :action="action" ref="uUpload" :limitType="['png', 'jpg', 'jpeg', 'webp', 'gif', 'image']" :header="headerToken" :form-data="formData"></u-upload>
@@ -56,7 +56,7 @@
       if(options.detail){
         const params = this.$getJumpParam(options)
         this.addCommentVOList = params.addCommentVOList
-        this.orderProductVO = options.type===1?this.addCommentVOList.skus[0]:this.addCommentVOList
+        this.orderProductVO = params.type===1?this.addCommentVOList.skus[0]:this.addCommentVOList
         this.productImage = this.orderProductVO.image
       }else{
         if(options.type == 1){

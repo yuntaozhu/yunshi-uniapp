@@ -37,14 +37,12 @@ service.interceptors.request.use(config => {
 // 响应拦截器
 service.interceptors.response.use(
   (response) => {
-    console.log(response)
     if (response.data.code && response.data.code !=='200' && response.data.message) {
       Vue.prototype.$message.error(response.data.message)
     }
     return response
   },
   err => {
-    console.log(err)
     // 失败响应
     if (err && err.response) {
       switch (err.response.status) {
@@ -107,7 +105,6 @@ service.interceptors.response.use(
 //真机获取
 service.defaults.adapter = function (config) {
   return new Promise((resolve, reject) => {
-    console.log(config)
     var settle = require('axios/lib/core/settle');
     var buildURL = require('axios/lib/helpers/buildURL');
     uni.request({

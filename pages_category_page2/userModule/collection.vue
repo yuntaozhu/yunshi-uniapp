@@ -313,7 +313,6 @@
 					this.cancelCollect(this.ids)
 					this.storeCollect.splice(this.currentIndex, 1);
 				} else {
-					console.log('删除')
 					let ids = []
 					this.storeCollect.forEach((value, index) => {
 						if (value.selected == 1) {
@@ -387,7 +386,6 @@
 			},
 			// 打开删除层
 			productActionClick() {
-				console.log('打开')
 				this.cardModal = true
 				this.paoductDelSubmit = true
 				this.shopDelSubmit = false
@@ -464,7 +462,6 @@
         if(shopActionSwipe){
           shopActionSwipe.forEach(item=>item.close())
         }
-        console.log(shopActionSwipe)
 			},
 			finishClick() {
 				this.allCheckShow = false
@@ -487,7 +484,6 @@
 						this.productPage = this.productPage
 					} else {
 						this.productCollect = this.productCollect.concat(res.data.list)
-            console.log(this.productCollect, 222)
 
             this.productCollect.forEach((value, index) => {
 							value['show'] = false

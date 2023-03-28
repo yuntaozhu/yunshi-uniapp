@@ -131,7 +131,6 @@
     },
 		onBackPress(e) {
 			if (e.from === 'navigateBack') {
-			  console.log(1)
 				return false;
 			}
 			this.back();
@@ -157,7 +156,6 @@
 				})
 			},
 			back(){
-        console.log(2)
 				uni.switchTab({
 					url:'../../pages/tabbar/user/index'
 				});

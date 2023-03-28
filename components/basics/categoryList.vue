@@ -49,7 +49,7 @@ export default {
 
 <style lang="scss" scoped>
 .tabs-nav-warp{
-  margin-top: 20rpx;
+  //margin-top: 20rpx;
   padding:0 30rpx;
   .tabs-nav{
     .ul{
@@ -60,7 +60,8 @@ export default {
         font-size: 30rpx;
         color: #999999;
         position: relative;
-        padding-bottom: 18rpx;
+        padding: 18rpx 0;
+        box-sizing: border-box;
         &:first-child{
           margin-left: 0;
         }

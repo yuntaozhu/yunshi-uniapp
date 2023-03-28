@@ -8,28 +8,28 @@
           <view class="ul">
             <!-- #ifdef APP-PLUS -->
             <view class="li" @click="share('weixin')">
-              <image class="icon" src="../static/images/share/weixin2x.png"></image>
+              <image class="icon" src="https://ceres.zkthink.com/static/img/share/weixin2x.png"></image>
               <label class="label">微信</label>
             </view>
             <view class="li" @click="share('weixinpyq')">
-              <image class="icon" src="../static/images/share/pyq.png"></image>
+              <image class="icon" src="https://ceres.zkthink.com/static/img/share/pyq.png"></image>
               <label class="label">朋友圈</label>
             </view>
             <!-- #endif -->
             <!-- #ifdef MP-WEIXIN -->
             <view class="li">
               <button open-type="share" @share='onShareAppMessage' :data-obj="wxShareData" class="share-button">
-                <image class="icon" src="../static/images/share/forward.png"></image>
+                <image class="icon" src="https://ceres.zkthink.com/static/img/share/forward.png"></image>
                 <label class="label">好友</label>
               </button>
             </view>
             <view class="li" @click="share('weixinpyq')">
-              <image class="icon" src="../static/images/share/pyq.png"></image>
+              <image class="icon" src="https://ceres.zkthink.com/static/img/share/pyq.png"></image>
               <label class="label">朋友圈</label>
             </view>
             <!-- #endif -->
             <view class="li" @click="share('lianjie')">
-              <image class="icon" src="../static/images/share/lianjie.png"></image>
+              <image class="icon" src="https://ceres.zkthink.com/static/img/share/lianjie.png"></image>
               <label class="label">链接</label>
             </view>
           </view>
@@ -97,12 +97,10 @@ export default {
       wxShareData: {
         url: ''
       }
-      // longUrl: ''
     };
   },
   mounted() {
-    // this.longUrl = API.shareLink + '/#' + this.url
-    // console.log(this.longUrl, this.url
+
     this.wxShareData = this.url
   },
   computed:{
@@ -132,7 +130,7 @@ export default {
         success: () => {
         },
         fail: (err) => {
-          console.log("err",err)
+          throw Error(err)
         }
       })
       // #endif
@@ -183,7 +181,6 @@ export default {
             data;
         if (view) {
           data = view.data;
-          console.log('是否重写分享方法', data.isOverShare);
           if (!data.isOverShare) {
             data.isOverShare = true;
             view.onShareAppMessage = function () {

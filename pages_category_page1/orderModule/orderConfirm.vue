@@ -488,7 +488,6 @@ export default {
   },
   onLoad(options) {
     this.getQuery()
-    console.log(options, 'options')
     this.type = options.type
     if (options.receiveId) {
       this.receiveId = options.receiveId
@@ -500,7 +499,6 @@ export default {
     }
     if (uni.getStorageSync("skuItemDTOList") != "") {
       this.skuItemDTOList = uni.getStorageSync('skuItemDTOList')
-      console.log(this.skuItemDTOList, '66666')
       if (this.skuItemDTOList[0].shopDiscountId > 0) {
         this.sumitType = 4
       } else if (this.skuItemDTOList[0].shopSeckillId > 0) {
@@ -509,7 +507,6 @@ export default {
       this.getSettlement(false)
     } else if (uni.getStorageSync("skuItemList") != "") {
       this.skuItemList = uni.getStorageSync("skuItemList")
-      //console.log(this.skuItemList, 999)
       this.shopGroupWorkId = this.skuItemList.shopGroupWorkId
       this.sumitType = this.skuItemList.type
       this.collageId = this.skuItemList.collageId
@@ -538,7 +535,6 @@ export default {
       }, 'GET').then(res => {
         this.integralRatio = parseFloat(res.data.dictDescribe)
       }).catch(res => {
-        console.log('平台端未配置积分兑换比例(1积分抵扣多少金额)')
       })
     },
     // 积分价格计算
@@ -581,7 +577,6 @@ export default {
           receiveId: this.receiveId
         }
         // composeId: 68
-        console.log(this.skuItemDTOList, 'this.skuItemDTOList')
       }
       NET.request(_url, _data, 'POST').then(res => {
         uni.hideLoading()
@@ -780,7 +775,6 @@ export default {
     },
     // 店铺优惠券选择
     shopCouponItemTap(index, coupon) {
-      console.log(index,coupon.checked)
       // 取消选择优惠券
       if (coupon.checked) {
         coupon.checked = false
@@ -825,7 +819,6 @@ export default {
 
         this.isShopCoupons = false
         let useCoupon = this.useShopCoupon(this.shopIndex, index)
-        console.log(useCoupon)
         if (useCoupon) {
           // 确认使用当前点击的商家券，先将所有的商家券取消选中
           for (let i = 0; i < this.selectShopCoupon.length; i++) {
@@ -955,7 +948,6 @@ export default {
       this.integralNum = 0
       let shopSumPrice = 0
       let shopsLen = this.settlement.shops.length
-      console.log(this.settlement, 'fsfsfs')
       for (let i = 0; i < shopsLen; i++) {
         this.totalPrice += parseFloat(this.settlement.shops[i].totalAfterDiscount)
         shopSumPrice += parseFloat(this.settlement.shops[i].totalAfterDiscount)

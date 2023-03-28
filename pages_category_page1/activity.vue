@@ -61,7 +61,6 @@
 					timestamp: timestamp
 				}, 'get').then(res => {
 					uni.stopPullDownRefresh();
-					console.log(res)
 					if (res.code == 200) {
 						this.productList = res.data.list
 					} else {
@@ -80,7 +79,6 @@
 			},
 			//商品详情
 			goodsDateils(shopId, productId, skuId) {
-				console.log(111)
 				uni.navigateTo({
 					url: './goodsModule/goodsDetails?shopId=' + shopId + '&productId=' + productId + '&skuId=' +
 						skuId

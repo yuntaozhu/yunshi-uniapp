@@ -33,8 +33,8 @@
 		</view>
 		<view class="content-text">
 			<view class="agreement">
-				<image v-if="!agreement" src="../../static/images/none.png" mode="" @click="agreement=true"></image>
-				<image v-else src="../../static/images/solid.png" mode="" @click="agreement=false"></image>
+				<image v-if="!agreement" src="https://ceres.zkthink.com/static/root/none.png" mode="" @click="agreement=true"></image>
+				<image v-else src="https://ceres.zkthink.com/static/root/solid.png" mode="" @click="agreement=false"></image>
 				<text class="font-color-999">我已阅读并同意</text>
 				<text class="font-color-C5AA7B" @click="protocol('app_user_agreement')">《账户注销重要提醒》</text>
 			</view>

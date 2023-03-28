@@ -11,10 +11,10 @@
     <!-- #endif -->
 		<view class="addressBack-box">
 			<view class="consignee-box bor-line-F7F7F7">
-				<input v-model="addressData.username" class="fs28"  placeholder-class="consignee" placeholder="收货人" />
+				<input v-model="addressData.username" maxlength="20" class="fs28"  placeholder-class="consignee" placeholder="收货人" />
 			</view>
 			<view class="iphoneNum-box bor-line-F7F7F7">
-				<input type="number" v-model="addressData.phone" class="fs28" placeholder-class="iphoneNum" placeholder="手机号码" />
+				<input type="number" v-model="addressData.phone" maxlength="11" class="fs28" placeholder-class="iphoneNum" placeholder="手机号码" />
 			</view>
 			<view @click="locationClick" class="location-box bor-line-F7F7F7 flex-row-plus flex-sp-between flex-items">
 				<view class="fs28 location">所在地</view>
@@ -26,7 +26,7 @@
 				</view>
 			</view>
 			<view class="detailAddress-box">
-				<input class="fs28" v-model="addressData.address" placeholder-class="detailAddress" placeholder="详细地址：如道路、门牌号、小区、楼栋号、单元等" />
+				<input class="fs28" v-model="addressData.address" maxlength="60" placeholder-class="detailAddress" placeholder="详细地址：如道路、门牌号、小区、楼栋号、单元等" />
 			</view>
 		</view>
 		<view class="addressTagBack-box">
@@ -118,7 +118,6 @@ const API = require('../../config/api')
 		},
 		onLoad(options) {
 			this.type = options.type
-			console.log(this.type,'this.type')
 			if(options.ordertype == 1){
 				this.ordertype = 1
 			}

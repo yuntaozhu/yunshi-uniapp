@@ -148,7 +148,6 @@
 							}
 							that.loginSuc(res.data, data)
 						}).catch(err => {
-							console.log('wxLogin failed', err)
 						})
 					},
 					fail: function(err) {
@@ -203,7 +202,6 @@
 						'buyerUserId': res.data.buyerUserId
 					})
 				}).catch(err => {
-					console.log('alipayLogin failed', err)
 				})
 			},
 			goToHome() {
@@ -272,7 +270,6 @@
 						uni.removeStorageSync('salesId');
 						uni.removeStorageSync('shopId');
 					}).catch(err => {
-						console.log('login bindSalesCustomer error')
 						console.dir(err)
 					})
 				}

@@ -10,7 +10,7 @@
 				<image class="loginIcon" src="https://ceres.zkthink.com/static/images/phone.png"></image>
 			</view>
 			<view>
-				<input v-model="userInfo.phone" placeholder-class="iphoneNum-input" type="number" disabled
+				<input v-model="userInfo.phone" maxlength="11" placeholder-class="iphoneNum-input" type="number" disabled
 					placeholder="请输入您的手机号" />
 			</view>
 		</view>
@@ -20,7 +20,7 @@
 					<image class="loginIcon" src="https://ceres.zkthink.com/static/images/code.png"></image>
 				</view>
 				<view>
-					<input v-model="code" placeholder-class="codeNum-input" placeholder="请输入验证码" />
+					<input v-model="code" maxlength="6" placeholder-class="codeNum-input" placeholder="请输入验证码" />
 				</view>
 			</view>
 			<view :class="disabled === true ? 'on' : ''" :disabled="disabled" class="getcode" @click="codede">{{text}}
@@ -46,7 +46,6 @@
 		mixins: [sendVerifyCode],
 		onLoad() {
 			this.userInfo = uni.getStorageSync('storage_userInfo')
-			console.log(this.userInfo)
 		},
 		methods: {
 
@@ -70,7 +69,6 @@
 			// 账户注销
 			unsubscribe() {
 				NET.request(API.delUser + this.code, {}, "delete").then(res => {
-					console.log(res)
 					if (res.code == '200') {
 						// uni.showLoading({
 						// 	mask: true,

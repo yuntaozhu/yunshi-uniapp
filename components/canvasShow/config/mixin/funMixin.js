@@ -19,7 +19,6 @@ export const tool = {
     }
   },
   mounted() {
-    // console.log('加载了组件')
   },
   methods: {
     ...mapMutations({
@@ -28,7 +27,6 @@ export const tool = {
     // 判断url
     jumpLink (linkObj) {
       var link = ''
-      console.log(linkObj.data)
       if(linkObj && linkObj.typeText && linkObj.data){
         switch (linkObj.typeText) {
           case '类别':
@@ -198,7 +196,6 @@ export const tool = {
     // },
     // 加入购物车
     addCart(id){
-      console.log(id)
     }
   }
 }

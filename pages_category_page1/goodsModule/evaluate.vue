@@ -22,7 +22,7 @@
 					<label style="width: 80upx;" v-else>非常好</label>
 				</view>
 				<view class="textarea-box mar-top-40 mar-left-20">
-					<textarea class="textarea-text" v-model="commentText" placeholder-style="color:#BBBBBB" placeholder="感谢您对宝贝的看法"/>
+					<textarea class="textarea-text" v-model="commentText" maxlength="200" placeholder-style="color:#BBBBBB" placeholder="感谢您对宝贝的看法"/>
 				</view>
 				<view class="mar-left-10 evaluateImg">
 					<u-upload :action="action" ref="uUpload" :limitType="['png', 'jpg', 'jpeg', 'webp', 'gif', 'image']" :header="headerToken" :form-data="formData"></u-upload>

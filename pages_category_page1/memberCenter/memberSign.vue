@@ -175,7 +175,6 @@
 					1)
 				const date = new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()
 				this.currentData = year + '-' + month + '-' + date
-				console.log(this.currentData, 'currentDate')
 			}
 		}
 	}

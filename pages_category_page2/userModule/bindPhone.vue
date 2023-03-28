@@ -22,7 +22,7 @@
           <image class="loginIcon" src="https://ceres.zkthink.com/static/images/phone.png"></image>
         </view>
         <view>
-          <input v-model="phone" placeholder-class="iphoneNum-input" type="number" placeholder="请输入您的手机号" />
+          <input v-model="phone" maxlength="11" placeholder-class="iphoneNum-input" type="number" placeholder="请输入您的手机号" />
         </view>
       </view>
       <view class="flex-row-plus mar-top-20">
@@ -31,7 +31,7 @@
             <image class="loginIcon" src="https://ceres.zkthink.com/static/images/code.png"></image>
           </view>
           <view>
-            <input v-model="code" placeholder-class="codeNum-input" placeholder="请输入验证码" />
+            <input v-model="code" maxlength="6" placeholder-class="codeNum-input" placeholder="请输入验证码" />
           </view>
         </view>
         <view :class="disabled === true ? 'on' : ''" :disabled="disabled" class="getcode" @click="codede">{{text}}
@@ -155,7 +155,6 @@
 					},
 					fail: (res) => {
             this.$hideLoading()
-						console.log('getPhoneNumber failed', res);
 						uni.hideLoading()
 						uni.showToast({
 							title: '验证失败',
@@ -165,11 +164,9 @@
 				});
 			},
 			onAuthError() {
-				console.log('onAuthError')
 			},
 			getPhoneNumber(e) {
 				if (e.detail.errMsg === "getPhoneNumber:ok") {
-					console.log(e)
 					uni.login({
 						provider: 'weixin',
 						success: (res) => {
@@ -185,12 +182,10 @@
 								}, 'POST').then(res2 => {
 									const item = res2.data
 									uni.setStorageSync('storage_key', item);
-									console.log(uni.getStorageSync('storage_key'))
 									this.bindSalesCustomer()
 									this.gotoHome()
 								}).catch(res => {})
 							}).catch(err => {
-								console.log(err, 22222)
 							})
 						},
 						fail: () => {
@@ -235,7 +230,6 @@
 					'buyerUserId': this.buyerUserId,
 					'encrypted': encrypted
 				}, 'POST').then(res => {
-					console.log('UpdateAliPhone res: ', res)
 					const item = res.data
 					uni.setStorageSync('storage_key', item);
 					this.bindSalesCustomer()
@@ -255,7 +249,6 @@
 				const salesId = uni.getStorageSync('salesId')
 				if (shopId && salesId) {
 					// 多次调用绑定方法，不提示任何信息即可
-					console.log('bindPhone bindSalesCustomer')
 					NET.request(API.BindSalesCustomer, {
 						shopId: shopId,
 						distributorId: salesId
@@ -263,7 +256,6 @@
 						uni.removeStorageSync('salesId');
 						uni.removeStorageSync('shopId');
 					}).catch(res => {
-						console.log('bindPhone bindSalesCustomer error')
 						console.dir(res)
 					})
 				}

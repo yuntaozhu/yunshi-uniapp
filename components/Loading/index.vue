@@ -29,7 +29,6 @@ export default {
   },
 
   mounted() {
-    console.log(getCurrentPages())
     //#ifdef H5
     //#endif
   },

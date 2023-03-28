@@ -223,7 +223,6 @@
 			this.getInviteSpell()
 		},
 		onLoad(options) {
-			console.log(options,'options')
 			this.isIphone = getApp().globalData.isIphone;
 			let item = getApp().globalData.inviteSpellShareIte
 			if (item) {
@@ -392,7 +391,6 @@
 				this.$refs.shareSpell.shareShow = false
 			},
 			goinvitePoster(){
-			  console.log(this.inviteSpell, 'test')
 				let data = {
 					image:this.inviteSpell.image,
 					headImage:this.inviteSpell.headImage,

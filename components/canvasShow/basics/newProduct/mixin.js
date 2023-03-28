@@ -53,7 +53,7 @@ export const commonMixin = {
         if (_.componentContent.productData.sourceType === '1') {
           if(_.componentContent.productData.productIdList && _.componentContent.productData.productIdList.length>0){
             _.sendReq({
-              url: `${api.getProducts}?page=1&pageSize=99&ids=${_.componentContent.productData.productIdList}`,
+              url: `${api.getProductsV2}?page=1&pageSize=99&ids=${_.componentContent.productData.productIdList}`,
               method: 'GET'
             }, (proRes) => {
               _.productData = proRes.data.list
@@ -61,7 +61,7 @@ export const commonMixin = {
                 _.componentContent.productData.imgTextData = _.productData
               }
               // _.$forceUpdate() // 刷新轮播图
-  
+
             })
           } else {
             _.productData = []
@@ -69,7 +69,7 @@ export const commonMixin = {
         } else if(_.componentContent.productData.sourceType === '2'){
           if(_.componentContent.productData.categoryId) {
             _.sendReq({
-              url: `${api.getProducts}?page=1&pageSize=99&classifyId=${_.componentContent.productData.categoryId}`,
+              url: `${api.getProductsV2}?page=1&pageSize=99&classifyId=${_.componentContent.productData.categoryId}`,
               method: 'GET'
             }, (proRes) => {
               _.productData = proRes.data.list
@@ -81,7 +81,7 @@ export const commonMixin = {
             })
           } else {
             _.productData = []
-  
+
         }
       }
     }

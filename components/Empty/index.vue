@@ -7,8 +7,8 @@
 -->
 <template>
   <view v-if="show" class="empty-content" :style="{
-        paddingTop: this.paddingTop+'rpx',
-        background: this.background
+        paddingTop: paddingTop+'rpx',
+        background: background
       }">
     <image :src="iconUrl" />
     <p class="tips">

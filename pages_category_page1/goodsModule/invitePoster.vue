@@ -104,7 +104,6 @@ export default {
             canvasId: 'posterCanvas', // 画布ID
             success: (res) => {
               this.$hideLoading()
-              console.log(res.tempFilePath, 'test0000')
               that.saveDownload(res.tempFilePath)
             },
             fail: () => {
@@ -120,15 +119,11 @@ export default {
           // #endif
           // #ifdef MP-ALIPAY
           const CanvasContext = my.createCanvasContext('posterCanvas');
-          console.log('kahu', CanvasContext)
           CanvasContext.toTempFilePath({
             success: (res) => {
-              console.log(2222)
-              console.log(res.apFilePath)
               my.saveImage({
                 url: res.apFilePath,
                 success: res => {
-                  console.log('saveImage', res)
                   // uni.hideLoading();
                   this.$hideLoading()
                   uni.showToast({
@@ -170,7 +165,6 @@ export default {
                 url: res.tempFilePath,//网络路径，下载下来
                 success: (res1) => {
                   this.$hideLoading()
-                  console.log(res1)
                   if (res1.statusCode === 200) {
                     // uni.hideLoading();
                     uni.showModal({
@@ -210,17 +204,13 @@ export default {
       // 			title:"图片保存中..."
       // 		})
       this.$showLoading()
-      console.log(file, 'test1')
       uni.getImageInfo({
         src: file,
         success: (res1) => {
-          console.log(res1, 'test2')
           // 2-保存图片至相册
-          console.log(2222)
           uni.saveImageToPhotosAlbum({ // 存成图片至手机
             filePath: res1.path, //画布保存的图片临时文件
             success: (res2) => {
-              console.log(3333)
               this.$hideLoading()
               // uni.hideLoading();
               uni.showToast({
@@ -266,7 +256,6 @@ export default {
         // #ifdef MP-WEIXIN
         this.qrcode = res.data.xcxQrcode
         // #endif
-        console.log(this.qrcode, 'this.qrcode')
         this.getCanvas()
         this.loadingQrcode = false
       }).catch(res => {

@@ -195,7 +195,7 @@ export default {
         }
       }
       if(params.ids || params.classifyId){
-        NET.request(API.getProducts, params, 'GET').then(res => {
+        NET.request(API.getProductsV2, params, 'GET').then(res => {
           uni.hideLoading()
           this.list = this.list.concat(res.data.list)
           if (this.list.length === 0) {

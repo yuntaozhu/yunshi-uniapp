@@ -1,16 +1,8 @@
 <template>
   <view class="container">
     <global-loading />
-    <!-- 骨架屏 -->
-    <u-skeleton
-        el-color="#efefef"
-        bg-color="#fff"
-        :loading="loading && isFirstComeIn"
-        :animation="true"
-    ></u-skeleton>
-    <!-- 商品列表 -->
     <view class="flex-items-plus flex-row search">
-      <view class="searchBg u-skeleton-fillet">
+      <view class="searchBg">
         <view class="searchImg-box flex-items-plus">
           <image
               class="searchImg"
@@ -19,6 +11,7 @@
           <input
               class="search-box"
               v-model="keyWord"
+			  maxlength="20"
               placeholder-class="searchboxPlace"
               placeholder="请输入您想要的宝贝"
           />
@@ -30,7 +23,7 @@
       </view>
     </view>
     <view class="shop-list-nav">
-      <view class="mlr-20  u-skeleton-fillet">
+      <view class="mlr-20">
         <view
             class="nav-item-sort"
             @click="sortTap(1)"
@@ -82,9 +75,18 @@
           </view>
         </view>
       </view>
-
     </view>
-    <view class="listBox u-skeleton">
+    <!-- 骨架 -->
+    <GoodListSkeleton
+        v-if="loading && isFirstComeIn"
+        :loading="loading"
+        :isFirst="isFirstComeIn"
+    />
+    <!-- 商品列表 -->
+    <view
+        class="listBox"
+        v-else
+    >
       <view
           v-for="(item, index) in list"
           :key="index"
@@ -96,10 +98,10 @@
             <view class="itemBox">
               <img
                   :src="item.image"
-                  class="pic-img u-skeleton-fillet default-img"
+                  class="pic-img default-img"
               >
             </view>
-            <view class="itemInfo u-skeleton-fillet">
+            <view class="itemInfo">
               <p>{{ item.productName }}</p>
               <view
                   class="number"
@@ -163,34 +165,22 @@
       </view>
     </view>
 
-    <!-- 搜索为空 -->
-    <view
-        v-if="ifEmpty"
-        class="emptyCart-box flex-items-plus flex-column"
-    >
-      <image
-          class="emptyCart-img"
-          src="https://ceres.zkthink.com/static/images/searchEmpty.png"
-      ></image>
-      <label class="font-color-999 fs26 mar-top-30">搜索不到你要找的宝贝呢</label>
-      <label class="font-color-999 fs26 mar-top-10">换个词试试吧～</label>
-    </view>
+    <!-- 空状态 -->
+    <Empty :show="list.length<=0">
+      <view class="text_center font-color-999 fs26 mar-top-30">搜索不到你要找的宝贝呢</view>
+      <view class="text_center font-color-999 fs26 mar-top-10">换个词试试吧～</view>
+    </Empty>
 
-    <view
-        class="reachBottom"
-        v-if="noMoreData && !ifEmpty"
-    >
-      <image
-          class="reach-icon"
-          src="https://ceres.zkthink.com/static/img/reachBottom.png"
-          mode="widthFix"
-      ></image>
-      <text class="reach-text">这里到底了哦~~</text>
-    </view>
+    <!-- 底部状态 -->
+    <ListBottomTips v-if="!isFirstComeIn" :loading="loading" :type="total<=list.length && total!==0?0:1"  />
   </view>
 </template>
 
 <script>
+import GoodListSkeleton from "@/pages_category_page1/goodsModule/Skeleton/GoodListSkeleton";
+import Empty from "@/components/Empty";
+import ListBottomTips from "@/components/ListBottomTips";
+
 const NET = require('../../utils/request')
 const API = require('../../config/api')
 export default {
@@ -203,17 +193,18 @@ export default {
       page: 1,
       pageSize: 20,
       source: 2,
-      list: [{}, {}, {}, {}, {}, {}, {}, {}, {}],
-      loadingType: 0,
+      list: [],
       sortIndex: 1,
       ifNew: 0,//是否新品
       type: 0,//价格排序条件
       volume: 0,//销量排序条件
-      topLeft: 0,
-      ifEmpty: false,
-      noMoreData: false,
       total: 0
     }
+  },
+  components: {
+    GoodListSkeleton,
+    Empty,
+    ListBottomTips
   },
   onLoad(option) {
     if (option.keyWord) {
@@ -225,36 +216,18 @@ export default {
     this.searchList(1)
   },
   onReachBottom() {
-    if (this.loadingType == 1) {
+    if (this.total <= this.list.length) {
       uni.stopPullDownRefresh()
     } else {
       this.page = this.page + 1
       this.searchList(0)
     }
   },
-  // onPageScroll(e) {
-  // 	this.topLeft = e.scrollTop
-  // },
+
   methods: {
     sortTap(index) {
-      this.loadingType = 0
-      this.noMoreData = false
       this.total = 0
       this.page = 1
-      this.list = [{}, {}, {}, {}, {}, {}, {}, {}, {}]
-      this.isFirstComeIn = true
-      // if(index == 1){
-      //   this.type = 1
-      //   this.volume = 1
-      //   this.sortIndex = index
-      // }else if(index == 2){
-      //   this.type = this.type != 1 ? 1:2
-      //   this.sortIndex = index
-      // }else if(index == 3){
-      //   this.volume = this.volume != 1 ? 1:2
-      //   this.sortIndex = index
-      // }
-      console.log(index, 'index')
       if (index === 1) {
         this.type = 0
         this.volume = 0
@@ -263,10 +236,8 @@ export default {
         if (this.type === 0) {
           this.type = 1
         } else {
-          console.log(this.type, 'this.type1')
           this.type = this.type != 1 ? 1 : 2
         }
-        console.log(this.type, 'this.type2')
       } else if (index === 3) {
         this.type = 0
         if (this.volume === 0) {
@@ -275,6 +246,8 @@ export default {
           this.volume = this.volume != 1 ? 1 : 2
         }
       }
+      this.list = []
+      this.isFirstComeIn = true
       this.sortIndex = index
       this.searchList()
     },
@@ -282,13 +255,9 @@ export default {
       this.keyWord = ''
     },
     searchList(type) {
-      // uni.showLoading({
-      //   mask: true,
-      //   title: '加载中...',
-      // })
       this.loading = true
       if (type == 1) {
-        this.list = [{}, {}, {}, {}, {}, {}, {}, {}, {}]
+        this.list = []
         this.isFirstComeIn = true
         this.page = 1
       }
@@ -303,17 +272,9 @@ export default {
         }, 'GET').then(res => {
           uni.hideLoading()
           this.list = this.list.concat(res.data.list)
-          this.list = this.list.filter(item=>JSON.stringify(item)!=='{}')
           this.total = res.data.total
           this.loading = false
           this.isFirstComeIn = false
-          this.ifEmpty = this.list.length === 0
-          if (this.total === this.list.length) {
-            this.noMoreData = true
-            this.loadingType = 1
-          }
-        }).catch(res => {
-          uni.hideLoading()
         })
       } else {
         NET.request(API.GgetSearchProducts, {
@@ -327,15 +288,9 @@ export default {
           this.loading = false
           this.isFirstComeIn = false
           this.list = this.list.concat(res.data.list)
-          this.list = this.list.filter(item=>JSON.stringify(item)!=='{}')
           this.total = res.data.total
-          this.ifEmpty = this.list.length === 0
-          if (this.total === this.list.length) {
-            this.noMoreData = true
-            this.loadingType = 1
-          }
-        }).catch(res => {
-          uni.hideLoading()
+          this.loading = false
+          this.isFirstComeIn = false
         })
       }
     },
@@ -357,6 +312,9 @@ page {
   background: #f8f8f8;
 }
 
+.text_center{
+  text-align: center;
+}
 // 触底样式
 .reachBottom {
   margin-top: 30rpx;
@@ -382,6 +340,7 @@ input {
 .container {
   height: 100%;
   background: #f8f8f8;
+  position: relative;
 
   .search {
     padding: 20rpx;
@@ -557,7 +516,8 @@ input {
 .shop-list-nav {
 
   background: #fff;
-  .mlr-20{
+
+  .mlr-20 {
     margin: 0 20rpx;
     display: flex;
     flex-direction: row;

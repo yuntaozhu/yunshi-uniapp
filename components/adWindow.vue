@@ -112,17 +112,15 @@ export default {
     },
     // 获取广告信息
     getAd() {
-			console.log(this.triggerCondition,'triggerCondition000000')
       const res = uni.getStorageSync('storage_key'),
           token = res.token;
       setTimeout(() => {
         this.buyerUserId = res.buyerUserId
         this.isLogin = !!token
-        console.log(this.buyerUserId,this.isLogin,this.triggerCondition)
         NET.request(API.GetAd, {
           triggerCondition: this.triggerCondition
         }, 'POST').then(res => {
-          console.log('123131321323', res)
+    
           if (res.data) {
             this.adInfo = res.data[0]
             if (this.adInfo.jumpContent) {
@@ -184,7 +182,6 @@ export default {
     },
     goRoll() {
       this.visible = false
-      console.log(this.jumpContent, 'this.jumpContent')
       switch (this.adInfo.jumpType) {
         case 1:
           uni.navigateTo({

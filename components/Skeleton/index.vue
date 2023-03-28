@@ -1,24 +1,37 @@
 <template>
-  <view v-if="loading" :style="{
+  <view
+      v-if="loading"
+      :style="{
 		width: windowWinth + 'px',
 		height: windowHeight + 'px',
 		backgroundColor: bgColor,
 		position: 'absolute',
 		left: left + 'px',
-		top: top + 'px',
+		top: isFixedOnFather?'0px':top + 'px',
 		zIndex: 100,
 		overflow: 'hidden'
 	}"
-        @touchmove.stop.prevent>
-    <view v-for="(item, index) in RectNodes" :key="$u.guid()" :class="[animation ? 'skeleton-fade' : '']" :style="{
+      @touchmove.stop.prevent
+  >
+
+    <view
+        v-for="(item, index) in RectNodes"
+        :key="$u.guid()"
+        :class="[animation ? 'skeleton-fade' : '']"
+        :style="{
 			width: item.width + 'px',
 			height: item.height + 'px',
 			backgroundColor: elColor,
 			position: 'absolute',
 			left: (item.left - left) + 'px',
 			top:(item.top - top)<0?(item.top - top +windowHeight-80)+ 'px':(item.top - top) + 'px'
-		}"></view>
-    <view v-for="(item, index) in circleNodes" :key="$u.guid()" :class="animation ? 'skeleton-fade' : ''" :style="{
+		}"
+    ></view>
+    <view
+        v-for="(item, index) in circleNodes"
+        :key="$u.guid()"
+        :class="animation ? 'skeleton-fade' : ''"
+        :style="{
 			width: item.width + 'px',
 			height: item.height + 'px',
 			backgroundColor: elColor,
@@ -26,8 +39,13 @@
 			position: 'absolute',
 			left: (item.left - left) + 'px',
 			top:(item.top - top)<0?(item.top - top +windowHeight-80)+ 'px':(item.top - top) + 'px'
-		}"></view>
-    <view v-for="(item, index) in filletNodes" :key="$u.guid()" :class="animation ? 'skeleton-fade' : ''" :style="{
+		}"
+    ></view>
+    <view
+        v-for="(item, index) in filletNodes"
+        :key="$u.guid()"
+        :class="animation ? 'skeleton-fade' : ''"
+        :style="{
 			width: item.width + 'px',
 			height: item.height + 'px',
 			backgroundColor: elColor,
@@ -35,7 +53,8 @@
 			position: 'absolute',
 			left: (item.left - left) + 'px',
 			top:(item.top - top)<0?(item.top - top +windowHeight-80)+ 'px':(item.top - top) + 'px'
-		}">
+		}"
+    >
     </view>
   </view>
 </template>
@@ -50,6 +69,7 @@
  * @property {Boolean} animation 骨架块是否显示动画效果（默认false）
  * @property {String Number} border-radius u-skeleton-fillet类名元素，对应的骨架块的圆角大小，单位rpx（默认10）
  * @property {Boolean} loading 是否显示骨架组件，请求完成后，将此值设置为false（默认true）
+ * @property {Boolean} isFixedOnFather 是否吸住父组件顶部（应用于子组件情况），父组件需要有定位
  * @example <u-skeleton :loading="true" :animation="true"></u-skeleton>
  */
 export default {
@@ -68,7 +88,7 @@ export default {
     // 是否显示加载动画
     animation: {
       type: Boolean,
-      default: false
+      default: true
     },
     // 圆角值，只对类名为u-skeleton-fillet的元素生效，为数值，不带单位
     borderRadius: {
@@ -79,6 +99,15 @@ export default {
     loading: {
       type: Boolean,
       default: true
+    },
+    // 是否吸住父组件顶部
+    isFixedOnFather: {
+      type: Boolean,
+      default: true
+    },
+    marginTop: {
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -108,7 +137,7 @@ export default {
         this.windowHeight = res[0][0].height;
         this.windowWinth = res[0][0].width;
         res[0][0].bottom = res[0][0].height
-        this.top = res[0][0].bottom - res[0][0].height;
+        this.top = this.marginTop + res[0][0].top;
         this.left = res[0][0].left;
       });
       // 矩形骨架元素
@@ -172,7 +201,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style
+    lang="scss"
+    scoped
+>
 
 .skeleton-fade {
   width: 100%;

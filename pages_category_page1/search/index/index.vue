@@ -5,7 +5,7 @@
 			<view class="flex-items-plus flex-row mar-top-20">
 				<view class="searchImg-box flex-items-plus">
 					<image class="searchImg" src="https://ceres.zkthink.com/static/img/searchImg.png"></image>
-					<input class="search-box" v-model="keyWord" placeholder-class="searchboxPlace"
+					<input class="search-box" v-model="keyWord" maxlength="20" placeholder-class="searchboxPlace"
 						placeholder="请输入您想要的宝贝" />
 <!--					<image class="searchClose-icon" @click="searchTextDel"
 						src="https://ceres.zkthink.com/static/img/index/searchClose_icon.png"></image>-->
@@ -131,7 +131,6 @@
 						if (res.confirm) {
 							this.deleteAllSearch()
 						} else if (res.cancel) {
-							console.log('用户点击取消')
 						}
 					}
 				})
@@ -157,7 +156,6 @@
 								this.findSearchHistory()
 							}).catch(res => {})
 						} else if (res.cancel) {
-							console.log('用户点击取消')
 						}
 					}
 				})

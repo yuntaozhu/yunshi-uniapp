@@ -63,7 +63,6 @@
 		},
 		onLoad(list) {
 			this.commentList = JSON.parse(list.commentList)
-      console.log(this.commentList, '1111')
 			this.commentListLength = this.commentList.length
 		},
 		methods: {

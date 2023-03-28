@@ -47,11 +47,11 @@
 		<view class="agreement">
 			<view class="agreement agreement_top" @click="protocol('app_privacy_agreement')">
 				<text>用户隐私协议</text>
-				<image src="../../static/images/right.png" mode=""></image>
+				<image src="https://ceres.zkthink.com/static/root/right.png" mode=""></image>
 			</view>
 			<view class="agreement" @click="protocol('app_user_agreement')">
 				<text>用户服务协议</text>
-				<image src="../../static/images/right.png" mode=""></image>
+				<image src="https://ceres.zkthink.com/static/root/right.png" mode=""></image>
 			</view>
 		</view>
 
@@ -310,11 +310,9 @@
 					success: (res) => {
             this.$hideLoading()
 						let encryptedData = res.response;
-						console.log('encryptedData:', encryptedData)
 						NET.request(API.UpdateAliPhone, {
 							'phone': encryptedData
 						}, 'POST').then(res => {
-							console.log('UpdateAliPhone res: ', res)
 							const item = res.data
 							uni.setStorageSync('storage_key', item);
 							that.phone = item.phone
@@ -325,7 +323,6 @@
 					},
 					fail: (res) => {
             this.$hideLoading()
-						console.log('getPhoneNumber failed', res);
 						uni.hideLoading()
 						uni.showToast({
 							title: '验证失败',
@@ -335,7 +332,6 @@
 				});
 			},
 			onAuthError() {
-				console.log('onAuthError')
 			}
 		},
 		filters: {

@@ -87,7 +87,6 @@
 		},
 		methods: {
 			back() {
-				console.log(this.type,'type')
 				if (this.type == 1 || this.type == 2 ) {
 					uni.navigateTo({
 						url: '../../pages_category_page1/orderModule/orderConfirm?type=' + this.type
@@ -120,7 +119,6 @@
 					pageSize: this.pageSize
 				}, "GET").then(res => {
 					this.addresList = res.data
-					console.log(this.addresList,'this.addresList')
 					if (res.data.list.length == 0) {
 						this.loadingType = 1
 						this.page = this.page
@@ -132,10 +130,8 @@
 					this.addresListlist.forEach((item) => {
 						item.receivePhone = hidden(item.receivePhone, 3, 4)
 					})
-					console.log(this.addresListlist.length,'this.addresListlist')
 					uni.hideLoading();
 				}).catch(err => {
-					console.log(err)
 					uni.hideLoading();
 				})
 			},
@@ -159,7 +155,6 @@
 				let self = this
 				uni.chooseAddress({
 					success(res) {
-						console.log(res, 'fsfsdfs')
 						self.addData['username'] = res.userName
 						self.addData['phone'] = res.telNumber
 						self.addData['ssqText'] = `${res.provinceName}-${res.cityName}-${res.countyName}`
@@ -180,7 +175,6 @@
 						}, 500);
 					},
           fail:(res)=>{
-            console.log('err---选择地址',res)
           }
 				})
 			}

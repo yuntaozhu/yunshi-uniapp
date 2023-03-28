@@ -221,7 +221,6 @@ export default {
     },
     // 跳转到兑换优惠详情
     goExchangeDetail (item) {
-      console.log(item, 'test')
       if (this.memberData.credit < item.credit) {
         this.isConvertible = true
       } else {

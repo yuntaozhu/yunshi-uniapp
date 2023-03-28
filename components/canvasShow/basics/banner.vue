@@ -38,7 +38,6 @@
     },
     computed: {
       bannerList: function () {
-        console.log(this.componentContent)
         return this.componentContent.bannerData.filter(function (item) {
           return item.bannerUrl
         })

@@ -117,7 +117,6 @@ export default {
   onLoad(options) {
     if (options.data) {
       this.currentCoupon = JSON.parse(options.data)
-	  console.log(this.currentCoupon)
       this.getProductList()
     }
   },

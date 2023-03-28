@@ -13,7 +13,7 @@
     </view>
     <view class="questionCent">
       <view class="uni-textarea">
-        <textarea v-model="questionText" placeholder="请说出你的问题..." auto-height />
+        <textarea v-model="questionText" maxlength="200" placeholder="请说出你的问题..." auto-height />
       </view>
 <!--      <view class="anonymous">-->
 <!--		  <view class="flex-row-plus flex-items" @click="changeCheck">-->
@@ -44,7 +44,6 @@
 		},
 		onLoad(params) {
       this.qudata = this.$getJumpParam(params);
-      console.log(this.qudata)
 		},
 		methods: {
 			seeAllFn () {

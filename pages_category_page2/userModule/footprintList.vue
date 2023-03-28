@@ -272,7 +272,6 @@
 			},
 			// 如果打开一个的时候，不需要关闭其他，则无需实现本方法
 			open(index,findex) {
-				console.log('打开')
 				this.footprintList[findex].products[index].show = true;
 				this.footprintList[findex].products.map((val, idx) => {
 					if(index != idx) this.footprintList[findex].products[idx].show = false;
