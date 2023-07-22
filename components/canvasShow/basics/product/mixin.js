@@ -33,6 +33,9 @@ export const commonMixin = {
   data () {
     return {
       productData: [1,2,3,4],
+      pageTotal:0,
+      pageSize:8,
+      currentPage:1,
       loading:true,
       isFirst:true
     }
@@ -40,7 +43,7 @@ export const commonMixin = {
   watch: {
     'componentContent': {
       handler(newVal, oldVal) {
-        this.getData()
+		//this.getData()
       },
       deep: true
     }
@@ -63,10 +66,11 @@ export const commonMixin = {
       if (_.componentContent.productData.sourceType === '1') {
         if(_.componentContent.productData.productIdList && _.componentContent.productData.productIdList.length>0){
           _.sendReq({
-            url: `${api.getProductsV2}?page=1&pageSize=99&ids=${_.componentContent.productData.productIdList}`,
+            url: `${api.getProductsV2}?page=${_.currentPage}&pageSize=${_.pageSize}&ids=${_.componentContent.productData.productIdList}`,
             method: 'GET'
           }, (proRes) => {
-            _.productData = proRes.data.list
+            _.productData = [..._.productData,...proRes.data.list].filter(item=>!!item.productId)
+            _.pageTotal = proRes.data.total
             if(_.isFirst){
               _.componentContent.productData.imgTextData = _.productData
             }
@@ -90,13 +94,23 @@ export const commonMixin = {
               _.componentContent.productData.imgTextData = _.productData
             }
             // _.swiper.update()
+			_.isFirst = false
+			_.loading = false
           })
         } else {
           _.productData = {
             products:[]
           }
+		  _.isFirst = false
+		  _.loading = false
         }
       }
     },
+    loadNext(){
+      if(this.loading)return;
+      if(this.productData.length>=this.pageTotal && this.pageTotal!==0)return
+      this.currentPage ++;
+      this.getData()
+    }
   }
 }
