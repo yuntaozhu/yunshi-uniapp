@@ -1,0 +1,661 @@
+<template>
+  <view class="container">
+    <global-loading />
+    <!-- 骨架屏 -->
+    <u-skeleton
+        el-color="#efefef"
+        bg-color="#fff"
+        :loading="loading && isFirstComeIn"
+        :animation="true"
+    ></u-skeleton>
+    <!-- 商品列表 -->
+    <view class="flex-items-plus flex-row search">
+      <view class="searchBg u-skeleton-fillet">
+        <view class="searchImg-box flex-items-plus">
+          <image
+              class="searchImg"
+              src="https://ceres.zkthink.com/static/img/searchImg.png"
+          ></image>
+          <input
+              class="search-box"
+              v-model="paramsConfig.keyWord"
+              placeholder-class="searchboxPlace"
+              placeholder="请输入您想要的宝贝"
+          />
+        </view>
+        <label
+            class="mar-left-40 fs28"
+            @click=" getProductList(1)"
+        >搜索</label>
+      </view>
+    </view>
+    <view class="shop-list-nav">
+      <view class="mlr-20  u-skeleton-fillet">
+        <view
+            class="nav-item-sort"
+            @click="sortTap(1)"
+        >
+          <text
+              class="nav-title"
+              :class="{'active' : sortIndex === 1}"
+          >默认
+          </text>
+        </view>
+        <view
+            class="nav-item-sort"
+            @click="sortTap(2)"
+        >
+          <text
+              class="nav-title"
+              :class="{'active' : sortIndex === 2}"
+          >价格
+          </text>
+          <view class="r">
+            <view
+                class="arrowUp"
+                :class="{activeUp: paramsConfig.sortType === 1}"
+            ></view>
+            <view
+                class="arrowDown"
+                :class="{activeDown: paramsConfig.sortType === 2}"
+            ></view>
+          </view>
+        </view>
+        <view
+            class="nav-item-sort"
+            @click="sortTap(3)"
+        >
+          <text
+              class="nav-title"
+              :class="{'active' : sortIndex === 3}"
+          >销量
+          </text>
+          <view class="r">
+            <view
+                class="arrowUp"
+                :class="{activeUp: paramsConfig.sortVolume === 1}"
+            ></view>
+            <view
+                class="arrowDown"
+                :class="{activeDown: paramsConfig.sortVolume === 2}"
+            ></view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="listBox u-skeleton">
+      <view
+          v-for="(item, index) in list"
+          :key="index"
+          class="goodsDetails-box flex-display flex-column"
+          @click="jumpToDetail(item)"
+      >
+        <view class="spikeList goodsDetails ">
+          <view class="listItem">
+            <view class="itemBox">
+              <image
+                  :src="item.image"
+                  class="pic-img u-skeleton-fillet default-img"
+              />
+            </view>
+            <view class="itemInfo u-skeleton-fillet">
+              <p>{{ item.productName }}</p>
+              <view
+                  class="number"
+                  v-if="item.number != null"
+              >
+                <view class="numText">已售{{ item.number }}件</view>
+                <view
+                    class="numText"
+                    v-if="item.total !==0 && item.activityType !== 0"
+                >限量{{ item.total }}件
+                </view>
+              </view>
+              <view class="flex-row-plus flex-item mar-top-30">
+                <image
+                    v-if="item.activityType!==0"
+                    class="iconImg"
+                    :src="getProductTypeIcon(item.activityType)"
+                />
+                <view class="font-color-C83732 flex-row-plus">
+                  <b>￥</b>
+                  <label class="fs28">{{ item.price }}</label>
+                </view>
+                <view class="mar-left-30 discountsPriceLine font-color-999">¥{{ item.originalPrice }}</view>
+              </view>
+              <view class="flex-display flex-sp-between flex-row mar-top-20 flex-items shopName">
+                <label class="fs22 font-color-FFEBC4">{{ item.shopName }}</label>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 搜索为空 -->
+    <view
+        v-if="listEmpty"
+        class="emptyCart-box flex-items-plus flex-column"
+    >
+      <image
+          class="emptyCart-img"
+          src="https://ceres.zkthink.com/static/images/searchEmpty.png"
+      ></image>
+      <label class="font-color-999 fs26 mar-top-30">搜索不到你要找的宝贝呢</label>
+      <label class="font-color-999 fs26 mar-top-10">换个词试试吧～</label>
+    </view>
+
+    <view
+        class="reachBottom"
+        v-if="loadOver && !listEmpty"
+    >
+      <image
+          class="reach-icon"
+          src="https://ceres.zkthink.com/static/img/reachBottom.png"
+          mode="widthFix"
+      ></image>
+      <text class="reach-text">这里到底了哦~~</text>
+    </view>
+  </view>
+</template>
+
+
+<script setup>
+import { request } from '@/utils/request'
+import API from "../../config/api";
+import { onLoad, onReachBottom } from '@dcloudio/uni-app';
+import { ref } from "vue";
+
+const loading = ref(false); // 数据是否正在加载
+const isFirstComeIn = ref(true); // 是否是首次进入页面（骨架屏）
+const paramsConfig = ref({
+  page:1,
+  pageSize:20,
+  total:0,
+  keyWord:'',
+  sortType:0, // 价格排序条件
+  sortVolume:0 // 销量排序条件
+})
+const sortIndex = ref(1); // 当前选中了哪个进行排序
+const list = ref(Array.from(new Array(9).keys()).map(item => ({}))); // 数据
+const loadOver = ref(0); // 是否加载完毕 0否1是
+const listEmpty = ref(false)
+
+/**
+ * 排序
+ * @param index 1默认 2价格 3销量
+ */
+function sortTap(index) {
+  resetPage()
+  sortIndex.value = index
+  const selectObj = {
+    0:1,
+    1:2,
+    2:0
+  }
+  // 默认排序
+  if (index === 1) {
+    paramsConfig.value.sortType = paramsConfig.value.sortVolume = 0
+  }
+  // 价格排序
+  if (index === 2) {
+    paramsConfig.value.sortVolume = 0
+    paramsConfig.value.sortType = selectObj[paramsConfig.value.sortType]
+  }
+  // 销量排序
+  if (index === 3) {
+    paramsConfig.value.sortType = 0
+    paramsConfig.value.sortVolume = selectObj[paramsConfig.value.sortType]
+  }
+  getProductList(1)
+}
+
+/**
+ * 重新设置分页
+ */
+function resetPage(){
+  loadOver.value = 0
+  isFirstComeIn.value = true
+  paramsConfig.value.total = 0
+  paramsConfig.value.page = 1
+  list.value = Array.from(new Array(9).keys()).map(item => ({}))
+}
+
+/**
+ * 搜索
+ * @param status 0非首次 1首次
+ */
+function getProductList(status) {
+  loading.value = true
+  if (status === 1) {
+    resetPage()
+  }
+  if (comeInType === 1) {
+    getProductListByClassify()
+  } else {
+    getProductListBySearch()
+  }
+}
+
+/**
+ * 通过分类查询商品
+ */
+async function getProductListByClassify(){
+  const res = await request(API.GetClaasifyProducts, {
+    classifyId: classifyId,
+    type: paramsConfig.value.sortType,
+    volume:paramsConfig.value.sortVolume,
+    productName: paramsConfig.value.keyWord,
+    page: paramsConfig.value.page,
+    pageSize: paramsConfig.value.pageSize
+  }, 'GET')
+  handleAfterGetListData(res.data)
+}
+
+/**
+ * 通过查询查询商品
+ * @returns {Promise<void>}
+ */
+async function getProductListBySearch(){
+  const res = await request(API.GgetSearchProducts, {
+    search: paramsConfig.value.keyWord,
+    type: paramsConfig.value.sortType,
+    volume:paramsConfig.value.sortVolume,
+    page: paramsConfig.value.page,
+    pageSize: paramsConfig.value.pageSize
+  }, 'GET')
+  handleAfterGetListData(res.data)
+}
+
+/**
+ * 处理数据加载完毕后逻辑
+ * @param responseData response数据
+ */
+function handleAfterGetListData(responseData){
+  isFirstComeIn.value = loading.value = false
+  list.value = list.value.concat(responseData.list).filter(item => JSON.stringify(item) !== '{}')
+  paramsConfig.value.total = responseData.total
+  listEmpty.value = list.value.length === 0
+  // 是否加载完毕
+  if (paramsConfig.value.total === list.value.length) {
+    loadOver.value = 1
+  }
+}
+
+/**
+ * 去商品详情
+ * @param item
+ */
+function jumpToDetail({shopId,productId,skuId}){
+  uni.navigateTo({
+    url: `goodsDetails?shopId=${shopId}&productId=${productId}&skuId=${skuId}`
+  })
+}
+
+/**
+ * 根据活动类型获取活动icon
+ * @param activityType
+ * @returns {*}
+ */
+function getProductTypeIcon(activityType){
+  const iconList = {
+    1:'https://ceres.zkthink.com/static/images/groupBuyIcon.png',
+    2:'https://ceres.zkthink.com/static/images/spikeIcon.png',
+    3:'https://ceres.zkthink.com/static/images/discountListIcon.png',
+    4:'https://ceres.zkthink.com/static/images/spikeIcon.png',
+    5:'https://ceres.zkthink.com/static/images/discountListIcon.png',
+    7:'https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png',
+    9:'https://ceres.zkthink.com/static/images/memberCenterIcon.png'
+  }
+  return iconList[activityType]
+}
+
+// ========================================== 生命周期函数 =========================================================
+let comeInType = 0 // 进入页面类型 0普通1分类
+let classifyId = undefined // 如果是分类进入，赋值分类ID进行查询
+onLoad((option) => {
+  paramsConfig.value.keyWord = option.keyWord ?? ''
+  comeInType = option.category3Id?1:0
+  classifyId = option.category3Id ?? undefined
+   getProductList(1)
+})
+onReachBottom(() => {
+  if (loadOver.value === 1) {
+    uni.stopPullDownRefresh()
+  } else {
+    paramsConfig.value.page++
+     getProductList(0)
+  }
+})
+
+
+</script>
+
+<style
+    lang="scss"
+    scoped
+>
+page {
+  background: #f8f8f8;
+}
+
+// 触底样式
+.reachBottom {
+  margin-top: 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .reach-icon {
+    width: 150rpx;
+    height: 150rpx;
+  }
+
+  .reach-text {
+    margin: 20rpx 0;
+    color: #CCCCCC;
+  }
+}
+
+input {
+  padding-left: 80upx;
+}
+
+.container {
+  height: 100%;
+  background: #f8f8f8;
+
+  .search {
+    padding: 20rpx;
+    background: #FFFFFF;
+    border-top: 2rpx solid #F3F4F5;
+    position: relative;
+    z-index: 2;
+  }
+
+  .searchImg-box {
+    position: relative;
+  }
+
+  .emptyCart-box {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+
+    .emptyCart-img {
+      width: 113upx;
+      height: 98upx;
+    }
+  }
+
+  .searchBg {
+    width: 100%;
+    display: flex;
+    background-color: #F7F7F7;
+    align-items: center;
+    height: 78rpx;
+    justify-content: space-between;
+    padding: 0 20rpx;
+
+    label {
+      font-weight: 400;
+      color: #333333;
+    }
+  }
+
+  .searchImg {
+    width: 50upx;
+    height: 50upx;
+    position: absolute;
+    left: 0upx;
+  }
+
+  .search-box {
+    width: 400upx;
+    height: 66upx;
+  }
+
+  .searchboxPlace {
+    font-size: 26upx;
+    color: #A9A9A9;
+    padding-right: 30upx;
+  }
+
+  .searchClose-icon {
+    z-index: 999;
+    width: 40upx;
+    height: 40upx;
+    margin-left: -50upx;
+  }
+
+  .promotion618 {
+    width: 130upx;
+    height: 30upx;
+  }
+
+  .goodsDetails-box {
+    background: #FFFFFF;
+    margin-top: 20rpx;
+    box-sizing: border-box;
+
+    .spikeList {
+      border-bottom: 1upx solid #EDEDED;
+      padding-top: 30rpx;
+      padding-bottom: 30upx;
+      position: relative;
+
+      .listItem {
+        display: flex;
+        border-bottom: 1upx solid #EEEEEE;
+        padding-left: 30rpx;
+
+        .iconImg {
+          width: 58rpx;
+          height: 36rpx;
+        }
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .itemBox {
+          width: 220upx;
+          height: 220upx;
+          margin-right: 30upx;
+
+          image {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .itemInfo {
+          flex: 1;
+
+          p {
+            font-size: 26upx;
+            color: #333333;
+            line-height: 40upx;
+            margin-bottom: 30upx;
+            text-overflow: -o-ellipsis-lastline;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+          }
+
+          .number {
+            color: #999999;
+            font-size: 26upx;
+            display: flex;
+            align-items: center;
+
+            .numText {
+              padding: 0 10rpx;
+              height: 40rpx;
+              line-height: 40rpx;
+              border: 2rpx solid #E4E5E6;
+              color: #C5AA7B;
+              font-size: 20rpx;
+              margin-right: 10rpx;
+            }
+          }
+        }
+      }
+
+      .shopName {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 50rpx;
+        background: #333333;
+        opacity: 1;
+        border-radius: 0 20rpx 20rpx 0;
+        padding: 10rpx 15rpx;
+      }
+    }
+  }
+
+  .listBox {
+    padding: 0 24rpx;
+    box-sizing: border-box;
+
+    .usersBox {
+      margin-top: 20rpx;
+
+      label {
+        padding: 10rpx;
+        border: 2rpx solid #E4E5E6;
+      }
+    }
+  }
+}
+
+.shop-list-nav {
+
+  background: #fff;
+
+  .mlr-20 {
+    margin: 0 20rpx;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 80rpx;
+    line-height: 76rpx;
+  }
+}
+
+.nav-item {
+  flex: 1;
+  font-size: 30rpx;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 80rpx;
+  line-height: 76rpx;
+}
+
+.nav-title {
+}
+
+.nav-item.active {
+  color: #C5AA7B;
+}
+
+.nav-item .line {
+  display: inline-block;
+  width: 80rpx;
+  height: 4rpx;
+  background: #fff;
+  border-radius: 2rpx;
+}
+
+.nav-item.active .line {
+  background: #C5AA7B;
+}
+
+.nav-item.padd-l {
+  padding-left: 20%;
+  box-sizing: border-box;
+}
+
+.active {
+  color: #C5AA7B;
+}
+
+.nav-item.padd-r {
+  padding-right: 20%;
+  box-sizing: border-box;
+}
+
+.nav-item-sort {
+  flex: 1;
+  font-size: 24rpx;
+  color: #222;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 80rpx;
+  line-height: 80rpx;
+}
+
+.nav-item-sort .r {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 5rpx;
+
+  .arrowDown {
+    width: 0;
+    height: 0;
+    border-width: 10rpx;
+    border-style: solid;
+    border-color: #CCCCCC transparent transparent transparent;
+    margin-top: 2rpx;
+  }
+
+  .arrowUp {
+    margin-bottom: 2rpx;
+    width: 0;
+    height: 0;
+    border-width: 10rpx;
+    border-style: solid;
+    border-color: transparent transparent #CCCCCC transparent;
+  }
+
+  .activeDown {
+    border-color: #C5AA7B transparent transparent transparent;
+  }
+
+  .activeUp {
+    border-color: transparent transparent #C5AA7B transparent;
+  }
+}
+
+//.nav-item-sort .r .arrow-img {
+//  width: 32rpx;
+//  height: 32rpx;
+//  padding: 7rpx;
+//  box-sizing: border-box;
+//}
+//// #ifdef MP-ALIPAY
+//.nav-item-sort .r .arrow-img {
+//  width: 16rpx;
+//  height: 16rpx;
+//  padding: 4rpx;
+//  box-sizing: border-box;
+//}
+.search {
+  padding-top: 20rpx;
+}
+
+// #endif
+</style>
