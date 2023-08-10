@@ -1,1 +1,0 @@
-export const liveAppid = 'wx2b03c6e691cd7370'
