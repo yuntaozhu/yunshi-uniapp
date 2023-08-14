@@ -1,7 +1,6 @@
 <template>
   <view class="combinationBox">
     <global-loading />
-
     <view class="topInfo">
       <view class="topBg">
         <swiper class="swiper" :circular="circular" :autoplay="autoplay" :vertical="vertical" :duration="duration">
@@ -117,7 +116,6 @@ const attrList = ref([]);
 const attrValueList = ref([]);
 
 onLoad((option) => {
-  console.log(option.priceId, 'priceId')
   priceId.value = option.priceId
   getSelectByPriceId() // 获取定价
   getSelectProductListByPriceId()
@@ -126,21 +124,24 @@ onLoad((option) => {
 const getSelectByPriceId = async () => {
   try {
     const res = await request(API.selectByPriceId,{
-      priceId: this.priceId
+      priceId: priceId.value
     },'GET')
-    uni.hideLoading()
     ruleList.value = res.data
-  } catch (err) {}
+  } catch (err) {
+    throw new Error(err)
+  }
 }
 
-const showRuleBox = (item, index) => {
+const productId = ref('')
+
+const showRuleBox = async (item, index) => {
   shopId.value = item.shopId
   productId.value = item.productId
   skuId.value = item.skuId
   currentIndex.value = index
+  await getProductSku()
+  await queryProductDetail()
   goosDetailshowFlag.value = true
-  getProductSku()
-  queryProductDetail()
 }
 
 const getSelectProductListByPriceId = async () => {
@@ -169,7 +170,7 @@ const goodsDateils = (shopId,productId,skuId) => {
 //获取商品详情
 const queryProductDetail = async () => {
   try {
-    const res = request(API.QueryProductDetail, {
+    const res = await request(API.QueryProductDetail, {
       shopId: shopId.value,
       productId: productId.value,
       skuId: skuId.value,
@@ -192,14 +193,13 @@ const queryProductDetail = async () => {
  */
 const getProductSku = async () => {
   try {
-    const res = request(API.QueryProductSku, {
+    const res = await request(API.QueryProductSku, {
       skuId: skuId.value,
       productId: productId.value
     }, 'GET')
     skuProdList.value = res.data
     attrList.value = res.data.names
     attrValueList.value = res.data.names[0].values
-    console.log(attrValueList.value[0], 'arr')
     //渲染商详之后，默认先选中第一个规格
     colorActiveClick(attrValueList.value[0], 0, 0)
     skuProdId.value = skuId.value
@@ -208,17 +208,21 @@ const getProductSku = async () => {
     stockNumber.value = res.data.stockNumber
     detailList.value.ifHuabei = res.data.ifHuabei
     // this.$forceUpdate()
-  } catch (err) {}
+  } catch (err) {
+    throw new Error(err)
+  }
 }
 /**
  * 颜色选中事件
  */
 const colorActiveClick = (res, index, resIndex) => {
+  skuImg.value = ''
+  attrItemIdArr.value = []
   selectArr.value[index] = res
   subIndex.value[index] = resIndex
   attrItemIdArr.value[index] = res.valueCode
   checkItem()
-  checkItemDataClick(t.attrItemIdArr)
+  checkItemDataClick(attrItemIdArr.value)
 }
 
 const checkItemDataClick = (attrItemIdArr) => {
@@ -257,6 +261,11 @@ const checkItemDataClick = (attrItemIdArr) => {
       }
     }
   }
+  // 单规格
+  if(currentCode==='' && Object.keys(mapinfo)[0] === '单款项'){
+    skuImg.value =mapinfo['单款项'].image
+  }
+
 }
 
 const checkItem = () => {

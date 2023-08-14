@@ -1,6 +1,6 @@
 import api from '../../config/api'
 import {
-  funMixin
+  funMixin,
 } from '../../config/mixin'
 import {
   ref,
@@ -13,7 +13,8 @@ export default function (componentContent, typeId, shopId) {
   const {
     sendReq,
     jumpProductDetail,
-    jumpGroupWorks
+    jumpGroupWorks,
+    jumpDiscount
   } = funMixin()
   const value = ref(100)
   const productData = ref({
@@ -87,6 +88,7 @@ export default function (componentContent, typeId, shopId) {
     productData,
     count,
     jumpProductDetail,
-    jumpGroupWorks
+    jumpGroupWorks,
+    jumpDiscount
   }
 }

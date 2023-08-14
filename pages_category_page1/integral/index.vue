@@ -167,10 +167,11 @@ const GetUser = async () => {
 }
 const getIntegralList = async () => {
   try {
-    const res = request(API.selectCreditRecord, integralInfo.value, 'POST')
+    const res = await request(API.selectCreditRecord, integralInfo.value, 'POST')
     ifShow.value = true
     integralRecord.value = res.data.list
   } catch (err) {
+    throw Error(err)
   }
 }
 
@@ -179,6 +180,7 @@ const getCreditCouponList = async () => {
   request(API.selectCreditCouponList, couponListInfo.value, 'POST').then(res => {
     creditCouponList.value = res.data.list
   }).catch(res => {
+    throw Error(res)
   })
 }
 

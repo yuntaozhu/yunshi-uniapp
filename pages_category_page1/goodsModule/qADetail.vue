@@ -17,7 +17,7 @@
       <view class="qaTitBox">
         <view class="qaTit"><i>问</i>
           <h3>{{ detailList.problem }}</h3></view>
-        <view class="qaTitTime"><img :src="detailList.headImage" />
+        <view class="qaTitTime"><image :src="detailList.headImage" />
           <span class="qaName">{{ detailList.name }}</span>
           <span class="qaTimeInfo">{{ detailList.createTime }}</span></view>
       </view>
@@ -32,10 +32,10 @@
         <view class="answerItem">
           <view class="itemTit">
             <view class="itemAvatarBox">
-              <img
+              <image
                   :src="item.headImage"
                   alt=""
-              >
+              />
               <span class="answerName">{{ item.name }}</span>
             </view>
             <view class="answerTime">{{ item.createTime }}</view>
@@ -209,7 +209,7 @@
         display: flex;
         align-items: center;
 
-        img {
+        image {
           width: 44upx;
           height: 44upx;
           margin-right: 20upx;
@@ -251,7 +251,7 @@
           .itemAvatarBox {
             display: flex;
 
-            img {
+            image {
               width: 46upx;
               height: 46upx;
               margin-right: 20upx;

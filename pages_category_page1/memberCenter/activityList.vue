@@ -42,7 +42,7 @@
     <view class="spikeList">
       <view class="listItem" v-for="(item,index) in getDiscount" :key="index">
         <view class="itemBox">
-          <img :src="item.image">
+          <image :src="item.image" />
         </view>
         <view class="itemInfo">
           <p>{{item.productName}}</p>
@@ -298,7 +298,7 @@ page {
         width: 260upx;
         height: 260upx;
         margin-right: 30upx;
-        img {
+        image {
           width: 100%;
           height: 100%;
         }

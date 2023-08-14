@@ -2,6 +2,8 @@ import api from '../../config/api'
 import {
   funMixin
 } from '../../config/mixin'
+const { sendReq} = funMixin()
+
 import {
   ref,
   onMounted,
@@ -9,7 +11,6 @@ import {
 
 export default function (componentContent, shopId) {
   const {
-    sendReq,
     jumpProductDetail,
     jumpCombination
   } = funMixin()
@@ -31,7 +32,7 @@ export default function (componentContent, shopId) {
         method: 'GET',
         url: `${api.getPrices}?shopId=${shopId.value}&ids=${componentContent.value.priceId}&page=1&pageSize=10`,
       }
-      this.sendReq(params, (res) => {
+      sendReq(params, (res) => {
         if( res.data.length > 0){
           productData.value = res.data[0]
         }
@@ -45,6 +46,7 @@ export default function (componentContent, shopId) {
   }
 
   return {
+    getData,
     productData,
     jumpProductDetail,
     jumpCombination

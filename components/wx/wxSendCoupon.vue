@@ -132,9 +132,9 @@ const receiveCoupon = async () => {
           try {
             const res = await request(API.takeBatchCoupon, params, 'POST')
             if (res.code === '200') {
-              uni.showToast({
-                title:'领取成功',
-              })
+              // uni.showToast({
+              //   title:'领取成功',
+              // })
               emits('success')
               if(!cParams.value){
                 emits('closeAd')

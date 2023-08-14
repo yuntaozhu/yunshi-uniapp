@@ -103,7 +103,7 @@ const props = defineProps({
   }
 })
 const { typeId, shopId, componentContent } = toRefs(props)
-const { productData, jumpProductDetail, jumpGroupWorks } = discountMixin(componentContent, typeId, shopId)
+const { productData, jumpProductDetail, jumpGroupWorks,jumpDiscount } = discountMixin(componentContent, typeId, shopId)
 
 const swiperCurrent = ref(0)
 

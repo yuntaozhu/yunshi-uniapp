@@ -549,7 +549,7 @@
         id
       }, 'get').then(res => {
         if (res.code === '' && res.data.corpId && res.data.url) {
-          shopids.push(shopId.value)
+          shopids.push(id.value)
           corpIds.push(res.data.corpId)
           urls.push(res.data.url)
 

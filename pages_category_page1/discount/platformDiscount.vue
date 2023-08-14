@@ -43,7 +43,7 @@
     <view class="spikeList mar-top-20">
       <view class="listItem" v-for="(item,index) in getDiscount" :key="index">
         <view class="itemBox">
-          <img :src="item.productImage">
+          <image :src="item.productImage" />
         </view>
         <view class="itemInfo">
           <p>{{item.productName}}</p>
@@ -135,10 +135,10 @@ const getDiscountInfo = async () => {
     dateformat(time.value)
     countDown()
   } catch (err) {
-    uni.showToast({
-      title:'失败',
-      icon:"none"
-    })
+    // uni.showToast({
+    //   title:'失败',
+    //   icon:"none"
+    // })
   }
 }
 /**
@@ -267,23 +267,23 @@ const dateformat = (micro_second) => {
   // 小时
   let hr = Math.floor(second / 3600 % 24);
   // 分钟
-  let min = Math.floor(second / 60 % 60);
+  let mins = Math.floor(second / 60 % 60);
   // 秒
-  let sec = Math.floor(second % 60);
+  let secs = Math.floor(second % 60);
   hou.value = hr + day * 24
-  min.value = min
-  sec.value = sec
+  min.value = mins
+  sec.value = secs
 }
 
 const countDown = () => {
   let timeOut = setTimeout(() => {
-    let hou = parseInt(hou.value + days.value * 24);
-    let min = parseInt(min.value);
-    let sec = parseInt(sec.value);
+    let hous = parseInt(hou.value + days.value * 24);
+    let mins = parseInt(min.value);
+    let secs = parseInt(sec.value);
 
-    let netxSec = sec - 1;
-    let netxMin = min
-    let netxHou = hou;
+    let netxSec = secs - 1;
+    let netxMin = mins
+    let netxHou = hous;
 
     if (netxHou == 0 && netxMin == 0 && netxSec == -1) {
       clearTimeout(timeOut)
@@ -307,7 +307,6 @@ const countDown = () => {
       hou.value = timeFormat(netxHou)
       min.value = timeFormat(netxMin)
       sec.value = timeFormat(netxSec)
-      timeOut.value = timeOut
       countDown();
     }
   }, 1000)
@@ -404,7 +403,7 @@ page {
           width: 260upx;
           height: 260upx;
           margin-right: 30upx;
-          img {
+          image {
             width: 100%;
             height: 100%;
           }

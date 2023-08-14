@@ -16,14 +16,14 @@
         </view>
         <view class="fs26 mar-top-40 mar-left-20 addEvaluateText"><label>*</label>举证照片</view>
         <view class="mar-left-10 mar-top-10 evaluateImg">
-          <u-upload
+          <Upload
               upload-text="上传凭证"
               :action="action"
               ref="uUpload"
               :limitType="['png', 'jpg', 'jpeg', 'webp', 'gif', 'image']"
               :header="headerToken"
               :form-data="formData"
-          ></u-upload>
+          ></Upload>
         </view>
       </view>
     </view>
@@ -42,6 +42,7 @@ import API from "../../config/api";
 import { ref } from "vue";
 import { onLoad, onReady } from "@dcloudio/uni-app";
 import { request } from "@/utils/request";
+import Upload from '@/uni_modules/vk-uview-ui/components/u-upload/u-upload.vue'
 
 const addCommentVOList = ref({})
 const orderProductVO = ref({})

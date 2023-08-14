@@ -73,12 +73,13 @@ const props = defineProps({
   },
 });
 const { shopId, componentContent } = toRefs(props);
-const { productData, jumpProductDetail, jumpCombination } = commonMixin(componentContent, shopId);
+const { productData, jumpProductDetail, jumpCombination} = commonMixin(componentContent, shopId);
 const swiperCurrent = ref(0)
 
 function swiperChange(e) {
   swiperCurrent.value = e.detail.current;
 }
+
 </script>
 
 <style lang="scss" scoped>

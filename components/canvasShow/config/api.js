@@ -2,8 +2,8 @@
 
 // 获取当前环境变量 true => 生产环境 false => 开发环境
 // const BASEURL = process.env.VUE_APP_DOMAIN_PREFIX
-// const BASEURL = (process.env.NODE_ENV === 'production') ? 'https://ceresdev.zkthink.com/api' : 'https://ceresdev.zkthink.com/api'
-const BASEURL = (process.env.NODE_ENV === 'production') ? 'http://127.0.0.1:9007' : 'http://127.0.0.1:9007'
+const BASEURL = (process.env.NODE_ENV === 'production') ? 'https://ceresdev.zkthink.com/api' : 'https://ceresdev.zkthink.com/api'
+// const BASEURL = (process.env.NODE_ENV === 'production') ? 'http://127.0.0.1:9007' : 'http://127.0.0.1:9007'
 
 
 export const api = {
@@ -11,7 +11,7 @@ export const api = {
   fileUpload: BASEURL + '/file/upload', // 文件上传
   getClassify: BASEURL + '/canvas/getClassify', // 查询分类层级
   getProducts: BASEURL + '/canvas/getProducts', // 选择商品查询
-  getProductsV2: `${BASEURL}/canvas/getProducts2`, // 选择商品查询
+  getProductsV2: `${BASEURL}/canvas/getProducts`, // 选择商品查询
   saveCanvas: BASEURL + '/canvas/saveCanvas', // 保存画布
   getCanvas: BASEURL + '/canvas/getCanvas', // 读取画布
   getShops: BASEURL + '/canvas/getShops', // 选择店铺查询

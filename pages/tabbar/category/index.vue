@@ -209,7 +209,8 @@ onMounted(() => {
 		}
 	}
 	.emptyOrder-box{
-		margin-left: 180upx;
+    width: 100%;
+		//margin-left: 180upx;
 		.emptyOrder-img{
 			margin-top: -130upx;
 			width: 113upx;

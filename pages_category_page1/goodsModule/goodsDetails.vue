@@ -983,6 +983,9 @@ onPageScroll(e => {
 
     .chooseSize-content {
       width: 100%;
+      image{
+        margin-right: 30rpx;
+      }
     }
   }
 

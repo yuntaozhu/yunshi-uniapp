@@ -173,7 +173,7 @@ const changeSkuItemValue = (item,index)=> {
     title: '加载中...'
   })
   request(API.QueryProductDetail, {
-        shopId: this.productData.shopId,
+        shopId: productData.value.shopId,
         productId: item.productId,
         skuId: item.skuItem.skuId,
         terminal: 1
@@ -198,7 +198,7 @@ const changeSkuItemValue = (item,index)=> {
       }
     }
 
-    skuProData.value = res
+    skuProData.value = res.data
     goodsDetailShowFlag.value = true
     selectBySkuId(item.skuItem.skuId)
   })
@@ -208,6 +208,7 @@ const selectBySkuId = (skuId) => {
   if (skuId) {
     let mapinfo = skuProData.value.map
     let flag = true
+    console.log(skuProData.value)
     for (var key in mapinfo) {
       if (parseInt(mapinfo[key].skuId) === parseInt(skuId)) {
         flag = false

@@ -90,26 +90,26 @@
                  :terminal="terminal"
                  :typeId="typeId"
                  :shopId="shopId"></com-spike>
-<!--      <com-price v-if="item.type==='priceList'"-->
-<!--                 :componentContent="item.componentContent"-->
-<!--                 :terminal="terminal"-->
-<!--                 :typeId="typeId"-->
-<!--                 :shopId="shopId"></com-price>-->
-<!--      <com-new-product v-if="item.type==='newProduct'"-->
-<!--                       :componentContent="item.componentContent"-->
-<!--                       :terminal="terminal"-->
-<!--                       :typeId="typeId"-->
-<!--                       :shopId="shopId"></com-new-product>-->
-<!--      <com-shop v-if="item.type==='shop'"-->
-<!--                :componentContent="item.componentContent"-->
-<!--                :terminal="terminal"-->
-<!--                :typeId="typeId"-->
-<!--                :shopId="shopId"></com-shop>-->
-<!--      <com-live v-if="item.type==='live'"-->
-<!--                :componentContent="item.componentContent"-->
-<!--                :terminal="terminal"-->
-<!--                :typeId="typeId"-->
-<!--                :shopId="shopId"></com-live>-->
+      <com-price v-if="item.type==='priceList'"
+                 :componentContent="item.componentContent"
+                 :terminal="terminal"
+                 :typeId="typeId"
+                 :shopId="shopId"></com-price>
+      <com-new-product v-if="item.type==='newProduct'"
+                       :componentContent="item.componentContent"
+                       :terminal="terminal"
+                       :typeId="typeId"
+                       :shopId="shopId"></com-new-product>
+      <com-shop v-if="item.type==='shop'"
+                :componentContent="item.componentContent"
+                :terminal="terminal"
+                :typeId="typeId"
+                :shopId="shopId"></com-shop>
+      <com-live v-if="item.type==='live'"
+                :componentContent="item.componentContent"
+                :terminal="terminal"
+                :typeId="typeId"
+                :shopId="shopId"></com-live>
     </div>
   </div>
 </template>
