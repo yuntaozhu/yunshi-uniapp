@@ -159,6 +159,7 @@ const onregister = () => {
 }
 // 获取验证码
 const codede = () => {
+  if(disabled.value)return
 	getVerify()
 }
 const getCode = () => {

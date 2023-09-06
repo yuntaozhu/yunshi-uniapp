@@ -187,6 +187,7 @@ const login = async () => {
 }
 // 获取验证码
 const codede = () => {
+  if(disabled.value)return
   getVerify()
 }
 const getVerify = async () => {

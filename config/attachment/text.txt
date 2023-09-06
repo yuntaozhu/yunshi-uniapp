@@ -4,10 +4,10 @@ Android
 	证书别名：
 	cereshop
 	证书秘钥密码：
-	xxxxxx
+	123456
 	
 IOS
 	appid：
 	cere.cereshop.mo
 	证书秘钥密码：
-	xxxxxx
+	123456

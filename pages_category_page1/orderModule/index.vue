@@ -9,10 +9,10 @@
       >
         <u-tabs
             class="tabs"
-            :list="tabList"
             disabled
+            :list="tabList"
             :is-scroll="false"
-            active-color="#C5AA7B !important"
+            active-color="#C5AA7B"
             :current="tabCurrentType"
             @change="handleTabChange"
         />
@@ -162,7 +162,7 @@ import { handleDoPay } from "@/utils/payUtil";
 import Skeleton from "../../components/Skeleton";
 import { request } from '@/utils/request'
 import API from "../../config/api";
-import { inject, onMounted, ref } from "vue";
+import { inject, nextTick, onMounted, ref } from "vue";
 import { onBackPress, onLoad, onReachBottom, onShow } from "@dcloudio/uni-app";
 import { useLoading } from "@/hooks/useLoading";
 const {showLoading,hideLoading} = useLoading();
@@ -188,7 +188,7 @@ const payObj = ref({
 })
 
 onLoad(options => {
-  if (options.type) {
+  if (options.type!==undefined) {
     tabCurrentType.value = options.type
     orderState.value = options.type
   } else {
@@ -207,7 +207,11 @@ onShow(() => {
   // #endif
 })
 onMounted(()=>{
-  handleRefreshList()
+  nextTick(()=>{
+    console.log(tabCurrentType.value)
+    handleTabChange(Number(tabCurrentType.value))
+  })
+  // handleRefreshList()
 })
 onReachBottom(() => {
   ++page.value
@@ -239,6 +243,7 @@ async function handleRefreshList() {
  * @param tabIndex
  */
 async function handleTabChange(tabIndex) {
+  console.log(tabIndex)
   if (loading.value) return
   tabCurrentType.value = tabIndex;
   orderState.value = tabList.value[tabIndex].number

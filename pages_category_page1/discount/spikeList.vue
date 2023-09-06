@@ -51,7 +51,7 @@
 		<view class="spikeList mar-top-20">
 			<view class="listItem" v-for="(item,index) in spikeLikeList" :key="index">
 				<view class="itemBox">
-					<img :src="item.productImage || item.image" class="pic-img default-img">
+					<image :src="item.productImage || item.image" class="pic-img default-img" />
 				</view>
 				<view class="itemInfo">
 					<p>{{item.productName}}</p>
@@ -177,7 +177,7 @@ onReachBottom(() => {
 })
 
 onBeforeUnmount(() => {
-	clearInterval(this.ticker)
+	clearInterval(ticker.value)
 	console.log('销毁前清楚定时器')
 })
 
@@ -212,7 +212,8 @@ const getQueryPlatformSeckillData = async () => {
 			title:'失败',
 			icon:'none'
 		})
-	}
+    throw new Error(err)
+  }
 }
 
 /**
@@ -235,7 +236,8 @@ const getPlatformSeckillsData = async (index) => {
 			title:'失败',
 			icon:'none'
 		})
-	}
+    throw new Error(err)
+  }
 }
 
 /**
@@ -243,9 +245,10 @@ const getPlatformSeckillsData = async (index) => {
  */
 const getQuerySession = async () => {
 	try {
-		const res = request(API.querySession, {}, 'GET')
+		const res = await request(API.querySession, {}, 'GET')
 		let arr = []
-		arr = res.data
+		arr = res.data || []
+    console.log(arr)
 		arr.forEach(item => {
 			let obj = {}
 			obj["time"] = item
@@ -257,15 +260,16 @@ const getQuerySession = async () => {
 			console.log(obj)
 			querySessionData.value.push(obj)
 		})
-		session.value = querySessionData.value[0].time.substring(0, 16)
-		timestamp.value = querySessionData.value[0].timestamp
-		endTime.value = querySessionData.value[0].endTime
+		session.value = querySessionData.value[0]?.time.substring(0, 16)
+		timestamp.value = querySessionData.value[0]?.timestamp
+		endTime.value = querySessionData.value[0]?.endTime
 	} catch (err) {
 		uni.showToast({
 			title: '失败',
 			icon: "none"
 		})
-	}
+    throw new Error(err)
+  }
 }
 
 /**
@@ -343,28 +347,29 @@ const getShopSeckillList = async () => {
 			title: '失败',
 			icon: "none"
 		})
-	}
+    throw new Error(err)
+  }
 }
 /**
  * 处理店铺秒杀倒计时
  */
 const shopCountDown = (timeAll) => {
 	let msec = timeAll
-	let hou = parseInt(msec / 3600000)
-	let min = parseInt((msec % 3600000) / 60000)
-	let sec = parseInt(((msec % 3600000) % 60000) / 1000)
-	if(hou < 10){
-		hou = '0' + hou
+	let hous = parseInt(msec / 3600000)
+	let mins = parseInt((msec % 3600000) / 60000)
+	let secs = parseInt(((msec % 3600000) % 60000) / 1000)
+	if(hous < 10){
+		hous = '0' + hous
 	}
-	if(min < 10){
-		min = '0' + min
+	if(mins < 10){
+		mins = '0' + mins
 	}
-	if(sec < 10){
-		sec = '0' + sec
+	if(secs < 10){
+		secs = '0' + secs
 	}
-	hou.value = hou
-	min.value = min
-	sec.value = sec
+	hou.value = hous
+	min.value = mins
+	sec.value = secs
 }
 </script>
 <style>
@@ -472,7 +477,7 @@ const shopCountDown = (timeAll) => {
 					height: 260upx;
 					margin-right: 30upx;
 
-					img {
+					image {
 						width: 100%;
 						height: 100%;
 					}

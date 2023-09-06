@@ -88,6 +88,7 @@ const allCheck = ref({
 })
 const number = ref(null)
 const total = ref(0)
+const skuLength = ref(0)
 const distribution = ref(null)
 const isAllSelect = ref(0)
 const evaluated = ref(0)
@@ -95,6 +96,7 @@ const $getJumpParam = inject('$getJumpParam')
 onLoad((options) => {
   item.value = $getJumpParam(options);
   item.value.skus.forEach(item=>item.checked = false)
+  skuLength.value = item.value.skus.length
   distribution.value = item.value.skus[0].distribution
   if([2].includes(item.value.state)){
     distribution.value = 1
@@ -127,6 +129,14 @@ const HandleGetRefundMoney = () => {
  * 申请退款
  */
 const ReturnMoney = (obj) => {
+  if (item.value.orderPrice != total.value && xuanzlist.value.length != skuLength.value) {
+    uni.showToast({
+      title: '改价后的订单不允许拆开售后',
+      duration: 1000,
+      icon: 'none'
+    })
+    return
+  }
   if (xuanzlist.value.length <= 0) {
     uni.showToast({
       title: '请选择退款的商品',
@@ -186,6 +196,14 @@ const changeAll = async (e) => {
  * 申请退货
  */
 const ReturnGoods = () => {
+  if (item.value.orderPrice != total.value && xuanzlist.value.length != skuLength.value) {
+    uni.showToast({
+      title: '改价后的订单不允许拆开售后',
+      duration: 1000,
+      icon: 'none'
+    })
+    return
+  }
   if (xuanzlist.value.length <= 0) {
     uni.showToast({
       title: '请选择退货的商品',
@@ -205,12 +223,12 @@ const checkboxGroupChange = (e) => {
 
 const checkboxChange = async (e) => {
   nextTick(async ()=>{
-    console.log(item.value.skus)
+    //console.log(item.value.skus)
     // 动态设置商品件数和总计
     if (!e.checked) {
-      number.value = number.value + e.number
-    } else {
       number.value = number.value - e.number
+    } else {
+      number.value = number.value + e.number
     }
     // 筛选勾选的
     xuanzlist.value = item.value.skus.filter(item => item.checked == true)

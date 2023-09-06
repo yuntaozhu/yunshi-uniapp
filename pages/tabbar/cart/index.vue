@@ -966,15 +966,18 @@ const settlementTap = async ()=> {
                     flex-direction: row;
                     justify-content: space-between;
                     overflow: hidden;
+                    box-sizing: border-box;
+                    align-item:center;
 
                     .num-btn {
-                      font-size: 34rpx;
+                      font-size: 26rpx;
                       color: #999999;
                       display: inline-block;
                       width: 40rpx;
                       text-align: center;
                       line-height: 40rpx;
                       height: 40rpx;
+                      box-sizing: border-box;
                     }
 
                     .num-btn.r {

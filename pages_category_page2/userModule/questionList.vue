@@ -621,6 +621,8 @@ function getAnswerList() {
 function questionTypeActive(index) {
   ifEmpty.value = false
   questionTypeFlag.value = index
+  allCheckShow.value=false
+  isAllAnswerCheck.value = fa;se
   if (index == 0) {
     problemPage.value = 1
     problemList.value = []

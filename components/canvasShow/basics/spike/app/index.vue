@@ -4,10 +4,10 @@
       <div class="spike-card-top">
         <h2 class="spike-card-top-title">
           <!-- #ifdef MP-WEIXIN -->
-          <image class="title-img" src="https://ceres.zkthink.com/static/canvas-images/spike/img-title.png" alt="秒杀专区" mode="widthFix"/>
+          <image class="title-img" src="https://ceres.zkthink.com/static/canvas-images/spike/img-title.png" alt="秒杀专区" mode="aspectFit"/>
           <!-- #endif -->
           <!-- #ifdef H5 || APP-PLUS -->
-          <image class="title-img" src="https://ceres.zkthink.com/static/canvas-images/spike/img-title.png" alt="秒杀专区" mode="widthFix" />
+          <image class="title-img" src="https://ceres.zkthink.com/static/canvas-images/spike/img-title.png" alt="秒杀专区" mode="aspectFit" />
           <!-- #endif -->
         </h2>
         <div class="spike-card-top-time" v-if="state===2">
@@ -84,6 +84,7 @@ const { state, productData, count, jumpProductDetail, jumpSeckills } = commonMix
         padding: 9rpx 20rpx 9rpx 30rpx;
         .title-img{
           width: 204rpx;
+          height: 36rpx;
           display: block;
         }
       }

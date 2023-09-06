@@ -83,6 +83,10 @@ const total = ref(0)
 const productList = ref([])
 const isShow = ref(false)
 
+watch(categoryid,()=>{
+  isShow.value=false
+})
+
 onMounted(()=>{
   productList.value = [{},{},{},{},{},{},{},{}]
   getData();

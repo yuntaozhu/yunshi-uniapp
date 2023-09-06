@@ -209,6 +209,7 @@ const signInFn = async () => {
     showLoading()
     await request(API.creditSignIn, {}, 'POST')
     await getSignData()
+    signTips.value = true
   } catch (err) {
   } finally {
     hideLoading()

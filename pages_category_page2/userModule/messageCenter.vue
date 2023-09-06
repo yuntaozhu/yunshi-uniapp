@@ -12,7 +12,7 @@
 			</view>
 			<u-swipe-action class="u-swipe-action" :show="item.show" :index="index" v-for="(item, index) in messageList"
 				:key="item.noticeId" @click="productClick(item)" :options="options">
-				<view class="messageItem" @click="goToMesDetail(item.noticeId,item.only,item.jump)">
+				<view class="messageItem" @click="goToMesDetail(item,item.noticeId,item.only,item.jump)">
 					<view class="messageBox">
 						<view class="messageType">
 							<view v-if="item.noticeType == 1" class="messageTypeL">
@@ -235,12 +235,13 @@ const allMessage = async () => {
  * @param jump 2 为订单跳转订单详情
  * @returns {Promise<void>}
  */
-const goToMesDetail = async (noticeId, only, jump) => {
+const goToMesDetail = async (item,noticeId, only, jump) => {
   try {
     const res = await request(API.readNotice, {
       noticeId: noticeId
     }, "post")
     if (res.code == 200) {
+      item.ifRead = 1
       if (jump == 2) {
         uni.navigateTo({
           url: "../../pages_category_page1/orderModule/orderDetails?orderId=" +
