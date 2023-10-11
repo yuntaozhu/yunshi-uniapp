@@ -165,6 +165,7 @@ import { Services } from '@/utils/services'
 import {request} from "@/utils/request";
 import API from "../../../config/api";
 import { Encrypt } from "@/utils/secret";
+import {onShow} from "@dcloudio/uni-app";
 
 const isFirstComeIn = ref(true);
 const loading = ref(true);
@@ -178,10 +179,11 @@ const userItem = ref({
 });
 const $jump = inject('$jump')
 
-onMounted(() => {
-  isFirstComeIn.value = true;
+onShow(() => {
   if (uni.getStorageSync('storage_key')) {
     cacheUserItem.value = uni.getStorageSync('storage_key');
+  } else {
+    isFirstComeIn.value = true;
   }
   handleGetUser();
 })

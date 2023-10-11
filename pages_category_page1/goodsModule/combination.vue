@@ -38,8 +38,9 @@
           <view class="flex-column-plus mar-left-40">
             <view class="font-color-C5AA7B">
               <label class="fs24">¥</label>
-              <label class="fs36 mar-left-10"
-                     v-text="detailList.activityType == 1 ? skuOriginalPrice : skuPrice"></label>
+              <label class="fs36 mar-left-10">
+                {{detailList.activityType == 1 ? skuOriginalPrice : skuPrice}}
+              </label>
             </view>
             <label class="fs24 font-color-999 mar-top-20">库存 {{stockNumber}} 件</label>
             <label class="fs24 mar-top-20">已选</label>

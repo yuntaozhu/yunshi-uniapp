@@ -42,12 +42,12 @@ onLoad((options) => {
 	// #ifndef MP
 	noMp.value = true
 	// #endif
-	const pages = getCurrentPages()
-	console.log(pages.length, 'pages-test')
-	uni.setStorageSync('last_page', pages[pages.length - 1].route);
-	if (pages[pages.length - 1].options) {
-		uni.setStorageSync('last_page_options', pages[pages.length - 1].options);
-	}
+	// const pages = getCurrentPages()
+	// console.log(pages.length, 'pages-test')
+	// uni.setStorageSync('last_page', pages[pages.length - 1].route);
+	// if (pages[pages.length - 1].options) {
+	// 	uni.setStorageSync('last_page_options', pages[pages.length - 1].options);
+	// }
 })
 onShow(() => {
 	// 所有需要授权页面进登录页面取消loading
@@ -146,15 +146,22 @@ const loginSuc = (buyerUser, data) => {
 		bindSalesCustomer()
 		const last_page = uni.getStorageSync('last_page') || ''
 		if (last_page) {
+      if(last_page==='pages_category_page2/userModule/login'){
+        // 如果最后一个是登录
+        uni.switchTab({
+          url:'/pages/tabbar/index/index'
+        })
+        return;
+      }
 			const last_page_options = uni.getStorageSync('last_page_options') || ''
-			const str = JSON.stringify(last_page_options).replaceAll('{', '').replaceAll('}', '').replaceAll(
-					'"', '').replaceAll(':', '=').replaceAll(',', '&')
+      const str = JSON.stringify(last_page_options).replace(/[{}"]/g, '')
+          .replace(/:/g, '=')
+          .replace(/,/g, '&');
 			// 清空其他路由，直接跳转最后登录页面
 			uni.reLaunch({
 				url: `/${last_page}?${str}`,
 				// url: `/${last_page}?` + str
 			})
-			return
 		} else {
 			// #ifdef MP-ALIPAY
 			uni.navigateTo({
@@ -173,6 +180,8 @@ const loginSuc = (buyerUser, data) => {
 		})
 	}
 }
+
+
 const bindSalesCustomer = async () => {
 	const shopId = uni.getStorageSync('shopId');
 	const salesId = uni.getStorageSync('salesId');

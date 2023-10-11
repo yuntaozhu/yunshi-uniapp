@@ -23,8 +23,9 @@
               <label class="fs24">¥</label>
               <label
                   class="fs36 mar-left-10"
-                  v-text="selectedSku.activityType === 1 && btnType === 4 ? selectedSku['salePrice'] : selectedSku.price"
-              ></label>
+              >
+                {{selectedSku.activityType === 1 && btnType === 4 ? selectedSku['salePrice'] : selectedSku.price}}
+              </label>
             </view>
             <label class="fs24 font-color-999 mar-top-20">库存 {{ selectedSku.stockNumber }} 件</label>
             <label class="fs24 mar-top-20">已选</label>

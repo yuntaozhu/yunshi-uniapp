@@ -100,6 +100,11 @@ const request = (url, data, method = 'GET') => {
 						resolve(res.data)
 					} else if (res.data.code === "20004" || res.data.code === "20005") {
 						uni.removeStorageSync("storage_key")
+						const pages = getCurrentPages();
+						const currentPage = pages[pages.length-1]
+						console.log(currentPage)
+						uni.setStorageSync('last_page', currentPage.route);
+						currentPage.options&&uni.setStorageSync('last_page_options', currentPage.options)
 						uni.navigateTo({
 							url: '/pages_category_page2/userModule/login'
 						})
