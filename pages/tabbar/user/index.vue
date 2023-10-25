@@ -157,7 +157,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from 'vue';
+import {ref, onMounted, inject, nextTick} from 'vue';
 import Skeleton from "../../../components/Skeleton";
 import { fastCardOneList, fastCardTwoList, orderCardList } from "./index.data";
 import { Services } from '@/utils/services'
@@ -180,12 +180,14 @@ const userItem = ref({
 const $jump = inject('$jump')
 
 onShow(() => {
-  if (uni.getStorageSync('storage_key')) {
-    cacheUserItem.value = uni.getStorageSync('storage_key');
-  } else {
-    isFirstComeIn.value = true;
-  }
-  handleGetUser();
+  nextTick(() => {
+    if (uni.getStorageSync('storage_key')) {
+      cacheUserItem.value = uni.getStorageSync('storage_key');
+    } else {
+      isFirstComeIn.value = true;
+    }
+    handleGetUser();
+  })
 })
 
 const handleJump = (url) => {

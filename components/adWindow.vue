@@ -113,8 +113,8 @@ function getAd() {
     request(API.GetAd, {
       triggerCondition: triggerCondition.value
     }, 'POST').then(res => {
-      console.log('123131321323', res)
-      if (res.data) {
+      console.log('广告数据', res)
+      if (res.data?.length > 0) {
         adInfo.value = res.data[0]
         if (adInfo.value.jumpContent) {
           jumpContent.value = JSON.parse(adInfo.value.jumpContent)

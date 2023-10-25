@@ -10,7 +10,7 @@
 		</view>
 		<view>
 			<!-- #ifdef MP-WEIXIN -->
-			<button class="loginWxBut fs28" @click="GetUserInfo">微信登录</button>
+			<button class="loginWxBut fs28" @click="GetUserInfo">手机号快捷登录</button>
 			<button class="goToHome fs28" @click="goToHome">去首页逛逛</button>
 			<!-- #endif -->
 			<!-- #ifdef MP-ALIPAY -->

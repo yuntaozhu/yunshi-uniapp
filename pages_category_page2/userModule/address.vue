@@ -47,7 +47,8 @@ import { ref } from "vue";
 import { hidden } from "../../utils/hidden";
 import { request } from "../../utils/request";
 import API from "../../config/api";
-import {onLoad, onReachBottom, onShow} from "@dcloudio/uni-app";
+import {onLoad, onBackPress, onReachBottom, onShow} from "@dcloudio/uni-app";
+import Bankcard from "./bankcard.vue";
 
 const addresList = ref([]);
 const headWord = ref('');
@@ -69,7 +70,7 @@ onShow(() => {
   getAddressData()
 })
 
-onReachBottom((e) => {
+onBackPress((e) => {
   if (e.from === 'navigateBack') {
     return false;
   }
@@ -77,8 +78,16 @@ onReachBottom((e) => {
   return true;
 })
 
+onReachBottom((e) => {
+	if (loadingType.value == 1) {
+		uni.stopPullDownRefresh()
+	} else {
+		page.value = page.value + 1
+		getAddressData()
+	}
+})
+
 const back = () => {
-  console.log(type.value,'type')
   if (type.value == 1 || type.value == 2 ) {
     uni.navigateTo({
       url: '../../pages_category_page1/orderModule/orderConfirm?type=' + type.value
@@ -338,21 +347,24 @@ const wxAddFn = () => {
 
 		.addAddress-box {
 			position: fixed;
-			bottom: 50upx;
-			left: 30upx;
-
+			bottom: 0rpx;
+			left: 0upx;
+      width: 100%;
+      padding: 20rpx 10rpx;
+      background: #ffffff;
 			.addAddress {
 				width: 690upx;
 				height: 100upx;
 				color: #FFEBC4;
 				text-align: center;
 				background: #333333;
+        margin: 0 auto;
 			}
 		}
 
 		.wxAddressNBox {
 			position: fixed;
-			bottom: 50upx;
+			bottom: 0rpx;
 			width: 100%;
 			left: 0;
 

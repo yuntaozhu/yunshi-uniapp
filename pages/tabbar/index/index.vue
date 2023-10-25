@@ -136,7 +136,7 @@ onLoad(() => {
   }
   nextTick(() => {
     canvasGet()
-    // adWindowRef.value.getAd()
+    adWindowRef.value.getAd()
   })
 })
 

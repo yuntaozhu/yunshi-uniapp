@@ -10,7 +10,7 @@
       </div>
     </div>
     <div v-else :style="{'padding':'0 ' + componentContent.pageSpacing + 'upx'}">
-      <div class="boxLayout" :style="{'paddingBottom':componentContent.maxH !== 0?getItemValue(componentContent.maxH) + '%': '100%'}">
+      <div class="boxLayout" :style="{'paddingBottom':componentContent.maxH !== 0?getItemValue(componentContent.maxH) + '%': (componentContent.layoutType === 'L1T1B2' ? '50%' : '100%')}">
         <div class="boxLayoutInner">
           <div class="boxWarp">
             <div class="customLayout" :style="{'marginLeft':(-componentContent.imgClearance) +'px','top':(-componentContent.imgClearance) +'px'}">
@@ -88,6 +88,9 @@ function getItemValue (val) {
       image{
         width: 100%;
         display: block;
+      }
+      .a-link {
+        height: 100%;
       }
     }
     .layoutL1 .li{
