@@ -510,8 +510,9 @@
               <label class="pay-type-label">支付宝支付</label>
               <u-radio
                   class="pay-type-radio-item"
-                  style="transform:scale(0.7)"
+                  style="transform:scale(0.9)"
                   :checked="paymentMode == 2"
+                  :name="2"
                   value="2"
               />
             </view>
@@ -525,9 +526,10 @@
               <label class="pay-type-label">花呗分期</label>
               <u-radio
                   class="pay-type-radio-item"
-                  style="transform:scale(0.7)"
+                  style="transform:scale(0.9)"
                   :disabled="totalPrice < 0.03"
                   :checked="paymentMode == 3"
+                  :name="3"
                   value="3"
               />
             </view>
@@ -544,9 +546,10 @@
                 </view>
                 <u-radio
                     class="period-type-radio-item"
-                    style="transform:scale(0.7)"
+                    style="transform:scale(0.9)"
                     :disabled="fenqiDisabledList[0]"
                     :checked="huabeiPeriod == 3"
+                    :name="3"
                     value="3"
                 />
               </view>
@@ -557,9 +560,10 @@
                 </view>
                 <u-radio
                     class="period-type-radio-item"
-                    style="transform:scale(0.7)"
+                    style="transform:scale(0.9)"
                     :disabled="fenqiDisabledList[1]"
                     :checked="huabeiPeriod == 6"
+                    :name="6"
                     value="6"
                 />
               </view>
@@ -570,9 +574,10 @@
                 </view>
                 <u-radio
                     class="period-type-radio-item"
-                    style="transform:scale(0.7)"
+                    style="transform:scale(0.9)"
                     :disabled="fenqiDisabledList[2]"
                     :checked="huabeiPeriod == 12"
+                    :name="12"
                     value="12"
                 />
               </view>
@@ -595,7 +600,7 @@
           </view>
           <view class="fenqi-confirm">
             <text
-                class="btn active"
+                class="btn"
                 @click="continuePay"
             >确认
             </text>
@@ -1057,6 +1062,13 @@ async function payOrder() {
     type: 2,
     paymentMode:1
   }
+  // #ifdef APP-PLUS || H5 || MP-WEIXIN
+  await handleDoPay.call(undefined, submitResult)
+  // #endif
+}
+
+// 支付宝付款
+async function continuePay() {
   await handleDoPay.call(undefined, submitResult)
 }
 
@@ -1160,8 +1172,9 @@ function applyTap() {
 }
 
 // 支付类型变更
-function payTypeChange(event) {
-  paymentMode.value = event.target.value;
+function payTypeChange(n) {
+  console.log(n, 'target--')
+  paymentMode.value = n;
   if (paymentMode.value == 2) {
     huabeiPeriod.value = -1
     fenqiDisabledList.value = [true, true, true]
@@ -1204,8 +1217,8 @@ function recalcHuabei() {
 }
 
 //花呗分期数变更
-function huabeiPeriodChange(event) {
-  huabeiPeriod.value = event.target.value
+function huabeiPeriodChange(n) {
+  huabeiPeriod.value = n
   recalcHuabei()
 }
 
@@ -1610,7 +1623,7 @@ page {
   color: #FFEBC4;
   text-align: center;
   line-height: 100upx;
-  font-weight: 500upx;
+  font-weight: 500;
 }
 
 .order-details-btn .btn-l {
@@ -1768,11 +1781,10 @@ page {
       width: 216upx;
       height: 80upx;
       line-height: 80upx;
-      border-radius: 40upx;
       font-size: 28upx;
       text-align: center;
-      background: linear-gradient(90deg, rgba(255, 162, 0, 1), rgba(255, 121, 17, 1));
-      color: #fff;
+      background: #333333;
+      color: #FFEBC4;
       display: inline-block;
       margin-right: 66upx;
     }
@@ -1792,7 +1804,7 @@ page {
       display: inline-block;
       margin-top: 12upx;
       margin-left: 6upx;
-      font-size: 26upx;
+      font-size: 26rpx;
       color: #b7b7b7;
       margin-bottom: 13upx;
     }
