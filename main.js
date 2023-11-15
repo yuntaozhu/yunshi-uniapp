@@ -2,7 +2,6 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import uView from './uni_modules/vk-uview-ui';
 import store from './store'
-import _ from 'lodash'
 import { jump, jumpToTabbar, goBack, getJumpParam } from './utils/jumpUtil'
 import loadingPlugin from './utils/plugIn/globalLoading'
 import GlobalLoading from "@/components/diyLoading/index.vue";
@@ -17,7 +16,6 @@ app.component('UvSkeleton',UvSkeleton)
 app.config.productionTip = false
 
 app.provide('$store', store)
-app.provide('$lodash', _)
 app.provide('$jump', jump)
 app.provide('$jumpToTabbar', jumpToTabbar)
 app.provide('$goBack', goBack)
