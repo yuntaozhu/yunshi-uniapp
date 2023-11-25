@@ -764,7 +764,14 @@ const handleDoDelete = async () => {
 const settlementTap = async ()=> {
   const {shopList} = await getPriceBySelect(dataList.value)
   uni.setStorageSync('skuItemDTOList', shopList)
-  $jump('/pages_category_page1/orderModule/orderConfirm?type=2')
+  if (shopList.length) {
+    $jump('/pages_category_page1/orderModule/orderConfirm?type=2')
+  } else {
+    uni.showToast({
+      title: '请先选择商品',
+      icon: 'none'
+    })
+  }
 }
 </script>
 
@@ -967,7 +974,7 @@ const settlementTap = async ()=> {
                     justify-content: space-between;
                     overflow: hidden;
                     box-sizing: border-box;
-                    align-item:center;
+                    align-items: center;
 
                     .num-btn {
                       font-size: 26rpx;

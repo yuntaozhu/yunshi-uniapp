@@ -163,7 +163,7 @@ import Skeleton from "../../components/Skeleton";
 import { request } from '@/utils/request'
 import API from "../../config/api";
 import { inject, nextTick, onMounted, ref } from "vue";
-import { onBackPress, onLoad, onReachBottom, onShow } from "@dcloudio/uni-app";
+import { onBackPress, onLoad, onReachBottom, onShow, onUnload } from "@dcloudio/uni-app";
 import { useLoading } from "@/hooks/useLoading";
 const {showLoading,hideLoading} = useLoading();
 
@@ -212,6 +212,9 @@ onMounted(()=>{
     handleTabChange(Number(tabCurrentType.value))
   })
   // handleRefreshList()
+})
+onUnload(() => {
+  goUserIndex()
 })
 onReachBottom(() => {
   ++page.value
@@ -669,7 +672,7 @@ function goSpellGroup(orderItem) {
  * 去用户中心
  */
 function goUserIndex() {
-  $jumpToTabbar('../../pages/tabbar/user/index')
+  $jumpToTabbar('/pages/tabbar/user/index')
 }
 
 /**
