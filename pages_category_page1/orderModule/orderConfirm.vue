@@ -977,7 +977,7 @@ function calcCredit() {
   if (skuCreditMap && integralRatio.value > 0) {
     orderCreditThreshold.value = settlement.value.orderCreditThreshold
     let remainUserCredit = settlement.value.userTotalCredit
-    let remainTotalPrice = Math.round((totalPrice + Number.EPSILON) * 100) / 100
+    let remainTotalPrice = Math.round((totalPrice.value + Number.EPSILON) * 100) / 100
     let remainDeductLimit = settlement.value.creditDeductLimit
     // 只有订单金额达到阈值，并且用户还有剩余的积分，才能进行积分抵扣
     if (totalPrice.value >= orderCreditThreshold.value && remainUserCredit > 0 && remainDeductLimit > 0) {
@@ -995,6 +995,7 @@ function calcCredit() {
             }
             // 按照比例换算成需要多少积分抵扣(取整)
             let finalSkuCredit = parseInt((skuRemainMap[skuId] / integralRatio.value).toString());
+            console.log(finalSkuCredit, 'finalSkuCredit')
             // 优先以商家配置的商品可抵扣积分为准
             if (skuCreditMap[skuId] < finalSkuCredit) {
               finalSkuCredit = skuCreditMap[skuId]
