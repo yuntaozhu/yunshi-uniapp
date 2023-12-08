@@ -31,10 +31,10 @@
             </div>
           </div>
          </swiper-item>
-         <!-- #ifdef MP-WEIXIN -->
-         <swiper-item v-if="productData.products.length" class="swiper-slide pro-item-warp" v-for="item in (3 - productData.products.length)">
-         </swiper-item>
-         <!-- #endif -->
+<!--         &lt;!&ndash; #ifdef MP-WEIXIN &ndash;&gt;-->
+<!--         <swiper-item v-if="productData.products.length" class="swiper-slide pro-item-warp" v-for="item in (3 - productData.products.length)">-->
+<!--         </swiper-item>-->
+<!--         &lt;!&ndash; #endif &ndash;&gt;-->
        </swiper>
          <view class="swiper-dots" v-if="productData.products && productData.products.length > 3">
            <text class="dot" :class="index - swiperCurrent <= 2 && index - swiperCurrent >=0  && 'dot-active'" v-for="(dot, index) in productData.products.length"

@@ -59,7 +59,7 @@ import { onLoad } from "@dcloudio/uni-app";
 const commentList = ref([])
 const commentListLength = ref('')
 const $getJumpParam = inject('$getJumpParam')
-onLoad(list=>{
+onLoad((list) => {
   if(list.detail){
     let detail = $getJumpParam(list)
     commentList.value = detail
@@ -68,7 +68,6 @@ onLoad(list=>{
     commentList.value = JSON.parse(list).commentList
     commentListLength.value = commentList.value.length
   }
-
 })
 
 

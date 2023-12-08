@@ -13,7 +13,7 @@ export default function (componentContent, typeId, shopId) {
     jumpProductDetail,
     jumpGroupWorks
   } = funMixin()
-  const productData = ref([])
+  const productData = ref({})
 
   onMounted(() => {
     getData()

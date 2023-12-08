@@ -102,13 +102,13 @@
 			        <image src="https://ceres.zkthink.com/static/images/expressSiteIcon.png" class="address-img"></image>
 			        <view class="address-info-r">
 			          <view class="item">
-			            <text><text class="title">收货人</text>：</text>
-			            <text class="r"><text>{{itemlist.returnPerson}}</text>
-			            <text class="ml30">{{itemlist.returnPhone}}</text></text>
+			            <view><text class="title">收货人</text>：</view>
+			            <view class="r"><text>{{itemlist.returnPerson}}</text>
+			            <text class="ml30">{{itemlist.returnPhone}}</text></view>
 			          </view>
 			          <view class="item">
-			            <text><text class="title">地址</text>：</text>
-			            <text class="r">{{itemlist.returnAdress}}</text>
+			            <view><text class="title">地址</text>：</view>
+			            <view class="r address-detail">{{itemlist.returnAdress}}</view>
 			          </view>
 			        </view>
 			      </view>
@@ -411,6 +411,9 @@ page {
   flex-direction: column;
   font-size: 28upx;
   color: #999;
+}
+.address-detail {
+  word-break: break-all;
 }
 
 .ml30 {

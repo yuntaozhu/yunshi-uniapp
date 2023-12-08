@@ -53,7 +53,13 @@ export const goBack = (delta = 1) => {
  */
 export const getJumpParam = (loadParam) => {
     if (typeof loadParam === "object" && loadParam?.detail) {
-        return JSON.parse(decodeURIComponent(loadParam.detail))
+        let data = loadParam.detail
+        // #ifdef H5
+        if(data.indexOf('%') > -1) { // 如果url中存在 '%'
+            data = data.replace(/%/g, '%25'); // 进行替换操作
+        }
+       // #endif
+        return JSON.parse(decodeURIComponent(data))
     }
     return {}
 }

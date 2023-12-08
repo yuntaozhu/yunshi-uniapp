@@ -100,17 +100,17 @@
           >
             <view class="l">
               <text class="status">待成团</text>
-              <!-- <text class="label">剩余时间{{hou}}小时{{min}}分{{sec}}秒</text> -->
-              <view style="color: #FFFFFF; margin-top: 20rpx;">
-                <text>剩余时间</text>
-                <u-count-down
-                    :timestamp="remainingTime"
-                    fontSize="24rpx"
-                    :separator="zh"
-                    separatorColor="#FFFFFF"
-                    separatorSize="24rpx"
-                ></u-count-down>
-              </view>
+              <text class="label">剩余时间{{hou}}小时{{min}}分{{sec}}秒</text>
+<!--              <view style="color: #FFFFFF; margin-top: 20rpx;">-->
+<!--                <text>剩余时间</text>-->
+<!--                <u-count-down-->
+<!--                    :timestamp="remainingTime"-->
+<!--                    fontSize="24rpx"-->
+<!--                    :separator="zh"-->
+<!--                    separatorColor="#FFFFFF"-->
+<!--                    separatorSize="24rpx"-->
+<!--                ></u-count-down>-->
+<!--              </view>-->
             </view>
             <!--					<image class='r' src="https://ceres.zkthink.com/static/images/clusterloss.png"></image>-->
           </view>

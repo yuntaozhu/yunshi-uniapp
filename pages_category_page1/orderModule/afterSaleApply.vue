@@ -129,7 +129,7 @@ const HandleGetRefundMoney = () => {
  * 申请退款
  */
 const ReturnMoney = (obj) => {
-  if (item.value.orderPrice != total.value && xuanzlist.value.length != skuLength.value) {
+  if (item.value.orderPrice != item.value.price && xuanzlist.value.length != skuLength.value) {
     uni.showToast({
       title: '改价后的订单不允许拆开售后',
       duration: 1000,
