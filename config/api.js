@@ -137,6 +137,7 @@ const API = {
 	getCoupons: WX_API_BASE + '/canvas/getCoupons', // 优惠券查询
 	ReceiveCoupon: WX_API_BASE + '/coupon/takeCoupon', //  领取优惠券
 	buildParam4Plug: WX_API_BASE + '/coupon/buildParam4Plug', //  领取优惠券
+	getCouponsByActivityId:WX_API_BASE + '/coupon/getChannelActivityCoupon', //  根据渠道活动ID获取优惠券
 
 
 	//分销中心
@@ -264,6 +265,7 @@ const API = {
 	GetAd: WX_API_BASE + '/advert/selectByCondition', //  获取首页广告
 	adClose: WX_API_BASE + '/advert/closeAdvert', //  关闭首页广告
 	takeBatchCoupon: WX_API_BASE + '/coupon/takeBatchCoupon', //  批量领取优惠券
+	takeChannelActivityCoupon: WX_API_BASE + '/coupon/takeChannelActivityCoupon', //  一键领取渠道优惠券
 
 	// 渠道优惠券
 	getChannelCoupon: WX_API_BASE + '/coupon/getChannelCouponDetail', // 获取渠道优惠券

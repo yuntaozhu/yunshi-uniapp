@@ -600,6 +600,14 @@
 
 				},
 				{
+					"path": "channelCouponList/index",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}
+
+				},
+				{
 					"path": "userModule/unsubscribe",
 					"style": {
 						"navigationBarTitleText": "账户注销",
