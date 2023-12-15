@@ -73,7 +73,7 @@
         <label class="fs30 font-color-999 fs-weight-300 ">历史搜索</label>
         <image
             class="historyDel-icon"
-            @click="delSearchHistory"
+            @click="delSearchHistory(1)"
             src="https://ceres.zkthink.com/static/img/index/historyDel_icon.png"
         />
       </view>

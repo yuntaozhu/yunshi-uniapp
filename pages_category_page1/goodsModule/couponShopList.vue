@@ -179,6 +179,14 @@ const goodsDateils = (shopId,productId,skuId) => {
 						width:70upx;
 						height:36upx;
 					}
+          .goodsName {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+          }
 				}
 				.goodsImg{
 					width: 260upx;

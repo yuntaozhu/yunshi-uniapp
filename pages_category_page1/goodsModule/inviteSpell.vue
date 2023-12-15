@@ -253,6 +253,7 @@
 				this.skuId = parseInt(options.skuId)
 				this.shopGroupWorkId = parseInt(options.shopGroupWorkId)
 			}
+      this.getProductSku()
 			// #ifdef MP-WEIXIN
 			this.url = '/pages_category_page1/goodsModule/inviteSpell?collageId=' +
 				this.collageId + '&orderId=' + this.orderId + '&productId=' + this.productId + '&skuId=' + this.skuId +
@@ -261,7 +262,7 @@
           '&shopGroupWorkId=' + this.shopGroupWorkId
 			// #endif
 			// #ifndef MP-WEIXIN
-			this.url = '/h5/#/pages_category_page1/goodsModule/inviteSpell?collageId=' +
+			this.url = '/pages_category_page1/goodsModule/inviteSpell?collageId=' +
 				this.collageId + '&orderId=' + this.orderId + '&productId=' + this.productId + '&skuId=' + this.skuId +
 				'&shopGroupWorkId=' + this.shopGroupWorkId
 			// #endif

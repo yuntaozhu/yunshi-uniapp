@@ -14,7 +14,7 @@
           :key="problemIndex"
       >
         <view class="itemAsk">
-          <i>问</i><span>{{ problemItem.problem }}</span>
+          <view class="text">问</view><span>{{ problemItem.problem }}</span>
         </view>
         <view v-if="problemItem.answers.length>0">
           <view
@@ -23,7 +23,7 @@
               :key="answerIndex"
           >
             <view class="answerBox">
-              <i>答</i><span>{{ answerItem.answer }}</span>
+              <view class="text">答</view><span>{{ answerItem.answer }}</span>
             </view>
             <view
                 class="answerBtn"
@@ -36,7 +36,7 @@
         <view v-else>
           <view class="answer">
             <view class="answerBox">
-              <i>答</i><span>暂无答复</span>
+              <view class="text">答</view><span>暂无答复</span>
             </view>
             <view
                 class="answerBtn"
@@ -130,7 +130,7 @@ function handleJumpAnswerByProblemId(problemId) {
       align-items: center;
       margin-bottom: 42upx;
 
-      i {
+      .text {
         font-style: normal;
         width: 38upx;
         height: 38upx;
@@ -159,7 +159,7 @@ function handleJumpAnswerByProblemId(problemId) {
         display: flex;
         align-items: center;
 
-        i {
+        .text {
           font-style: normal;
           width: 38upx;
           height: 38upx;

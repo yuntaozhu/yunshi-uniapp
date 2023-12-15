@@ -127,6 +127,12 @@ const getProductList = async () => {
       page: page.value,
       pageSize: pageSize.value
     }, 'GET')
+    if (res.code === '200') {
+      productList.value = productList.value.concat(res.data.list)
+      if (productList.value.length == res.data.total) {
+        loadingType.value = 1
+      }
+    }
   } catch (err) {}
 }
 

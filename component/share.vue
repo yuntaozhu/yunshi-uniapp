@@ -79,9 +79,9 @@ const props = defineProps({
 const {img,url,title,urlParms} = toRefs(props)
 onShareAppMessage((e)=>{
   // 获取按钮传进来的参数 data 中的item值
-  let params = e.target.dataset.obj// 获取的为 data 中定义的item值
+  let params = e.target.dataset.obj // 获取的为 data 中定义的item值
   return {
-    path: `/pages_category_page1/goodsModule/inviteSpell?${params.url}`
+    path: `${params}`
   }
 })
 const shareShow = ref(false)

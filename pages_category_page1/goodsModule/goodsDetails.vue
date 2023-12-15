@@ -672,7 +672,8 @@ async function handleGetProductDetail() {
     // 评价
     commentList.value = res.data.comments
     // 宝贝详情
-    sellDescList.value = res.data.text.replace(/\<img/gi,
+    let result = res.data.text.replace(/(<img[^>]*?)\sstyle=""/gi, '$1');
+    sellDescList.value = result.replace(/\<img/gi,
         '<img style="max-width:100%;height:auto" ')
 
     //渲染商详之后，如果参数传了skuId，则选中该skuId，否则选中第一个规格

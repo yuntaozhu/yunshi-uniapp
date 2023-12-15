@@ -205,7 +205,7 @@ const goToQuestions = ()=> {
           align-items: center;
           margin-bottom: 42upx;
 
-          i {
+          .text {
             font-style: normal;
             width: 38upx;
             height: 38upx;

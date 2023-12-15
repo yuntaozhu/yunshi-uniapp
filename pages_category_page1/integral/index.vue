@@ -73,7 +73,7 @@
     </view>
     <view class="signExchange mar-top-20" v-else>
       <view class="exchangeInfoBox">
-        <view class="exchangeItem flex-items flex-sp-between" v-for="(item, index) of creditCouponList" :key="index">
+        <view class="exchangeItem flex-items flex-sp-between" v-for="(item, index) of creditCouponList" :key="index" @click="goExchangeDetail(item)">
           <view class="exchangeLeft flex-items">
             <view class="discountBox mar-right-20">
               <view class="fs24" v-if="item.couponType === 1">{{item.fullMoney === 0 ? `无门槛减${item.reduceMoney}元` : `满${item.fullMoney}元减${item.reduceMoney}元`}}</view>
@@ -91,7 +91,7 @@
           <view class="exchangeRight">
             <view class="exchangeBtn fs28 font-color-FFF" v-if="item.state === 0 && item.stockNumber !== 0" @click="goExchangeDetail(item)">兑换</view>
             <view class="exchangeBtn available fs28 font-color-FFF" v-if="item.stockNumber === 0">已兑完</view>
-            <view class="exchangeBtn available fs28 font-color-FFF" v-if="item.state === 1" @click="goExchangeDetail(item)">已兑换</view>
+            <view class="exchangeBtn available fs28 font-color-FFF" v-if="item.state === 1">已兑换</view>
           </view>
         </view>
         <view class="emptyCart-box flex-items-plus flex-column" v-if="creditCouponList.length === 0">

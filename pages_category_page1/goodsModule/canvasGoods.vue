@@ -293,6 +293,14 @@ input{padding-left: 80upx;}
           width:70upx;
           height:36upx;
         }
+        .goodsName {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
       }
       .shopName {
         position: absolute;
