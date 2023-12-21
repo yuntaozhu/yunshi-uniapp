@@ -14,7 +14,7 @@
         <view class="searchImg-box flex-items-plus">
           <image
               class="searchImg"
-              src="https://ceres.zkthink.com/static/img/searchImg.png"
+              :src="`${VUE_APP_STATIC_URL}static/images/searchImg.png`"
           ></image>
           <input
               class="search-box"
@@ -25,112 +25,160 @@
         </view>
         <label
             class="mar-left-40 fs28"
-            @click=" getProductList(1)"
+            @click="getSearchList()"
         >搜索</label>
       </view>
     </view>
-    <view class="shop-list-nav">
-      <view class="mlr-20  u-skeleton-fillet">
-        <view
-            class="nav-item-sort"
-            @click="sortTap(1)"
-        >
-          <text
-              class="nav-title"
-              :class="{'active' : sortIndex === 1}"
-          >默认
-          </text>
-        </view>
-        <view
-            class="nav-item-sort"
-            @click="sortTap(2)"
-        >
-          <text
-              class="nav-title"
-              :class="{'active' : sortIndex === 2}"
-          >价格
-          </text>
-          <view class="r">
-            <view
-                class="arrowUp"
-                :class="{activeUp: paramsConfig.sortType === 1}"
-            ></view>
-            <view
-                class="arrowDown"
-                :class="{activeDown: paramsConfig.sortType === 2}"
-            ></view>
-          </view>
-        </view>
-        <view
-            class="nav-item-sort"
-            @click="sortTap(3)"
-        >
-          <text
-              class="nav-title"
-              :class="{'active' : sortIndex === 3}"
-          >销量
-          </text>
-          <view class="r">
-            <view
-                class="arrowUp"
-                :class="{activeUp: paramsConfig.sortVolume === 1}"
-            ></view>
-            <view
-                class="arrowDown"
-                :class="{activeDown: paramsConfig.sortVolume === 2}"
-            ></view>
-          </view>
-        </view>
-      </view>
+    <view class="tabsbox">
+      <u-tabs :list="collectionTypeList" bar-width="60" :bold="false" active-color="#333333"
+              inactive-color="#CCCCCC" :is-scroll="false" :current="collectionTypeFlag"
+              @change="collectionTypeActive"></u-tabs>
     </view>
-    <view class="listBox u-skeleton">
-      <view
-          v-for="(item, index) in list"
-          :key="index"
-          class="goodsDetails-box flex-display flex-column"
-          @click="jumpToDetail(item)"
-      >
-        <view class="spikeList goodsDetails ">
-          <view class="listItem">
-            <view class="itemBox">
-              <image
-                  :src="item.image"
-                  class="pic-img u-skeleton-fillet default-img"
-              />
-            </view>
-            <view class="itemInfo u-skeleton-fillet">
-              <p>{{ item.productName }}</p>
+    <!--    商品-->
+    <view v-if="collectionTypeFlag == 0">
+      <view class="shop-list-nav">
+        <view class="mlr-20  u-skeleton-fillet">
+          <view
+              class="nav-item-sort"
+              @click="sortTap(1)"
+          >
+            <text
+                class="nav-title"
+                :class="{'active' : sortIndex === 1}"
+            >默认
+            </text>
+          </view>
+          <view
+              class="nav-item-sort"
+              @click="sortTap(2)"
+          >
+            <text
+                class="nav-title"
+                :class="{'active' : sortIndex === 2}"
+            >价格
+            </text>
+            <view class="r">
               <view
-                  class="number"
-                  v-if="item.number != null"
-              >
-                <view class="numText">已售{{ item.number }}件</view>
-                <view
-                    class="numText"
-                    v-if="item.total !==0 && item.activityType !== 0"
-                >限量{{ item.total }}件
-                </view>
-              </view>
-              <view class="flex-row-plus flex-item mar-top-30">
+                  class="arrowUp"
+                  :class="{activeUp: paramsConfig.sortType === 1}"
+              ></view>
+              <view
+                  class="arrowDown"
+                  :class="{activeDown: paramsConfig.sortType === 2}"
+              ></view>
+            </view>
+          </view>
+          <view
+              class="nav-item-sort"
+              @click="sortTap(3)"
+          >
+            <text
+                class="nav-title"
+                :class="{'active' : sortIndex === 3}"
+            >销量
+            </text>
+            <view class="r">
+              <view
+                  class="arrowUp"
+                  :class="{activeUp: paramsConfig.sortVolume === 1}"
+              ></view>
+              <view
+                  class="arrowDown"
+                  :class="{activeDown: paramsConfig.sortVolume === 2}"
+              ></view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="listBox u-skeleton">
+        <view
+            v-for="(item, index) in list"
+            :key="index"
+            class="goodsDetails-box flex-display flex-column"
+            @click="jumpToDetail(item)"
+        >
+          <view class="spikeList goodsDetails ">
+            <view class="listItem">
+              <view class="itemBox">
                 <image
-                    v-if="item.activityType!==0"
-                    class="iconImg"
-                    :src="getProductTypeIcon(item.activityType)"
+                    :src="item.image"
+                    class="pic-img u-skeleton-fillet default-img"
                 />
-                <view class="font-color-C83732 flex-row-plus">
-                  <b>￥</b>
-                  <label class="fs28">{{ item.price }}</label>
-                </view>
-                <view class="mar-left-30 discountsPriceLine font-color-999">¥{{ item.originalPrice }}</view>
               </view>
-              <view class="flex-display flex-sp-between flex-row mar-top-20 flex-items shopName">
-                <label class="fs22 font-color-FFEBC4">{{ item.shopName }}</label>
+              <view class="itemInfo u-skeleton-fillet">
+                <p>{{ item.productName }}</p>
+                <view
+                    class="number"
+                    v-if="item.number != null"
+                >
+                  <view class="numText">已售{{ item.number }}件</view>
+                  <view
+                      class="numText"
+                      v-if="item.total !==0 && item.activityType !== 0"
+                  >限量{{ item.total }}件
+                  </view>
+                </view>
+                <view class="flex-row-plus flex-item mar-top-30">
+                  <image
+                      v-if="item.activityType!==0"
+                      class="iconImg"
+                      :src="getProductTypeIcon(item.activityType)"
+                  />
+                  <view class="font-color-C83732 flex-row-plus">
+                    <b>￥</b>
+                    <label class="fs28">{{ item.price }}</label>
+                  </view>
+                  <view class="mar-left-30 discountsPriceLine font-color-999">¥{{ item.originalPrice }}</view>
+                </view>
+                <view class="flex-display flex-sp-between flex-row mar-top-20 flex-items shopName">
+                  <label class="fs22 font-color-FFEBC4">{{ item.shopName }}</label>
+                </view>
               </view>
             </view>
           </view>
         </view>
       </view>
     </view>
+    <!--    店铺-->
+    <view v-if="collectionTypeFlag == 1">
+      <view>
+        <view class="swipe-box swipeBox u-skeleton">
+          <view class="shopBox" v-for="(item, index) in storeCollect" :key="item.shopId" :index="index">
+            <view class="item wid flex-row-plus flex-display">
+              <view class="infoCent">
+                <view class="flex-row-plus flex-sp-between flex-items-plus wid">
+                  <view class="flex-display flex-items flex-row pad-topbot-10 wid u-skeleton-fillet">
+                    <image class="head-img" mode="aspectFill" :src="item.shopLogo" />
+                    <!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
+                    <view class="flex-display flex-sp-between wid">
+                      <view class="title-wrap mar-left-20">
+                        <view>
+                          <view class="title u-line-2 shopName">{{ item.shopName }}</view>
+                        </view>
+                        <!--                      <text class="font-color-CCC fs24">{{item.person}}人关注</text>-->
+                        <view class="font-color-999 fs24 location"><text class="location-text">所在地：</text>{{item.shopAdress}}</view>
+                      </view>
+                      <view class="toStore flex-items-plus fs24" @click="toStoreClick(item.shopId)">
+                        进入店铺
+                        <image :src="`${VUE_APP_STATIC_URL}static/images/arrowR.png`"></image>
+                      </view>
+                    </view>
+                  </view>
+                </view>
+                <view class="shopImgBox u-skeleton-fillet"  v-if="item.skus.length>0">
+                  <view class="itemImgBox" v-for="(sItem, sIndex) of item.skus.slice(0, 4)"
+                        :key="sIndex"
+                        @click.stop="goodsDateils(sItem.shopId,sItem.productId,sItem.skuId)">
+                    <image :src="sItem.image" class="pic-img default-img"></image>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
 
     <!-- 搜索为空 -->
     <view
@@ -139,9 +187,9 @@
     >
       <image
           class="emptyCart-img"
-          src="https://ceres.zkthink.com/static/images/searchEmpty.png"
+          :src="`${VUE_APP_STATIC_URL}static/images/searchEmpty.png`"
       ></image>
-      <label class="font-color-999 fs26 mar-top-30">搜索不到你要找的宝贝呢</label>
+      <label class="font-color-999 fs26 mar-top-30">{{collectionTypeFlag === 0 ? '搜索不到你要找的宝贝呢' : '搜索不到你要找的店铺呢' }}</label>
       <label class="font-color-999 fs26 mar-top-10">换个词试试吧～</label>
     </view>
 
@@ -151,7 +199,7 @@
     >
       <image
           class="reach-icon"
-          src="https://ceres.zkthink.com/static/img/reachBottom.png"
+          :src="`${VUE_APP_STATIC_URL}static/img/reachBottom.png`"
           mode="widthFix"
       ></image>
       <text class="reach-text">这里到底了哦~~</text>
@@ -165,6 +213,7 @@ import { request } from '@/utils/request'
 import API from "../../config/api";
 import { onLoad, onReachBottom } from '@dcloudio/uni-app';
 import { ref } from "vue";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const loading = ref(false); // 数据是否正在加载
 const isFirstComeIn = ref(true); // 是否是首次进入页面（骨架屏）
@@ -180,6 +229,13 @@ const sortIndex = ref(1); // 当前选中了哪个进行排序
 const list = ref(Array.from(new Array(9).keys()).map(item => ({}))); // 数据
 const loadOver = ref(0); // 是否加载完毕 0否1是
 const listEmpty = ref(false)
+const collectionTypeList = ref([{
+  name: '商品'
+}, {
+  name: '店铺'
+}])
+const collectionTypeFlag = ref(0)
+const storeCollect = ref([])
 
 /**
  * 排序
@@ -218,6 +274,7 @@ function resetPage(){
   isFirstComeIn.value = true
   paramsConfig.value.total = 0
   paramsConfig.value.page = 1
+  storeCollect.value = []
   list.value = Array.from(new Array(9).keys()).map(item => ({}))
 }
 
@@ -234,6 +291,15 @@ function getProductList(status) {
     getProductListByClassify()
   } else {
     getProductListBySearch()
+  }
+}
+
+function getSearchList() {
+  if (collectionTypeFlag.value == 0) {
+    getProductList(1)
+  } else {
+    resetPage()
+    getStoreList()
   }
 }
 
@@ -299,13 +365,13 @@ function jumpToDetail({shopId,productId,skuId}){
  */
 function getProductTypeIcon(activityType){
   const iconList = {
-    1:'https://ceres.zkthink.com/static/images/groupBuyIcon.png',
-    2:'https://ceres.zkthink.com/static/images/spikeIcon.png',
-    3:'https://ceres.zkthink.com/static/images/discountListIcon.png',
-    4:'https://ceres.zkthink.com/static/images/spikeIcon.png',
-    5:'https://ceres.zkthink.com/static/images/discountListIcon.png',
-    7:'https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png',
-    9:'https://ceres.zkthink.com/static/images/memberCenterIcon.png'
+    1: `${VUE_APP_STATIC_URL}static/images/groupBuyIcon.png`,
+    2: `${VUE_APP_STATIC_URL}static/images/spikeIcon.png`,
+    3: `${VUE_APP_STATIC_URL}static/images/discountListIcon.png`,
+    4: `${VUE_APP_STATIC_URL}static/images/spikeIcon.png`,
+    5: `${VUE_APP_STATIC_URL}static/images/discountListIcon.png`,
+    7: `${VUE_APP_STATIC_URL}static/images/holidaySaleIcon.png`,
+    9: `${VUE_APP_STATIC_URL}static/images/memberCenterIcon.png`
   }
   return iconList[activityType]
 }
@@ -324,11 +390,66 @@ onReachBottom(() => {
     uni.stopPullDownRefresh()
   } else {
     paramsConfig.value.page++
-     getProductList(0)
+    if (collectionTypeFlag.value == 0) {
+      getProductList(0)
+    } else {
+      getStoreList()
+    }
+
   }
 })
 
 
+function collectionTypeActive(index) {
+  collectionTypeFlag.value = index
+  if (index == 0) {
+    getProductList(1)
+  } else if (index == 1) {
+    storeCollect.value = []
+    paramsConfig.value.page = 1
+    loading.value = true
+    isFirstComeIn.value = true
+    getStoreList()
+  }
+}
+function getStoreList() {
+  request(API.ShopSearch, {
+        page: paramsConfig.value.page,
+        pageSize: paramsConfig.value.pageSize,
+        search: paramsConfig.value.keyWord
+      },
+      'GET').then(res => {
+    storeCollect.value = storeCollect.value.concat(res.data.list)
+    console.log(storeCollect.value, '店铺列表')
+    paramsConfig.value.total = res.data.total
+    listEmpty.value = storeCollect.value.length === 0
+    isFirstComeIn.value = false
+    // 是否加载完毕
+    if (paramsConfig.value.total === storeCollect.value.length) {
+      loadOver.value = 1
+    }
+  }).catch(res => {
+    uni.showToast({
+      title: '失败',
+      icon: "none"
+    })
+    throw Error(res)
+  })
+}
+//去店铺
+function toStoreClick(storeId) {
+  uni.navigateTo({
+    url: '../../pages_category_page1/store/index?storeId=' + storeId
+  })
+}
+
+//商品详情
+function goodsDateils(shopId, productId, skuId) {
+  uni.navigateTo({
+    url: '/pages_category_page1/goodsModule/goodsDetails?shopId=' + shopId + '&productId=' +
+        productId + '&skuId=' + skuId
+  })
+}
 </script>
 
 <style
@@ -658,4 +779,106 @@ input {
 }
 
 // #endif
+.tabsbox ::v-deep #u-tab-item-0 {
+  position: relative;
+}
+
+.tabsbox ::v-deep .u-tab-bar {
+  background-color: #c5aa7b !important;
+}
+
+.shopBox {
+  margin-bottom: 20rpx;
+}
+.swipe-box {
+  padding: 0 20rpx;
+  .shopImgBox {
+    display: flex;
+    margin-left: 90rpx;
+    padding-bottom: 20rpx;
+    margin-top: 20rpx;
+    .itemImgBox {
+      margin-right: 15rpx;
+      margin-left: 5rpx;
+
+      image {
+        width: 120rpx;
+        height: 120rpx;
+        border: 2rpx solid #F3F4F5;
+      }
+    }
+  }
+  .item {
+    display: flex;
+
+    .infoCent {
+      padding: 20rpx;
+      width: 100%;
+      .title-wrap {
+        width: 350rpx;
+      }
+      .location {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+        padding-right: 10rpx;
+        .location-text {
+          color: #606266;
+          font-size: 24rpx;
+        }
+      }
+    }
+  }
+  .head-img {
+    width: 80rpx;
+    flex: 0 0 80rpx;
+    height: 80rpx;
+    border-radius: 50%;
+  }
+
+  .title {
+    text-align: left;
+    font-size: 28rpx;
+    color: $u-content-color;
+    height: 165rpx;
+    padding-right: 20rpx;
+  }
+
+  .shopName {
+    height: auto;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 340rpx;
+    margin-bottom: 10rpx;
+  }
+
+  .cart-select-img {
+    width: 40upx;
+    height: 40upx;
+    margin: 0upx 30upx 0upx;
+    box-sizing: border-box;
+  }
+
+  .toStore {
+    width: 80px;
+    color: #FFEBC4;
+    padding: 0rpx 5rpx;
+    height: 52rpx;
+    background: #333333;
+    image {
+      width: 10rpx;
+      height: 18rpx;
+      margin-left: 10rpx;
+    }
+  }
+
+  .shopBox {
+    margin-top: 20rpx;
+    .item {
+      background: #FFFFFF;
+    }
+  }
+}
 </style>

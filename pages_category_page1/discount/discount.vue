@@ -27,8 +27,6 @@
         <view class="r">
           <view class="arrowUp" :class="{activeUp: type == 1}"></view>
           <view class="arrowDown" :class="{activeDown: type == 2}"></view>
-          <!--          <image src="https://ceres.zkthink.com/static/images/arrowSortUp.png" v-if="type == 1" class="arrow-img padd-t"></image>-->
-          <!--          <image src="https://ceres.zkthink.com/static/images/arrowSortDown.png" v-if="type == 2" class="arrow-img padd-b"></image>-->
         </view>
       </view>
       <view class="nav-item-sort" @click="sortTap(3)">
@@ -36,8 +34,6 @@
         <view class="r">
           <view class="arrowUp" :class="{activeUp: volume == 1}"></view>
           <view class="arrowDown" :class="{activeDown: volume == 2}"></view>
-          <!--          <image src="https://ceres.zkthink.com/static/images/arrowSortUp.png" v-if="volume == 1" class="arrow-img padd-t"></image>-->
-          <!--          <image src="https://ceres.zkthink.com/static/images/arrowSortDown.png" v-if="volume == 2" class="arrow-img padd-b"></image>-->
         </view>
       </view>
     </view>
@@ -54,7 +50,7 @@
           <view class="price">
             <view class="currentPrice flex-row-plus flex-items-plus font-color-FF7800">
               <view class="iconBox">
-                <image src="https://ceres.zkthink.com/static/images/discountListIcon.png"></image>
+                <image :src="`${VUE_APP_STATIC_URL}static/images/discountListIcon.png`"></image>
               </view>
               <view class="flex-row-plus flex-items priceInfo">
                 <label class="fs24">￥</label>
@@ -85,6 +81,7 @@ import { ref } from "vue"
 import { onLoad, onReachBottom } from "@dcloudio/uni-app";
 import { request } from "../../utils/request";
 import API from "@/config/api";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const pageType = ref(true);
 const getDiscount = ref([]);
@@ -281,6 +278,7 @@ page {
 }
 </style>
 <style lang="scss" scoped>
+@import "../../style/images";
 page {
   background: #333333;
 }
@@ -288,7 +286,7 @@ page {
     .discountBg {
       width: 100%;
       height: 480rpx;
-      background: url("https://ceres.zkthink.com/static/images/discount.png") no-repeat left top;
+      background: $discountBg no-repeat left top;
       background-size: contain;
       position: relative;
       .discountInfoBox {
@@ -300,7 +298,7 @@ page {
           height: 99rpx;
           line-height: 99rpx;
           text-align: center;
-          background: url("https://ceres.zkthink.com/static/images/discountText.png") no-repeat center center;
+          background: $discountText no-repeat center center;
           font-size: 28rpx;
           color: #FFFFFF;
           background-size: contain;

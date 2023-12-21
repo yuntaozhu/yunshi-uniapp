@@ -10,7 +10,7 @@
             @click="addAddressTap"
         >
           <image
-              src="https://ceres.zkthink.com/static/images/orderAddress.png"
+              :src="`${VUE_APP_STATIC_URL}static/images/orderAddress.png`"
               class="address-img"
           ></image>
           <!-- 有地址的 -->
@@ -34,7 +34,7 @@
             <text>你还没有收货地址哦，点击这里添加</text>
           </view>
           <image
-              src="https://ceres.zkthink.com/static/images/greyArrow.png"
+              :src="`${VUE_APP_STATIC_URL}static/images/greyArrow.png`"
               class="arrow-right-img"
           ></image>
         </view>
@@ -47,7 +47,7 @@
             <view class="order-list-top">
               <view class="top-l">
                 <image
-                    src="https://ceres.zkthink.com/static/images/orderStoreIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/images/orderStoreIcon.png`"
                     class="shop-img"
                 >
                 </image>
@@ -130,13 +130,9 @@
                   </view>
                   <image
                       class="discount-img"
-                      src="https://ceres.zkthink.com/static/images/arrowRight.png"
+                      :src="`${VUE_APP_STATIC_URL}static/images/arrowRight.png`"
                   ></image>
                 </view>
-                <!--							<view class="discount-info-box flex-items" v-else>-->
-                <!--								<view class="discount-info1"></view>-->
-                <!--								<image class="discount-img" src="https://ceres.zkthink.com/static/images/arrowRight.png"></image>-->
-                <!--							</view>-->
               </view>
               <view class="order-total-box">
                 <text class="total-num">共{{ item.number }}件</text>
@@ -184,7 +180,7 @@
             </view>
             <image
                 class="discount-img"
-                src="https://ceres.zkthink.com/static/images/arrowRight.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/arrowRight.png`"
             ></image>
           </view>
         </view>
@@ -283,7 +279,7 @@
             <image
                 class="close-btn"
                 @click="onDiscountClose"
-                src="https://ceres.zkthink.com/static/images/close.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/close.png`"
             ></image>
           </view>
           <view class="activity-coupon-box">
@@ -325,12 +321,12 @@
                       </view>
                       <image
                           class="check-img"
-                          src="https://ceres.zkthink.com/static/images/selectActive.png"
+                          :src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
                           v-if="usableItem.checked"
                       ></image>
                       <image
                           class="check-img"
-                          src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                          :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
                           v-else
                       >
                       </image>
@@ -355,7 +351,7 @@
             <image
                 class="close-btn"
                 @click="onshopClose"
-                src="https://ceres.zkthink.com/static/images/close.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/close.png`"
             ></image>
           </view>
           <view class="activity-coupon-box">
@@ -396,12 +392,12 @@
                       </view>
                       <image
                           class="check-img"
-                          src="https://ceres.zkthink.com/static/images/selectActive.png"
+                          :src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
                           v-if="sItem.checked"
                       ></image>
                       <image
                           class="check-img"
-                          src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                          :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
                           v-else
                       >
                       </image>
@@ -425,6 +421,7 @@ import API from "../../config/api";
 import { onBackPress, onLoad, onShow } from "@dcloudio/uni-app";
 import CashierList from "../../components/CashierList";
 import { ref,inject } from "vue";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const promotionInfoDTO = ref({
   couponId: 0,
@@ -1330,6 +1327,7 @@ async function submitOrder() {
 </script>
 
 <style lang="scss">
+@import "../../style/images";
 page {
   background-color: #F7F7F7;
 }
@@ -2004,7 +2002,7 @@ page {
 .coupon-item {
   width: 48%;
   height: 291rpx;
-  background: url("https://ceres.zkthink.com/static/images/couponsIcon.png") no-repeat center top;
+  background: $couponsIcon no-repeat center top;
   margin-top: 20upx;
   color: #C5AA7B;
   flex-shrink: 0;

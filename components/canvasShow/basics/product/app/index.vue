@@ -5,7 +5,7 @@
       <!-- #ifdef MP-WEIXIN -->
       <image
           class="title-img"
-          src="https://ceres.zkthink.com/static/canvas-images/product/img-title.png"
+          :src="`${VUE_APP_STATIC_URL}static/canvas-images/product/img-title.png`"
           alt="商品推荐"
           mode="widthFix"
       />
@@ -13,7 +13,7 @@
       <!-- #ifdef H5 || APP-PLUS -->
       <image
           class="title-img"
-          src="https://ceres.zkthink.com/static/canvas-images/product/img-title.png"
+          :src="`${VUE_APP_STATIC_URL}static/canvas-images/product/img-title.png`"
           alt="商品推荐"
           mode="widthFix"
       />
@@ -64,37 +64,37 @@
                 <image
                     class="iconImg"
                     v-if="item.activityType == 1"
-                    src="https://ceres.zkthink.com/static/canvas-images/groupBuyIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/groupBuyIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 2"
-                    src="https://ceres.zkthink.com/static/canvas-images/spikeIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/spikeIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 4"
-                    src="https://ceres.zkthink.com/static/canvas-images/spikeIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/spikeIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 3"
-                    src="https://ceres.zkthink.com/static/canvas-images/discountListIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/discountListIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 5"
-                    src="https://ceres.zkthink.com/static/canvas-images/discountListIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/discountListIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 9"
-                    src="https://ceres.zkthink.com/static/canvas-images/memberCenterIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/memberCenterIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 8"
-                    src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png"
+                    :src="`${VUE_APP_STATIC_URL}static/images/holidaySaleIcon.png`"
                 />
                 <!-- #endif -->
                 <!-- #ifdef H5 || APP-PLUS -->
@@ -131,7 +131,7 @@
 <!--                            <image-->
 <!--                                class="iconImg"-->
 <!--                                v-if="item.activityType == 8"-->
-<!--                                src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png"-->
+<!--                                :src="`${VUE_APP_STATIC_URL}static/images/holidaySaleIcon.png`"-->
 <!--                            >-->
                               <!-- #endif -->
                               <div class="price">
@@ -214,74 +214,74 @@
                 <image
                     class="iconImg"
                     v-if="item.activityType == 1"
-                    src="https://ceres.zkthink.com/static/canvas-images/groupBuyIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/groupBuyIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 2"
-                    src="https://ceres.zkthink.com/static/canvas-images/spikeIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/spikeIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 4"
-                    src="https://ceres.zkthink.com/static/canvas-images/spikeIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/spikeIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 3"
-                    src="https://ceres.zkthink.com/static/canvas-images/discountListIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/discountListIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 5"
-                    src="https://ceres.zkthink.com/static/canvas-images/discountListIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/discountListIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 9"
-                    src="https://ceres.zkthink.com/static/canvas-images/memberCenterIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/memberCenterIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 8"
-                    src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png"
+                    :src="`${VUE_APP_STATIC_URL}static/images/holidaySaleIcon.png`"
                 />
                 <!-- #endif -->
                 <!-- #ifdef H5 || APP-PLUS -->
                 <image
                     class="iconImg"
                     v-if="item.activityType == 1"
-                    src="https://ceres.zkthink.com/static/canvas-images/groupBuyIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/groupBuyIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 2"
-                    src="https://ceres.zkthink.com/static/canvas-images/spikeIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/spikeIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 4"
-                    src="https://ceres.zkthink.com/static/canvas-images/spikeIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/spikeIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 3"
-                    src="https://ceres.zkthink.com/static/canvas-images/discountListIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/discountListIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 5"
-                    src="https://ceres.zkthink.com/static/canvas-images/discountListIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/discountListIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 9"
-                    src="https://ceres.zkthink.com/static/canvas-images/memberCenterIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/canvas-images/memberCenterIcon.png`"
                 />
                 <image
                     class="iconImg"
                     v-if="item.activityType == 8"
-                    src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png"
+                    :src="`${VUE_APP_STATIC_URL}static/images/holidaySaleIcon.png`"
                 />
                 <!-- #endif -->
                 <div class="price">
@@ -323,6 +323,8 @@
 <script setup>
 import {ref, toRefs} from 'vue';
 import productMixin from '../mixin.js';
+import { VUE_APP_STATIC_URL } from "@/config/api";
+
 const props = defineProps({
   typeId: {
     type: Number,

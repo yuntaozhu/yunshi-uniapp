@@ -43,7 +43,7 @@
               ></image>
               <image
                   class="user-headSmallImg u-skeleton-circle"
-                  src="https://ceres.zkthink.com/static/images/storeLogo.png"
+                  :src="`${VUE_APP_STATIC_URL}static/images/storeLogo.png`"
                   v-else
               ></image>
               <view class="skuValue u-skeleton-fillet">
@@ -130,13 +130,13 @@
               <image
                   class="praise-icon"
                   @click.stop="zanTap(index,item.commentId,0)"
-                  src="https://ceres.zkthink.com/static/images/praiseActiveIcon.png"
+                  :src="`${VUE_APP_STATIC_URL}static/images/praiseActiveIcon.png`"
                   v-if="item.ifLike"
               ></image>
               <image
                   class="praise-icon"
                   @click.stop="zanTap(index,item.commentId,1)"
-                  src="https://ceres.zkthink.com/static/images/addPraiseIcon.png"
+                  :src="`${VUE_APP_STATIC_URL}static/images/praiseIcon.png`"
                   v-else
               ></image>
               <label class="mar-left-10">{{ item.likes }}</label>
@@ -149,7 +149,7 @@
         >
           <image
               class="emptyOrder-img"
-              src="https://ceres.zkthink.com/static/img/bgnull.png"
+              :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`"
           ></image>
           <label class="font-color-999 fs26 mar-top-30">你还没有评论哦～</label>
         </view>
@@ -175,7 +175,7 @@
               ></image>
               <image
                   class="user-headSmallImg"
-                  src="https://ceres.zkthink.com/static/images/storeLogo.png"
+                  :src="`${VUE_APP_STATIC_URL}static/images/storeLogo.png`"
                   v-else
               ></image>
               <label
@@ -233,13 +233,13 @@
                 <image
                     class="praise-icon"
                     @click.stop="zanTap(index,item.commentId,0)"
-                    src="https://ceres.zkthink.com/static/images/praiseActiveIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/images/praiseActiveIcon.png`"
                     v-if="item.ifLike"
                 ></image>
                 <image
                     class="praise-icon"
                     @click.stop="zanTap(index,item.commentId,1)"
-                    src="https://ceres.zkthink.com/static/images/praiseIcon.png"
+                    :src="`${VUE_APP_STATIC_URL}static/images/praiseIcon.png`"
                     v-else
                 ></image>
                 <label class="mar-left-10">{{ item.likes }}</label>
@@ -253,7 +253,7 @@
         >
           <image
               class="emptyOrder-img"
-              src="https://ceres.zkthink.com/static/img/bgnull.png"
+              :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`"
           ></image>
           <label class="font-color-999 fs26 mar-top-30">你还没有评论哦～</label>
         </view>
@@ -268,6 +268,8 @@ import API from "../../config/api";
 import { ref } from "vue";
 import { onBackPress, onReachBottom, onShow } from "@dcloudio/uni-app";
 import Skeleton from "@/components/Skeleton/index.vue";
+import { VUE_APP_STATIC_URL } from "@/config/api";
+
 const loading = ref(true);
 const evaluateTitleFlag = ref(1);
 const myCommentList = ref([]);

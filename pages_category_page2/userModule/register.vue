@@ -3,12 +3,12 @@
 	<view class="container flex-items flex-column">
     <global-loading />
 		<view class="login-logoBox">
-			<image class="login-logo" src="https://ceres.zkthink.com/static/images/loginLogo.png"></image>
+			<image class="login-logo" :src="`${VUE_APP_STATIC_URL}static/images/loginLogo.png`"></image>
 		</view>
 		<view>
 			<view class="iphoneNum-box flex-row-plus flex-items">
 				<view>
-					<image class="loginIcon" src="https://ceres.zkthink.com/static/images/phone.png"></image>
+					<image class="loginIcon" :src="`${VUE_APP_STATIC_URL}static/images/phone.png`"></image>
 				</view>
 				<view style="margin-left: 40rpx;">
 					<input v-model="phone" class="iphoneNum-inputbox" placeholder-class="iphoneNum-input" type="number"
@@ -18,7 +18,7 @@
 			<view class="flex-row-plus mar-top-20">
 				<view class="code-box">
 					<view>
-						<image class="loginIcon" src="https://ceres.zkthink.com/static/images/code.png"></image>
+						<image class="loginIcon" :src="`${VUE_APP_STATIC_URL}static/images/code.png`"></image>
 					</view>
 					<view style="margin-left: 40rpx;">
 						<input v-model="RegisterQuery.code" :maxlength="4" class="codeNum-inputbox" placeholder-class="codeNum-input"
@@ -49,6 +49,8 @@
 import { ref, reactive } from 'vue';
 import { request } from "../../utils/request";
 import API from "../../config/api";
+import { VUE_APP_STATIC_URL } from "@/config/api";
+
 const getCodeisWaiting = ref(false);
 const phone = ref('');
 const RegisterQuery = reactive({

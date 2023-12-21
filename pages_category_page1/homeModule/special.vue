@@ -8,9 +8,6 @@
 				<image :src="item" mode="widthFix" class="bannerImg"></image>
 			</swiper-item>
 		</swiper>
-<!--		<view class="flex-items-plus mar-top-20">-->
-<!--			<image class="choiceness" src="https://ceres.zkthink.com/static/images/choiceness.png"></image>-->
-<!--		</view>-->
 		<view>
 			<!-- {{goodsList.productVOList}} -->
 		</view>
@@ -21,7 +18,6 @@
 					<image class="goodsImg" :src="item.imgs[0]"></image>
 					<view class="mar-left-30">
 						<view class="goodsName-box overflowNoDot">
-							<!-- <image class="img618-cion" src="https://ceres.zkthink.com/static/images/618.png"></image> -->
 							<label class="goodsName fs26 mar-left-20">{{item.productName}}</label>
 						</view>
 						<view class="priceBuyNum-box mar-top-20">
@@ -32,7 +28,7 @@
 						</view>
 						<view class="flex-display flex-sp-between flex-row mar-top-10 flex-items">
 							<label class="fs22 font-color-999">{{item.storeDTO.storeName}}</label>
-							<image class="arrowImg" src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
+							<image class="arrowImg" :src="`${VUE_APP_STATIC_URL}static/img/user/arrow.png`"></image>
 						</view>
 					</view>
 				</view>
@@ -41,68 +37,61 @@
 
 		<!-- 为空 -->
 		<view v-else class="emptyOrder-box flex-items-plus flex-column">
-			<image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
+			<image class="emptyOrder-img" :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`"></image>
 			<label class="font-color-999 fs26 mar-top-30">专题商品为空哦～</label>
 		</view>
 	</view>
 </template>
 
-<script>
-	import { request } from "@/utils/request";
-	import API from "@/config/api";
-	export default {
-		data() {
-			return {
-				key: '',
-				bannerList: [],
-				goodsList: {
-					productVOList:[]
-				},
-				subject:{},
-				current: 1,
-				size: 10,
-			}
-		},
-		onLoad(options) {
-			this.key = options.key
-			this.getSubjectDetailByKeyList();
-		},
-		methods: {
-			getSubjectDetailByKeyList() {
-				let _this = this
-				// uni.showLoading({
-        //   mask: true,
-				// 	title: '加载中...'
-				// })
-				request(API.SubjectWithProduct + this.key, {
-					current: this.current,
-					map: {},
-					model: {},
-					order: 'descending',
-					size: this.size,
-					sort: 'id'
+<script setup>
+import { ref } from 'vue';
+import { request } from "@/utils/request";
+import API from "@/config/api";
+import { onLoad } from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
-				}, 'POST').then(res => {
-					uni.hideLoading()
-					_this.bannerList.push(res.data.subject.banner)
-					_this.goodsList = res.data.productPageVO
-					_this.subject = res.data.subject
-					uni.setNavigationBarTitle({
-					　　title:res.data.subject.title
-					})
+const key = ref('');
+const bannerList = ref([]);
+const goodsList = ref({
+  productVOList: []
+});
+const subject = ref({});
+const current = ref(1);
+const size = ref(10);
 
-				}).catch(res => {
-					uni.hideLoading()
-				})
-			},
-			goodsDateils(id){
-				uni.navigateTo({
-					url:`../goodsModule/goodsDetails?id=${id}`
-				})
+onLoad((options) => {
+  key.value = options.key
+  getSubjectDetailByKeyList();
+})
 
-			}
-		}
-	}
+const getSubjectDetailByKeyList = () => {
+  request(API.SubjectWithProduct + key.value, {
+    current: current.value,
+    map: {},
+    model: {},
+    order: 'descending',
+    size: size.value,
+    sort: 'id'
+
+  }, 'POST').then(res => {
+    uni.hideLoading()
+    bannerList.value.push(res.data.subject.banner)
+    goodsList.value = res.data.productPageVO
+    subject.value = res.data.subject
+    uni.setNavigationBarTitle({
+      title: res.data.subject.title
+    })
+  }).catch(res => {
+    uni.hideLoading()
+  })
+}
+
+const goodsDateils = (id) => {
+  uni.navigateTo({
+    url:`../goodsModule/goodsDetails?id=${id}`
+  })
+
+}
 </script>
 
 <style lang="scss">

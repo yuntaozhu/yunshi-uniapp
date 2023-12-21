@@ -4,10 +4,10 @@
       <div class="spike-card-top">
         <h2 class="spike-card-top-title">
           <!-- #ifdef MP-WEIXIN -->
-          <image class="title-img" src="https://ceres.zkthink.com/static/canvas-images/spike/img-title.png" alt="秒杀专区" mode="aspectFit"/>
+          <image class="title-img" :src="`${VUE_APP_STATIC_URL}static/canvas-images/spike/img-title.png`" alt="秒杀专区" mode="aspectFit"/>
           <!-- #endif -->
           <!-- #ifdef H5 || APP-PLUS -->
-          <image class="title-img" src="https://ceres.zkthink.com/static/canvas-images/spike/img-title.png" alt="秒杀专区" mode="aspectFit" />
+          <image class="title-img" :src="`${VUE_APP_STATIC_URL}static/canvas-images/spike/img-title.png`" alt="秒杀专区" mode="aspectFit" />
           <!-- #endif -->
         </h2>
         <div class="spike-card-top-time" v-if="state===2">
@@ -48,6 +48,8 @@
 <script setup>
 import commonMixin from '../mixin'
 import { toRefs } from 'vue';
+import { VUE_APP_STATIC_URL } from "@/config/api";
+
 const props = defineProps({
   typeId: {
     type: Number,

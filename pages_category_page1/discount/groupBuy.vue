@@ -3,7 +3,7 @@
     <global-loading />
 
     <view class="groupBuyBg">
-      <image src="https://ceres.zkthink.com/static/images/groupBuyLogo.png"></image>
+      <image :src="`${VUE_APP_STATIC_URL}static/images/groupBuyLogo.png`"></image>
     </view>
     <view
         class="countdown"
@@ -100,7 +100,7 @@
           <view class="price">
             <view class="currentPrice flex-row-plus flex-items-plus font-color-FF7800">
               <view class="iconBox">
-                <image src="https://ceres.zkthink.com/static/images/groupBuyIcon.png"></image>
+                <image :src="`${VUE_APP_STATIC_URL}static/images/groupBuyIcon.png`"></image>
               </view>
               <view class="flex-row-plus flex-items priceInfo">
                 <label class="fs24">￥</label>
@@ -145,7 +145,7 @@
       >
         <image
             class="emptyOrder-img"
-            src="https://ceres.zkthink.com/static/img/bgnull.png"
+            :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`"
         ></image>
         <label class="font-color-999 fs26 mar-top-30">暂无活动商品～</label>
       </view>
@@ -158,6 +158,7 @@ import { ref } from "vue"
 import {request} from "../../utils/request";
 import { onLoad, onShow, onReachBottom } from "@dcloudio/uni-app";
 import API from "@/config/api";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const pageType = ref(true);
 const groupBuy = ref([]);

@@ -57,7 +57,7 @@
       <view class="signInBox">
         <view class="signItem flex-items flex-sp-between" v-for="(item, index) of integralRecord" :key="index">
           <view class="leftBox flex-items">
-            <image src="https://ceres.zkthink.com/static/images/signIcon1.png"></image>
+            <image :src="`${VUE_APP_STATIC_URL}static/images/signIcon1.png`"></image>
             <view class="leftInfo">
               <label class="fs28 font-color-333">{{item.recordContent}}</label>
               <view class="fs24 font-color-999">{{item.createTime}}</view>
@@ -66,7 +66,7 @@
           <view class="rightBtn">{{item.recordType === 1 ? '+' : '-'}}{{item.credit}}</view>
         </view>
         <view class="emptyCart-box flex-items-plus flex-column" v-if="integralRecord.length === 0">
-          <image class="emptyCart-img" src="https://ceres.zkthink.com/static/images/searchEmpty.png"></image>
+          <image class="emptyCart-img" :src="`${VUE_APP_STATIC_URL}static/images/searchEmpty.png`"></image>
           <label class="font-color-999 fs26 mar-top-30">暂无记录~</label>
         </view>
       </view>
@@ -95,7 +95,7 @@
           </view>
         </view>
         <view class="emptyCart-box flex-items-plus flex-column" v-if="creditCouponList.length === 0">
-          <image class="emptyCart-img" src="https://ceres.zkthink.com/static/images/searchEmpty.png"></image>
+          <image class="emptyCart-img" :src="`${VUE_APP_STATIC_URL}static/images/searchEmpty.png`"></image>
           <label class="font-color-999 fs26 mar-top-30">暂无优惠券~</label>
         </view>
       </view>
@@ -114,7 +114,7 @@
           </view>
         </view>
         <view v-if="isConvertible" @click="isConvertible = false" class="cancelDel">
-          <image src="https://ceres.zkthink.com/static/images/cancelClose.png" mode=""></image>
+          <image :src="`${VUE_APP_STATIC_URL}static/images/cancelClose.png`" mode=""></image>
         </view>
       </view>
     </tui-modal>
@@ -126,7 +126,8 @@ import { ref, onMounted } from "vue"
 import tuiModal from "@/components/modal/modal"
 import { request } from "../../utils/request"
 import API from "../../config/api"
-import {onLoad} from "@dcloudio/uni-app"
+import { onLoad } from "@dcloudio/uni-app"
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const memberData = ref({})
 const equityList = ref([])
@@ -233,12 +234,13 @@ const changeTab = (type) => {
 </script>
 
 <style lang="scss" scoped>
+@import "../../style/images";
 page {
   background: #F8F8F8;
 }
 .memberCenter {
   border-top: 2rpx solid #4b4b4b;
-  background: url("https://ceres.zkthink.com/static/images/addBankBg.png") no-repeat left top;
+  background: $addBankBg no-repeat left top;
   background-size: contain;
   min-height: 800rpx;
   padding: 0 20rpx;
@@ -259,7 +261,6 @@ page {
     .memberBoxTop {
       position: relative;
       .memberTopPos{
-        //background: url("https://ceres.zkthink.com/static/images/integralBg.png") no-repeat left top;
         background-size: cover;
         height: 302rpx;
         border-radius: 24rpx;
@@ -305,7 +306,7 @@ page {
     padding: 0 20rpx;
     .signLeft {
       .signIcon {
-        background: url("https://ceres.zkthink.com/static/images/signIcon.png") no-repeat center left;
+        background: $signIcon no-repeat center left;
         background-size: contain;
         height: 120rpx;
         width: 96rpx;
@@ -334,22 +335,22 @@ page {
         margin-right: 15rpx;
       }
       .detailIcon {
-        background: url("https://ceres.zkthink.com/static/images/detailIcon.png") no-repeat center center;
+        background: $detailIcon no-repeat center center;
         background-size: contain;
       }
       .exchangeIcon {
-        background: url("https://ceres.zkthink.com/static/images/exchangeIcon.png") no-repeat center center;
+        background:$exchangeIcon no-repeat center center;
         background-size: contain;
       }
     }
     .active {
       background: #333333;
       .detailIcon {
-        background: url("https://ceres.zkthink.com/static/images/detailIcon1.png") no-repeat center center;
+        background: $detailIcon1 no-repeat center center;
         background-size: contain;
       }
       .exchangeIcon {
-        background: url("https://ceres.zkthink.com/static/images/exchangeIcon1.png") no-repeat center center;
+        background: $exchangeIcon1 no-repeat center center;
         background-size: contain;
       }
       text {
@@ -405,7 +406,7 @@ page {
             color: #FDFED6;
             width: 300rpx;
             height: 146rpx;
-            background: url('https://ceres.zkthink.com/static/images/exchangeItem.png') no-repeat left top;
+            background: $exchangeItem no-repeat left top;
             background-size: contain;
             padding: 30rpx 25rpx;
           }

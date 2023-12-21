@@ -4,7 +4,7 @@
 
     <view class="productList">
       <view class="couponTit flex-items">
-        <image src="https://ceres.zkthink.com/static/images/counponTitIcon.png"></image>
+        <image :src="`${VUE_APP_STATIC_URL}static/images/counponTitIcon.png`"></image>
         <text class="fs24 font-color-C83732" v-if="currentCoupon.discountMode === 1">以下商品使用满{{currentCoupon.fullMoney}}元减{{currentCoupon.reduceMoney}}元的优惠券</text>
         <text class="fs24 font-color-C83732" v-else>以下商品使用满{{currentCoupon.fullMoney}}打{{currentCoupon.reduceMoney}}折</text>
       </view>
@@ -23,7 +23,7 @@
           </view>
         </view>
         <view v-if="ifEmpty" class="emptyOrder-box flex-items-plus flex-column">
-          <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
+          <image class="emptyOrder-img" :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`"></image>
           <label class="font-color-999 fs26 mar-top-30">暂无可用商品～</label>
         </view>
       </view>
@@ -35,6 +35,7 @@ import { ref } from "vue";
 import { request } from "../../utils/request";
 import { onLoad, onReachBottom } from "@dcloudio/uni-app";
 import API from "../../config/api";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const productList = ref([])
 const page = ref(1)

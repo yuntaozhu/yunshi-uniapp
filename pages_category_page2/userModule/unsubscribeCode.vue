@@ -3,11 +3,11 @@
 	<view class="container flex-items-plus flex-column">
     <global-loading />
     <view class="login-logoBox">
-			<image class="login-logo" src="https://ceres.zkthink.com/static/images/loginLogo.png"></image>
+			<image class="login-logo" :src="`${VUE_APP_STATIC_URL}static/images/loginLogo.png`"></image>
 		</view>
 		<view class="iphoneNum-box flex-row-plus flex-items">
 			<view style="margin-right: 30rpx">
-				<image class="loginIcon" src="https://ceres.zkthink.com/static/images/phone.png"></image>
+				<image class="loginIcon" :src="`${VUE_APP_STATIC_URL}static/images/phone.png`"></image>
 			</view>
 			<view>
 				<input v-model="userInfo.phone" placeholder-class="iphoneNum-input" type="number" disabled
@@ -17,7 +17,7 @@
 		<view class="flex-row-plus mar-top-20">
 			<view class="code-box">
 				<view style="margin-right: 30rpx">
-					<image class="loginIcon" src="https://ceres.zkthink.com/static/images/code.png"></image>
+					<image class="loginIcon" :src="`${VUE_APP_STATIC_URL}static/images/code.png`"></image>
 				</view>
 				<view>
 					<input v-model="code" placeholder-class="codeNum-input" placeholder="请输入验证码" />
@@ -40,6 +40,7 @@ import { ref } from "vue";
 import { request } from "../../utils/request";
 import API from "../../config/api";
 import {onLoad} from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const disabled = ref(false)
 const text = ref('获取验证码')

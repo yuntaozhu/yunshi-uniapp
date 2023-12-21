@@ -3,10 +3,10 @@
     <div class="vip-card">
       <div class="vip-title">
         <!-- #ifdef MP-WEIXIN -->
-        <image class="title-img" src="https://ceres.zkthink.com/static/canvas-images/vip/img-title.png" alt="会员专区" mode="widthFix"/>
+        <image class="title-img" :src="`${VUE_APP_STATIC_URL}static/canvas-images/vip/img-title.png`" alt="会员专区" mode="widthFix"/>
         <!-- #endif -->
         <!-- #ifdef H5 || APP-PLUS -->
-        <image class="title-img" src="https://ceres.zkthink.com/static/canvas-images/vip/img-title.png" alt="会员专区" mode="widthFix"/>
+        <image class="title-img" :src="`${VUE_APP_STATIC_URL}static/canvas-images/vip/img-title.png`" alt="会员专区" mode="widthFix"/>
         <!-- #endif -->
         <a v-show="componentContent.showMore" class="btn-more a-link" @click="jumpVip">更多<i class="iconfont icon-arrow-right"></i></a>
       </div>
@@ -31,10 +31,10 @@
                   <div class="price-warp">
                     <div class="flag">
                       <!-- #ifdef MP-WEIXIN -->
-                      <image src="https://ceres.zkthink.com/static/canvas-images/vip/flag-vip.png" alt="会员价" class="flagImg"/>
+                      <image :src="`${VUE_APP_STATIC_URL}static/canvas-images/vip/flag-vip.png`" alt="会员价" class="flagImg"/>
                       <!-- #endif -->
                       <!-- #ifdef H5 || APP-PLUS -->
-                      <image class="flagImg" src="https://ceres.zkthink.com/static/canvas-images/vip/flag-vip.png" alt="会员专区" mode="widthFix"/>
+                      <image class="flagImg" :src="`${VUE_APP_STATIC_URL}static/canvas-images/vip/flag-vip.png`" alt="会员专区" mode="widthFix"/>
                       <!-- #endif -->
                     </div>
                     <div class="price">
@@ -77,10 +77,10 @@
                 <div class="price-warp">
                   <div class="flag">
                     <!-- #ifdef MP-WEIXIN -->
-                    <image src="https://ceres.zkthink.com/static/canvas-images/vip/flag-vip.png" alt="会员价" class="flagImg"/>
+                    <image :src="`${VUE_APP_STATIC_URL}static/canvas-images/vip/flag-vip.png`" alt="会员价" class="flagImg"/>
                     <!-- #endif -->
                     <!-- #ifdef H5 || APP-PLUS -->
-                    <image class="flagImg" src="https://ceres.zkthink.com/static/canvas-images/vip/flag-vip.png" alt="会员专区" mode="widthFix"/>
+                    <image class="flagImg" :src="`${VUE_APP_STATIC_URL}static/canvas-images/vip/flag-vip.png`" alt="会员专区" mode="widthFix"/>
                     <!-- #endif -->
                   </div>
                   <div class="price">

@@ -7,7 +7,7 @@
       <view v-else class="h3" :style="{fontSize:componentContent.fontSizeNum+'px',fontWeight:componentContent.textFontW,color:componentContent.titColor}">{{componentContent.title}}</view>
       <view class="search-btn" @click="searchPro">
         <image class="search-icon"
-               src="https://ceres.zkthink.com/static/img/search.png"
+               :src="`${VUE_APP_STATIC_URL}static/img/search.png`"
                mode="widthFix"></image>
       </view>
     </view>
@@ -27,6 +27,8 @@
 <script setup>
 import {ref, toRefs} from 'vue';
 import headerMixin from '../mixin'
+import { VUE_APP_STATIC_URL } from "@/config/api";
+
 const emits = defineEmits(['tabChange'])
 const props = defineProps({
   componentContent: {

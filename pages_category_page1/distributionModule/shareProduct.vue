@@ -7,11 +7,11 @@
 					<!-- 关闭按钮 -->
 					<view class="guanbiView">
 						<!-- #ifdef MP-WEIXIN -->
-						<image @click="showcos" src="https://ceres.zkthink.com/static/img/guanbi.png" class="guanbi"
+						<image @click="showcos" :src="`${VUE_APP_STATIC_URL}static/img/guanbi.png`" class="guanbi"
 							style="width:30px;height:30px;" mode="widthFix"></image>
 						<!-- #endif -->
 						<!-- #ifdef H5 || APP-PLUS -->
-						<image @click="showcos" src="https://ceres.zkthink.com/static/img/guanbi.png" class="guanbi"
+						<image @click="showcos" :src="`${VUE_APP_STATIC_URL}static/img/guanbi.png`" class="guanbi"
 							style="width:30px;height:30px;" mode="widthFix"></image>
 						<!-- #endif -->
 					</view>
@@ -29,10 +29,10 @@
 				<view class="shareBox" :class="{'width100':noMp}" hover-class="btn-click" @click="WXfenx">
 					<view style="flex: 1;text-align: center;display: flex;">
 						<view style="margin-left: 120rpx;" v-if="noMp">
-							<image src="https://ceres.zkthink.com/static/img/album.png" mode="widthFix"></image>
+							<image :src="`${VUE_APP_STATIC_URL}static/img/album.png`" mode="widthFix"></image>
 						</view>
 						<view style="margin-left: 35%;" v-else>
-							<image src="https://ceres.zkthink.com/static/img/album.png" mode="widthFix"></image>
+							<image :src="`${VUE_APP_STATIC_URL}static/img/album.png`" mode="widthFix"></image>
 						</view>
 						<view style="margin-left: 10rpx;font-size: 28rpx;color: #333333">保存到本地</view>
 					</view>
@@ -40,7 +40,7 @@
 				<view class="linkBtnBox" hover-class="btn-click" @click="FZlianj" v-if="noMp">
 					<view style="flex: 1;text-align: center;display: flex;">
 						<view class="linkBox">
-							<image src="https://ceres.zkthink.com/static/img/lianjie.png" mode="widthFix"></image>
+							<image :src="`${VUE_APP_STATIC_URL}static/img/lianjie.png`" mode="widthFix"></image>
 						</view>
 						<view style="margin-left: 10rpx;">
 							复制链接
@@ -57,6 +57,7 @@ import { ref } from "vue";
 import {onLoad} from "@dcloudio/uni-app";
 import { request } from '../../utils/request'
 import API from "../../config/api";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const size = ref(110); // 二维码大小
 const onval = ref(true);

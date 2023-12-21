@@ -5,7 +5,7 @@
     <!-- #ifdef MP-WEIXIN -->
     <!--    <view class="wxAddress flex-items flex-end" v-if="type == 1">-->
     <!--      <view class="wxBtnBox flex-items" @click="addAddressWx">-->
-    <!--        <image class="" src="https://ceres.zkthink.com/static/images/withdraw.png"></image>-->
+    <!--        <image class="" :src="`${VUE_APP_STATIC_URL}static/images/withdraw.png`"></image>-->
     <!--      </view>-->
     <!--    </view>-->
     <!-- #endif -->
@@ -22,7 +22,7 @@
           <!--					<city-select v-model="locationShowFalg" @city-change="cityChange"></city-select>-->
           <u-picker-cere mode="region" v-model="locationShowFalg" @confirm="cityChange" :default-region='addressData.defaultRegion' title="所在地"></u-picker-cere>
           <text>{{addressData.ssqText}}</text>
-          <image class="arrow mar-left-20" src="https://ceres.zkthink.com/static/images/greyArrow.png"></image>
+          <image class="arrow mar-left-20" :src="`${VUE_APP_STATIC_URL}static/images/greyArrow.png`"></image>
         </view>
       </view>
       <view class="detailAddress-box">
@@ -34,7 +34,7 @@
         <view class="fs28 addressTag">地址标签</view>
         <view class="flex-items">
           <text >{{tag}}</text>
-          <image class="arrow mar-left-20" src="https://ceres.zkthink.com/static/images/greyArrow.png"></image>
+          <image class="arrow mar-left-20" :src="`${VUE_APP_STATIC_URL}static/images/greyArrow.png`"></image>
         </view>
       </view>
       <view class="defaultState-box flex-row-plus flex-sp-between flex-items">
@@ -63,6 +63,7 @@ import {ref} from "vue";
 import {request} from "../../utils/request";
 import API from "../../config/api";
 import { onLoad } from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const show = ref(false)
 const type = ref(1) // 1.添加新地址 2.编辑收货地址

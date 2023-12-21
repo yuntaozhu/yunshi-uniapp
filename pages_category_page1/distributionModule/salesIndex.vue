@@ -42,19 +42,19 @@
 		<view class="btnList">
 			<view class="btnListBox flex-row-plus flex-items flex-sp-around">
 				<view class="flex-column-plus flex-items"  @click="gopromotion(1)">
-					<image class="salesIcon" src="https://ceres.zkthink.com/static/images/salesStoreIcon.png"></image>
+					<image class="salesIcon" :src="`${VUE_APP_STATIC_URL}static/images/salesStoreIcon.png`"></image>
 					<label class="fs26 font-color-333">推广店铺</label>
 				</view>
 				<view class="flex-column-plus flex-items" @click="storeindex">
-					<image class="salesIcon" src="https://ceres.zkthink.com/static/images/extendGoodsIcon.png"></image>
+					<image class="salesIcon" :src="`${VUE_APP_STATIC_URL}static/images/salesOrderIcon.png`"></image>
 					<label class="fs26 font-color-333">推广商品</label>
 				</view>
 				<view class="flex-column-plus flex-items" @click="godistributionOrder">
-					<image class="salesIcon" src="https://ceres.zkthink.com/static/images/salesOrderIcon.png"></image>
+					<image class="salesIcon" :src="`${VUE_APP_STATIC_URL}static/images/extendGoodsIcon.png`"></image>
 					<label class="fs26 font-color-333">分销订单</label>
 				</view>
 				<view class="flex-column-plus flex-items" @click="gopromotion(2)">
-					<image class="salesIcon" src="https://ceres.zkthink.com/static/images/inviteLowerIcon.png"></image>
+					<image class="salesIcon" :src="`${VUE_APP_STATIC_URL}static/images/inviteLowerIcon.png`"></image>
 					<label class="fs26 font-color-333">邀请下级</label>
 				</view>
 			</view>
@@ -67,6 +67,7 @@ import { ref } from 'vue'
 import { request } from '../../utils/request'
 import API from "../../config/api";
 import { onLoad } from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const item = ref({})
 const SalesMainItem = ref({}) // 页面信息数据

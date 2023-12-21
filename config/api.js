@@ -1,6 +1,8 @@
 // const DOMAIN_PREFIX = 'http://127.0.0.1:9007'
 const DOMAIN_PREFIX = 'https://ceres.zkthink.com/api'
 
+export const VUE_APP_STATIC_URL = "https://ceres.zkthink.com/" // 静态资源路径
+
 // https://ceresdev.zkthink.com
 // #ifndef H5
 const WX_API_BASE = DOMAIN_PREFIX // app
@@ -56,6 +58,7 @@ const API = {
 
 	//商品相关接口
 	GetClaasifyProducts: WX_API_BASE + '/classify/getClaasifyProducts', //  商品分类到商品列表
+	ShopSearch: WX_API_BASE + '/shop/getShops', //  店铺列表搜索
 	SearchHistory: WX_API_BASE + '/app/getHistory', //  查询最近的N条历史记录
 	GgetSearchProducts: WX_API_BASE + '/app/getSearchProducts', //  商品搜索查询
 	DeleteSearch: WX_API_BASE + '/app/deleteSearch', //  删除搜索记录

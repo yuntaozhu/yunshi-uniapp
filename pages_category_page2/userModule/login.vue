@@ -2,7 +2,7 @@
 	<view class="container flex-items-plus flex-column">
     <global-loading />
 		<view class="login-logoBox">
-			<image class="login-logo" src="https://ceres.zkthink.com/static/images/loginLogo.png"></image>
+			<image class="login-logo" :src="`${VUE_APP_STATIC_URL}static/images/loginLogo.png`"></image>
 		</view>
 		<view class="loginTitle-text flex-column-plus flex-items font-color-666 fs26">
 			<text>为了给您提供更好的服务</text>
@@ -31,6 +31,8 @@ import { ref } from 'vue';
 import { request } from "../../utils/request";
 import API from "../../config/api";
 import { onShow, onLoad, onBackPress } from '@dcloudio/uni-app';
+import { VUE_APP_STATIC_URL } from "@/config/api";
+
 const WXloginQuery = ref({
 	"code": "",
 	"salesId": 0,

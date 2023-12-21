@@ -34,13 +34,13 @@
 			<view class="signDateList">
 				<view class="signItem" v-for="(item, index) of recordList" :key="item.signinId">
 					<view class="topIcon">
-						<image src="https://ceres.zkthink.com/static/img/member/signIcon.png"></image>
+						<image :src=" `${VUE_APP_STATIC_URL}static/img/member/signIcon.png`"></image>
 					</view>
 					<view class="dateInfo">{{ index + 1 }}天</view>
 				</view>
 				<view class="signItem" v-for="index of noSign" :key="index">
 					<view class="topIcon">
-						<image src="https://ceres.zkthink.com/static/img/member/signIcon2.png"></image>
+						<image :src="`${VUE_APP_STATIC_URL}static/img/member/signIcon2.png`"></image>
 					</view>
 					<!-- #ifdef MP-WEIXIN -->
 					<view class="dateInfo">{{recordList.length+index+1}}天</view>
@@ -72,123 +72,123 @@
 	</view>
 </template>
 
-<script>
-	import {request} from "../../utils/request";
-	import API from "../../config/api";
+<script setup>
+import {request} from "../../utils/request";
+import API from "../../config/api";
+import { ref } from 'vue';
+import { onLoad, onReachBottom } from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
-	export default {
-		name: "index",
-		data() {
-			return {
-				growingValue: 80,
-				growingMax: 3500,
-				memberData: {},
-				recordList: {},
-				historyList: [],
-				page: 1,
-				pageSize: 5,
-				levelInfo: {},
-				noSign: 7,
-				signDate: 0,
-				currentData: '',
-				upDate: '',
-				loadingType:false, //判断是否触发onReachBottom
-			}
-		},
-		onLoad() {
-			this.getDate();
-			this.memberData = uni.getStorageSync('storage_userInfo');
-			this.levelInfo = uni.getStorageSync('storage_levelInfo');
-			this.getSelectSigninRecordList()
-			this.getSelectSigninHistory()
-		},
-		onReachBottom(){
-			if(this.loadingType){
-				uni.stopPullDownRefresh()
-			}else{
-				this.page = this.page+1
-				this.getSelectSigninHistory()
-			}
-		},
-		methods: {
-			getSelectSigninRecordList() {
-				this.noSign = 7
-				this.signDate = 0
-				// 获取签到
-				// uni.showLoading({
-        //   mask: true,
-				// 	title: '加载中...',
-				// })
-				request(API.selectSigninRecordList, {}, 'GET').then(res => {
-					uni.hideLoading()
-					this.recordList = res.data
-					this.noSign = this.noSign - this.recordList.length
-					// this.signDate = this.recordList.length
-					let newDate = this.recordList[this.recordList.length - 1]
-					this.upDate = newDate.createTime.slice(0, 10)
-				}).catch(res => {})
-			},
-			getSelectSigninHistory() {
-				// 获取签到历史
-				let param = ''
-				param = {
-					page: this.page,
-					pageSize: this.pageSize,
-				}
-				// uni.showLoading({
-        //   mask: true,
-				// 	title: '加载中...',
-				// })
-				request(API.selectSigninHistory, param, 'GET').then(res => {
-					if(res.data.list.length===0){
-						this.loadingType = true
-						this.page = this.page
-					}
-					uni.hideLoading()
-					this.historyList = this.historyList.concat(res.data.list);
-					this.signDate = res.data.total
-				}).catch(res => {
-					uni.hideLoading()
-				})
-			},
-			// 签到
-			signInFn() {
-				if (this.upDate !== this.currentData) {
-					// uni.showLoading({
-          //   mask: true,
-					// 	title: '请稍等...',
-					// })
-					request(API.signIn, {}, 'POST').then(res => {
-						uni.hideLoading()
-						uni.showToast({
-							title: '签到成功！',
-							icon: 'none'
-						})
-						this.getSelectSigninRecordList()
-						this.getSelectSigninHistory()
-					}).catch(res => {})
-				}
-			},
-			getDate() {
-				const year = new Date().getFullYear()
-				const month = new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() +
-					1)
-				const date = new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()
-				this.currentData = year + '-' + month + '-' + date
-				console.log(this.currentData, 'currentDate')
-			}
-		}
-	}
+const growingValue = ref(80);
+const growingMax = ref(3500);
+const memberData = ref({});
+const recordList = ref({});
+const historyList = ref([]);
+const page = ref(1);
+const pageSize = ref(5);
+const levelInfo = ref({});
+const noSign = ref(7);
+const signDate = ref(0);
+const currentData = ref('');
+const upDate = ref('');
+const loadingType = ref(false); // 判断是否触发onReachBottom
+
+
+onLoad(() => {
+  getDate();
+  memberData.value = uni.getStorageSync('storage_userInfo');
+  levelInfo.value = uni.getStorageSync('storage_levelInfo');
+  getSelectSigninRecordList()
+  getSelectSigninHistory()
+})
+
+onReachBottom(() => {
+  if(loadingType.value){
+    uni.stopPullDownRefresh()
+  }else{
+    page.value = page.value + 1
+    getSelectSigninHistory()
+  }
+})
+
+const getSelectSigninRecordList = () => {
+  noSign.value = 7
+  signDate.value = 0
+  // 获取签到
+  // uni.showLoading({
+  //   mask: true,
+  // 	title: '加载中...',
+  // })
+  request(API.selectSigninRecordList, {}, 'GET').then(res => {
+    uni.hideLoading()
+    recordList.value = res.data
+    noSign.value = noSign.value - recordList.value.length
+    // this.signDate = this.recordList.length
+    let newDate = recordList.value[recordList.value.length - 1]
+    upDate.value = newDate.createTime.slice(0, 10)
+  }).catch(res => {})
+}
+
+const getSelectSigninHistory = () => {
+  // 获取签到历史
+  let param = ''
+  param = {
+    page: page.value,
+    pageSize: pageSize.value,
+  }
+  // uni.showLoading({
+  //   mask: true,
+  // 	title: '加载中...',
+  // })
+  request(API.selectSigninHistory, param, 'GET').then(res => {
+    if(res.data.list.length === 0){
+      loadingType.value = true
+    }
+    uni.hideLoading()
+    historyList.value = historyList.value.concat(res.data.list);
+    signDate.value = res.data.total
+  }).catch(res => {
+    uni.hideLoading()
+  })
+}
+
+// 签到
+const signInFn = () => {
+  if (upDate.value !== currentData.value) {
+    // uni.showLoading({
+    //   mask: true,
+    // 	title: '请稍等...',
+    // })
+    request(API.signIn, {}, 'POST').then(res => {
+      uni.hideLoading()
+      uni.showToast({
+        title: '签到成功！',
+        icon: 'none'
+      })
+      getSelectSigninRecordList()
+      getSelectSigninHistory()
+    }).catch(res => {})
+  }
+}
+
+const getDate = () => {
+  const year = new Date().getFullYear()
+  const month = new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() +
+      1)
+  const date = new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()
+  currentData.value = year + '-' + month + '-' + date
+}
 </script>
 
 <style lang="scss" scoped>
+@import "../../style/images";
 	page {
 		background: #F8F8F8;
 	}
 
 	.memberCenter {
 		border-top: 2rpx solid #4b4b4b;
-		background: url("https://ceres.zkthink.com/static/img/member/memberSignBg.png") no-repeat left top;
+		background: $memberCenterBg no-repeat left top;
 		background-size: contain;
 		min-height: 900rpx;
 		padding: 0 20rpx;

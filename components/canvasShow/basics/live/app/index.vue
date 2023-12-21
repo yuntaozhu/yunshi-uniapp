@@ -2,10 +2,10 @@
   <div class="live-list-page" v-if="roomList && roomList.length > 0">
     <div class="title">
       <!-- #ifdef MP-WEIXIN -->
-      <image class="title-img" src="https://ceres.zkthink.com/static/canvas-images/live/img-title.png" alt="直播"  mode="widthFix"/>
+      <image class="title-img" :src="`${VUE_APP_STATIC_URL}static/canvas-images/live/img-title.png`" alt="直播"  mode="widthFix"/>
       <!-- #endif -->
       <!-- #ifdef H5 || APP-PLUS -->
-      <image class="title-img" src="https://ceres.zkthink.com/static/canvas-images/live/img-title.png" alt="直播"  mode="widthFix"/>
+      <image class="title-img" :src="`${VUE_APP_STATIC_URL}static/canvas-images/live/img-title.png`" alt="直播"  mode="widthFix"/>
       <!-- #endif -->
     </div>
     <div class="live-list">

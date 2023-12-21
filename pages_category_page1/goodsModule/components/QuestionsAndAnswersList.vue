@@ -53,17 +53,6 @@
         >查看全部答复
         </view>
       </view>
-      <!--      <view
-                class="moreBox"
-                v-if="problemsList.length>0"
-                @click="handleJumpAllAnswer"
-            >
-              <label class="fs24">查看全部</label>
-              <image
-                  class="evaluateAllArrow-icon mar-left-10"
-                  src="https://ceres.zkthink.com/static/img/user/arrow.png"
-              ></image>
-            </view>-->
     </view>
   </div>
 </template>

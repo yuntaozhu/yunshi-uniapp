@@ -3,12 +3,12 @@
     <div class="coupon-list">
       <div class="coupon-item" v-for="(item,index) in couponsData" :key="index" :class="item.state && item.state !== 3 && 'isReceive'">
         <!-- #ifdef MP-WEIXIN -->
-        <image class="coupon-item-bg" src="https://ceres.zkthink.com/static/canvas-images/coupon/bg-coupon.png" v-if="item.state && item.state === 3" mode="widthFix" />
-        <image class="coupon-item-bg" src="https://ceres.zkthink.com/static/canvas-images/coupon/bg-coupon2.png" v-else mode="widthFix" />
+        <image class="coupon-item-bg" :src="`${VUE_APP_STATIC_URL}static/canvas-images/coupon/bg-coupon.png`" v-if="item.state && item.state === 3" mode="widthFix" />
+        <image class="coupon-item-bg" :src="`${VUE_APP_STATIC_URL}static/canvas-images/coupon/bg-coupon2.png`" v-else mode="widthFix" />
         <!-- #endif -->
         <!-- #ifdef H5 || APP-PLUS -->
-<!--        <image class="coupon-item-bg" src="../../../static/images/coupon/bg-coupon.png" v-if="item.state && item.state === 3" mode="widthFix">-->
-<!--        <image class="coupon-item-bg" src="../../../static/images/coupon/bg-coupon2.png" v-else mode="widthFix">-->
+<!--        <image class="coupon-item-bg" src="../../../static/images/coupon/bg-coupon.png`" v-if="item.state && item.state === 3" mode="widthFix">-->
+<!--        <image class="coupon-item-bg" src="../../../static/images/coupon/bg-coupon2.png`" v-else mode="widthFix">-->
         <!-- #endif -->
         <div class="coupon-item-cont">
         <div class="coupon-item-content">
@@ -34,6 +34,8 @@
 <script setup>
 import couponMixin from '../mixin';
 import { toRefs } from 'vue';
+import { VUE_APP_STATIC_URL } from "@/config/api";
+
 const props = defineProps({
   typeId: {
     type: Number,

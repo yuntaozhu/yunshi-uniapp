@@ -37,13 +37,13 @@
           <view class="r-box"
                 v-if="ReturnMoneyQuery.goodsState == 0">
             <text>未收到货</text>
-            <image src="https://ceres.zkthink.com/static/images/arrowRight.png"
+            <image :src="`${VUE_APP_STATIC_URL}static/images/arrowRight.png`"
                    class="r"></image>
           </view>
           <view class="r-box"
                 v-if="ReturnMoneyQuery.goodsState == 1">
             <text>已收到货</text>
-            <image src="https://ceres.zkthink.com/static/images/arrowRight.png"
+            <image :src="`${VUE_APP_STATIC_URL}static/images/arrowRight.png`"
                    class="r"></image>
           </view>
         </view>
@@ -52,7 +52,7 @@
           <view class="l">退款原因</view>
           <view class="r-box">
             <text >{{ liyoutext }}</text>
-            <image src="https://ceres.zkthink.com/static/images/arrowRight.png"
+            <image :src="`${VUE_APP_STATIC_URL}static/images/arrowRight.png`"
                    class="r"></image>
           </view>
         </view>
@@ -122,11 +122,11 @@
                   @click="ReturnMoneyQuery.goodsState = 0">
               <text class="status-select-title">未收到货</text>
               <image mode="aspectFill"
-                     src="https://ceres.zkthink.com/static/images/selectActive.png"
+                     :src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
                      v-if="ReturnMoneyQuery.goodsState == 0"
                      class="status-select-img"></image>
               <image mode="aspectFill"
-                     src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                     :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
                      v-else
                      class="status-select-img"></image>
             </view>
@@ -134,11 +134,11 @@
                   @click="ReturnMoneyQuery.goodsState = 1">
               <text class="status-select-title">已收到货</text>
               <image mode="aspectFill"
-                     src="https://ceres.zkthink.com/static/images/selectActive.png"
+                     :src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
                      v-if="ReturnMoneyQuery.goodsState == 1"
                      class="status-select-img"></image>
               <image mode="aspectFill"
-                     src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                     :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
                      v-else
                      class="status-select-img"></image>
             </view>
@@ -167,11 +167,11 @@
                   :key="index">
               <text class="status-select-title">{{ item }}</text>
               <image mode="aspectFill"
-                     src="https://ceres.zkthink.com/static/images/selectActive.png"
+                     :src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
                      v-if="ReturnMoneyQuery.returnReason == index"
                      class="status-select-img"></image>
               <image mode="aspectFill"
-                     src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                     :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
                      v-else
                      class="status-select-img"></image>
             </view>
@@ -191,6 +191,7 @@ import { request } from '../../utils/request'
 import API from "../../config/api";
 import { onReady, onLoad } from "@dcloudio/uni-app";
 import Upload from '@/uni_modules/vk-uview-ui/components/u-upload/u-upload.vue'
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const returnImgsList = ref(1)
 const cargoStatusShowFalg = ref(false)

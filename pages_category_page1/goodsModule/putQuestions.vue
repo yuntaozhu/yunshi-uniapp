@@ -15,13 +15,6 @@
       <view class="uni-textarea">
         <textarea v-model="questionText" placeholder="请说出你的问题..." auto-height />
       </view>
-<!--      <view class="anonymous">-->
-<!--		  <view class="flex-row-plus flex-items" @click="changeCheck">-->
-<!--			 <image mode="aspectFill" v-if="anonymous == true" src="https://ceres.zkthink.com/static/images/selectActive.png" class="cart-select-img"></image>-->
-<!--			 <image mode="aspectFill" v-else src="https://ceres.zkthink.com/static/images/selectEmpty.png" class="cart-select-img"></image>-->
-<!--			 <label>匿名提问</label>-->
-<!--		  </view>-->
-<!--      </view>-->
     </view>
     <view class="putQuestionsBox" @click="addProblem">
       <span class="putQuestionsBtn">发布</span>

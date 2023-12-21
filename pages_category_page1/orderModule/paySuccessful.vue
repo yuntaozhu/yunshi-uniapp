@@ -10,7 +10,7 @@
     </view>
     <view class="resultCard">
       <view class="imgBox">
-        <image src="https://ceres.zkthink.com/static/images/payIcon.png"></image>
+        <image :src="`${VUE_APP_STATIC_URL}static/images/payIcon.png`"></image>
       </view>
       <view class="successful">支付成功</view>
       <view class="btnBox fs28 font-color-333">
@@ -30,7 +30,7 @@
           v-if="orderPolite.growth || orderPolite.couponList"
       >
         <view class="politeImgBox">
-          <image src="https://ceres.zkthink.com/static/images/politeIcon.png"></image>
+          <image :src="`${VUE_APP_STATIC_URL}static/images/politeIcon.png`"></image>
         </view>
         <view class="rightInfo">
           <view
@@ -64,10 +64,10 @@
     <HotTemplate />
     <!-- 广告 -->
     <ad-window
-        ref="adWindow"
         :triggerCondition="2"
     ></ad-window>
   </view>
+  ref="adWindow"
 </template>
 
 <script setup>
@@ -78,6 +78,7 @@ import { request } from '../../utils/request'
 import API from "../../config/api";
 import { onLoad, onShow } from "@dcloudio/uni-app";
 import { nextTick, ref } from "vue";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 onShow(() => {
   // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ

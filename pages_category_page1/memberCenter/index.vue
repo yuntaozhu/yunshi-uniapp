@@ -17,7 +17,7 @@
           <view class="memberTopInfo">
             <view class="backBox">
               <image
-                  src="https://ceres.zkthink.com/static/images/back_img04.png"
+                  :src="`${VUE_APP_STATIC_URL}static/images/back_img04.png`"
                   class="back"
                   @click="back"
               ></image>
@@ -122,7 +122,7 @@
               <view class="signItem flex-items flex-sp-between">
                 <view class="itemLeft flex-items">
                   <view class="leftIcon">
-                    <image src="https://ceres.zkthink.com/static/img/member/memberList2.png"></image>
+                    <image :src="`${VUE_APP_STATIC_URL}static/img/member/memberList2.png`"></image>
                   </view>
                   <view class="leftInfo">
                     <label class="fs28 font-color-333">购物</label>
@@ -148,6 +148,7 @@ import { ref, onMounted } from "vue";
 import { onLoad } from '@dcloudio/uni-app';
 import { request } from '../../utils/request'
 import API from "../../config/api";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const memberData = ref({});
 const equityList = ref([]);

@@ -16,7 +16,7 @@
         <image
             class="user-headImg"
             v-else
-            src="https://ceres.zkthink.com/static/img/user/morentouxiang.png"
+            :src="`${VUE_APP_STATIC_URL}static/img/user/morentouxiang.png`"
         >
         </image>
       </view>
@@ -160,6 +160,7 @@ import { request } from "@/utils/request";
 import API from "@/config/api";
 import { onMounted, ref } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const screenHeight = ref(0)
 const birthdateShow = ref(false)

@@ -9,8 +9,8 @@
             <view class="cart-bg  u-skeleton-fillet">
               <view class="cart-num-box">
                 <image
-                    class="  u-skeleton-fillet"
-                    src="https://ceres.zkthink.com/static/images/logoTop.png"
+                    class="u-skeleton-fillet"
+                    :src="`${VUE_APP_STATIC_URL}static/assets/img/logo.png`"
                 ></image>
                 <text
                     class="btn-box "
@@ -47,14 +47,14 @@
                   <image
                       mode="aspectFill  u-skeleton-fillet"
                       v-if="item.selected === 1"
-                      src="https://ceres.zkthink.com/static/images/selectActive.png"
+                      :src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
                       class="cart-select-img"
                       @click.stop="handleSelectShop(index,0)"
                   ></image>
                   <image
                       mode="aspectFill  u-skeleton-fillet"
                       v-else
-                      src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                      :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
                       class="cart-select-img"
                       @click.stop="handleSelectShop(index,1)"
                   ></image>
@@ -63,12 +63,12 @@
                       @click="$jump(`${jumpObj.store}?storeId=${item.shopId}`)"
                   >
                     <image
-                        src="https://ceres.zkthink.com/static/images/orderStoreIcon.png"
+                        :src="`${VUE_APP_STATIC_URL}static/images/orderStoreIcon.png`"
                         class="shop-img"
                     ></image>
                     <text class="shop-name">{{ item.shopName }}</text>
                     <image
-                        src="https://ceres.zkthink.com/static/images/arrowRight.png"
+                        :src="`${VUE_APP_STATIC_URL}static/images/arrowRight.png`"
                         class="arrow-right-img"
                     ></image>
                   </view>
@@ -79,7 +79,7 @@
                 >
                   <image
                       class="mar-right-20"
-                      src="https://ceres.zkthink.com/static/images/zuheIcon.png"
+                      :src="`${VUE_APP_STATIC_URL}static/images/zuheIcon.png`"
                   ></image>
                   <view class="fs24 font-color-C83732">
                     已满足【{{ item.currentRules.price }}元任选{{ item.currentRules.number }}件】！
@@ -96,14 +96,14 @@
                     <image
                         mode="aspectFill  u-skeleton-fillet"
                         v-if="skuItem.selected == 1"
-                        src="https://ceres.zkthink.com/static/images/selectActive.png"
+                        :src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
                         @click.stop="handleSelectSku(index,cIndex,0)"
                         class="cart-select-img"
                     ></image>
                     <image
                         mode="aspectFill  u-skeleton-fillet"
                         v-else
-                        src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                        :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
                         @click.stop="handleSelectSku(index,cIndex,1)"
                         class="cart-select-img"
                     ></image>
@@ -153,14 +153,14 @@
                 <image
                     mode="aspectFill"
                     v-if="settleAccountsObj.isAllCheck"
-                    src="https://ceres.zkthink.com/static/images/selectActive.png"
+                    :src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
                     class="cart-select-img"
                     @click="handleSelectAll(0)"
                 ></image>
                 <image
                     mode="aspectFill"
                     v-else
-                    src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                    :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
                     class="cart-select-img"
                     @click="handleSelectAll(1)"
                 ></image>
@@ -202,14 +202,14 @@
                 <image
                     mode="aspectFill"
                     v-if="settleAccountsObj.isAllCheck"
-                    src="https://ceres.zkthink.com/static/images/selectActive.png"
+                    :src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
                     class="cart-select-img"
                     @click="handleSelectAll(0)"
                 ></image>
                 <image
                     mode="aspectFill"
                     v-else
-                    src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                    :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
                     class="cart-select-img"
                     @click="handleSelectAll(1)"
                 ></image>
@@ -253,7 +253,7 @@
       >
         <image
             class="emptyCart-img"
-            src="https://ceres.zkthink.com/static/images/cartEmpty.png"
+            :src="`${VUE_APP_STATIC_URL}static/images/cartEmpty.png`"
         ></image>
         <label class="font-color-999 fs26 mar-top-30">你的购物车还没有宝贝哦</label>
         <label class="font-color-999 fs26 mar-top-10">快去首页选一个吧～</label>
@@ -290,6 +290,8 @@ import { defaultCartList, getCartNumberBySelect, getPriceBySelect } from "./cart
 import lodash from "lodash";
 import { request } from "@/utils/request";
 import API from "@/config/api";
+import { VUE_APP_STATIC_URL } from "@/config/api";
+
 let cacheKey = ''
 
 const $jumpToTabbar = inject('$jumpToTabbar')

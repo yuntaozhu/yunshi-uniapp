@@ -40,7 +40,7 @@
               />
               <text class="shop-name">{{ orderItem.shopName }}</text>
               <image
-                  src="https://ceres.zkthink.com/static/images/arrowRight.png"
+                  :src="`${VUE_APP_STATIC_URL}static/images/arrowRight.png`"
                   class="arrow-img"
               />
             </view>
@@ -125,7 +125,7 @@
         <NoMore :show="!isEmpty && list.length >=listTotal" />
         <Empty
             :show="isEmpty"
-            icon-url="https://ceres.zkthink.com/static/images/emptyOrderImg.png"
+            :icon-url="`${VUE_APP_STATIC_URL}static/images/emptyOrderImg.png`"
         >您还没有订单哦~
         </Empty>
       </view>
@@ -166,6 +166,7 @@ import { inject, nextTick, onMounted, ref } from "vue";
 import { onBackPress, onLoad, onReachBottom, onShow, onUnload } from "@dcloudio/uni-app";
 import { useLoading } from "@/hooks/useLoading";
 const {showLoading,hideLoading} = useLoading();
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const $showLoading = showLoading
 const $hideLoading = hideLoading
@@ -738,6 +739,7 @@ function goAdditionalEvaluation(orderIndex, commentId) {
 </script>
 
 <style lang="scss">
+@import "../../style/images";
 .tabs {
   position: relative;
   z-index: 999999;
@@ -843,7 +845,7 @@ page {
     .delIcon {
       width: 40rpx;
       height: 40rpx;
-      background: url("https://ceres.zkthink.com/static/images/delListOrder.png") no-repeat center center;
+      background: $delListOrder no-repeat center center;
       background-size: contain;
     }
   }

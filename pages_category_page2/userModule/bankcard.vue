@@ -29,7 +29,7 @@
     >
       <image
           class="emptyBankcard"
-          src="https://ceres.zkthink.com/static/img/bgnull.png"
+          :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`"
       ></image>
       <label>你还没有添加银行卡哦～</label>
     </view>
@@ -49,6 +49,7 @@ import { request } from "@/utils/request";
 import API from "@/config/api";
 import { ref } from "vue";
 import { onBackPress, onLoad, onReachBottom } from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const bankcardList = ref([])
 const headWord = ref('')
@@ -125,9 +126,10 @@ const encodeCardNum = (cardNum) => {
 </script>
 
 <style lang="scss">
+@import "../../style/images";
 .container {
   .bankcardList {
-    background: url("https://ceres.zkthink.com/static/images/addBankBg.png") no-repeat left top;
+    background: $addBankBg no-repeat left top;
     background-size: contain;
     display: block;
     padding-bottom: 85px;
@@ -175,7 +177,7 @@ const encodeCardNum = (cardNum) => {
     .bankcard-detail {
       width: 100%;
       height: 334rpx;
-      background: url("https://ceres.zkthink.com/static/images/accountBg.png") no-repeat left top;
+      background: $accountBg no-repeat left top;
       background-size: contain;
       border-radius: 18rpx;
 

@@ -78,7 +78,7 @@
 <script>
 import { request } from "../../utils/request";
 import API from "../../config/api";
-
+import {VUE_APP_STATIC_URL} from "../../config/api";
 export default {
   name: "CashierList",
   props: {
@@ -95,21 +95,21 @@ export default {
           id: 1,
           label: '微信支付',
           paymentMode: 1,
-          icon: 'https://ceres.zkthink.com/static/images/wechat_pay.png',
+          icon: `${VUE_APP_STATIC_URL}images/wechat_pay.png`,
           disabled:false
         },
         {
           id: 2,
           label: '支付宝支付',
           paymentMode: 2,
-          icon: 'https://ceres.zkthink.com/static/images/alipay.png',
+          icon: `${VUE_APP_STATIC_URL}images/alipay.png`,
           disabled:false
         },
         {
           id: 3,
           label: '花呗分期',
           paymentMode: 3,
-          icon: 'https://ceres.zkthink.com/static/images/huabei.png',
+          icon: `${VUE_APP_STATIC_URL}images/huabei.png`,
           disabled:false
         }
       ],

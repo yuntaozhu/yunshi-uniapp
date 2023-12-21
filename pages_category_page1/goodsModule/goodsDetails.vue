@@ -69,7 +69,7 @@
       <view class="express-box flex-items flex-row fs24 u-skeleton-fillet">
         <label class="fs24 font-color-999 mar-right-20 ">发货</label>
         <image
-            src="https://ceres.zkthink.com/static/images/mapIcon.png"
+            :src="`${VUE_APP_STATIC_URL}static/images/mapIcon.png`"
             v-if="productData.receive && productData.receive.receiveAdress"
         ></image>
         <label
@@ -100,7 +100,7 @@
           </view>
           <image
               class="arrow-icon"
-              src="https://ceres.zkthink.com/static/img/user/arrow.png"
+              :src="`${VUE_APP_STATIC_URL}static/img/user/arrow.png`"
           ></image>
         </view>
       </view>
@@ -130,7 +130,7 @@
             </view>
             <image
                 class="evaluateAllArrow-icon mar-left-10"
-                src="https://ceres.zkthink.com/static/img/user/arrow.png"
+                :src="`${VUE_APP_STATIC_URL}static/img/user/arrow.png`"
             ></image>
           </view>
         </view>
@@ -227,7 +227,7 @@
           >
             <image
                 class="store-icon"
-                src="https://ceres.zkthink.com/static/images/storeIcon.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/storeIcon.png`"
             ></image>
             <label class="fs22">店铺</label>
           </view>
@@ -238,7 +238,7 @@
           >
             <image
                 class="store-icon"
-                src="https://ceres.zkthink.com/static/images/service-product-detail.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/service-product-detail.png`"
             ></image>
             <label class="fs22">客服</label>
           </view>
@@ -254,7 +254,7 @@
             </view>
             <image
                 class="store-icon"
-                src="https://ceres.zkthink.com/static/images/gouwuche.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/gouwuche.png`"
             ></image>
             <label class="fs22">购物车</label>
           </view>
@@ -308,7 +308,7 @@
       >
         <image
             class="returnTopImg"
-            src="https://ceres.zkthink.com/static/images/backTop.png"
+            :src="`${VUE_APP_STATIC_URL}static/images/backTop.png`"
         ></image>
       </view>
     </view>
@@ -404,6 +404,7 @@ import API from "@/config/api";
 import { inject, nextTick, ref } from "vue";
 import { onLoad, onPageScroll, onShareTimeline, onUnload } from '@dcloudio/uni-app';
 import { useLoading } from "@/hooks/useLoading";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 // import GlobalLoading from "@/components/diyLoading/index.vue";
 
 const $store = inject('$store')
@@ -812,6 +813,7 @@ onPageScroll(e => {
     scoped
     lang="scss"
 >
+@import "../../style/images";
 .page {
   background-color: #F7F7F7;
 }
@@ -1082,7 +1084,7 @@ onPageScroll(e => {
         content: '';
         width: 60rpx;
         height: 60rpx;
-        background: url("https://ceres.zkthink.com/static/images/arrow.png") no-repeat center center;
+        background: $smallArrowR no-repeat center center;
         background-size: contain;
         display: block;
         position: absolute;
@@ -1326,7 +1328,7 @@ onPageScroll(e => {
         width: 36rpx;
         height: 36rpx;
         display: block;
-        background: url("https://ceres.zkthink.com/static/images/serviceImg.png") no-repeat center center;
+        background: $serviceImg no-repeat center center;
         background-size: contain;
       }
     }
@@ -1531,14 +1533,12 @@ onPageScroll(e => {
 
 .sceneMarketingBox {
   width: 100%;
-  background: url("https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/5f85fe4782e34c10b15b04f76c571d12_sceneMarketingDetailsIcon.png"
-  ) no-repeat center;
+  background: $sceneMarketingDetailsIcon no-repeat center;
   padding: 20rpx 30rpx;
   background-size: cover;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   .sceneNameBox {
     width: 220rpx;
     text-align: center;

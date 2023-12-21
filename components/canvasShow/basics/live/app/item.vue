@@ -5,10 +5,10 @@
       <view class="status">
         <view class="status-state">
           <!-- #ifdef MP-WEIXIN -->
-          <image class="img" src="https://ceres.zkthink.com/static/canvas-images/live/icon-live-num.png" mode="widthFix"/>
+          <image class="img" :src="`${VUE_APP_STATIC_URL}static/canvas-images/live/icon-live-num.png`" mode="widthFix"/>
           <!-- #endif -->
           <!-- #ifdef H5 || APP-PLUS -->
-          <image class="img" src="https://ceres.zkthink.com/static/canvas-images/live/icon-live-num.png" mode="widthFix"/>
+          <image class="img" :src="`${VUE_APP_STATIC_URL}static/canvas-images/live/icon-live-num.png`" mode="widthFix"/>
           <!-- #endif -->
           直播中
         </view>
@@ -90,6 +90,7 @@
 import {toRefs,ref, onMounted, onUnmounted } from "vue";
 import {request} from "@/utils/request"
 import API from '@/config/api';
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 import { startLiveTemplate } from '@/config/subscribe.js'
 import { liveAppid } from '@/config/live.js'

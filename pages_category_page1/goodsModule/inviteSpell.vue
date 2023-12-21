@@ -13,16 +13,12 @@
           <view class="title-lab fs28">{{inviteSpell.productName}}</view>
           <view class="flex-row-plus flex-sp-between">
             <view class="flex-column-plus">
-<!--              <view class="spellNum flex-items-plus font-color-C5AA7B mar-top-30 fs24">{{inviteSpell.person}}人团</view>-->
               <view class="flex-row-plus mar-top-30 flex-items">
                 <label class="font-color-C83732 fs24">¥</label>
                 <label class="font-color-C83732 fs36 mar-left-5">{{inviteSpell.price}}</label>
                 <label class="font-color-CCC discountsPriceLine fs26 mar-left-20">¥{{inviteSpell.originalPrice}}</label>
               </view>
             </view>
-<!--            <view class="mar-top-20">-->
-<!--              <image class="issueregiment" src="https://ceres.zkthink.com/static/images/issueregiment.png"></image>-->
-<!--            </view>-->
           </view>
         </view>
       </view>
@@ -508,6 +504,7 @@
 </script>
 
 <style lang="scss">
+@import "../../style/images";
 page{background-color: #F7F7F7;}
 .copy-color{
 	display: flex;
@@ -516,7 +513,7 @@ page{background-color: #F7F7F7;}
 	flex-direction: column;
 }
 .inviteSpell-con{
-  background: url("https://ceres.zkthink.com/static/images/pintuanbg.png") no-repeat left top;
+  background: $pintuanBg no-repeat left top;
   background-size: contain;
   .grouped {
     text-align: center;

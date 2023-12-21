@@ -4,7 +4,7 @@
 
     <view v-if="!shopSeckillId">
 			<view class="spikeBg">
-				<image src="https://ceres.zkthink.com/static/images/spikelLogo.png"></image>
+				<image :src="`${VUE_APP_STATIC_URL}static/images/spikelLogo.png`"></image>
 			</view>
 			<view class="tabs-nav-warp spikeNav">
 				<scroll-view class="tabs-nav" scroll-x="true">
@@ -61,7 +61,7 @@
 					<view class="price">
 						<view class="currentPrice flex-items font-color-FF7800">
 							<view class="iconBox flex-items">
-								<image src="https://ceres.zkthink.com/static/images/spikeIcon.png"></image>
+								<image :src="`${VUE_APP_STATIC_URL}static/images/spikeIcon.png`"></image>
 							</view>
 							<view class="flex-row-plus flex-items priceInfo">
 								<label class="fs24">￥</label>
@@ -104,6 +104,7 @@ import { ref, onBeforeUnmount } from "vue";
 import { request } from "../../utils/request"
 import API from "@/config/api";
 import { onLoad, onShow, onReachBottom } from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 import UCountDown from "../../uni_modules/vk-uview-ui/components/u-count-down/u-count-down";
 
 const spikeLikeList = ref([]);

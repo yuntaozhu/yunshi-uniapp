@@ -5,33 +5,34 @@
  * @LastEditors: kahu
  * @LastEditTime: 2022/11/4
  */
+import {VUE_APP_STATIC_URL} from "../../../config/api";
 export const orderCardList = [
     {
         id:1,
         label:'待付款',
         key:'waitPayOrderCount',
-        icon:'https://ceres.zkthink.com/static/img/user/daifukuan1.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/daifukuan1.png`,
         jumpUrl:'../../../pages_category_page1/orderModule/index?type=1'
     },
     {
         id:2,
         label:'待发货',
         key:'waitSendOrderCount',
-        icon:'https://ceres.zkthink.com/static/img/user/daifahuo1.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/daifahuo1.png`,
         jumpUrl:'../../../pages_category_page1/orderModule/index?type=2'
     },
     {
         id:3,
         label:'待收货',
         key:'waitReceiveOrderCount',
-        icon:'https://ceres.zkthink.com/static/img/user/daishouhuo.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/daishouhuo.png`,
         jumpUrl:'../../../pages_category_page1/orderModule/index?type=3'
     },
     {
         id:4,
         label:'全部订单',
         key:'',
-        icon:'https://ceres.zkthink.com/static/img/user/daifukuan1.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/daifukuan1.png`,
         jumpUrl:'../../../pages_category_page1/orderModule/index'
     }
 ]
@@ -40,48 +41,48 @@ export const fastCardOneList = [
     {
         id:1,
         label:'我的收藏',
-        icon:'https://ceres.zkthink.com/static/img/user/mycollectionIcon.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/mycollectionIcon.png`,
         jumpUrl:'../../../pages_category_page2/userModule/collection'
     },
     {
         id:2,
         label:'我的问答',
-        icon:'https://ceres.zkthink.com/static/img/user/myQuestionIcon.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/myQuestionIcon.png`,
         jumpUrl:'../../../pages_category_page2/userModule/questionList'
     },
     {
         id:3,
         label:'浏览足迹',
-        icon:'https://ceres.zkthink.com/static/img/user/myfootprintIcon.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/myfootprintIcon.png`,
         jumpUrl:'../../../pages_category_page2/userModule/footprintList'
     },
     {
         id:4,
         label:'我的评价',
-        icon:'https://ceres.zkthink.com/static/img/user/pingjia.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/pingjia.png`,
         jumpUrl:'../../../pages_category_page1/goodsModule/userEvaluate'
     },
     {
         id:5,
         label:'我的账户',
-        icon:'https://ceres.zkthink.com/static/img/user/account.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/account.png`,
         jumpUrl:'../../../pages_category_page2/userModule/memberAccount'
     },
     {
         id:6,
         label:'我的卡券',
-        icon:'https://ceres.zkthink.com/static/img/user/kaquan.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/kaquan.png`,
         jumpUrl:'../../../pages_category_page2/userModule/coupon'
     }, {
         id:7,
         label:'分销中心',
-        icon:'https://ceres.zkthink.com/static/img/user/fenxiao.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/fenxiao.png`,
         jumpUrl:'../../../pages_category_page1/distributionModule/index'
     },
     {
         id:8,
         label:'商家入驻',
-        icon:'https://ceres.zkthink.com/static/img/user/Settled.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/Settled.png`,
         jumpUrl:'function:handleApplySettle'
     }
 ]
@@ -90,48 +91,48 @@ export const fastCardTwoList = [
     {
         id:1,
         label:'地址管理',
-        icon:'https://ceres.zkthink.com/static/img/user/dizhi1.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/dizhi1.png`,
         jumpUrl:'../../../pages_category_page2/userModule/address'
     },
     {
         id:2,
         label:'我的售后',
-        icon:'https://ceres.zkthink.com/static/img/user/shouhou.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/shouhou.png`,
         jumpUrl:'../../../pages_category_page2/orderModule/afterSale'
     },
     {
         id:3,
         label:'会员中心',
-        icon:'https://ceres.zkthink.com/static/img/user/VIP.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/VIP.png`,
         jumpUrl:'../../../pages_category_page1/memberCenter/index'
     },
     {
         id:4,
         label:'银行卡',
-        icon:'https://ceres.zkthink.com/static/img/user/kaquan.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/kaquan.png`,
         jumpUrl:'../../../pages_category_page2/userModule/bankcard'
     },
     {
         id:5,
         label:'我的积分',
-        icon:'https://ceres.zkthink.com/static/img/user/myIntegral.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/myIntegral.png`,
         jumpUrl:'../../../pages_category_page1/integral/index'
     },
     {
         id:6,
         label:'签到',
-        icon:'https://ceres.zkthink.com/static/img/user/signIcon.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/signIcon.png`,
         jumpUrl:'../../../pages_category_page1/integral/sign'
     }, {
         id:7,
         label:'优惠券',
-        icon:'https://ceres.zkthink.com/static/img/user/userCouponIcon.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/userCouponIcon.png`,
         jumpUrl:'../../../pages_category_page1/coupon/list'
     },
     {
         id:8,
         label:'平台客服',
-        icon:'https://ceres.zkthink.com/static/img/user/service.png',
+        icon:`${VUE_APP_STATIC_URL}static/img/user/service.png`,
         jumpUrl:'function:flyToService'
     }
 ]

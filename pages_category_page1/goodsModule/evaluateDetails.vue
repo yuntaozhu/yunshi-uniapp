@@ -7,7 +7,7 @@
 			<view class="evaluate-content flex-items flex-row flex-sp-between">
 				<view class="flex-items">
 					<image class="user-headSmallImg" v-if="commentVOList.headImage" :src="commentVOList.headImage"></image>
-					<image class="user-headSmallImg" src="https://ceres.zkthink.com/static/images/storeLogo.png" v-else ></image>
+					<image class="user-headSmallImg" :src="`${VUE_APP_STATIC_URL}static/images/storeIcon.png`" v-else ></image>
 					<label class="fs28 mar-left-20" v-if="commentVOList.name">{{commentVOList.name}}</label>
 					<label class="fs28 mar-left-20" v-else>匿名</label>
 				</view>
@@ -47,19 +47,19 @@
 		<view class="linkBox">
 			<view class="butBox flex-row-plus" v-if="commentVOList.addComment != ''">
 				<view class="addPraise-box1 flex-items-plus" @click="zanTap">
-          <image class="addPraise-icon" src="https://ceres.zkthink.com/static/images/addPraiseIcon.png" v-if="!commentVOList.ifLike"/>
-          <image class="addPraise-icon" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-03-10/415f93719fa64af58b8d7cafb734ec4a_22.png" v-else/>
+          <image class="addPraise-icon" :src="`${VUE_APP_STATIC_URL}static/images/praiseIcon.png`" v-if="!commentVOList.ifLike"/>
+          <image class="addPraise-icon" :src="`${VUE_APP_STATIC_URL}static/images/praiseActiveIcon2.png`" v-else/>
           <label :class="['mar-left-10',commentVOList.ifLike?'font-color-FFEBC4':'font-color-DDD']">点赞</label>
 				</view>
 			</view>
 			<view class="butBox flex-row-plus" v-else>
 				<view class="addComments-box flex-items-plus" @click="addCommentsClick()">
-					<image class="addComments-cion" src="https://ceres.zkthink.com/static/images/addCommentsIcon.png"></image>
+					<image class="addComments-cion" :src="`${VUE_APP_STATIC_URL}static/images/addCommentsIcon.png`"></image>
 					<label class="mar-left-10 font-color-333">追加评价</label>
 				</view>
 				<view class="addPraise-box flex-items-plus" @click="zanTap">
-					<image class="addPraise-icon" src="https://ceres.zkthink.com/static/images/addPraiseIcon.png" v-if="!commentVOList.ifLike"/>
-          <image class="addPraise-icon" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-03-10/415f93719fa64af58b8d7cafb734ec4a_22.png" v-else/>
+					<image class="addPraise-icon" :src="`${VUE_APP_STATIC_URL}static/images/praiseIcon.png`" v-if="!commentVOList.ifLike"/>
+          <image class="addPraise-icon" :src="`${VUE_APP_STATIC_URL}static/images/praiseActiveIcon2.png`" v-else/>
 					<label :class="['mar-left-10',commentVOList.ifLike?'font-color-FFEBC4':'font-color-DDD']">点赞</label>
 				</view>
 			</view>
@@ -68,6 +68,7 @@
 </template>
 
 <script setup>
+import { VUE_APP_STATIC_URL } from "@/config/api";
 import { request } from "@/utils/request";
 import API from "@/config/api";
 import { ref } from "vue";

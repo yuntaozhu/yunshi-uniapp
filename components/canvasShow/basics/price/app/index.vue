@@ -4,10 +4,10 @@
       <div class="title">
         <label>
           <!-- #ifdef MP-WEIXIN -->
-          <image class="title-img" src="https://ceres.zkthink.com/static/canvas-images/price/img-title.png" alt="组合优惠" mode="widthFix"/>
+          <image class="title-img" :src="`${VUE_APP_STATIC_URL}static/canvas-images/price/img-title.png`" alt="组合优惠" mode="widthFix"/>
           <!-- #endif -->
           <!-- #ifdef H5 || APP-PLUS -->
-          <image class="title-img" src="https://ceres.zkthink.com/static/canvas-images/price/img-title.png" alt="组合优惠" mode="widthFix"/>
+          <image class="title-img" :src="`${VUE_APP_STATIC_URL}static/canvas-images/price/img-title.png`" alt="组合优惠" mode="widthFix"/>
           <!-- #endif -->
         </label>
         <div class="price-text">
@@ -60,6 +60,8 @@
 <script setup>
 import {ref, toRefs} from 'vue';
 import commonMixin from '../mixin';
+import { VUE_APP_STATIC_URL } from "@/config/api";
+
 const props = defineProps({
   shopId: {
     type: Number,

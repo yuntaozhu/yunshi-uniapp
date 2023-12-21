@@ -5,11 +5,11 @@
 				<view class="rect" @tap.stop>
 					<!-- 关闭按钮 -->
 					<view class="guanbiBox">
-						<image @click="showcos" src="https://ceres.zkthink.com/static/img/guanbi.png" class="guanbi" mode=""></image>
+						<image @click="showcos" :src="`${VUE_APP_STATIC_URL}static/img/guanbi.png`" class="guanbi" mode=""></image>
 					</view>
 					<!-- 内容 -->
 					<view>
-						<image src="https://ceres.zkthink.com/static/img/banyuan.png" style="width: 100%;height: 44rpx;" mode=""></image>
+						<image :src="`${VUE_APP_STATIC_URL}static/img/banyuan.png`" style="width: 100%;height: 44rpx;" mode=""></image>
 					</view>
 					<view style="padding: 30rpx;">
 						<!-- 个人信息 -->
@@ -35,7 +35,6 @@
                 <p style="color: #666666;font-size: 22rpx;">来自「cereshop商城」小程序</p>
 							</view>
 							<view style="margin-left: 60rpx;" v-if="listitem.ifLogo">
-								<!-- <image src="https://ceres.zkthink.com/static/img/user/morentouxiang.png" style="width: 118rpx;height: 118rpx;" mode=""></image> -->
 								<view class="qrimg-i" @click="saveQrcode">
 									<tki-qrcode  cid="qrcode2" ref="qrcode2" :val="erweima" :size="size" :onval="onval" :loadMake="loadMake" :usingComponents="true" />
 								</view>
@@ -50,7 +49,7 @@
           <button open-type="share" >
             <view @click="WXfenx" style="flex: 1;text-align: center;display: flex;">
               <view style="margin-left: 120rpx;">
-                <image src="https://ceres.zkthink.com/static/img/weixin2x.png" mode=""></image>
+                <image :src="`${VUE_APP_STATIC_URL}static/img/weixin2x.png`" mode=""></image>
               </view>
               <view style="margin-left: 10rpx;font-size: 28rpx;color: #333333">分享到微信</view>
             </view>
@@ -64,7 +63,7 @@
         <!--        </view>-->
         <view class="linkBtnBox" @click="FZlianj">
           <view class="linkBox">
-            <image src="https://ceres.zkthink.com/static/img/lianjie.png" mode=""></image>
+            <image :src="`${VUE_APP_STATIC_URL}static/img/lianjie.png`" mode=""></image>
           </view>
           <view style="margin-left: 10rpx;">
             复制链接
@@ -81,6 +80,7 @@ import { request } from '../../utils/request'
 import API from "../../config/api";
 import tkiQrcode from '@/components/tki-qrcode/tki-qrcode.vue'
 import {onLoad} from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const size = ref(110);
 const onval = ref(true);

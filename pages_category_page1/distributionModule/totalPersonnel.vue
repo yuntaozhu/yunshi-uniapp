@@ -19,8 +19,8 @@
                 <label class="orderId-box font-color-999">手机号：{{item.distributorPhone}}</label>
               </view>
             </view>
-            <image v-if="item.ifOpen == false" class="arrow-down" src="https://ceres.zkthink.com/static/images/arrowDownIcon.png"></image>
-            <image v-if="item.ifOpen == true" class="arrow-down" src="https://ceres.zkthink.com/static/images/arrowUpIcon.png"></image>
+            <image v-if="item.ifOpen == false" class="arrow-down" :src="`${VUE_APP_STATIC_URL}static/images/arrowDownIcon.png`"></image>
+            <image v-if="item.ifOpen == true" class="arrow-down" :src="`${VUE_APP_STATIC_URL}static/images/arrowUpIcon.png`"></image>
           </view>
           <view v-if="item.ifOpen == true">
             <view class="flex-row-plus flex-itdistributionOrderems mar-top-30 flex-sp-between">
@@ -32,7 +32,7 @@
       </view>
     </view>
     <view v-else class="emptyCart-box flex-items-plus flex-column">
-      <image class="emptyCart-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
+      <image class="emptyCart-img" :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`"></image>
       <label class="font-color-999 fs26 mar-top-30 font-color-999">这里空空如也~</label>
     </view>
 	</view>
@@ -43,6 +43,7 @@ import {ref} from "vue";
 import { request } from '../../utils/request'
 import API from "../../config/api";
 import {onLoad, onReachBottom} from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const item = ref({})
 const SubordinateSalesQuery = ref({
@@ -105,6 +106,7 @@ const arrowTypeChange = (arrowTypeId) => {
 </script>
 
 <style lang="scss">
+@import "../../style/images";
 page {
   background: #333333;
 }
@@ -123,7 +125,7 @@ page {
     .topBg {
       width: 100%;
       height: 196rpx;
-      background: url("https://ceres.zkthink.com/static/images/totalPersonnelTopBackImg.png") no-repeat;
+      background: $totalPersonnelTopBackImg no-repeat;
       margin-top: 50rpx;
       text-align: center;
       background-size: contain;

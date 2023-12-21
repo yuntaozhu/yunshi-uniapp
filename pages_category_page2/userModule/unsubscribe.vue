@@ -1,7 +1,6 @@
 <template>
 	<view class="content">
 		<view class="topbg">
-			<image src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/z…043464279494de4b8129f5155135d6e_unsubscribeBg.png" mode=""></image>
 		</view>
 		<view class="content-text">
 			<view class="text-align fs32 fs-bold">

@@ -30,7 +30,7 @@
     >
       <image
           class="share-img"
-          src="https://ceres.zkthink.com/static/images/shareBut.png"
+          :src="`${VUE_APP_STATIC_URL}static/images/shareBut.png`"
       ></image>
       <label class="fs24 mar-left-5">分享</label>
     </view>
@@ -70,7 +70,7 @@
           <view class="vipImg flex-items">
             <image
                 class="vip-icon"
-                src="https://ceres.zkthink.com/static/images/vipDetail.png"
+                :src="`${VUE_APP_STATIC_URL}static/img/vipDetail.png`"
                 mode=""
             >
             </image>
@@ -91,19 +91,19 @@
             <image
                 v-if="[2,4].includes(props.skuSelect.activityType)"
                 class="seckill-icon"
-                src="https://ceres.zkthink.com/static/images/seckillicon.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/seckillicon.png`"
                 mode=""
             ></image>
             <image
                 v-if="[3,5].includes(props.skuSelect.activityType)"
                 class="discount-icon"
-                src="https://ceres.zkthink.com/static/images/discounticon.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/discounticon.png`"
                 mode=""
             ></image>
             <image
                 v-if="props.skuSelect.activityType === 1"
                 class="spell-icon"
-                src="https://ceres.zkthink.com/static/images/spellicon.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/spellicon.png`"
                 mode=""
             ></image>
             <view class="flex-row-plus flex-items mar-top-10">
@@ -148,12 +148,12 @@
           <image
               v-if="props.productInfo.ifCollect === 1"
               class="store-icon"
-              src="https://ceres.zkthink.com/static/images/shoucangActive1.png"
+              :src="`${VUE_APP_STATIC_URL}static/images/shoucangActive1.png`"
           ></image>
           <image
               v-else
               class="store-icon"
-              src="https://ceres.zkthink.com/static/images/shoucang2x.png"
+              :src="`${VUE_APP_STATIC_URL}static/images/shoucang2x.png`"
           >
           </image>
           <label class="fs22">收藏</label>
@@ -176,7 +176,7 @@
             <label class="fs24 font-color-C5AA7B">领券</label>
             <image
                 class="coupon-arrow"
-                src="https://ceres.zkthink.com/static/img/user/arrow.png"
+                :src="`${VUE_APP_STATIC_URL}static/img/user/arrow.png`"
             ></image>
           </view>
         </view>
@@ -208,6 +208,7 @@ import API from "@/config/api";
 import ShareSpell from '../../../component/share.vue'
 import { TimeFormatting } from "@/utils/timeUtil";
 import { onShareTimeline } from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const props = defineProps({
   // 商品信息
@@ -418,7 +419,7 @@ defineExpose({handleGetCountDownNumber})
     lang="scss"
     scoped
 >
-
+@import "../../../style/images";
 .goodsImgswiper-box {
   width: 750upx;
   height: 750upx;
@@ -530,7 +531,7 @@ defineExpose({handleGetCountDownNumber})
 
 .seckill-box {
   width: 100%;
-  background: url("https://ceres.zkthink.com/static/images/storeTop_Img.png") no-repeat left top;
+  background: $storeTopImg no-repeat left top;
   padding: 35rpx 30rpx;
 
   .seckill-icon {

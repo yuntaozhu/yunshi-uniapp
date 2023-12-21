@@ -301,6 +301,7 @@ const goToexchange = () => {
     lang="scss"
     scoped
 >
+@import "../../style/images";
 page {
   background: #F8F8F8;
 }
@@ -309,7 +310,7 @@ page {
   padding-bottom: 50rpx;
 
   .signBg {
-    background: url("https://ceres.zkthink.com/static/images/signBg.png") no-repeat left top;
+    background: $signBg no-repeat left top;
     background-size: contain;
     min-height: 702rpx;
     padding-top: 160rpx;
@@ -331,7 +332,7 @@ page {
       .signStateBg {
         width: 300rpx;
         height: 300rpx;
-        background: url("https://ceres.zkthink.com/static/images/signState.png") no-repeat left top;
+        background: $signState no-repeat left top;
         background-size: contain;
 
         text {
@@ -340,7 +341,7 @@ page {
       }
 
       .noSign {
-        background: url("https://ceres.zkthink.com/static/images/signState1.png") no-repeat left top;
+        background: $signState1 no-repeat left top;
         background-size: contain;
 
         text {
@@ -375,7 +376,7 @@ page {
 
     .redEnvelopeBg {
       height: 230rpx;
-      background: url("https://ceres.zkthink.com/static/images/redEnvelopeBg.png") no-repeat left top;
+      background: $redEnvelopeBg no-repeat left top;
       background-size: contain;
       padding-right: 50rpx;
 

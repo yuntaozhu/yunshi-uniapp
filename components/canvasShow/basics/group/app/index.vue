@@ -4,10 +4,10 @@
       <div class="title">
         <label>
           <!-- #ifdef MP-WEIXIN -->
-          <image class="title-img" src="https://ceres.zkthink.com/static/canvas-images/group/img-title.png" alt="拼团专区" mode="widthFix"/>
+          <image class="title-img" :src="`${VUE_APP_STATIC_URL}static/canvas-images/group/img-title.png`" alt="拼团专区" mode="widthFix"/>
           <!-- #endif -->
           <!-- #ifdef H5 || APP-PLUS -->
-          <image class="title-img" src="https://ceres.zkthink.com/static/canvas-images/group/img-title.png" alt="拼团专区" mode="widthFix"/>
+          <image class="title-img" :src="`${VUE_APP_STATIC_URL}static/canvas-images/group/img-title.png`" alt="拼团专区" mode="widthFix"/>
           <!-- #endif -->
          </label>
          <a v-show="componentContent.showMore" class="btn-all a-link" @click="jumpGroupWorks(productData)">更多<i class="iconfont icon-arrow-right"></i></a>
@@ -49,6 +49,7 @@
 <script setup>
 import {ref, toRefs} from 'vue';
 import groupMixin from '../mixin'
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const props = defineProps({
   typeId: {

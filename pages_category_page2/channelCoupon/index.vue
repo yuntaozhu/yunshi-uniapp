@@ -10,7 +10,7 @@
       <view class="info">
         <view class="price-box">
           <view class="icon">
-            <img class="icon-img" src="https://ceres.zkthink.com/static/img/channelCoupon/icon-coupon.png" alt="" mode="widthFix"/>
+            <img class="icon-img" :src="`${VUE_APP_STATIC_URL}static/img/channelCoupon/icon-coupon.png`" alt="" mode="widthFix"/>
           </view>
           <label class="price">¥{{channelCouponData.price}}</label>
           <label class="original-price">¥{{channelCouponData.originalPrice}}</label>
@@ -38,7 +38,7 @@
     </view>
     <div class="pro-list" v-if="productList && productList.length > 0">
       <div class="title">
-        <img class="title-img" src="https://ceres.zkthink.com/static/img/channelCoupon/img-title.png" alt="商品推荐" mode="widthFix"/>
+        <img class="title-img" :src="`${VUE_APP_STATIC_URL}static/img/channelCoupon/img-title.png`" alt="商品推荐" mode="widthFix"/>
       </div>
       <div class="product-list">
         <div class="product-list-box" >
@@ -59,12 +59,12 @@
                   <label class="buy-count">{{item.users?item.users: 0}}人付款</label>
                 </div>
                 <div class="price-warp">
-                  <img class="iconImg" v-if="item.activityType == 1" src="https://ceres.zkthink.com/static/images/groupBuyIcon.png">
-                  <img class="iconImg" v-if="item.activityType == 2" src="https://ceres.zkthink.com/static/images/spikeIcon.png">
-                  <img class="iconImg" v-if="item.activityType == 4" src="https://ceres.zkthink.com/static/images/spikeIcon.png">
-                  <img class="iconImg" v-if="item.activityType == 3" src="https://ceres.zkthink.com/static/images/discountListIcon.png">
-                  <img class="iconImg" v-if="item.activityType == 5" src="https://ceres.zkthink.com/static/images/discountListIcon.png">
-                  <img class="iconImg" v-if="item.activityType == 8" src="https://ceres.zkthink.com/static/images/memberCenterIcon.png">
+                  <img class="iconImg" v-if="item.activityType == 1" :src="`${VUE_APP_STATIC_URL}static/images/groupBuyIcon.png`">
+                  <img class="iconImg" v-if="item.activityType == 2" :src="`${VUE_APP_STATIC_URL}static/images/spikeIcon.png`">
+                  <img class="iconImg" v-if="item.activityType == 4" :src="`${VUE_APP_STATIC_URL}static/images/spikeIcon.png`">
+                  <img class="iconImg" v-if="item.activityType == 3" :src="`${VUE_APP_STATIC_URL}static/images/discountListIcon.png`">
+                  <img class="iconImg" v-if="item.activityType == 5" :src="`${VUE_APP_STATIC_URL}static/images/discountListIcon.png`">
+                  <img class="iconImg" v-if="item.activityType == 8" :src="`${VUE_APP_STATIC_URL}static/images/memberCenterIcon.png`">
                   <div class="price">
                     ¥ {{item.price}}
                   </div>
@@ -81,131 +81,131 @@
   </view>
 </template>
 
-<script>
+<script setup>
 import { request } from '../../utils/request'
+import { ref } from 'vue';
 import API from '../../config/api'
-export default {
-  name: "channelCoupon",
-  data() {
-    return {
-      channelCouponData:{
-        startTime: '',
-        endTime: ''
-      },
-      productList:[],
-      isLogin: false,
-      params:{
-        productId: 0,
-        shopCouponId: 0,
-        shopId: 0
-      }
+import {onLoad} from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
+
+const channelCouponData = ref({
+  startTime: '',
+  endTime: ''
+});
+const productList = ref([]);
+const isLogin = ref(false);
+const params = ref({
+  productId: 0,
+  shopCouponId: 0,
+  shopId: 0
+});
+
+onLoad((options) => {
+  console.log(options,'options')
+  params.value.productId = options.productId
+  params.value.shopCouponId = options.shopCouponId
+  params.value.shopId = options.shopId
+  const res = uni.getStorageSync('storage_key'),token = res.token;
+  isLogin.value = !!token
+  getChannelCoupon()
+  getProductList()
+})
+
+// 获取渠道优惠券
+const getChannelCoupon = () => {
+  // uni.showLoading({
+  //   mask: true,
+  //   title: '加载中...'
+  // })
+  request(API.getChannelCoupon, params.value, 'GET').then(res => {
+    channelCouponData.value = res.data
+    // uni.hideLoading()
+  }).catch(res => {
+    // uni.hideLoading()
+    uni.showToast({
+      title: '失败',
+      icon: "none"
+    })
+    throw Error(res)
+  })
+}
+
+// 获取推荐产品
+const getProductList = () => {
+  // uni.showLoading({
+  //   mask: true,
+  //   title: '加载中...'
+  // })
+  let params ={
+    page: 1,
+    pageSize: 10,
+    timestamp: new Date().getTime()
+  }
+  request(API.getRandomProduct, params, 'GET').then(res => {
+    productList.value = res.data.list
+    // uni.hideLoading()
+  }).catch(res => {
+    // uni.hideLoading()
+    throw Error(res)
+  })
+}
+
+// 领取优惠券
+const receiveCoupon = (item) => {
+  if (isLogin.value) {
+    let paramsData = {
+      shopCouponId: item.shopCouponId,
+      shopId: params.value.shopId
     }
-  },
-  onLoad(options) {
-    console.log(options,'options')
-    this.params.productId = options.productId
-    this.params.shopCouponId = options.shopCouponId
-    this.params.shopId = options.shopId
-    const res = uni.getStorageSync('storage_key'),token = res.token;
-    this.isLogin = !!token
-    this.getChannelCoupon()
-    this.getProductList()
-  },
-  methods:{
-    // 获取渠道优惠券
-    getChannelCoupon(){
-      // uni.showLoading({
-      //   mask: true,
-      //   title: '加载中...'
-      // })
-      request(API.getChannelCoupon, this.params, 'GET').then(res => {
-        this.channelCouponData = res.data
-        // uni.hideLoading()
-      }).catch(res => {
-        // uni.hideLoading()
-        uni.showToast({
-          title: '失败',
-          icon: "none"
-        })
-        throw Error(res)
+    request(API.ReceiveCoupon, paramsData, 'POST').then(res => {
+      uni.showToast({
+        title:'领取成功',
+        icon:"success"
       })
-    },
-    // 获取推荐产品
-    getProductList(){
-      // uni.showLoading({
-      //   mask: true,
-      //   title: '加载中...'
-      // })
-      var params ={
-        page: 1,
-        pageSize: 10,
-        timestamp: new Date().getTime()
+      let data = {
+        shopId: channelCouponData.value.shopId,
+        productId: channelCouponData.value.productId,
+        skuId: channelCouponData.value.skuId,
       }
-      request(API.getRandomProduct, params, 'GET').then(res => {
-        this.productList = res.data.list
-        // uni.hideLoading()
-      }).catch(res => {
-        // uni.hideLoading()
-        throw Error(res)
-      })
-    },
-    // 领取优惠券
-    receiveCoupon(item) {
-      if (this.isLogin) {
-        var paramsData = {
-          shopCouponId: item.shopCouponId,
-          shopId: this.params.shopId
-        }
-        request(API.ReceiveCoupon, paramsData, 'POST').then(res => {
-          uni.showToast({
-            title:'领取成功',
-            icon:"success"
-          })
-		  let data = {
-			  shopId:this.channelCouponData.shopId,
-			  productId:this.channelCouponData.productId,
-			  skuId:this.channelCouponData.skuId,
-		  }
-		  setTimeout(()=>{
-			  this.jumpProductDetail(data)
-		  },2000)
-        }).catch(res => {
-          if(res.data.code !== '200'){
-            uni.showToast({
-              title:res.data.message,
-              icon:"none"
-            })
-          }
-          throw Error(res)
-        })
-      } else {
+      setTimeout(()=>{
+        jumpProductDetail(data)
+      },2000)
+    }).catch(res => {
+      if(res.data.code !== '200'){
         uni.showToast({
-          title:'请先登录',
+          title:res.data.message,
           icon:"none"
         })
-        uni.navigateTo({
-          url:'/pages_category_page2/userModule/login'
-        })
       }
-    },
-    // 跳转到店铺主页
-    jumpStore(item){
-      uni.navigateTo({
-        url: `/pages_category_page1/store/index?storeId=${item.shopId}`
-      })
-    },
-    // 跳转到商品详情
-    jumpProductDetail(item){
-      uni.navigateTo({
-        url: '/pages_category_page1/goodsModule/goodsDetails?shopId=' + item.shopId + '&productId=' + item.productId + '&skuId=' + item
-            .skuId
-      })
-    },
+      throw Error(res)
+    })
+  } else {
+    uni.showToast({
+      title:'请先登录',
+      icon:"none"
+    })
+    uni.navigateTo({
+      url:'/pages_category_page2/userModule/login'
+    })
   }
+}
+// 跳转到店铺主页
+const jumpStore = (item) => {
+  uni.navigateTo({
+    url: `/pages_category_page1/store/index?storeId=${item.shopId}`
+  })
+}
+// 跳转到商品详情
+const jumpProductDetail = (item) =>{
+  uni.navigateTo({
+    url: '/pages_category_page1/goodsModule/goodsDetails?shopId=' + item.shopId + '&productId=' + item.productId + '&skuId=' + item
+        .skuId
+  })
 }
 </script>
 
 <style lang="scss" scoped>
+@import "../../style/images";
 .channel-coupon{
   .details{
     background-color: #fff;
@@ -262,7 +262,7 @@ export default {
     .coupon{
       margin: 32rpx 20rpx;
       height: 140rpx;
-      background: #333333 url("https://ceres.zkthink.com/static/img/channelCoupon/border-coupon.png") no-repeat right center / auto 140rpx;
+      background: #333333 $borderCoupon no-repeat right center / auto 140rpx;
       display: flex;
       .price{
         position: relative;

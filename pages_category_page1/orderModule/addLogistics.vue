@@ -12,7 +12,7 @@
           <view class="r-box">
             <text>{{ SendReturnQuery.logisticsName }}</text>
             <image
-                src="https://ceres.zkthink.com/static/images/arrowRight.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/arrowRight.png`"
                 class="r"
             ></image>
           </view>
@@ -49,13 +49,15 @@
       <view class="afterSale-select-box mt20">
         <view class="upload-title">上传凭证</view>
         <view class="mar-left-10 mar-top-10 evaluateImg">
-          <u-upload
-              :limitType="['png', 'jpg', 'jpeg', 'webp', 'gif', 'image']"
-              :action="action"
-              ref="uUpload"
-              :header="headerToken"
-              :form-data="formData"
-          ></u-upload>
+          <view class="mar-left-10 mar-top-10">
+            <Upload :limitType="['png', 'jpg', 'jpeg', 'webp', 'gif', 'image']"
+                    :action="action"
+                    ref="uUpload"
+                    :header="headerToken"
+                    @on-success="handleUploadSuccess"
+                    @on-remove="handleUploadRemove"
+                    :form-data="formData"></Upload>
+          </view>
         </view>
       </view>
     </view>
@@ -80,11 +82,13 @@
 </template>
 
 <script setup>
-import API from "@/config/api";
+import Upload from "@/uni_modules/vk-uview-ui/components/u-upload/u-upload.vue"
+import API from "../../config/api";
 import LbPicker from '@/components/lb-picker'
-import { ref } from "vue";
-import { onLoad, onReady } from "@dcloudio/uni-app";
+import {onMounted, ref} from "vue";
+import { onLoad } from "@dcloudio/uni-app";
 import { request } from "@/utils/request";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const item = ref({})
 const shippinglist = ref([])
@@ -107,17 +111,17 @@ const formData = ref({'folderId': -1})
 const headerToken = ref({Authorization: ''})
 const fileList = ref([])
 const companyList = ref([])
-
+const uUpload = ref()
+onMounted(()=>{
+  fileList.list = uUpload.value.lists
+})
 onLoad(options=> {
   item.value = uni.getStorageSync('itemLogistics')
+  console.log(item.value, 'itemData')
   const res = uni.getStorageSync('storage_key');
   headerToken.value.Authorization = res.token
   getShippingCompany()
   uni.removeStorageSync('itemLogistics')
-})
-const uUpload = ref()
-onReady(()=> {
-  fileList.value  = uUpload.value.lists
 })
 
 function getShippingCompany() {
@@ -129,11 +133,10 @@ function getShippingCompany() {
   })
 }
 function subimtTap() {
-  if (fileList.value.length > 0) {
+  if(fileList.value.length>0){
     commentImgsFlag.value = true
-    for (let i = 0; i < fileList.value.length; i++) {
-      commentImgs.value += fileList.value[i].response.data.url + ','
-
+    for(let i=0;i<fileList.value.length;i++){
+      commentImgs.value += fileList.value[i].data.url+','
     }
   }
   getSendReturnGoods()
@@ -179,6 +182,13 @@ function change(e) {
   SendReturnQuery.value.shipperCode = e.item.value
 
 }
+function handleUploadSuccess(data){
+  fileList.value.push(data)
+}
+function handleUploadRemove(index){
+  fileList.value.splice(index,1)
+}
+
 </script>
 
 <style>
@@ -581,19 +591,20 @@ page {
   left: 0;
 }
 </style>
-<style scoped>
-.evaluateImg /deep/ .u-upload .u-list-item {
+<style lang="scss" scoped>
+@import "../../style/images";
+.evaluateImg ::v-deep .u-upload .u-list-item {
   background: none;
   border: 2rpx solid #E4E5E6;
   border-radius: 0;
   margin-bottom: 20rpx;
 }
 
-.evaluateImg /deep/ .u-upload .u-list-item .uicon-plus:before {
+.evaluateImg ::v-deep .u-upload .u-list-item .uicon-plus:before {
   content: '';
   height: 71rpx;
   width: 71rpx;
-  background: url("https://ceres.zkthink.com/static/images/addImg.png") no-repeat center center;
+  background: $addImgIcon no-repeat center center;
   display: block;
   background-size: contain;
 }

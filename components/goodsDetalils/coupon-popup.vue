@@ -19,7 +19,7 @@
         <view v-show="activeTypeFlag === 0">
           <view class="couponShow">
             <view class="title-box">
-              <image class="close-btn" @click="onActivityClose" src="https://ceres.zkthink.com/static/images/close.png"></image>
+              <image class="close-btn" @click="onActivityClose" :src="`${VUE_APP_STATIC_URL}static/images/close.png`"></image>
             </view>
             <view class="shopCouponBox" :class="markTools.length === 0 && 'flex'">
               <view class="list" v-if="markTools.length > 0">
@@ -46,7 +46,7 @@
                 </view>
               </view>
               <view v-else class="emptyOrder-box flex-items-plus flex-column">
-                <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
+                <image class="emptyOrder-img" :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`"></image>
                 <label class="font-color-999 fs26 mar-top-30">你还没有优惠券哦～</label>
               </view>
             </view>
@@ -55,7 +55,7 @@
         <view v-show="activeTypeFlag === 1">
           <view class="couponShow">
             <view class="title-box">
-              <image class="close-btn" @click="onActivityClose" src="https://ceres.zkthink.com/static/images/close.png"></image>
+              <image class="close-btn" @click="onActivityClose" :src="`${VUE_APP_STATIC_URL}static/images/close.png`"></image>
             </view>
             <view class="shopCouponBox" :class="shopMarkTools.length === 0 && 'flex'">
               <view class="list" v-if="shopMarkTools.length > 0">
@@ -81,7 +81,7 @@
                 </view>
               </view>
               <view v-else class="emptyOrder-box flex-items-plus flex-column">
-                <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
+                <image class="emptyOrder-img" :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`"></image>
                 <label class="font-color-999 fs26 mar-top-30">你还没有优惠券哦～</label>
               </view>
             </view>
@@ -89,7 +89,7 @@
         </view>
         <view class="receive-success" v-if="isShowSuccess">
             <view class="success-box">
-                <image class="success-img" src="https://ceres.zkthink.com/static/images/success_tu.png"></image>
+                <image class="success-img" :src="`${VUE_APP_STATIC_URL}static/images/success_tu.png`"></image>
                 <view class="text">领取成功</view>
             </view>
         </view>
@@ -193,6 +193,7 @@ defineExpose({showActivity})
 </script>
 
 <style lang="scss" scoped>
+@import "../../style/images";
 .coupon-popup{
     display: block;
     position: fixed;
@@ -293,7 +294,7 @@ defineExpose({showActivity})
             .item {
                 width: 50%;
                 height: 291rpx;
-                background: url("https://ceres.zkthink.com/static/images/couponsIcon.png") no-repeat center top;
+                background: $couponsIcon no-repeat center top;
                 border-radius: 10rpx;
                 margin-top: 20rpx;
                 display: flex;
@@ -304,7 +305,7 @@ defineExpose({showActivity})
                 margin-bottom: 30rpx;
             }
             .received {
-                background: url("https://ceres.zkthink.com/static/images/couponsIcon1.png") no-repeat center top;
+                background: $couponsIcon1 no-repeat center top;
                 background-size: contain;
                 .discoun {
                     color: #999999;

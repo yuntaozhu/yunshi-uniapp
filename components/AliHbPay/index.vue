@@ -24,7 +24,7 @@
             <view class="pay-type-img">
               <img
                   class="pay-type-img-inner"
-                  src="https://ceres.zkthink.com/static/images/alipay.png"
+                  :src="`${VUE_APP_STATIC_URL}static/images/alipay.png`"
               />
             </view>
             <label class="pay-type-label">支付宝支付</label>
@@ -39,7 +39,7 @@
             <view class="pay-type-img">
               <img
                   class="pay-type-img-inner"
-                  src="https://ceres.zkthink.com/static/images/huabei.png"
+                  :src="`${VUE_APP_STATIC_URL}static/images/huabei.png`"
               />
             </view>
             <label class="pay-type-label">花呗分期</label>
@@ -103,7 +103,7 @@
 import { request } from "../../utils/request";
 import API from "../../config/api";
 import { handleDoPay } from "../../utils/payUtil";
-
+import { VUE_APP_STATIC_URL } from "@/config/api";
 export default {
   name: "AliHbPay",
   data() {

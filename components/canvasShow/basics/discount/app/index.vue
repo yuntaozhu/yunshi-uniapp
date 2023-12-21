@@ -2,10 +2,10 @@
   <div class="hom-pro-list" v-if="productData.products.length">
     <div class="title">
       <!-- #ifdef MP-WEIXIN -->
-      <image class="title-img" src="https://ceres.zkthink.com/static/canvas-images/discount/img-title.png" alt="限时折扣" mode="widthFix"/>
+      <image class="title-img" :src="`${VUE_APP_STATIC_URL}static/canvas-images/discount/img-title.png`" alt="限时折扣" mode="widthFix"/>
       <!-- #endif -->
       <!-- #ifdef H5 || APP-PLUS -->
-      <image class="title-img" src="https://ceres.zkthink.com/static/canvas-images/discount/img-title.png" alt="限时折扣" mode="widthFix"/>
+      <image class="title-img" :src="`${VUE_APP_STATIC_URL}static/canvas-images/discount/img-title.png`" alt="限时折扣" mode="widthFix"/>
       <!-- #endif -->
     </div>
     <div v-if="componentContent.arrangeType == '横向滑动' && productData.products.length > 2" class="product-list">
@@ -20,10 +20,10 @@
             <div>
               <div class="flag">
                 <!-- #ifdef MP-WEIXIN -->
-                <image class="icon" src="https://ceres.zkthink.com/static/canvas-images/discount/flag-discount2.png" alt="限时折扣" mode="widthFix"/>
+                <image class="icon" :src="`${VUE_APP_STATIC_URL}static/canvas-images/discount/flag-discount2.png`" alt="限时折扣" mode="widthFix"/>
                 <!-- #endif -->
                 <!-- #ifdef H5 || APP-PLUS -->
-                <image class="icon" src="https://ceres.zkthink.com/static/canvas-images/discount/flag-discount2.png" alt="限时折扣" mode="widthFix"/>
+                <image class="icon" :src="`${VUE_APP_STATIC_URL}static/canvas-images/discount/flag-discount2.png`" alt="限时折扣" mode="widthFix"/>
                 <!-- #endif -->
               </div>
               <label class="buy-count">剩余{{item.stockNumber}}件</label>
@@ -58,10 +58,10 @@
             <div>
               <div class="flag">
                 <!-- #ifdef MP-WEIXIN -->
-                <image class="icon" src="https://ceres.zkthink.com/static/canvas-images/discount/flag-discount2.png" alt="限时折扣" mode="widthFix"/>
+                <image class="icon" :src="`${VUE_APP_STATIC_URL}static/canvas-images/discount/flag-discount2.png`" alt="限时折扣" mode="widthFix"/>
                 <!-- #endif -->
                 <!-- #ifdef H5 || APP-PLUS -->
-                <image class="icon" src="https://ceres.zkthink.com/static/canvas-images/discount/flag-discount2.png" alt="限时折扣" mode="widthFix"/>
+                <image class="icon" :src="`${VUE_APP_STATIC_URL}static/canvas-images/discount/flag-discount2.png`" alt="限时折扣" mode="widthFix"/>
                 <!-- #endif -->
               </div>
               <label class="buy-count">剩余{{item.stockNumber}}件</label>
@@ -86,6 +86,8 @@
 <script setup>
 import { ref, toRefs } from 'vue';
 import discountMixin from '../mixin'
+import { VUE_APP_STATIC_URL } from "@/config/api";
+
 const props = defineProps({
   typeId: {
     type: Number,

@@ -29,7 +29,6 @@
                 <text>自动关闭</text>
               </view>-->
             </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaifukuan.png"></image>-->
           </view>
           <!--  待发货-->
           <view
@@ -40,7 +39,6 @@
               <text class="status">等待卖家发货</text>
               <text class="label">付款后2-5个工作日发货</text>
             </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaifahuo.png"></image>-->
           </view>
           <!--  待收货-->
           <view
@@ -51,7 +49,6 @@
               <text class="status">卖家已发货</text>
               <!-- <text class="label">还剩5天21小时自动确认</text> -->
             </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaishouhuo.png"></image>-->
           </view>
           <!-- 已完成 -->
           <view
@@ -62,7 +59,6 @@
               <text class="status">交易成功</text>
               <text class="label">感谢您的使用</text>
             </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/orderDaipingjia.png"></image>-->
           </view>
           <!--  拼团失败-->
           <view
@@ -74,7 +70,6 @@
               <text class="label">剩余时间 00:00:00</text>
             </view>
             <view class="clusterback">
-              <!--						<image class='r' src="https://ceres.zkthink.com/static/images/staycluster.png"></image>-->
             </view>
           </view>
           <!-- 交易关闭-->
@@ -112,14 +107,13 @@
 <!--                ></u-count-down>-->
 <!--              </view>-->
             </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/clusterloss.png"></image>-->
           </view>
 
         </view>
         <view class="order-details-info-box">
           <view class="address-box">
             <image
-                src="https://ceres.zkthink.com/static/images/orderAddress.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/orderAddress.png`"
                 class="address-img"
             >
             </image>
@@ -133,7 +127,7 @@
               </view>
             </view>
             <image
-                src="https://ceres.zkthink.com/static/images/arrowRight.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/arrowRight.png`"
                 v-if="false"
                 class="arrow-right-img"
             ></image>
@@ -147,12 +141,12 @@
                     @click="goShop(dataList.shopId)"
                 >
                   <image
-                      src="https://ceres.zkthink.com/static/images/orderStoreIcon.png"
+                      :src="`${VUE_APP_STATIC_URL}static/images/orderStoreIcon.png`"
                       class="shop-img"
                   ></image>
                   <text class="shop-name">{{ dataList.shopName }}</text>
                   <image
-                      src="https://ceres.zkthink.com/static/images/arrowRight.png"
+                      :src="`${VUE_APP_STATIC_URL}static/images/arrowRight.png`"
                       class="arrow-img"
                   >
                   </image>
@@ -162,7 +156,7 @@
                     @click="openService"
                 >
                   <image
-                      src="https://ceres.zkthink.com/static/images/serviceImg-order-detail.png"
+                      :src="`${VUE_APP_STATIC_URL}static/images/serviceImg-order-detail.png`"
                       class="service-img"
                   ></image>
                   <text>联系客服</text>
@@ -385,7 +379,7 @@
               </view>
               <image
                   mode="aspectFill"
-                  src="https://ceres.zkthink.com/static/images/arrowDown.png"
+                  :src="`${VUE_APP_STATIC_URL}static/images/arrowDown.png`"
                   class="arrow-down-img"
                   style="transform:rotate(180deg);"
                   v-if="isShowWuLiu == true"
@@ -393,7 +387,7 @@
               </image>
               <image
                   mode="aspectFill"
-                  src="https://ceres.zkthink.com/static/images/arrowDown.png"
+                  :src="`${VUE_APP_STATIC_URL}static/images/arrowDown.png`"
                   class="arrow-down-img"
                   v-else
               >
@@ -418,7 +412,7 @@
             >
               <image
                   class="emptyOrder-img"
-                  src="https://ceres.zkthink.com/static/img/bgnull.png"
+                  :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`"
               ></image>
               <label class="font-color-999 fs26 mar-top-30">这里空空如也～</label>
             </view>
@@ -504,7 +498,7 @@
               <view class="pay-type-img">
                 <image
                     class="pay-type-img-inner"
-                    src="https://ceres.zkthink.com/static/images/alipay.png"
+                    :src="`${VUE_APP_STATIC_URL}static/images/alipay.png`"
                 />
               </view>
               <label class="pay-type-label">支付宝支付</label>
@@ -520,7 +514,7 @@
               <view class="pay-type-img">
                 <image
                     class="pay-type-img-inner"
-                    src="https://ceres.zkthink.com/static/images/huabei.png"
+                    :src="`${VUE_APP_STATIC_URL}static/images/huabei.png`"
                 />
               </view>
               <label class="pay-type-label">花呗分期</label>
@@ -613,6 +607,7 @@
 
 <script setup>
 import UCountDown from "../../uni_modules/vk-uview-ui/components/u-count-down/u-count-down";
+import { VUE_APP_STATIC_URL } from "../../config/api";
 import ClipboardJS from "clipboard";
 import { hidden } from "../../utils/hidden";
 import { handleDoPay } from "../../utils/payUtil";

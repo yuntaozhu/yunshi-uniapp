@@ -14,7 +14,7 @@
           >
             <image
                 class="logo"
-                src="https://ceres.zkthink.com/static/assets/img/logo.png"
+                :src="`${VUE_APP_STATIC_URL}static/assets/img/logo.png`"
                 mode="widthFix"
             ></image>
           </view>
@@ -29,7 +29,7 @@
           >
             <image
                 class="search-icon"
-                src="https://ceres.zkthink.com/static/images/searchImg.png"
+                :src="`${VUE_APP_STATIC_URL}static/img/search.png`"
                 mode="widthFix"
             >
             </image>
@@ -41,18 +41,18 @@
         <view class="header">
           <view class="topBox topWap">
             <image
-                class="logo"
-                src="https://ceres.zkthink.com/static/assets/img/logo.png"
-                mode="widthFix"
+              class="logo"
+              :src="`${VUE_APP_STATIC_URL}static/assets/img/logo.png`"
+              mode="widthFix"
             ></image>
             <view
                 class="search-btn"
                 @click="searchPro"
             >
               <image
-                  class="search-icon"
-                  src="https://ceres.zkthink.com/static/img/search.png"
-                  mode="widthFix"
+                class="search-icon"
+                :src="`${VUE_APP_STATIC_URL}static/img/search.png`"
+                mode="widthFix"
               >
               </image>
             </view>
@@ -76,7 +76,7 @@
     <view class="reachBottom"
           v-if="topLeft > 400">
       <image class="reach-icon"
-             src="https://ceres.zkthink.com/static/img/reachBottom.png"
+             :src="`${VUE_APP_STATIC_URL}static/img/reachBottom.png`"
              mode="widthFix">
       </image>
       <text class="reach-text">这里到底了哦~~</text>
@@ -112,6 +112,8 @@ import CategoryList from "@/components/basics/categoryList.vue"
 import CategoryShow from "@/components/basics/categoryShow.vue"
 import comHeader from '@/components/canvasShow/basics/header/app'
 import canvasPage from '@/components/canvasShow/canvasShowPage.vue'
+import { VUE_APP_STATIC_URL } from "@/config/api";
+
 const terminal = ref(API.terminal)
 const activeTab = ref(0)
 const categoryid = ref(0)

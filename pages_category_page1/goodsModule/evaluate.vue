@@ -266,17 +266,18 @@ function submitTap(){
 		}
 	}
 </style>
-<style scoped>
-.evaluateImg /deep/ .u-upload .u-list-item {
+<style lang="scss" scoped>
+@import "../../style/images";
+.evaluateImg ::v-deep .u-upload .u-list-item {
   background: none;
   border: 2rpx solid #E4E5E6;
   border-radius: 0;
 }
-.evaluateImg /deep/ .u-upload .u-list-item .uicon-plus:before {
+.evaluateImg ::v-deep .u-upload .u-list-item .uicon-plus:before {
   content: '';
   height: 71rpx;
   width: 71rpx;
-  background: url("https://ceres.zkthink.com/static/images/addImg.png") no-repeat center center;
+  background: $addImgIcon no-repeat center center;
   display: block;
   background-size: contain;
 }

@@ -28,7 +28,7 @@
     >
       <image
           class="emptyOrder-img"
-          src="https://ceres.zkthink.com/static/img/bgnull.png"
+          :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`"
       ></image>
       <label class="font-color-999 fs26 mar-top-30">你还没有物流信息哦～</label>
     </view>
@@ -40,6 +40,7 @@ import { request } from "@/utils/request";
 import API from "@/config/api";
 import { ref } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const express = ref('')
 const deliverFormid = ref('')

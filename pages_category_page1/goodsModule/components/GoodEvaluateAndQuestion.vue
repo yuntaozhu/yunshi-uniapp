@@ -99,13 +99,13 @@
           <image
               class="like-img"
               @click="handlePraise(commentItem,0)"
-              src="https://ceres.zkthink.com/static/images/praiseActiveIcon.png"
+              :src="`${VUE_APP_STATIC_URL}static/images/praiseActiveIcon.png`"
               v-if="commentItem.ifLike === 1"
           ></image>
           <image
               class="like-img"
               @click="handlePraise(commentItem,1)"
-              src="https://ceres.zkthink.com/static/images/praiseIcon.png"
+              :src="`${VUE_APP_STATIC_URL}static/images/praiseIcon.png`"
               v-else
           ></image>
           <view class="like-num">{{ commentItem.likes }}</view>
@@ -119,7 +119,7 @@
         <label class="fs24">查看全部</label>
         <image
             class="evaluateAllArrow-icon mar-left-10"
-            src="https://ceres.zkthink.com/static/img/user/arrow.png"
+            :src="`${VUE_APP_STATIC_URL}static/img/user/arrow.png`"
         ></image>
       </view>
     </view>
@@ -150,7 +150,7 @@
           <label class="fs24">查看全部</label>
           <image
               class="evaluateAllArrow-icon mar-left-10"
-              src="https://ceres.zkthink.com/static/img/user/arrow.png"
+              :src="`${VUE_APP_STATIC_URL}static/img/user/arrow.png`"
           ></image>
         </view>
       </view>
@@ -164,6 +164,7 @@ import API from "@/config/api";
 import lodash from 'lodash'
 import QuestionsAndAnswersList from "./QuestionsAndAnswersList";
 import { inject, ref, toRefs } from "vue";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const $jump = inject('$jump')
 
@@ -274,6 +275,7 @@ defineExpose({handleGetProblemList })
     lang="scss"
     scoped
 >
+@import "../../../style/images";
 .evaQaTab {
   height: 82rpx;
   line-height: 82rpx;
@@ -341,7 +343,7 @@ defineExpose({handleGetProblemList })
         content: '';
         width: 60rpx;
         height: 60rpx;
-        background: url("https://ceres.zkthink.com/static/images/arrow.png") no-repeat center center;
+        background: $smallArrowR no-repeat center center;
         background-size: contain;
         display: block;
         position: absolute;

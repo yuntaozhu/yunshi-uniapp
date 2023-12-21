@@ -1,7 +1,7 @@
 <template>
 	<view class="notice">
 		<view class="content">
-			<image src="https://ceres.zkthink.com/static/assets/images/cereshop/notice.png" mode=""></image>
+			<image :src="`${VUE_APP_STATIC_URL}static/assets/images/cereshop/notice.png`" mode=""></image>
 			<swiper class="swiper" :circular="true" :autoplay="true" :vertical="true" :interval="3000" :duration="500">
 			    <swiper-item v-for="(item,index) in list" :key="item.noticeId">
 			        <view class="swiper-item uni-bg-red fs26 font-color-333 overflow" @tap="goToMesDetail(item)">{{item.noticeTitle}}</view>

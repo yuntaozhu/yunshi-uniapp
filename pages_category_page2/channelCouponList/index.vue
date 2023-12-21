@@ -68,7 +68,7 @@
       </template>
       <template v-else>
         <view class="empty-box">
-          <image class="emptyCart-img" src="https://ceres.zkthink.com/static/images/searchEmpty.png"></image>
+          <image class="emptyCart-img" :src="`${VUE_APP_STATIC_URL}static/images/searchEmpty.png`"></image>
           暂无优惠券
         </view>
       </template>
@@ -83,6 +83,7 @@ import API from "../../config/api";
 import { request } from "../../utils/request";
 import { ref, getCurrentInstance } from 'vue';
 import { onShow, onLoad } from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const isGet = ref(false); // 是否已经领取
 const channelActivityId = ref(null);
@@ -194,6 +195,7 @@ const handleGetAllCoupon = () => {
     lang="scss"
     scoped
 >
+@import '../../style/images';
 .pink-color {
   background-color: #fdedea;
 }
@@ -201,7 +203,7 @@ const handleGetAllCoupon = () => {
 .content {
   width: 100%;
   min-height: 100vh;
-  background: url("https://ceres.zkthink.com/static/images/channelBg.png") no-repeat #FFFFFF;
+  background: $channelBg no-repeat #FFFFFF;
   background-size: 100vw 100vh;
   padding: 380rpx 30rpx 0 30rpx;
   box-sizing: border-box;
@@ -340,7 +342,7 @@ const handleGetAllCoupon = () => {
       }
       .right-icon {
         width: 8rpx;
-        background: url("https://ceres.zkthink.com/static/images/all_get.png") no-repeat;
+        background: $allGet no-repeat;
       }
     }
 

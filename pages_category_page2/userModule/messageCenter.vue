@@ -17,14 +17,14 @@
 						<view class="messageType">
 							<view v-if="item.noticeType == 1" class="messageTypeL">
 								<view class="iconBox">
-									<image src="https://ceres.zkthink.com/static/images/notice.png" alt=""></image>
+									<image :src="`${VUE_APP_STATIC_URL}static/images/notice.png`" alt=""></image>
 									<view class="redBox" v-if="item.ifRead ===0"></view>
 								</view>
 								<span>订单消息</span>
 							</view>
 							<view v-else class="messageTypeL">
 								<view class="iconBox">
-									<image src="https://ceres.zkthink.com/static/images/notice.png" alt=""></image>
+									<image :src="`${VUE_APP_STATIC_URL}static/images/notice.png`" alt=""></image>
 								</view>
 								<span>系统公告</span>
 							</view>
@@ -42,7 +42,7 @@
 			</u-swipe-action>
 		</view>
 		<view v-if="ifEmpty" class="empty-box">
-			<image class="question-empty" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
+			<image class="question-empty" :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`"></image>
 			<view class="tohome-box flex-items-plus">暂无消息</view>
 		</view>
 	</view>
@@ -54,6 +54,7 @@ import parse from 'mini-html-parser2';
 import {request} from "../../utils/request";
 import API from "@/config/api";
 import { onReachBottom } from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const list = ref(3);
 const messageList = ref([]); // 消息列表
@@ -265,6 +266,7 @@ const goToMesDetail = async (item,noticeId, only, jump) => {
 
 
 <style lang="scss" scoped>
+@import "../../style/images";
 	page {
 		background: #FFFFFF;
 	}
@@ -387,7 +389,7 @@ const goToMesDetail = async (item,noticeId, only, jump) => {
 					display: block;
 					width: 28upx;
 					height: 28upx;
-					background: url("https://ceres.zkthink.com/static/images/arrowRight.png") no-repeat center center;
+					background: $arrowRight no-repeat center center;
 					background-size: contain;
 				}
 			}

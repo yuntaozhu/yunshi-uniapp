@@ -4,7 +4,7 @@
       <image class="cover-img" :src="liveData.feedsImg" />
       <view class="status">
         <view class="status-state">
-          <image class="img" src="https://ceres.zkthink.com/static/img/live/icon-live-num.png" />直播中
+          <image class="img" :src="`${VUE_APP_STATIC_URL}static/img/live/icon-live-num.png`" />直播中
         </view>
         <!-- <view class="status-num">1000人</view> -->
       </view>
@@ -88,6 +88,7 @@ import { request } from "../../../utils/request";
 import API from "../../../config/api";
 import { startLiveTemplate } from '@/config/subscribe.js'
 import { liveAppid } from '@/config/live.js'
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 // #ifdef MP-WEIXIN
 const livePlayer = requirePlugin('live-player-plugin')

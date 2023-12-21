@@ -141,7 +141,7 @@
 				}, {
 					"path": "goodsModule/goodsList",
 					"style": {
-						"navigationBarTitleText": "商品列表"
+						"navigationBarTitleText": ""
 					}
 				}, {
 					"path": "goodsModule/canvasGoods",

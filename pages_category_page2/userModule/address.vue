@@ -20,14 +20,14 @@
 			</view>
 		</view>
 		<view v-else class="emptyAddress-box">
-			<image class="emptyAddress" src="https://ceres.zkthink.com/static/img/noAddress.png"></image>
+			<image class="emptyAddress" :src="`${VUE_APP_STATIC_URL}static/img/noAddress.png`"></image>
 			<text>你还没有添加地址哦～</text>
 		</view>
 		<!-- #ifdef MP-WEIXIN -->
 		<view class="wxAddressNBox">
 			<view class="flex-items btnBox flex-sp-between">
 				<view class="wxAddress btn flex-items flex-center" @click="wxAddFn">
-					<image src="https://ceres.zkthink.com/static/images/weixin2x.png"></image>
+					<image :src="`${VUE_APP_STATIC_URL}static/images/weixin2x.png`"></image>
 					<text>微信导入</text>
 				</view>
 				<view class="addAddressBtn btn" @click="addAddressClick">添加新地址</view>
@@ -48,6 +48,7 @@ import { hidden } from "../../utils/hidden";
 import { request } from "../../utils/request";
 import API from "../../config/api";
 import {onLoad, onBackPress, onReachBottom, onShow} from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 import Bankcard from "./bankcard.vue";
 
 const addresList = ref([]);
@@ -319,6 +320,7 @@ const wxAddFn = () => {
 </script>
 
 <style lang="scss">
+@import '../../style/images';
 	.container {
 		padding: 0 24rpx;
 
@@ -474,7 +476,7 @@ const wxAddFn = () => {
 				width: 50rpx;
 				height: 50rpx;
 				display: block;
-				background: url("https://ceres.zkthink.com/static/images/addEdit.png") no-repeat center center;
+				background: $addEdit no-repeat center center;
 				background-size: contain;
 			}
 		}

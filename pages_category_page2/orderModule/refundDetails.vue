@@ -10,7 +10,7 @@
               <text class="status">审核中</text>
               <!-- <text class="label" v-if="deliveryfalse">还剩1天22时30分</text> -->
             </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsTime.png"></image>-->
+            <!--					<image class='r' :src="`${VUE_APP_STATIC_URL}static/images/afterSaleDetailsTime.png`"></image>-->
           </view>
           <!--  审核通过-->
           <view class="status-title-box" v-if="status == 10">
@@ -18,7 +18,7 @@
               <text class="status">审核通过</text>
               <!-- <text class="label" v-if="deliveryfalse">2020年4月24日 22:00:00</text> -->
             </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsSuccess.png"></image>-->
+            <!--					<image class='r' :src="`${VUE_APP_STATIC_URL}static/images/afterSaleDetailsSuccess.png`"></image>-->
           </view>
           <!--  审核不通过-->
           <view class="status-title-box" v-if="status == 6">
@@ -26,7 +26,7 @@
               <text class="status">审核不通过</text>
               <!-- <text class="label" v-if="deliveryfalse">2020年4月24日 22:00:00</text> -->
             </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsSuccess.png"></image>-->
+            <!--					<image class='r' :src="`${VUE_APP_STATIC_URL}static/images/afterSaleDetailsSuccess.png`"></image>-->
           </view>
           <view class="reason" v-if="status == 6">原因: {{ itemList.reason }}</view>
           <!--  退款中-->
@@ -35,14 +35,14 @@
               <text class="status">退款中</text>
               <!-- <text class="label">2020年4月24日 22:00:00</text> -->
             </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
+            <!--					<image class='r' :src="`${VUE_APP_STATIC_URL}static/images/afterSaleDetailsFalse.png`"></image>-->
           </view>
           <!--  退款中-->
           <view class="status-title-box" v-if="status == 7">
             <view class="l">
               <text class="status">评审中</text>
             </view>
-            <!--          <image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
+            <!--          <image class='r' :src="`${VUE_APP_STATIC_URL}static/images/afterSaleDetailsFalse.png`"></image>-->
           </view>
           <!--  退货完成待退款-->
           <view class="status-title-box" v-if="status == 4">
@@ -50,7 +50,7 @@
               <text class="status">退款成功</text>
               <!-- <text class="label">2020年4月24日 22:00:00</text> -->
             </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
+            <!--					<image class='r' :src="`${VUE_APP_STATIC_URL}static/images/afterSaleDetailsFalse.png`"></image>-->
           </view>
           <!--  退货完成拒绝退款-->
           <view class="status-title-box" v-if="status == 5">
@@ -58,7 +58,7 @@
               <text class="status">退款失败</text>
               <!-- <text class="label">2020年4月24日 22:00:00</text> -->
             </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsFalse.png"></image>-->
+            <!--					<image class='r' :src="`${VUE_APP_STATIC_URL}static/images/afterSaleDetailsFalse.png`"></image>-->
           </view>
           <!--  平台介入拒绝-->
           <view class="status-title-box" v-if="status == 9 && isPlaformState === 1">
@@ -72,7 +72,7 @@
               <text class="status">撤销申请</text>
               <!-- <text class="label" v-if="deliveryfalse">2020年4月24日 22:00:00</text> -->
             </view>
-            <!--					<image class='r' src="https://ceres.zkthink.com/static/images/afterSaleDetailsSuccess.png"></image>-->
+            <!--					<image class='r' :src="`${VUE_APP_STATIC_URL}static/images/afterSaleDetailsSuccess.png`"></image>-->
           </view>
 
         </view>
@@ -194,6 +194,7 @@ import { ref } from 'vue'
 import { onLoad } from "@dcloudio/uni-app"
 import { request } from '../../utils/request'
 import API from '../../config/api'
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const item = ref({})
 const itemList = ref({})
@@ -253,7 +254,8 @@ const closeInterventionFn = () => {
 
 </script>
 
-<style>
+<style lang="scss">
+@import "../../style/images";
 page {
   background: #f8f8f8;
 }
@@ -261,7 +263,7 @@ page {
 .order-details-status {
   width: 100%;
   height: 302upx;
-  background: url("https://ceres.zkthink.com/static/images/refundBg.png") no-repeat left top;
+  background: $refundBg no-repeat left top;
   background-size: contain;
 }
 
@@ -554,7 +556,7 @@ page {
   color: #F5DEB2;
   background: #333333;
 }
-.interventionBox .btnBox /deep/ uni-button:after {
+.interventionBox .btnBox ::v-deep uni-button:after {
   border-radius: 0;
 }
 .interventionBox .intTit{
@@ -581,10 +583,10 @@ page {
   font-size: 20upx;
   height: 200rpx;
 }
-.interventionBox /deep/ .uni-textarea-textarea {
+.interventionBox ::v-deep .uni-textarea-textarea {
   width: 100%;
 }
-.interventionBox /deep/ .uni-textarea {
+.interventionBox ::v-deep .uni-textarea {
   width: 100%;
 }
 .u-node {

@@ -10,7 +10,7 @@
         <!-- 我的 -->
         <image
                 class="top-bg"
-                src="https://ceres.zkthink.com/static/img/user/topBg.png"
+                :src="`${VUE_APP_STATIC_URL}static/img/user/topBg.png`"
         ></image>
         <view class="page-content" >
             <!-- 用户未登录 -->
@@ -21,7 +21,7 @@
             >
                 <image
                         class="user-image u-skeleton-circle"
-                        src="https://ceres.zkthink.com/static/img/user/morentouxiang.png"
+                        :src="`${VUE_APP_STATIC_URL}static/img/user/morentouxiang.png`"
                         mode="widthFix"
                 ></image>
                 <view class="user-info">
@@ -30,7 +30,7 @@
                 </view>
                 <image
                         class="user-info-right"
-                        src="https://ceres.zkthink.com/static/img/user/back.png"
+                        :src="`${VUE_APP_STATIC_URL}static/img/user/back.png`"
                 ></image>
                 <view class="notice">
                     <view
@@ -56,7 +56,7 @@
                 <image
                         class="user-image"
                         v-else
-                        src="https://ceres.zkthink.com/static/img/user/morentouxiang.png"
+                        :src="`${VUE_APP_STATIC_URL}static/img/user/morentouxiang.png`"
                         mode="widthFix"
                 >
                 </image>
@@ -143,7 +143,7 @@
                 <!--        <button open-type="contact"
                                 class="item-btn btnNone">
                           <image class="item-btn-icon"
-                                 src="https://ceres.zkthink.com/static/img/user/service.png"
+                                 :src="`${VUE_APP_STATIC_URL}static/img/user/service.png`"
                                  mode="widthFix"></image>
                           <view class="item-btn-text">平台客服</view>
                         </button>-->
@@ -166,6 +166,7 @@ import {request} from "@/utils/request";
 import API from "../../../config/api";
 import { Encrypt } from "@/utils/secret";
 import {onShow} from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const isFirstComeIn = ref(true);
 const loading = ref(true);
@@ -261,6 +262,7 @@ const functionObj={
 </script>
 
 <style lang="scss">
+@import "../../../style/images";
 page {
   background: #f8f8f8;
 }
@@ -309,7 +311,7 @@ page {
         position: absolute;
         top: 0;
         right: 50rpx;
-        background: url("https://ceres.zkthink.com/static/images/notice.png") no-repeat center center;
+        background: $notice no-repeat center center;
         background-size: contain;
 
         .messNum {

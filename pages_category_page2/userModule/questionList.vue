@@ -30,7 +30,7 @@
           >
             <image
                 class="editicon"
-                src="https://ceres.zkthink.com/static/images/collectionEditicon.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/collectionEditicon.png`"
             >
             </image>
             <text class="mar-left-10">编辑</text>
@@ -59,14 +59,14 @@
                       mode="aspectFill"
                       v-if="item.selected == 1"
                       @click.stop="problemItemSel(index,0)"
-                      src="https://ceres.zkthink.com/static/images/selectActive.png"
+                      :src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
                       class="cart-select-img"
                   ></image>
                   <image
                       mode="aspectFill"
                       v-else
                       @click.stop="problemItemSel(index,1)"
-                      src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                      :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
                       class="cart-select-img"
                   ></image>
                 </view>
@@ -104,14 +104,14 @@
             <image
                 mode="aspectFill"
                 v-if="isAllProblemCheck"
-                src="https://ceres.zkthink.com/static/images/selectActive.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
                 class="cart-select-img"
                 @click="allProblemSel(0)"
             ></image>
             <image
                 mode="aspectFill"
                 v-else
-                src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
                 class="cart-select-img"
                 @click="allProblemSel(1)"
             ></image>
@@ -136,7 +136,7 @@
       >
         <image
             class="question-empty"
-            src="https://ceres.zkthink.com/static/img/bgnull.png"
+            :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`"
         ></image>
         <view class="tohome-box flex-items-plus">暂无提问内容</view>
       </view>
@@ -156,7 +156,7 @@
         >
           <image
               class="editicon"
-              src="https://ceres.zkthink.com/static/images/collectionEditicon.png"
+              :src="`${VUE_APP_STATIC_URL}static/images/collectionEditicon.png`"
           >
           </image>
           <text class="mar-left-10">编辑</text>
@@ -188,14 +188,14 @@
                         mode="aspectFill"
                         v-if="item.selected == 1"
                         @click.stop="answerItemSel(index,0)"
-                        src="https://ceres.zkthink.com/static/images/selectActive.png"
+                        :src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
                         class="cart-select-img"
                     ></image>
                     <image
                         mode="aspectFill"
                         v-else
                         @click.stop="answerItemSel(index,1)"
-                        src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                        :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
                         class="cart-select-img"
                     ></image>
                   </view>
@@ -227,7 +227,7 @@
                         <text class="fs24 font-color-C5AA7B">共{{ item.count }}个回答</text>
                         <image
                             class="item-btn-right"
-                            src="https://ceres.zkthink.com/static/img/user/arrow.png"
+                            :src="`${VUE_APP_STATIC_URL}static/img/user/arrow.png`"
                             mode="widthFix"
                         ></image>
                       </view>
@@ -247,14 +247,14 @@
             <image
                 mode="aspectFill"
                 v-if="isAllAnswerCheck"
-                src="https://ceres.zkthink.com/static/images/selectActive.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
                 class="cart-select-img"
                 @click="allAnswerSel(0)"
             ></image>
             <image
                 mode="aspectFill"
                 v-else
-                src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
                 class="cart-select-img"
                 @click="allAnswerSel(1)"
             ></image>
@@ -279,7 +279,7 @@
       >
         <image
             class="question-empty"
-            src="https://ceres.zkthink.com/static/img/bgnull.png"
+            :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`"
         ></image>
         <view class="tohome-box flex-items-plus">暂无问答内容</view>
       </view>
@@ -293,7 +293,7 @@
         </view>
       </view>
       <view class="cancel-but" @click="cancelClick">
-        <image src="https://ceres.zkthink.com/static/images/cancelClose.png" mode=""></image>
+        <image :src="`${VUE_APP_STATIC_URL}static/images/cancelClose.png`" mode=""></image>
       </view>
     </u-popup> -->
     <!-- 删除确认弹窗 -->
@@ -322,7 +322,7 @@
           class="cancelDel"
       >
         <image
-            src="https://ceres.zkthink.com/static/images/cancelClose.png"
+            :src="`${VUE_APP_STATIC_URL}static/images/cancelClose.png`"
             mode=""
         ></image>
       </view>
@@ -336,6 +336,7 @@ import API from "@/config/api";
 import { onLoad, onReachBottom } from "@dcloudio/uni-app";
 import { inject,ref } from "vue";
 import TuiModal from "@/components/modal/modal.vue";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const questionTypeList = ref([{
   name: '我的提问(0)'
@@ -913,12 +914,13 @@ page {
   }
 }
 </style>
-<style>
-.question-box /deep/ .u-tabs #u-tab-item-0 {
+<style lang="scss">
+@import "../../style/images";
+.question-box ::v-deep .u-tabs #u-tab-item-0 {
   position: relative;
 }
 
-.question-box /deep/ .u-tabs #u-tab-item-0:before {
+.question-box ::v-deep .u-tabs #u-tab-item-0:before {
   content: '';
   display: block;
   width: 2rpx;
@@ -929,21 +931,21 @@ page {
   background: #CCCCCC;
 }
 
-.swipe-box /deep/ .u-swipe-del {
+.swipe-box ::v-deep .u-swipe-del {
   align-items: center;
   justify-content: center;
   width: 120rpx !important;
 }
 
-.swipe-box /deep/ .u-btn-text {
+.swipe-box ::v-deep .u-btn-text {
   width: 60rpx;
   height: 60rpx;
   display: block;
-  background: url("https://ceres.zkthink.com/static/images/delIcon.png") no-repeat center center;
+  background: $delIcon no-repeat center center;
   background-size: contain;
 }
 
-.swipe-box /deep/ .u-swipe-action {
+.swipe-box ::v-deep .u-swipe-action {
   background: none !important;
   margin-bottom: 20rpx;
 }

@@ -3,7 +3,7 @@
     <view class="group-warp">
       <view class="title">
         <label>
-          <image class="title-img" src="https://ceres.zkthink.com/static/images/combinationIcon.png" alt="组合销售" mode="widthFix"></image>
+          <image class="title-img" :src="`${VUE_APP_STATIC_URL}static/images/combinationIcon.png`" alt="组合销售" mode="widthFix"></image>
         </label>
         <view class="price-text">
           组合价：¥{{composePrice}}
@@ -97,6 +97,7 @@ import API from "../../config/api";
 import { request } from "@/utils/request";
 import { defineProps,toRefs } from "vue";
 import { getCurrentInstance, onMounted, ref } from "vue";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const props = defineProps({
   pid: {
@@ -344,6 +345,7 @@ onMounted(()=>{
 </script>
 
 <style lang="scss" scoped>
+@import "../../style/images";
 .group-list{
   padding: 10upx 20upx 60upx;
   border-top: 12upx solid #F8F8F8;
@@ -459,7 +461,7 @@ onMounted(()=>{
           margin: 0 auto;
           line-height: 50upx;
           border: 2upx solid #E4E5E6;
-          background: url("https://ceres.zkthink.com/static/images/arrow-suk-select.png") no-repeat right center / 60upx 60upx;
+          background: $arrowSelect no-repeat right center / 60upx 60upx;
           .text{
             font-size: 24upx;
             color: #999;

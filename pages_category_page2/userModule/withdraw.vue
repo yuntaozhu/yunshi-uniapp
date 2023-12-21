@@ -8,7 +8,7 @@
 				<view class="fs28 addressTag">银行卡</view>
 				<view>
 					<label>{{cardNum}}</label>
-					<image class="arrow mar-left-20" src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
+					<image class="arrow mar-left-20" :src="`${VUE_APP_STATIC_URL}static/img/user/arrow.png`"></image>
 				</view>
 			</view>
 			<view class="apply-box">
@@ -50,6 +50,7 @@
 import { ref, onMounted, nextTick, computed } from "vue";
 import { request } from "@/utils/request";
 import API from "@/config/api";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const balance = ref("");
 const cardNum = ref("");

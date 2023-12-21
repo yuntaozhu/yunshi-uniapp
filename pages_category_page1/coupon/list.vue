@@ -64,7 +64,7 @@
       >
         <image
             class="reach-icon"
-            src="https://ceres.zkthink.com/static/img/reachBottom.png"
+            :src="`${VUE_APP_STATIC_URL}static/img/reachBottom.png`"
             mode="widthFix"
         ></image>
         <text class="reach-text">这里到底了哦~~</text>
@@ -82,6 +82,7 @@ import Empty from "../../components/Empty";
 import WxSendCoupon from "../../components/wx/wxSendCoupon";
 import { request } from "../../utils/request"
 import API from "@/config/api";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const loading = ref(false)
 const isFirstComeIn = ref(true)
@@ -155,6 +156,7 @@ const success = () => {
     lang="scss"
     scoped
 >
+@import "../../style/images";
 page {
   background: #F8F8F8 !important;
 
@@ -167,7 +169,7 @@ page {
       margin-top: 40rpx;
       padding: 25rpx 35rpx;
       overflow: hidden;
-      background-image: url("https://ceres.zkthink.com/static/images/borderIcon.png");
+      background-image: $borderIcon;
       background-repeat: no-repeat;
       background-size: contain;
       background-position: right top;

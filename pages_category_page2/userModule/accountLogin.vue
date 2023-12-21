@@ -5,14 +5,14 @@
     <view class="login-logoBox">
       <image
           class="login-logo"
-          src="https://ceres.zkthink.com/static/images/loginLogo.png"
+          :src="`${VUE_APP_STATIC_URL}static/images/loginLogo.png`"
       ></image>
     </view>
     <view class="iphoneNum-box flex-row-plus flex-items">
       <view style="margin-right: 30rpx">
         <image
             class="loginIcon"
-            src="https://ceres.zkthink.com/static/images/phone.png"
+            :src="`${VUE_APP_STATIC_URL}static/images/phone.png`"
         ></image>
       </view>
       <view>
@@ -30,7 +30,7 @@
         <view style="margin-right: 30rpx">
           <image
               class="loginIcon"
-              src="https://ceres.zkthink.com/static/images/code.png"
+              :src="`${VUE_APP_STATIC_URL}static/images/code.png`"
           ></image>
         </view>
         <view>
@@ -60,6 +60,7 @@
   </view>
 </template>
 <script setup>
+import { VUE_APP_STATIC_URL } from "@/config/api";
 import { ref } from 'vue';
 import { request } from '../../utils/request';
 import API from '../../config/api';

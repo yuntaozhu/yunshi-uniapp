@@ -11,22 +11,22 @@
               <label class="product-name">{{item.productName}}</label>
               <div class="price-warp">
                 <!-- #ifdef MP-WEIXIN -->
-                <image class="iconImg" v-if="item.activityType == 1" src="https://ceres.zkthink.com/static/canvas-images/groupBuyIcon.png"/>
-                <image class="iconImg" v-if="item.activityType == 2" src="https://ceres.zkthink.com/static/canvas-images/spikeIcon.png"/>
-                <image class="iconImg" v-if="item.activityType == 4" src="https://ceres.zkthink.com/static/canvas-images/spikeIcon.png"/>
-                <image class="iconImg" v-if="item.activityType == 3" src="https://ceres.zkthink.com/static/canvas-images/discountListIcon.png"/>
-                <image class="iconImg" v-if="item.activityType == 5" src="https://ceres.zkthink.com/static/canvas-images/discountListIcon.png"/>
-                <image class="iconImg" v-if="item.activityType == 9" src="https://ceres.zkthink.com/static/canvas-images/memberCenterIcon.png"/>
-				<image class="iconImg" v-if="item.activityType == 8" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png"/>
+                <image class="iconImg" v-if="item.activityType == 1" :src="`${VUE_APP_STATIC_URL}static/canvas-images/groupBuyIcon.png`"/>
+                <image class="iconImg" v-if="item.activityType == 2" :src="`${VUE_APP_STATIC_URL}static/canvas-images/spikeIcon.png`"/>
+                <image class="iconImg" v-if="item.activityType == 4" :src="`${VUE_APP_STATIC_URL}static/canvas-images/spikeIcon.png`"/>
+                <image class="iconImg" v-if="item.activityType == 3" :src="`${VUE_APP_STATIC_URL}static/canvas-images/discountListIcon.png`"/>
+                <image class="iconImg" v-if="item.activityType == 5" :src="`${VUE_APP_STATIC_URL}static/canvas-images/discountListIcon.png`"/>
+                <image class="iconImg" v-if="item.activityType == 9" :src="`${VUE_APP_STATIC_URL}static/canvas-images/memberCenterIcon.png`"/>
+				        <image class="iconImg" v-if="item.activityType == 8" :src="`${VUE_APP_STATIC_URL}static/images/holidaySaleIcon.png`" />
                 <!-- #endif -->
                 <!-- #ifdef H5 || APP-PLUS -->
-                <image class="iconImg" v-if="item.activityType == 1" src="https://ceres.zkthink.com/static/canvas-images/groupBuyIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 2" src="https://ceres.zkthink.com/static/canvas-images/spikeIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 4" src="https://ceres.zkthink.com/static/canvas-images/spikeIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 3" src="https://ceres.zkthink.com/static/canvas-images/discountListIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 5" src="https://ceres.zkthink.com/static/canvas-images/discountListIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 9" src="https://ceres.zkthink.com/static/canvas-images/memberCenterIcon.png"></image>
-				<image class="iconImg" v-if="item.activityType == 8" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png"></image>
+                <image class="iconImg" v-if="item.activityType == 1" :src="`${VUE_APP_STATIC_URL}static/canvas-images/groupBuyIcon.png`"></image>
+                <image class="iconImg" v-if="item.activityType == 2" :src="`${VUE_APP_STATIC_URL}static/canvas-images/spikeIcon.png`"></image>
+                <image class="iconImg" v-if="item.activityType == 4" :src="`${VUE_APP_STATIC_URL}static/canvas-images/spikeIcon.png`"></image>
+                <image class="iconImg" v-if="item.activityType == 3" :src="`${VUE_APP_STATIC_URL}static/canvas-images/discountListIcon.png`"></image>
+                <image class="iconImg" v-if="item.activityType == 5" :src="`${VUE_APP_STATIC_URL}static/canvas-images/discountListIcon.png`"></image>
+                <image class="iconImg" v-if="item.activityType == 9" :src="`${VUE_APP_STATIC_URL}static/canvas-images/memberCenterIcon.png`"></image>
+				        <image class="iconImg" v-if="item.activityType == 8" :src="`${VUE_APP_STATIC_URL}static/images/holidaySaleIcon.png`"></image>
                 <!-- #endif -->
                 <div class="price">
                   ¥ {{item.price}}
@@ -48,6 +48,8 @@
 <script setup>
 import { toRefs } from 'vue';
 import commonMixin from '../mixin';
+import { VUE_APP_STATIC_URL } from "@/config/api";
+
 const props = defineProps({
   componentContent: {
     type: Object,
@@ -61,6 +63,7 @@ const { productData, jumpProductDetail, jumpProList } = commonMixin(componentCon
 </script>
 
 <style lang="scss" scoped>
+@import "../../../../../style/images";
 .hom-pro-list{
   ::v-deep .swiper-wrapper{
     position: static;
@@ -70,7 +73,7 @@ const { productData, jumpProductDetail, jumpProList } = commonMixin(componentCon
     width: 100%;
     height: 454upx;
     padding: 90upx 34upx 0;
-    background: url("https://ceres.zkthink.com/static/canvas-images/newProduct/bg-product-card.png") no-repeat center;
+    background: $newProductBg no-repeat center;
     background-size: 710upx 454upx;
     box-sizing: border-box;
     position: relative;
@@ -107,7 +110,7 @@ const { productData, jumpProductDetail, jumpProList } = commonMixin(componentCon
         display: block;
         width: 54upx;
         height: 54upx;
-        background: url("https://ceres.zkthink.com/static/canvas-images/newProduct/flag-new.png") no-repeat;
+        background: $newTagIcon no-repeat;
         background-size: 100% 100%;
         position: absolute;
         top: 0;

@@ -12,6 +12,7 @@
 import api from '../config/api'
 import { ref, toRefs, onMounted } from 'vue';
 import funMixin from '../config/mixin/funMixin.js'
+
 const { jumpNoticeDetail, sendReq, beforeGetData, afterGetData } = funMixin()
 const props = defineProps({
   terminal: {
@@ -46,6 +47,7 @@ function getData() {
 </script>
 
 <style lang="scss" scoped>
+@import "../../../style/images";
 .notice-list{
   height: 60upx;
   line-height: 60upx;
@@ -61,7 +63,7 @@ function getData() {
       display: inline-block;
       padding-left: 50upx;
       font-size: 24upx;
-      background: url("https://ceres.zkthink.com/static/canvas-images/notice/ico_notice2.png") no-repeat left center;
+      background: $noticeIcon2 no-repeat left center;
       background-size: 30upx 30upx;
     }
   }
@@ -84,7 +86,7 @@ function getData() {
         display: block;
         padding-left: 25upx;
         font-size: 14upx;
-        background: url("https://ceres.zkthink.com/static/canvas-images/notice/ico_notice.png") no-repeat left center;
+        background: $noticeIcon no-repeat left center;
       }
     }
   }

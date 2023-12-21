@@ -19,7 +19,7 @@
 						</view>
 						<view class="flex-display flex-sp-between flex-row mar-top-10 flex-items">
 							<label class="fs22 font-color-999">{{item.shopName}}</label>
-							<image class="arrowImg" src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
+							<image class="arrowImg" :src="`${VUE_APP_STATIC_URL}static/img/user/arrow.png`"></image>
 						</view>
 					</view>
 				</view>
@@ -44,7 +44,7 @@
 					  </view>
 					  <view class="flex-display flex-sp-between flex-row mar-top-10 flex-items">
 					  	<label class="fs22 font-color-999">{{item.shopName}}</label>
-					  	<image class="arrowImg" src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>
+					  	<image class="arrowImg" :src="`${VUE_APP_STATIC_URL}static/img/user/arrow.png`"></image>
 					  </view>
 				    </view>
 				  </view>
@@ -54,7 +54,7 @@
 
 		<!-- 搜索为空 -->
 		<view v-if="ifShow" class="emptyCart-box flex-items-plus flex-column">
-			<image class="emptyCart-img" src="https://ceres.zkthink.com/static/images/searchEmpty.png"></image>
+			<image class="emptyCart-img" :src="`${VUE_APP_STATIC_URL}static/images/searchEmpty.png`"></image>
 			<label class="font-color-999 fs26 mar-top-30">无可用商品</label>
 		</view>
 	</view>
@@ -65,6 +65,7 @@ import { ref } from 'vue'
 import { onLoad, onReachBottom } from "@dcloudio/uni-app";
 import { request } from "../../utils/request";
 import API from "../../config/api";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const page = ref(1)
 const pageSize = ref(20)

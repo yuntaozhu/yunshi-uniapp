@@ -23,7 +23,7 @@
 							{{item.shopName}}
 						</view>
 						<view>
-							<image class="rightIcon" src="https://ceres.zkthink.com/images/arrowRight.png" mode="aspectFill"></image>
+							<image class="rightIcon" :src="`${VUE_APP_STATIC_URL}images/arrowRight.png`" mode="aspectFill"></image>
 						</view>
 					</view>
 				</view>
@@ -32,62 +32,59 @@
 	</view>
 </template>
 
-<script>
-  import {request} from "../utils/request";
-  import API from "../config/api";
-	export default {
-		data() {
-			return {
-				list: [],
-				pageSize: 1,
-				productList:[]
-			}
-		},
+<script setup>
+import {request} from "../utils/request";
+import API from "../config/api";
+import { VUE_APP_STATIC_URL } from "@/config/api";
+import { ref } from "vue"
+import { onLoad, onPullDownRefresh } from "@dcloudio/uni-app";
 
-		onPullDownRefresh() { //上拉触底函数
-			this.pageSize = this.pageSize + 1
-			this.GetremenList()
-		},
-		onLoad() {
-			this.GetremenList()
-		},
-		methods: {
-			// 获取列表数据
-			GetremenList() {
-				let timestamp = new Date().getTime()
-				request(API.GetremenList, {
-					page: this.pageSize,
-					pageSize: 5,
-					timestamp: timestamp
-				}, 'get').then(res => {
-					uni.stopPullDownRefresh();
-					console.log(res)
-					if (res.code == 200) {
-						this.productList = res.data.list
-					} else {
-						uni.showToast({
-							title: res.message,
-							icon: 'none'
-						})
-					}
-				})
-			},
-			// 跳转店铺
-			goStore(shopId) {
-				uni.navigateTo({
-					url: './store/index?storeId=' + shopId
-				})
-			},
-			//商品详情
-			goodsDateils(shopId, productId, skuId) {
-				console.log(111)
-				uni.navigateTo({
-					url: './goodsModule/goodsDetails?shopId=' + shopId + '&productId=' + productId + '&skuId=' +
-						skuId
-				})
-			}
-		}
-	}
+const list = ref([])
+const pageSize = ref(1)
+const productList = ref([])
+
+onPullDownRefresh(() => {
+  pageSize.value = pageSize.value + 1
+  GetremenList()
+})
+
+onLoad(() => {
+  GetremenList()
+})
+
+const GetremenList = () => {
+  let timestamp = new Date().getTime()
+  request(API.GetremenList, {
+    page: pageSize.value,
+    pageSize: 5,
+    timestamp: timestamp
+  }, 'get').then(res => {
+    uni.stopPullDownRefresh();
+    console.log(res)
+    if (res.code == 200) {
+      productList.value = res.data.list
+    } else {
+      uni.showToast({
+        title: res.message,
+        icon: 'none'
+      })
+    }
+  })
+}
+
+// 跳转店铺
+const goStore = (shopId) => {
+  uni.navigateTo({
+    url: './store/index?storeId=' + shopId
+  })
+}
+//商品详情
+const goodsDateils = (shopId, productId, skuId) => {
+  uni.navigateTo({
+    url: './goodsModule/goodsDetails?shopId=' + shopId + '&productId=' + productId + '&skuId=' +
+        skuId
+  })
+}
 </script>
 
 <style lang="scss" scoped>

@@ -22,7 +22,7 @@
         >
           <image
               class="editicon"
-              src="https://ceres.zkthink.com/static/images/collectionEditicon.png"
+              :src="`${VUE_APP_STATIC_URL}static/images/collectionEditicon.png`"
           ></image>
           <label class="mar-left-10">编辑</label>
         </view>
@@ -62,13 +62,13 @@
                   <image
                       v-if="item.selected == 1"
                       @click.stop="footItemSel(index,findex,0)"
-                      src="https://ceres.zkthink.com/static/images/selectActive.png"
+                      :src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
                       class="cart-select-img"
                   ></image>
                   <image
                       v-else
                       @click.stop="footItemSel(index,findex,1)"
-                      src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+                      :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
                       class="cart-select-img"
                   ></image>
                 </view>
@@ -84,43 +84,43 @@
                     <image
                         v-if="item.activityType===1"
                         class="iconType"
-                        src="https://ceres.zkthink.com/static/images/groupBuyIcon.png"
+                        :src="`${VUE_APP_STATIC_URL}static/images/groupBuyIcon.png`"
                         alt="拼团icon"
                     ></image>
                     <image
                         v-if="item.activityType === 2"
                         class="iconType"
-                        src="https://ceres.zkthink.com/static/images/spikeIcon.png"
+                        :src="`${VUE_APP_STATIC_URL}static/images/spikeIcon.png`"
                         alt="秒杀活动"
                     ></image>
                     <image
                         v-if="item.activityType === 3"
                         class="iconType discountIcon"
-                        src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-03-14/38184785db4b4fbca767ada611097ae9_discount.png"
+                        :src="`${VUE_APP_STATIC_URL}static/images/discountTagIcon.png`"
                         alt="限时折扣活动"
                     ></image>
                     <image
                         v-if="item.activityType === 4"
                         class="iconType"
-                        src="https://ceres.zkthink.com/static/images/spikeIcon.png"
+                        :src="`${VUE_APP_STATIC_URL}static/images/spikeIcon.png`"
                         alt="平台秒杀"
                     ></image>
                     <image
                         v-if="item.activityType===5"
                         class="iconType"
-                        src="https://ceres.zkthink.com/static/images/discountListIcon.png"
+                        :src="`${VUE_APP_STATIC_URL}static/images/discountListIcon.png`"
                         alt="平台折扣"
                     ></image>
                     <image
                         v-if="item.activityType===9"
                         class="iconType"
-                        src="https://ceres.zkthink.com/static/images/memberCenterIcon.png"
+                        :src="`${VUE_APP_STATIC_URL}static/images/memberCenterIcon.png`"
                         alt="会员价"
                     ></image>
                     <image
                         v-if="item.activityType === 8"
                         class="iconType"
-                        src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png"
+                        :src="`${VUE_APP_STATIC_URL}static/images/holidaySaleIcon.png`"
                         alt="场景营销"
                     ></image>
                     <label class="fs40 mar-right-20 font-color-C83732">¥{{ item.price }}</label>
@@ -139,13 +139,13 @@
         <view class="left">
           <image
               v-if="isAllCheck"
-              src="https://ceres.zkthink.com/static/images/selectActive.png"
+              :src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
               class="cart-select-img"
               @click="allSel(0)"
           ></image>
           <image
               v-else
-              src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+              :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
               class="cart-select-img"
               @click="allSel(1)"
           ></image>
@@ -201,7 +201,7 @@
           class="cancelDel"
       >
         <image
-            src="https://ceres.zkthink.com/static/images/cancelClose.png"
+            :src="`${VUE_APP_STATIC_URL}static/images/cancelClose.png`"
             mode=""
         ></image>
       </view>
@@ -216,6 +216,7 @@ import { onLoad, onReachBottom } from "@dcloudio/uni-app";
 import { request } from "@/utils/request";
 import API from "@/config/api";
 import TuiModal from "@/components/modal/modal.vue";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const loading = ref(false);
 const isFirstComeIn = ref(true);
@@ -656,18 +657,19 @@ page {
   }
 }
 </style>
-<style scoped>
-.swipe-box /deep/ .u-swipe-del {
+<style lang="scss" scoped>
+@import "../../style/images";
+.swipe-box ::v-deep .u-swipe-del {
   align-items: center;
   justify-content: center;
   width: 160rpx !important;
 }
 
-.swipe-box /deep/ .u-btn-text {
+.swipe-box ::v-deep .u-btn-text {
   width: 60rpx;
   height: 60rpx;
   display: block;
-  background: url("https://ceres.zkthink.com/static/images/delIcon.png") no-repeat center center;
+  background: $delIcon no-repeat center center;
   background-size: contain;
 }
 </style>

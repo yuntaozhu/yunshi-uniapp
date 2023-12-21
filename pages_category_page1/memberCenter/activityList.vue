@@ -23,8 +23,6 @@
             <view class="r">
               <view class="arrowUp" :class="{activeUp: type == 1}"></view>
               <view class="arrowDown" :class="{activeDown: type == 2}"></view>
-              <!--          <image src="https://ceres.zkthink.com/static/images/arrowSortUp.png" v-if="type == 1" class="arrow-img padd-t"></image>-->
-              <!--          <image src="https://ceres.zkthink.com/static/images/arrowSortDown.png" v-if="type == 2" class="arrow-img padd-b"></image>-->
             </view>
           </view>
           <view class="nav-item-sort" @click="sortTap(3)">
@@ -32,8 +30,6 @@
             <view class="r">
               <view class="arrowUp" :class="{activeUp: volume == 1}"></view>
               <view class="arrowDown" :class="{activeDown: volume == 2}"></view>
-              <!--          <image src="https://ceres.zkthink.com/static/images/arrowSortUp.png" v-if="volume == 1" class="arrow-img padd-t"></image>-->
-              <!--          <image src="https://ceres.zkthink.com/static/images/arrowSortDown.png" v-if="volume == 2" class="arrow-img padd-b"></image>-->
             </view>
           </view>
         </view>
@@ -51,7 +47,7 @@
               <view class="originalPrice">原价: ¥{{item.originalPrice}}</view>
               <view class="flex-row-plus flex-items-plus">
                 <view class="iconBox">
-                  <image src="https://ceres.zkthink.com/static/images/memberCenterIcon.png"></image>
+                  <image :src="`${VUE_APP_STATIC_URL}static/images/memberCenterIcon.png`"></image>
                 </view>
                 <view class="flex-row-plus flex-items priceInfo">
                   <label class="fs24">￥</label>
@@ -74,6 +70,7 @@ import {ref} from "vue";
 import { request } from '../../utils/request'
 import API from "../../config/api";
 import {onPageScroll, onReady, onLoad, onShow, onReachBottom} from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const pageType = ref(true);
 const getDiscount = ref([]);
@@ -238,11 +235,12 @@ page {
 }
 </style>
 <style lang="scss" scoped>
+@import "../../style/images";
 .spikeListBox {
   .discountBg {
     width: 100%;
     height: 440rpx;
-    background: url("https://ceres.zkthink.com/static/images/memberCenterBg.png") no-repeat center center;
+    background: $memberCenterBg no-repeat center center;
     background-size: contain;
     position: relative;
   }

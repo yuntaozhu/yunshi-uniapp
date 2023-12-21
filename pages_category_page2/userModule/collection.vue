@@ -11,7 +11,7 @@
 				<view class="wid function-box">
 					<view class="finishbox" @click="finishClick" v-if="allCheckShow">完成</view>
 					<view v-else class="flex-row-plus editicon-box flex-items fs28" @click="editClick">
-						<image class="editicon" src="https://ceres.zkthink.com/static/images/collectionEditicon.png">
+						<image class="editicon" :src="`${VUE_APP_STATIC_URL}static/images/collectionEditicon.png`">
 						</image>
 						<text class="mar-left-10">编辑</text>
 					</view>
@@ -27,10 +27,10 @@
 									<view class="flex-items selctBtn" v-show="allCheckShow">
 										<image mode="aspectFill" v-if="item.selected == 1"
 											@click.stop="productItemSel(index,0)"
-											src="https://ceres.zkthink.com/static/images/selectActive.png"
+											:src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
 											class="cart-select-img"></image>
 										<image mode="aspectFill" v-else @click.stop="productItemSel(index,1)"
-											src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+											:src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
 											class="cart-select-img"></image>
 									</view>
 									<view class="infoCent flex-items">
@@ -42,13 +42,13 @@
 											<view class="flex-items">
 												<!-- <image v-if="item.activityType" class="iconImg mar-right-10"
 													:src="imgs[item.activityType]"></image> -->
-													<image v-if="item.activityType===1" class="iconImg" src="https://ceres.zkthink.com/static/images/groupBuyIcon.png" alt="拼团icon"></image>
-													<image v-if="item.activityType === 2" class="iconImg"  src="https://ceres.zkthink.com/static/images/spikeIcon.png" alt="秒杀活动"></image>
-													<image v-if="item.activityType === 3" class="iconImg discountIcon" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-03-14/38184785db4b4fbca767ada611097ae9_discount.png" alt="限时折扣活动"></image>
-													<image v-if="item.activityType === 4" class="iconImg" src="https://ceres.zkthink.com/static/images/spikeIcon.png" alt="平台秒杀"></image>
-													<image v-if="item.activityType===5" class="iconImg" src="https://ceres.zkthink.com/static/images/discountListIcon.png" alt="平台折扣"></image>
-													<image v-if="item.activityType===9" class="iconImg" src="https://ceres.zkthink.com/static/images/memberCenterIcon.png" alt="会员价"></image>
-													<image v-if="item.activityType === 8" class="iconImg" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png" alt="场景营销"></image>
+													<image v-if="item.activityType===1" class="iconImg" :src="`${VUE_APP_STATIC_URL}static/images/groupBuyIcon.png`" alt="拼团icon"></image>
+													<image v-if="item.activityType === 2" class="iconImg"  :src="`${VUE_APP_STATIC_URL}static/images/spikeIcon.png`" alt="秒杀活动"></image>
+													<image v-if="item.activityType === 3" class="iconImg discountIcon" :src="`${VUE_APP_STATIC_URL}static/images/discountTagIcon.png`" alt="限时折扣活动"></image>
+													<image v-if="item.activityType === 4" class="iconImg" :src="`${VUE_APP_STATIC_URL}static/images/spikeIcon.png`" alt="平台秒杀"></image>
+													<image v-if="item.activityType===5" class="iconImg" :src="`${VUE_APP_STATIC_URL}static/images/discountListIcon.png`" alt="平台折扣"></image>
+													<image v-if="item.activityType===9" class="iconImg" :src="`${VUE_APP_STATIC_URL}static/images/memberCenterIcon.png`" alt="会员价"></image>
+													<image v-if="item.activityType === 8" class="iconImg" :src="`${VUE_APP_STATIC_URL}static/images/holidaySaleIcon.png`" alt="场景营销"></image>
 												<text class="fs40 font-color-C83732">¥</text>
 												<text class="fs40 font-color-C83732 mar-right-20">{{item.price}}</text>
 												<text
@@ -65,9 +65,9 @@
 				<view v-show="allCheckShow" class="allcheck-box flex-row-plus flex-sp-between flex-items">
 					<view class="left">
 						<image mode="aspectFill" v-if="isAllProCheck"
-							src="https://ceres.zkthink.com/static/images/selectActive.png" class="cart-select-img"
+							:src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`" class="cart-select-img"
 							@click="allProductSel(0)"></image>
-						<image mode="aspectFill" v-else src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+						<image mode="aspectFill" v-else :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
 							class="cart-select-img" @click="allProductSel(1)"></image>
 						<text>全选</text>
 					</view>
@@ -78,7 +78,7 @@
 				<view v-if="allCheckShow" class="pad-bot-140"></view>
 			</view>
 			<view v-if="productCollect.length==0&&proCollectShow" class="mar-top-60 empty-box">
-				<image class="collect-empty" src="https://ceres.zkthink.com/static/images/collectEmpty.png"></image>
+				<image class="collect-empty" :src="`${VUE_APP_STATIC_URL}static/images/collectEmpty.png`"></image>
 				<view class="tohome-box flex-items-plus">暂无收藏</view>
 			</view>
 		</view>
@@ -86,7 +86,7 @@
 			<view v-if="storeCollect.length>0">
 				<view class="finishbox" @click="finishClick" v-if="allCheckShow">完成</view>
 				<view v-else class="flex-row-plus editicon-box flex-items fs28" @click="editClick">
-					<image class="editicon" src="https://ceres.zkthink.com/static/images/collectionEditicon.png">
+					<image class="editicon" :src="`${VUE_APP_STATIC_URL}static/images/collectionEditicon.png`">
 					</image>
 					<text class="mar-left-10">编辑</text>
 				</view>
@@ -98,10 +98,10 @@
 								<view v-show="allCheckShow" class="selctBtn flex-items">
 									<image mode="aspectFill" v-if="item.selected == 1"
 										@click.stop="storeItemSel(index,0)"
-										src="https://ceres.zkthink.com/static/images/selectActive.png"
+										:src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`"
 										class="cart-select-img"></image>
 									<image mode="aspectFill" v-else @click.stop="storeItemSel(index,1)"
-										src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+										:src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
 										class="cart-select-img"></image>
 								</view>
 								<view class="infoCent">
@@ -116,7 +116,7 @@
 										</view>
 										<view class="toStore flex-items-plus fs24" @click="toStoreClick(item.shopId)">
 											进入店铺
-											<image src="https://ceres.zkthink.com/static/images/arrowR.png"></image>
+											<image :src="`${VUE_APP_STATIC_URL}static/images/arrowR.png`"></image>
 										</view>
 									</view>
 									<view class="shopImgBox"  v-if="item.productList.length>0">
@@ -134,9 +134,9 @@
 				<view v-show="allCheckShow" class="allcheck-box flex-row-plus flex-sp-between flex-items">
 					<view class="left">
 						<image mode="aspectFill" v-if="isAllStoreCheck"
-							src="https://ceres.zkthink.com/static/images/selectActive.png" class="cart-select-img"
+							:src="`${VUE_APP_STATIC_URL}static/images/selectActive.png`" class="cart-select-img"
 							@click="allStoreSel(0)"></image>
-						<image mode="aspectFill" v-else src="https://ceres.zkthink.com/static/images/selectEmpty.png"
+						<image mode="aspectFill" v-else :src="`${VUE_APP_STATIC_URL}static/images/selectEmpty.png`"
 							class="cart-select-img" @click="allStoreSel(1)"></image>
 						<text>全选</text>
 					</view>
@@ -147,7 +147,7 @@
 				<view v-if="allCheckShow" class="pad-bot-140"></view>
 			</view>
 			<view v-if="storeCollect.length==0&&storeCollectShow" class="mar-top-60 empty-box">
-				<image class="collect-empty" src="https://ceres.zkthink.com/static/images/collectEmpty.png"></image>
+				<image class="collect-empty" :src="`${VUE_APP_STATIC_URL}static/images/collectEmpty.png`"></image>
 				<view class="tohome-box flex-items-plus">暂无收藏</view>
 			</view>
 		</view>
@@ -170,7 +170,7 @@
 				</view>
 			</view>
 			<view v-if="cardModal" @click="cardModal = false" class="cancelDel">
-				<image src="https://ceres.zkthink.com/static/images/cancelClose.png" mode=""></image>
+				<image :src="`${VUE_APP_STATIC_URL}static/images/cancelClose.png`" mode=""></image>
 			</view>
 		</tui-modal>
 	</view>
@@ -182,13 +182,14 @@ import { request } from "@/utils/request";
 import API from "@/config/api";
 import { ref } from "vue";
 import { onLoad, onReachBottom } from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const imgs = ref([
-  'https://ceres.zkthink.com/static/images/groupBuyIcon.png',
-  'https://ceres.zkthink.com/static/images/spikeIcon.png',
-  'https://ceres.zkthink.com/static/images/discountListIcon.png',
-  'https://ceres.zkthink.com/static/images/spikeIcon.png',
-  'https://ceres.zkthink.com/static/images/discountListIcon.png',
+  `${VUE_APP_STATIC_URL}static/images/groupBuyIcon.png`,
+  `${VUE_APP_STATIC_URL}static/images/spikeIcon.png`,
+  `${VUE_APP_STATIC_URL}static/images/discountListIcon.png`,
+  `${VUE_APP_STATIC_URL}static/images/spikeIcon.png`,
+  `${VUE_APP_STATIC_URL}static/images/discountListIcon.png`,
 ])
     const collectionTypeList = ref([{
   name: '商品'
@@ -824,16 +825,17 @@ function goodsDateils(shopId, productId, skuId) {
 		}
 	}
 </style>
-<style scoped>
-	.tabsbox /deep/ #u-tab-item-0 {
+<style lang="scss" scoped>
+@import '../../style/images';
+	.tabsbox ::v-deep #u-tab-item-0 {
 		position: relative;
 	}
 
-	.tabsbox /deep/ .u-tab-bar {
+	.tabsbox ::v-deep .u-tab-bar {
 		background-color: #c5aa7b !important;
 	}
 
-	.tabsbox /deep/ #u-tab-item-0::before {
+	.tabsbox ::v-deep #u-tab-item-0::before {
 		content: '';
 		width: 2rpx;
 		height: 30rpx;
@@ -844,17 +846,17 @@ function goodsDateils(shopId, productId, skuId) {
 		top: 20rpx;
 	}
 
-	.swipe-box /deep/ .u-swipe-del {
+	.swipe-box ::v-deep .u-swipe-del {
 		align-items: center;
 		justify-content: center;
 		width: 160rpx !important;
 	}
 
-	.swipe-box /deep/ .u-btn-text {
+	.swipe-box ::v-deep .u-btn-text {
 		width: 60rpx;
 		height: 60rpx;
 		display: block;
-		background: url("https://ceres.zkthink.com/static/images/delIcon.png") no-repeat center center;
+		background: $delIcon no-repeat center center;
 		background-size: contain;
 	}
 </style>

@@ -188,6 +188,7 @@ const success = () => {
 </script>
 
 <style lang="scss" scoped>
+@import "../../style/images";
 page {
   background: #F8F8F8;
 }
@@ -195,12 +196,12 @@ page {
   padding-bottom: 200rpx;
   background: #F8F8F8;
  .topBg {
-   background: url("https://ceres.zkthink.com/static/images/addBankBg.png") no-repeat left top;
+   background: $addBankBg no-repeat left top;
    background-size: contain;
    height: 350rpx;
    padding: 40rpx 20rpx 0 20rpx;
    .exchangeCoupon {
-     background: url("https://ceres.zkthink.com/static/images/exchagneCoupon.png") no-repeat left top;
+     background: $exchagneCoupon no-repeat left top;
      background-size: contain;
      height: 302rpx;
      border-radius: 16rpx;

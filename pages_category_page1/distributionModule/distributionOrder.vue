@@ -13,8 +13,8 @@
 							</view>
 						</view>
             <view>
-             <image v-if="item.ifOpen  == false" class="arrow-down" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-16/5533f3baf2184f86b5ef88ed6c400713_arrowDownIcon.png"></image>
-              <image v-if="item.ifOpen  == true" class="arrow-down" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-16/22f5f56f53ec4f558a6268e4fef7e1f5_arrowUpIcon.png"></image>
+             <image v-if="item.ifOpen  == false" class="arrow-down" :src="`${VUE_APP_STATIC_URL}static/images/arrowUpIcon.png`"></image>
+              <image v-if="item.ifOpen  == true" class="arrow-down" :src="`${VUE_APP_STATIC_URL}static/images/arrowDownIcon.png`"></image>
             </view>
 					</view>
 					<view class="upBox" v-if="item.ifOpen == true">
@@ -31,7 +31,7 @@
 			</view>
 		</view>
 		<view v-else class="emptyCart-box flex-items-plus flex-column">
-			<image class="emptyCart-img" src="https://ceres.zkthink.com/static/images/collectEmpty.png"></image>
+			<image class="emptyCart-img" :src="`${VUE_APP_STATIC_URL}static/images/collectEmpty.png`"></image>
 			<label class="font-color-999 fs26 mar-top-30">这里空空如也~</label>
 		</view>
 	</view>
@@ -42,6 +42,7 @@ import { ref } from "vue";
 import { request } from '../../utils/request'
 import API from "../../config/api";
 import {onLoad, onReachBottom} from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const shopId = ref(0);
 const distributorId = ref(0);

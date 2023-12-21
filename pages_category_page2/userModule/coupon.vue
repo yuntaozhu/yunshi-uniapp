@@ -17,13 +17,13 @@
 				</view>
 			</view>
       <view v-if="ifEmpty" class="emptyOrder-box flex-items-plus flex-column">
-        <image class="emptyOrder-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
+        <image class="emptyOrder-img" :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`"></image>
         <label class="font-color-999 fs26 mar-top-30">你还没有优惠券哦～</label>
       </view>
 		</view>
 		<!-- 触底 -->
     <view class="reachBottom" v-if="topLeft > 400 && list.length > 0">
-			<image class="reach-icon" src="https://ceres.zkthink.com/static/img/reachBottom.png" mode="widthFix"></image>
+			<image class="reach-icon" :src="`${VUE_APP_STATIC_URL}static/img/reachBottom.png`" mode="widthFix"></image>
 			<text class="reach-text">这里到底了哦~~</text>
 		</view>
 	</view>
@@ -34,6 +34,8 @@
 	import API from "@/config/api";
   import { ref } from "vue";
   import { onPageScroll, onShow } from "@dcloudio/uni-app";
+  import { VUE_APP_STATIC_URL } from "@/config/api";
+
   const list = ref([])
   const total = ref(0)
   const availableList = ref([])
@@ -74,6 +76,7 @@
 </script>
 
 <style lang="scss" scoped>
+@import '../../style/images';
 .emptyOrder-box{
 	margin: 70upx auto 0 auto;
 	.emptyOrder-img{
@@ -90,7 +93,7 @@
 .item {
   width: 50%;
   height: 291rpx;
-  background: url("https://ceres.zkthink.com/static/images/couponsIcon.png") no-repeat center top;
+  background: $couponsIcon no-repeat center top;
   border-radius: 10rpx;
   margin-top: 20rpx;
   display: flex;

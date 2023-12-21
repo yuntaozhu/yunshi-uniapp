@@ -8,7 +8,7 @@
 			/>
 		</view>
     <view v-if="ifShow" class="emptyCart-box">
-      <image class="emptyCart-img" src="https://ceres.zkthink.com/static/images/collectEmpty.png"></image>
+      <image class="emptyCart-img" :src="`${VUE_APP_STATIC_URL}static/images/collectEmpty.png`"></image>
       <label class="text font-color-999 fs26 mar-top-30">暂无直播~</label>
     </view>
 	</view>
@@ -22,6 +22,7 @@ import {request} from "../../utils/request";
 import API from "../../config/api";
 import LiveBox from './components/liveBox.vue'
 import {onLoad, onReachBottom} from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const page = ref({
   page: 1,

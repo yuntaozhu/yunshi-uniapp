@@ -7,7 +7,7 @@
         <view class="searchImg-box flex-items-plus">
           <image
               class="searchImg"
-              src="https://ceres.zkthink.com/static/img/searchImg.png"
+              :src="`${VUE_APP_STATIC_URL}static/img/searchImg.png`"
           ></image>
           <input
               class="search-box"
@@ -33,7 +33,7 @@
         <label class="fs30 font-color-999 fs-weight-300">热门搜索</label>
         <image
             class="seeIcon hotSearchListSee-icon"
-            :src="!hideHotFlag?'https://ceres.zkthink.com/static/img/see.png':'https://ceres.zkthink.com/static/img/notSee.png'"
+            :src="!hideHotFlag ? `${VUE_APP_STATIC_URL}static/img/see.png` : `${VUE_APP_STATIC_URL}static/img/notSee.png`"
             @click="hideHotFlag = !hideHotFlag"
         />
       </view>
@@ -74,7 +74,7 @@
         <image
             class="historyDel-icon"
             @click="delSearchHistory(1)"
-            src="https://ceres.zkthink.com/static/img/index/historyDel_icon.png"
+            :src="`${VUE_APP_STATIC_URL}static/img/index/historyDel_icon.png`"
         />
       </view>
       <view class="historySear-box flex-wrap-1 flex-row">
@@ -95,7 +95,7 @@
           >
             <image
                 class="historySearDel-icon text-align"
-                src="https://ceres.zkthink.com/static/img/index/historySearDel_icon.png"
+                :src="`${VUE_APP_STATIC_URL}static/img/index/historySearDel_icon.png`"
             />
           </view>
         </view>
@@ -111,6 +111,7 @@ import { onShow } from "@dcloudio/uni-app";
 import { request } from "@/utils/request";
 import API from "@/config/api";
 import { useLoading } from "@/hooks/useLoading";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 const {showLoading,hideLoading} = useLoading()
 
 // ==================================== 搜索相关 ==========================================

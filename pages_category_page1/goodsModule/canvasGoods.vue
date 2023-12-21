@@ -1,41 +1,6 @@
 <template>
   <view class="container">
     <global-loading />
-
-    <!-- 商品列表 -->
-    <!--		<view class="flex-items-plus flex-row search">-->
-    <!--      <view class="searchBg">-->
-    <!--        <view class="searchImg-box flex-items-plus">-->
-    <!--          <image class="searchImg" src="https://ceres.zkthink.com/static/img/searchImg.png"></image>-->
-    <!--          <input class="search-box" v-model="keyWord" placeholder-class="searchboxPlace" placeholder="请输入您想要的宝贝" />-->
-    <!--&lt;!&ndash;          <image class="searchClose-icon" @click="searchTextDel" src="https://ceres.zkthink.com/static/img/index/searchClose_icon.png"></image>&ndash;&gt;-->
-    <!--        </view>-->
-    <!--        <label class="mar-left-40 fs28" @click="searchList(1)">搜索</label>-->
-    <!--      </view>-->
-    <!--		</view>-->
-    <!--    <view class="shop-list-nav">-->
-    <!--      <view class="nav-item-sort" @click="sortTap(1)">-->
-    <!--        <text class="nav-title" :class="{'active' : sortIndex == 1}">默认</text>-->
-    <!--      </view>-->
-    <!--      <view class="nav-item-sort" @click="sortTap(2)">-->
-    <!--        <text class="nav-title" :class="{'active' : sortIndex == 2}">价格</text>-->
-    <!--        <view class="r">-->
-    <!--          <view class="arrowUp" :class="{activeUp: type == 1}"></view>-->
-    <!--          <view class="arrowDown" :class="{activeDown: type == 2}"></view>-->
-    <!--          &lt;!&ndash;          <image src="https://ceres.zkthink.com/static/images/arrowSortUp.png" v-if="type == 1" class="arrow-img padd-t"></image>&ndash;&gt;-->
-    <!--          &lt;!&ndash;          <image src="https://ceres.zkthink.com/static/images/arrowSortDown.png" v-if="type == 2" class="arrow-img padd-b"></image>&ndash;&gt;-->
-    <!--        </view>-->
-    <!--      </view>-->
-    <!--      <view class="nav-item-sort" @click="sortTap(3)">-->
-    <!--        <text class="nav-title" :class="{'active' : sortIndex == 3}">销量</text>-->
-    <!--        <view class="r">-->
-    <!--          <view class="arrowUp" :class="{activeUp: volume == 1}"></view>-->
-    <!--          <view class="arrowDown" :class="{activeDown: volume == 2}"></view>-->
-    <!--          &lt;!&ndash;          <image src="https://ceres.zkthink.com/static/images/arrowSortUp.png" v-if="volume == 1" class="arrow-img padd-t"></image>&ndash;&gt;-->
-    <!--          &lt;!&ndash;          <image src="https://ceres.zkthink.com/static/images/arrowSortDown.png" v-if="volume == 2" class="arrow-img padd-b"></image>&ndash;&gt;-->
-    <!--        </view>-->
-    <!--      </view>-->
-    <!--    </view>-->
     <view v-if="list.length>0" class="listBox">
       <view v-for="(item, index) in list" :key="index" class="goodsDetails-box flex-display flex-column" @click="goodsDateils(item.shopId,item.productId,item.skuId)">
         <view v-if="item.activityType === 0" class="goodsDetails flex-items-plus flex-row">
@@ -59,7 +24,6 @@
             </view>
             <view class="flex-display flex-sp-between flex-row mar-top-10 flex-items shopName">
               <label class="fs22 font-color-FFEBC4">{{item.shopName}}</label>
-              <!--							<image class="arrowImg" src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>-->
             </view>
           </view>
         </view>
@@ -75,13 +39,13 @@
                 <!--                <view class="numText" v-if="item.total !=0">限量{{item.total}}件</view>-->
               </view>
               <view class="flex-row-plus flex-item mar-top-30">
-                <image class="iconImg" v-if="item.activityType == 1" src="https://ceres.zkthink.com/static/images/groupBuyIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 2" src="https://ceres.zkthink.com/static/images/spikeIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 4" src="https://ceres.zkthink.com/static/images/spikeIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 3" src="https://ceres.zkthink.com/static/images/discountListIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 5" src="https://ceres.zkthink.com/static/images/discountListIcon.png"></image>
-				<image class="iconImg" v-if="item.activityType == 9" src="https://ceres.zkthink.com/static/images/memberCenterIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 8" src="https://zk-cereshop.oss-cn-shenzhen.aliyuncs.com/zkthink/2022-02-15/d0d8d96f28904167b271de4ae924d1a8_sceneMarketing.png"></image>
+                <image class="iconImg" v-if="item.activityType == 1" :src="`${VUE_APP_STATIC_URL}static/images/groupBuyIcon.png`"></image>
+                <image class="iconImg" v-if="item.activityType == 2" :src="`${VUE_APP_STATIC_URL}static/images/spikeIcon.png`"></image>
+                <image class="iconImg" v-if="item.activityType == 4" :src="`${VUE_APP_STATIC_URL}static/images/spikeIcon.png`"></image>
+                <image class="iconImg" v-if="item.activityType == 3" :src="`${VUE_APP_STATIC_URL}static/images/discountListIcon.png`"></image>
+                <image class="iconImg" v-if="item.activityType == 5" :src="`${VUE_APP_STATIC_URL}static/images/discountListIcon.png`"></image>
+				<image class="iconImg" v-if="item.activityType == 9" :src="`${VUE_APP_STATIC_URL}static/images/memberCenterIcon.png`"></image>
+                <image class="iconImg" v-if="item.activityType == 8" :src="`${VUE_APP_STATIC_URL}static/images/holidaySaleIcon.png`"></image>
                 <view class="font-color-C83732 flex-row-plus">
                   <b>￥</b>
                   <label class="fs28">{{item.price}}</label>
@@ -90,7 +54,6 @@
               </view>
               <view class="flex-display flex-sp-between flex-row mar-top-10 flex-items shopName">
                 <label class="fs22 font-color-FFEBC4">{{item.shopName}}</label>
-                <!--					  	<image class="arrowImg" src="https://ceres.zkthink.com/static/img/user/arrow.png"></image>-->
               </view>
             </view>
           </view>
@@ -100,119 +63,114 @@
 
     <!-- 搜索为空 -->
     <view v-if="ifEmpty" class="emptyCart-box flex-items-plus flex-column">
-      <image class="emptyCart-img" src="https://ceres.zkthink.com/static/images/searchEmpty.png"></image>
+      <image class="emptyCart-img" :src="`${VUE_APP_STATIC_URL}static/images/searchEmpty.png`"></image>
       <label class="font-color-999 fs26 mar-top-30">搜索不到你要找的宝贝呢</label>
       <label class="font-color-999 fs26 mar-top-10">换个词试试吧～</label>
     </view>
   </view>
 </template>
 
-<script>
+<script setup>
 import { request } from "@/utils/request";
+import { onLoad, onReachBottom } from "@dcloudio/uni-app";
 import API from "@/config/api";
-export default {
-  data() {
-    return {
-      keyWord:'',
-      category3Id:'',
-      page: 1,
-      pageSize: 20,
-      source:2,
-      list:[],
-      loadingType:0,
-      sortIndex: 0,
-      ifNew:0,//是否新品
-      type:1,//价格排序条件
-      volume:1,//销量排序条件
-      sourceType: '',
-      ids: [],
-      classifyId: 0,
-      ifEmpty: false
-    }
-  },
-  onLoad(option) {
-    if(option.sourceType){
-      this.sourceType = option.sourceType
-      if(option.sourceType === '1'){
-        this.ids = option.ids
-      } else if(option.sourceType === '2'){
-        this.classifyId = option.classifyId
-      }
-    }
-    this.searchList(1)
-  },
-  onReachBottom(){
-    if(this.loadingType == 1){
-      uni.stopPullDownRefresh()
-    }else{
-      this.page = this.page+1
-      this.searchList(0)
-    }
-  },
-  methods: {
-    sortTap(index){
-      this.page = 1
-      this.list = []
-      if(index == 1){
-        this.type = 1
-        this.volume = 1
-        this.sortIndex = index
-      }else if(index == 2){
-        this.type = this.type != 1 ? 1:2
-        this.sortIndex = index
-      }else if(index == 3){
-        this.volume = this.volume != 1 ? 1:2
-        this.sortIndex = index
-      }
-      this.searchList()
-    },
-    // searchTextDel(){
-    // 	this.keyWord = ''
-    // },
-    searchList(type){
-      // uni.showLoading({
-      //   title: '加载中...',
-      // })
-      if(type == 1){
-        this.list = []
-        this.page = 1
-      }
-      var params = {
-        page: this.page,
-        pageSize: this.pageSize
-      }
-      if (this.sourceType === '1') {
-        if(this.ids && this.ids.length>0){
-          params.ids = this.ids
-        } else {
-          this.list = []
-        }
-      } else if(this.sourceType === '2'){
-        if(this.classifyId) {
-          params.classifyId = this.classifyId
-        } else {
-          this.list = []
-        }
-      }
-      if(params.ids || params.classifyId){
-        request(API.getProducts, params, 'GET').then(res => {
-          uni.hideLoading()
-          this.list = this.list.concat(res.data.list)
-          if (this.list.length === 0) {
-            this.ifEmpty = true
-          }
-        }).catch(res => {
-          uni.hideLoading()
-        })
-      }
-    },
-    //商品详情
-    goodsDateils(shopId,productId,skuId){
-      uni.navigateTo({
-        url: 'goodsDetails?shopId='+shopId + '&productId='+productId +'&skuId='+skuId
-      })
+import { ref } from "vue";
+import { VUE_APP_STATIC_URL } from "@/config/api";
+
+const keyWord = ref('')
+const category3Id = ref('')
+const page = ref(1)
+const pageSize = ref(20)
+const source = ref(2)
+const list = ref([])
+const loadingType = ref(0)
+const sortIndex = ref(0)
+const ifNew = ref(0) // 是否新品
+const type = ref(1) // 价格排序条件
+const volume = ref(1) // 销量排序条件
+const sourceType = ref('')
+const ids = ref([])
+const classifyId = ref(0)
+const ifEmpty = ref(false)
+
+onLoad((option) => {
+  if(option.sourceType){
+    sourceType.value = option.sourceType
+    if(option.sourceType === '1'){
+      ids.value = option.ids
+    } else if(option.sourceType === '2'){
+      classifyId.value = option.classifyId
     }
   }
+  searchList(1)
+})
+
+onReachBottom(() => {
+  if(loadingType.value == 1){
+    uni.stopPullDownRefresh()
+  }else{
+    page.value = page.value + 1
+    searchList(0)
+  }
+})
+
+const sortTap = () => {
+  page.value = 1
+  list.value = []
+  if(index == 1){
+    type.value = 1
+    volume.value = 1
+    sortIndex.value = index
+  }else if(index == 2){
+    type.value = type.value != 1 ? 1:2
+    sortIndex.value = index
+  }else if(index == 3){
+    volume.value = volume.value != 1 ? 1:2
+    sortIndex.value = index
+  }
+  searchList()
+}
+
+const searchList = (type) => {
+  if(type == 1){
+    list.value = []
+    page.value = 1
+  }
+  let params = {
+    page: page.value,
+    pageSize: pageSize.value
+  }
+  if (sourceType.value === '1') {
+    if(ids.value && ids.value.length>0){
+      params.ids = ids.value
+    } else {
+      list.value = []
+    }
+  } else if(sourceType.value === '2'){
+    if(classifyId.value) {
+      params.classifyId = classifyId.value
+    } else {
+      list.value = []
+    }
+  }
+  if(params.ids || params.classifyId){
+    request(API.getProducts, params, 'GET').then(res => {
+      uni.hideLoading()
+      list.value = list.value.concat(res.data.list)
+      if (list.value.length === 0) {
+        ifEmpty.value = true
+      }
+    }).catch(res => {
+      uni.hideLoading()
+    })
+  }
+}
+
+//商品详情
+const goodsDateils = (shopId,productId,skuId) => {
+  uni.navigateTo({
+    url: 'goodsDetails?shopId='+shopId + '&productId='+productId +'&skuId='+skuId
+  })
 }
 </script>
 

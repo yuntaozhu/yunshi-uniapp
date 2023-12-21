@@ -187,11 +187,12 @@ const applyForRecruit = async () => {
 </script>
 
 <style lang="scss">
+@import '../../style/images';
 	.container {
 		.topBackImg {
 			width: 100%;
 			height: 260upx;
-			background: url(https://ceres.zkthink.com/static/images/storeTop_Img.png) no-repeat;
+			background: $storeTopBg no-repeat;
 			background-size: 100% 260upx;
 
 			.content {

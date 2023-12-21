@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import {VUE_APP_STATIC_URL} from "../../config/api";
 export default {
   name: "empty",
   data() {
@@ -40,7 +41,7 @@ export default {
     },
     iconUrl:{
       type:String,
-      default:()=>'https://ceres.zkthink.com/static/images/searchEmpty.png'
+      default:()=>`${VUE_APP_STATIC_URL}static/images/searchEmpty.png`
     }
   },
   computed:{

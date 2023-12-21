@@ -1,7 +1,7 @@
 <template>
   <view class="hotTemplate" v-if="productList.length">
     <view class="evaluateIcon flex-items">
-      <image src="https://ceres.zkthink.com/static/images/evaluateIcon.png"></image>
+      <image :src="`${VUE_APP_STATIC_URL}static/images/evaluateIcon.png`"></image>
       <text>热门推荐</text>
     </view>
     <view class="recommendList">
@@ -31,6 +31,7 @@
 import API from "@/config/api";
 import { request } from "@/utils/request";
 import { onMounted, ref } from "vue";
+import {VUE_APP_STATIC_URL} from "@/config/api";
 
 const listQuery = ref({
   page: 1, pageSize: 5

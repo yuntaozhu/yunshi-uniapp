@@ -2,7 +2,7 @@
   <view class="payCourteous">
     <view class="evaBox">
       <view class="imgBox">
-        <image src="https://ceres.zkthink.com/static/images/payIcon.png"></image>
+        <image :src="`${VUE_APP_STATIC_URL}static/images/payIcon.png`"></image>
       </view>
       <view class="successful">评价成功</view>
       <view class="btnBox fs28 font-color-333">
@@ -16,6 +16,7 @@
 </template>
 
 <script setup>
+import { VUE_APP_STATIC_URL } from "@/config/api";
 import HotTemplate from '@/components/hoteRecommed/index.vue'
 function goToOrder() {
   uni.navigateTo({

@@ -12,8 +12,8 @@
 							</view>
 						</view>
             <view>
-              <image v-if="item.ifOpen  == false" class="arrow-down" src="https://ceres.zkthink.com/static/images/arrowDownIcon.png"></image>
-              <image v-if="item.ifOpen  == true" class="arrow-down" src="https://ceres.zkthink.com/static/images/arrowUpIcon.png"></image>
+              <image v-if="item.ifOpen  == false" class="arrow-down" :src="`${VUE_APP_STATIC_URL}static/images/arrowDownIcon.png`"></image>
+              <image v-if="item.ifOpen  == true" class="arrow-down" :src="`${VUE_APP_STATIC_URL}static/images/arrowUpIcon.png`"></image>
             </view>
 					</view>
 					<view class="upBox" v-if="item.ifOpen == true">
@@ -30,7 +30,7 @@
 			</view>
 		</view>
 		<view v-else class="emptyCart-box flex-items-plus flex-column">
-			<image class="emptyCart-img" src="https://ceres.zkthink.com/static/img/bgnull.png"></image>
+			<image class="emptyCart-img" :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`"></image>
 			<label class="font-color-999 fs26 mar-top-30">这里空空如也~</label>
 		</view>
 	</view>
@@ -41,6 +41,7 @@ import {ref} from "vue";
 import { request } from '../../utils/request'
 import API from '../../config/api'
 import {onLoad, onReachBottom} from "@dcloudio/uni-app";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const shopId = ref(0)
 const distributorId = ref(0)

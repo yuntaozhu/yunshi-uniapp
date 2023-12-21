@@ -21,20 +21,20 @@
               </view>
               <div class="price-warp">
                 <!-- #ifdef MP-WEIXIN -->
-                <img class="iconImg" v-if="item.activityType == 1" src="https://ceres.zkthink.com/static/canvas-images/groupBuyIcon.png">
-                <img class="iconImg" v-if="item.activityType == 2" src="https://ceres.zkthink.com/static/canvas-images/spikeIcon.png">
-                <img class="iconImg" v-if="item.activityType == 4" src="https://ceres.zkthink.com/static/canvas-images/spikeIcon.png">
-                <img class="iconImg" v-if="item.activityType == 3" src="https://ceres.zkthink.com/static/canvas-images/discountListIcon.png">
-                <img class="iconImg" v-if="item.activityType == 5" src="https://ceres.zkthink.com/static/canvas-images/discountListIcon.png">
-                <img class="iconImg" v-if="item.activityType == 8" src="https://ceres.zkthink.com/static/canvas-images/memberCenterIcon.png">
+                <img class="iconImg" v-if="item.activityType == 1" :src="`${VUE_APP_STATIC_URL}static/canvas-images/groupBuyIcon.png`">
+                <img class="iconImg" v-if="item.activityType == 2" :src="`${VUE_APP_STATIC_URL}static/canvas-images/spikeIcon.png`">
+                <img class="iconImg" v-if="item.activityType == 4" :src="`${VUE_APP_STATIC_URL}static/canvas-images/spikeIcon.png`">
+                <img class="iconImg" v-if="item.activityType == 3" :src="`${VUE_APP_STATIC_URL}static/canvas-images/discountListIcon.png`">
+                <img class="iconImg" v-if="item.activityType == 5" :src="`${VUE_APP_STATIC_URL}static/canvas-images/discountListIcon.png`">
+                <img class="iconImg" v-if="item.activityType == 8" :src="`${VUE_APP_STATIC_URL}static/canvas-images/memberCenterIcon.png`">
                 <!-- #endif -->
                 <!-- #ifdef H5 || APP-PLUS -->
-                <image class="iconImg" v-if="item.activityType == 1" src="https://ceres.zkthink.com/static/canvas-images/groupBuyIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 2" src="https://ceres.zkthink.com/static/canvas-images/spikeIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 4" src="https://ceres.zkthink.com/static/canvas-images/spikeIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 3" src="https://ceres.zkthink.com/static/canvas-images/discountListIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 5" src="https://ceres.zkthink.com/static/canvas-images/discountListIcon.png"></image>
-                <image class="iconImg" v-if="item.activityType == 8" src="https://ceres.zkthink.com/static/canvas-images/memberCenterIcon.png"></image>
+                <image class="iconImg" v-if="item.activityType == 1" :src="`${VUE_APP_STATIC_URL}static/canvas-images/groupBuyIcon.png`"></image>
+                <image class="iconImg" v-if="item.activityType == 2" :src="`${VUE_APP_STATIC_URL}static/canvas-images/spikeIcon.png`"></image>
+                <image class="iconImg" v-if="item.activityType == 4" :src="`${VUE_APP_STATIC_URL}static/canvas-images/spikeIcon.png`"></image>
+                <image class="iconImg" v-if="item.activityType == 3" :src="`${VUE_APP_STATIC_URL}static/canvas-images/discountListIcon.png`"></image>
+                <image class="iconImg" v-if="item.activityType == 5" :src="`${VUE_APP_STATIC_URL}static/canvas-images/discountListIcon.png`"></image>
+                <image class="iconImg" v-if="item.activityType == 8" :src="`${VUE_APP_STATIC_URL}static/canvas-images/memberCenterIcon.png`"></image>
                 <!-- #endif -->
                 <div class="price">
                   ¥ {{item.price}}
@@ -59,7 +59,7 @@
       </view>
     </view>
     <view v-if="isShow" class="emptyCart-box flex-items-plus flex-column">
-        <image class="emptyCart-img" src="https://ceres.zkthink.com/static/img/bgnull.png" mode="widthFix" />
+        <image class="emptyCart-img" :src="`${VUE_APP_STATIC_URL}static/img/bgnull.png`" mode="widthFix" />
         <label class="font-color-999 fs26 mar-top-30">这里空空如也~</label>
     </view>
   </view>
@@ -69,6 +69,8 @@
 import {ref, onMounted, toRefs, watch} from 'vue';
 import API from "@/config/api";
 import {request} from "@/utils/request"
+import { VUE_APP_STATIC_URL } from "@/config/api";
+
 const props = defineProps({
   categoryid: {
     type: Number,
