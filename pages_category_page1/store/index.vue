@@ -172,6 +172,8 @@
 	import CanvasPage from '@/components/canvasShow/canvasShowPage.vue'
   import { ref } from "vue";
   import { onLoad, onReachBottom } from "@dcloudio/uni-app";
+  import {VUE_APP_STATIC_URL} from "@/config/api";
+
   const componentsData = ref([])
   const navIndex = ref(0)
   const id = ref('')

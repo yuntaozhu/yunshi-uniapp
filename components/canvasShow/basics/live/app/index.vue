@@ -24,6 +24,8 @@
 import commonMixin from '../mixin';
 import LiveBox from './item.vue';
 import { toRefs } from 'vue';
+import {VUE_APP_STATIC_URL} from "@/config/api";
+
 const { roomList, toLiveRoom, jumpLive } = commonMixin();
 const props = defineProps({
   componentContent: {

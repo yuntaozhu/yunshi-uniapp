@@ -106,6 +106,8 @@
 <script setup>
 import { ref, computed, toRefs } from 'vue';
 import vipMixin from '../mixin'
+import {VUE_APP_STATIC_URL} from "@/config/api";
+
 const { productData, jumpVip, jumpProductDetail } = vipMixin()
 const props = defineProps({
   componentContent: {

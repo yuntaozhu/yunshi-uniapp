@@ -11,26 +11,22 @@
 	</view>
 </template>
 
-<script>
-	export default {
-		props: {
-			list: {
-				type: Array
-			}
-		},
-		data() {
-			return {
-			}
-		},
-		methods: {
-			goToMesDetail(item){
-				uni.navigateTo({
-					url: '/pages_category_page2/userModule/messageDetail?noticeId='+item.noticeId,
-					success: res => {},fail: (err) => {console.log(err,'1')},complete: () => {}
-				})
-			}
-		}
-	}
+<script setup>
+import {VUE_APP_STATIC_URL} from "@/config/api";
+// props
+const props = defineProps({
+  list: {
+    type: Array
+  }
+});
+
+// methods
+const goToMesDetail = (item) => {
+  uni.navigateTo({
+    url: '/pages_category_page2/userModule/messageDetail?noticeId='+item.noticeId,
+    success: res => {}, fail: (err) => {console.log(err,'1')}, complete: () => {}
+  })
+}
 </script>
 
 <style lang="scss">

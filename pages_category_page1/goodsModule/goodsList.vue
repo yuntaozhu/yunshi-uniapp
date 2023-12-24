@@ -459,7 +459,10 @@ function goodsDateils(shopId, productId, skuId) {
 page {
   background: #f8f8f8;
 }
-
+.tabsbox {
+  position: relative;
+  z-index: 999;
+}
 // 触底样式
 .reachBottom {
   margin-top: 30rpx;
@@ -777,7 +780,6 @@ input {
 .search {
   padding-top: 20rpx;
 }
-
 // #endif
 .tabsbox ::v-deep #u-tab-item-0 {
   position: relative;

@@ -102,6 +102,7 @@ import WxSendCoupon from "@/components/wx/wxSendCoupon";
 import { request } from "@/utils/request";
 import API from "@/config/api";
 import { ref, toRefs } from "vue";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 
 const props = defineProps({
   markTools: {

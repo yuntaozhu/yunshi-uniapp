@@ -13,7 +13,6 @@
 			</view>
 			<view v-else>
 				<view class="flex-end-plus" @tap="handleClickCancel">
-					<!-- <image class="img" :src="`${VUE_APP_STATIC_URL}static/close@3x.png" mode=""></image> -->
 				</view>
 				<slot></slot>
 			</view>

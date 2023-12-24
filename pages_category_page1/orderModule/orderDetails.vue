@@ -607,7 +607,7 @@
 
 <script setup>
 import UCountDown from "../../uni_modules/vk-uview-ui/components/u-count-down/u-count-down";
-import { VUE_APP_STATIC_URL } from "../../config/api";
+import { VUE_APP_STATIC_URL } from "@/config/api";
 import ClipboardJS from "clipboard";
 import { hidden } from "../../utils/hidden";
 import { handleDoPay } from "../../utils/payUtil";
