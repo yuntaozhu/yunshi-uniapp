@@ -1,393 +1,400 @@
 <template>
-  <view
-      class="container u-skeleton"
-      @scroll="handlePageScroll"
-  >
+  <!-- !loading -->
+  <template v-if="!loading">
     <global-loading />
-    <view class="">
-      <!--  拼团滚动-->
-      <view class="news-box">
-        <view class="news-bg">
-          <swiper
-              class="goodsImgswiper-box"
-              :vertical="true"
-              :circular="true"
-              interval="8000"
-              duration="2000"
-              :autoplay="true"
-          >
-            <swiper-item
-                v-for="(item, index) of broadCastList"
-                :key="index"
+    <view
+        class="container u-skeleton"
+        @scroll="handlePageScroll"
+    >
+      <view class="">
+        <!--  拼团滚动-->
+        <view class="news-box">
+          <view class="news-bg">
+            <swiper
+                class="goodsImgswiper-box"
+                :vertical="true"
+                :circular="true"
+                interval="8000"
+                duration="2000"
+                :autoplay="true"
             >
-              <view class="news-item flex-items">
-                <image
-                    class="item-avatar"
-                    :src="item.headImage"
-                ></image>
-                <view class="news-item-user">{{ item.name }}</view>
-                <view class="news-item-info">{{ item.timeStr }}</view>
-                <view
-                    class="news-item-info"
-                    v-if="item.type === 1"
-                >给了好评
-                </view>
-                <view
-                    class="news-item-info"
-                    v-if="item.type === 2"
-                >正在拼单
-                </view>
-                <view
-                    class="news-item-info"
-                    v-if="item.type === 3"
-                >拼单成功
-                </view>
-                <view
-                    class="news-item-info"
-                    v-if="item.type === 4"
-                >下单
-                </view>
-              </view>
-            </swiper-item>
-          </swiper>
-        </view>
-      </view>
-
-      <!-- 轮播图+分享+价格名称+活动倒计时+优惠券 -->
-      <GoodActivityDetail
-          ref="goodActivityDetail"
-          :sku-select="selectedSku"
-          :product-info="productData"
-          :time-active-type="timeActiveType"
-          :mark-tools="markTools"
-          :shop-mark-tools="shopMarkTools"
-          @activityEnd="handleActivityEnd"
-          @couponClick="handleShowCoupon"
-      />
-
-      <!-- 发货 -->
-      <view class="express-box flex-items flex-row fs24 u-skeleton-fillet">
-        <label class="fs24 font-color-999 mar-right-20 ">发货</label>
-        <image
-            :src="`${VUE_APP_STATIC_URL}static/images/mapIcon.png`"
-            v-if="productData.receive && productData.receive.receiveAdress"
-        ></image>
-        <label
-            class="mar-left-10 mapName mar-right-30"
-            v-if="productData.receive && productData.receive.receiveAdress"
-        >{{
-            productData.receive.receiveAdress
-          }}</label>
-        <label>快递：¥ {{ productData.logisticsPrice || 0 }}</label>
-      </view>
-
-      <!-- 选择SKU -->
-      <view
-          class="fs24 chooseSize-box flex-start"
-          @click="handleShowGoodsSkuSelect(6)"
-      >
-        <view class="chooseSize-content flex-items flex-row flex-sp-between u-skeleton-fillet">
-          <view class="flex-row-plus ">
-            <label class="fs26   mar-left-30 font-color-999">选择</label>
-            <view class="valueBox mar-left-20 flex-items">
-              <view
-                  class="mar-right-10"
-                  v-for="(item, index) of currentSuk"
+              <swiper-item
+                  v-for="(item, index) of broadCastList"
                   :key="index"
-              >{{ item.skuText || '-' }}
-              </view>
-            </view>
+              >
+                <view class="news-item flex-items">
+                  <image
+                      class="item-avatar"
+                      :src="item.headImage"
+                  ></image>
+                  <view class="news-item-user">{{ item.name }}</view>
+                  <view class="news-item-info">{{ item.timeStr }}</view>
+                  <view
+                      class="news-item-info"
+                      v-if="item.type === 1"
+                  >给了好评
+                  </view>
+                  <view
+                      class="news-item-info"
+                      v-if="item.type === 2"
+                  >正在拼单
+                  </view>
+                  <view
+                      class="news-item-info"
+                      v-if="item.type === 3"
+                  >拼单成功
+                  </view>
+                  <view
+                      class="news-item-info"
+                      v-if="item.type === 4"
+                  >下单
+                  </view>
+                </view>
+              </swiper-item>
+            </swiper>
           </view>
-          <image
-              class="arrow-icon"
-              :src="`${VUE_APP_STATIC_URL}static/img/user/arrow.png`"
-          ></image>
         </view>
-      </view>
 
-      <!--结合销售-->
-      <CombinedSales
-          :pid="productId"
-          :productData="productData"
-      ></CombinedSales>
-      <!--拼团-->
-      <view
-          v-if="selectedSku.activityType === 1"
-          class="borRig-line-20"
-      ></view>
-      <!-- 拼单列表 -->
-      <view
-          v-if="selectedSku.activityType === 1&&topThreeCollageOrders.length > 0"
-          class="goodsDiscount"
-      >
-        <view class="questionTit mar-left-30 flex-items flex-row flex-sp-between">
-          <label class="">这些人正在拼单</label>
-          <view class="allMoreBox">
-            <view
-                class="allMore"
-                @click="handleOpenGroupBookingList"
-            >查看全部
+        <!-- 轮播图+分享+价格名称+活动倒计时+优惠券 -->
+        <GoodActivityDetail
+            ref="goodActivityDetail"
+            :sku-select="selectedSku"
+            :product-info="productData"
+            :time-active-type="timeActiveType"
+            :mark-tools="markTools"
+            :shop-mark-tools="shopMarkTools"
+            @activityEnd="handleActivityEnd"
+            @couponClick="handleShowCoupon"
+        />
+
+        <!-- 发货 -->
+        <view class="express-box flex-items flex-row fs24 u-skeleton-fillet">
+          <label class="fs24 font-color-999 mar-right-20 ">发货</label>
+          <image
+              :src="`${VUE_APP_STATIC_URL}static/images/mapIcon.png`"
+              v-if="productData.receive && productData.receive.receiveAdress"
+          ></image>
+          <label
+              class="mar-left-10 mapName mar-right-30"
+              v-if="productData.receive && productData.receive.receiveAdress"
+          >{{
+              productData.receive.receiveAdress
+            }}</label>
+          <label>快递：¥ {{ productData.logisticsPrice || 0 }}</label>
+        </view>
+
+        <!-- 选择SKU -->
+        <view
+            class="fs24 chooseSize-box flex-start"
+            @click="handleShowGoodsSkuSelect(6)"
+        >
+          <view class="chooseSize-content flex-items flex-row flex-sp-between u-skeleton-fillet">
+            <view class="flex-row-plus ">
+              <label class="fs26   mar-left-30 font-color-999">选择</label>
+              <view class="valueBox mar-left-20 flex-items">
+                <view
+                    class="mar-right-10"
+                    v-for="(item, index) of currentSuk"
+                    :key="index"
+                >{{ item.skuText || '-' }}
+                </view>
+              </view>
             </view>
             <image
-                class="evaluateAllArrow-icon mar-left-10"
+                class="arrow-icon"
                 :src="`${VUE_APP_STATIC_URL}static/img/user/arrow.png`"
             ></image>
           </view>
         </view>
+
+        <!--结合销售-->
+        <CombinedSales
+            :pid="productId"
+            :productData="productData"
+        ></CombinedSales>
+        <!--拼团-->
         <view
-            class="groupBuy"
-            v-for="(Gitem, index) in topThreeCollageOrders"
-            :key="index"
+            v-if="selectedSku.activityType === 1"
+            class="borRig-line-20"
+        ></view>
+        <!-- 拼单列表 -->
+        <view
+            v-if="selectedSku.activityType === 1&&topThreeCollageOrders.length > 0"
+            class="goodsDiscount"
         >
+          <view class="questionTit mar-left-30 flex-items flex-row flex-sp-between">
+            <label class="">这些人正在拼单</label>
+            <view class="allMoreBox">
+              <view
+                  class="allMore"
+                  @click="handleOpenGroupBookingList"
+              >查看全部
+              </view>
+              <image
+                  class="evaluateAllArrow-icon mar-left-10"
+                  :src="`${VUE_APP_STATIC_URL}static/img/user/arrow.png`"
+              ></image>
+            </view>
+          </view>
           <view
-              class="groupBuyList"
-              v-if="Gitem.time > 0"
+              class="groupBuy"
+              v-for="(Gitem, index) in topThreeCollageOrders"
+              :key="index"
           >
-            <view class="groupBuyItem">
-              <view class="leftAvatar">
-                <img
-                    :src="Gitem.headImage"
-                    alt=""
-                >
-                <span>{{ Gitem.name }}</span>
-              </view>
-              <view class="rightInfo">
-                <view
-                    class="groupBuyTime"
-                    style="width: 70%;"
-                >
-                  <view class="needPeople flex-row-plus">还差<b>{{ Gitem.person }}人</b>拼成</view>
-                  <view class="endDate">剩余{{ handleGetDownTime(Gitem.time) }}</view>
+            <view
+                class="groupBuyList"
+                v-if="Gitem.time > 0"
+            >
+              <view class="groupBuyItem">
+                <view class="leftAvatar">
+                  <img
+                      :src="Gitem.headImage"
+                      alt=""
+                  >
+                  <span>{{ Gitem.name }}</span>
                 </view>
-                <view
-                    class="groupBuyBtn"
-                    @click="handleGoGroupBooking(Gitem.collageId)"
-                >和Ta拼
+                <view class="rightInfo">
+                  <view
+                      class="groupBuyTime"
+                      style="width: 70%;"
+                  >
+                    <view class="needPeople flex-row-plus">还差<b>{{ Gitem.person }}人</b>拼成</view>
+                    <view class="endDate">剩余{{ handleGetDownTime(Gitem.time) }}</view>
+                  </view>
+                  <view
+                      class="groupBuyBtn"
+                      @click="handleGoGroupBooking(Gitem.collageId)"
+                  >和Ta拼
+                  </view>
                 </view>
               </view>
             </view>
           </view>
         </view>
-      </view>
-      <!--  评价  -->
-      <GoodEvaluateAndQuestion
-          ref="goodEvaluateAndQuestion"
-          class=" u-skeleton-fillet"
-          :product-info="productData"
-          :comment-list="commentList"
-      />
-      <!-- 店铺 -->
-      <view class="inStore-box flex-items flex-row flex-sp-between  u-skeleton-fillet">
-        <view class="flex-display flex-row">
-          <view>
-            <image
-                @click="handleJumpToStore"
-                class="inStore-logo default-img"
-                :src="productData.shopLogo"
-            ></image>
-          </view>
-          <view class="flex-display flex-column mar-left-20">
-            <label @click="handleJumpToStore">{{ productData.shopName }}</label>
-            <view class="flex-display flex-row fs24 font-color-999 mar-top-5">
-              <label>商品总类：{{ productData.classifyNumber }}</label>
-              <label class="mar-left-30">已售：{{ productData.number }}件</label>
+        <!--  评价  -->
+        <GoodEvaluateAndQuestion
+            ref="goodEvaluateAndQuestion"
+            class=" u-skeleton-fillet"
+            :product-info="productData"
+            :comment-list="commentList"
+        />
+        <!-- 店铺 -->
+        <view class="inStore-box flex-items flex-row flex-sp-between  u-skeleton-fillet">
+          <view class="flex-display flex-row">
+            <view>
+              <image
+                  @click="handleJumpToStore"
+                  class="inStore-logo default-img"
+                  :src="productData.shopLogo"
+              ></image>
+            </view>
+            <view class="flex-display flex-column mar-left-20">
+              <label @click="handleJumpToStore">{{ productData.shopName }}</label>
+              <view class="flex-display flex-row fs24 font-color-999 mar-top-5">
+                <label>商品总类：{{ productData.classifyNumber }}</label>
+                <label class="mar-left-30">已售：{{ productData.number }}件</label>
+              </view>
             </view>
           </view>
-        </view>
-        <view
-            class="inStore-but"
-            @click="handleJumpToStore"
-        >去逛逛
-        </view>
-      </view>
-      <!-- 详细信息 -->
-      <view class="goodsDetails-box u-skeleton-fillet">
-        <view class="goodsDetails-title">
-          <view class="goodsDetails-Line"></view>
-          <label class="goodsDetails-text">宝贝详情</label>
-          <view class="goodsDetails-Line"></view>
-        </view>
-        <view class="goodsDetailsimg-box">
-          <view class="">
-            <rich-text :nodes="sellDescList"></rich-text>
-          </view>
-        </view>
-      </view>
-    </view>
-    <!-- 底部购买 -->
-    <view class="buygoods-box">
-      <view
-          class="buygoodsBut-box flex-row-plus"
-          :style="{'height':(isIphone === true? 160:130)+'rpx'}"
-      >
-        <view class="btns_container">
           <view
-              class="btns flex-column-plus"
+              class="inStore-but"
               @click="handleJumpToStore"
-          >
-            <image
-                class="store-icon"
-                :src="`${VUE_APP_STATIC_URL}static/images/storeIcon.png`"
-            ></image>
-            <label class="fs22">店铺</label>
-          </view>
-          <!-- #ifdef MP-WEIXIN || APP-PLUS || H5 -->
-          <view
-              class="btns flex-column-plus mar-left-10"
-              @click="flyToService"
-          >
-            <image
-                class="store-icon"
-                :src="`${VUE_APP_STATIC_URL}static/images/service-product-detail.png`"
-            ></image>
-            <label class="fs22">客服</label>
-          </view>
-          <!-- #endif -->
-          <view
-              class="btns flex-column-plus mar-left-10 flex-items Cart"
-              @click="handleJumpToShopCart"
-          >
-            <view
-                class="cartAllNum"
-                v-if="allCartNum>0"
-            >{{ allCartNum }}
-            </view>
-            <image
-                class="store-icon"
-                :src="`${VUE_APP_STATIC_URL}static/images/gouwuche.png`"
-            ></image>
-            <label class="fs22">购物车</label>
+          >去逛逛
           </view>
         </view>
-        <view class="btns_container">
-          <view
-              class="flex-row-plus offShelf"
-              v-if="productData.shelveState === 0"
-          >
-            商品已下架
+        <!-- 详细信息 -->
+        <view class="goodsDetails-box u-skeleton-fillet">
+          <view class="goodsDetails-title">
+            <view class="goodsDetails-Line"></view>
+            <label class="goodsDetails-text">宝贝详情</label>
+            <view class="goodsDetails-Line"></view>
           </view>
-          <view
-              class="flex-row-plus flex-items"
-              v-else-if="selectedSku.activityType === 1"
-          >
-            <view
-                class="joinShopCartBut"
-                @click=" handleShowGoodsSkuSelect(4)"
-            >单独购买
-            </view>
-            <view
-                class="buyNowBut"
-                @click=" handleShowGoodsSkuSelect(3)"
-            >我要开团
-            </view>
-          </view>
-          <view
-              class="flex-row-plus flex-items"
-              v-else
-          >
-            <view
-                class="joinShopCartBut"
-                @click=" handleShowGoodsSkuSelect(1)"
-            >加入购物车
-            </view>
-            <view
-                class="buyNowBut"
-                @click=" handleShowGoodsSkuSelect(2)"
-            >立即购买
+          <view class="goodsDetailsimg-box">
+            <view class="">
+              <rich-text :nodes="sellDescList"></rich-text>
             </view>
           </view>
         </view>
       </view>
-    </view>
-    <!-- 回到顶部 -->
-    <view class="returnTopService-box">
-      <view
-          class="returnTop-box flex-items-plus flex-column"
-          @click="handleReturnTop"
-          :style="{'display':(returnTopFlag===true? 'flex':'none')}"
-      >
-        <image
-            class="returnTopImg"
-            :src="`${VUE_APP_STATIC_URL}static/images/backTop.png`"
-        ></image>
-      </view>
-    </view>
-    <!-- SKU选择器 -->
-    <GoodSkuSelect
-        ref="skuSelect"
-        :product-data="productData"
-        :selected-sku="selectedSku"
-        :collage-id="collageId"
-        @postSelectSku="selectSkuPostProcessor"
-        @getCurrentSku="handleSelectSku"
-        @changeCartNum="(num)=>allCartNum = num"
-    />
-    <!-- 优惠券选择器 -->
-    <coupon-popup
-        ref="couponPopup"
-        :markTools="markTools"
-        :shopMarkTools="shopMarkTools"
-        :setTop="topLeft"
-        :currentActive="currentActive"
-    ></coupon-popup>
-    <!-- 拼单弹框 -->
-    <u-popup
-        class="popupDiscount"
-        v-model="showGroupBuyList"
-        mode="center"
-        border-radius="14"
-        close-icon-pos="top-right"
-        close-icon-size="20"
-    >
-      <view class="popupDiscountTit">这些人正在拼单</view>
-      <view class="groupBuy">
-        <view class="groupBuyList">
-          <scroll-view
-              style="height: 480upx;"
-              scroll-y
-          >
+      <!-- 底部购买 -->
+      <view class="buygoods-box">
+        <view
+            class="buygoodsBut-box flex-row-plus"
+            :style="{'height':(isIphone === true? 160:130)+'rpx'}"
+        >
+          <view class="btns_container">
             <view
-                class="groupBuyItem1"
-                v-for="(aitem,index) in selectedSku.collageOrders"
-                :key="index"
+                class="btns flex-column-plus"
+                @click="handleJumpToStore"
+            >
+              <image
+                  class="store-icon"
+                  :src="`${VUE_APP_STATIC_URL}static/images/storeIcon.png`"
+              ></image>
+              <label class="fs22">店铺</label>
+            </view>
+            <!-- #ifdef MP-WEIXIN || APP-PLUS || H5 -->
+            <view
+                class="btns flex-column-plus mar-left-10"
+                @click="flyToService"
+            >
+              <image
+                  class="store-icon"
+                  :src="`${VUE_APP_STATIC_URL}static/images/service-product-detail.png`"
+              ></image>
+              <label class="fs22">客服</label>
+            </view>
+            <!-- #endif -->
+            <view
+                class="btns flex-column-plus mar-left-10 flex-items Cart"
+                @click="handleJumpToShopCart"
             >
               <view
-                  class="leftAvatar"
-                  v-if="aitem.time > 0"
-              >
-                <img
-                    :src="aitem.headImage"
-                    alt=""
-                >
-                <view class="groupBuyTime">
-                  <view class="needPeople"><span>{{ aitem.name }}</span>还差<b>{{ aitem.person }}人</b>
-                  </view>
-                  <view class="endDate">剩余{{ handleGetDownTime(aitem.time) }}</view>
-                </view>
+                  class="cartAllNum"
+                  v-if="allCartNum>0"
+              >{{ allCartNum }}
+              </view>
+              <image
+                  class="store-icon"
+                  :src="`${VUE_APP_STATIC_URL}static/images/gouwuche.png`"
+              ></image>
+              <label class="fs22">购物车</label>
+            </view>
+          </view>
+          <view class="btns_container">
+            <view
+                class="flex-row-plus offShelf"
+                v-if="productData.shelveState === 0"
+            >
+              商品已下架
+            </view>
+            <view
+                class="flex-row-plus flex-items"
+                v-else-if="selectedSku.activityType === 1"
+            >
+              <view
+                  class="joinShopCartBut"
+                  @click=" handleShowGoodsSkuSelect(4)"
+              >单独购买
               </view>
               <view
-                  class="rightInfo"
-                  v-if="aitem.time > 0"
-              >
-                <view
-                    class="groupBuyBtn"
-                    @click="handleGoGroupBooking(aitem.collageId)"
-                >和Ta拼
-                </view>
+                  class="buyNowBut"
+                  @click=" handleShowGoodsSkuSelect(3)"
+              >我要开团
               </view>
             </view>
-          </scroll-view>
+            <view
+                class="flex-row-plus flex-items"
+                v-else
+            >
+              <view
+                  class="joinShopCartBut"
+                  @click=" handleShowGoodsSkuSelect(1)"
+              >加入购物车
+              </view>
+              <view
+                  class="buyNowBut"
+                  @click=" handleShowGoodsSkuSelect(2)"
+              >立即购买
+              </view>
+            </view>
+          </view>
         </view>
       </view>
-    </u-popup>
-    <!-- 骨架屏 -->
-    <Skeleton
-        el-color="#efefef"
-        bg-color="#fff"
-        :loading="isFirstComeIn&&loading"
-        :animation="true"
-    ></Skeleton>
-  </view>
+      <!-- 回到顶部 -->
+      <view class="returnTopService-box">
+        <view
+            class="returnTop-box flex-items-plus flex-column"
+            @click="handleReturnTop"
+            :style="{'display':(returnTopFlag===true? 'flex':'none')}"
+        >
+          <image
+              class="returnTopImg"
+              :src="`${VUE_APP_STATIC_URL}static/images/backTop.png`"
+          ></image>
+        </view>
+      </view>
+      <!-- SKU选择器 -->
+      <GoodSkuSelect
+          ref="skuSelect"
+          :product-data="productData"
+          :selected-sku="selectedSku"
+          :collage-id="collageId"
+          @postSelectSku="selectSkuPostProcessor"
+          @getCurrentSku="handleSelectSku"
+          @changeCartNum="(num)=>allCartNum = num"
+      />
+      <!-- 优惠券选择器 -->
+      <coupon-popup
+          ref="couponPopup"
+          :markTools="markTools"
+          :shopMarkTools="shopMarkTools"
+          :setTop="topLeft"
+          :currentActive="currentActive"
+      ></coupon-popup>
+      <!-- 拼单弹框 -->
+      <u-popup
+          class="popupDiscount"
+          v-model="showGroupBuyList"
+          mode="center"
+          border-radius="14"
+          close-icon-pos="top-right"
+          close-icon-size="20"
+      >
+        <view class="popupDiscountTit">这些人正在拼单</view>
+        <view class="groupBuy">
+          <view class="groupBuyList">
+            <scroll-view
+                style="height: 480upx;"
+                scroll-y
+            >
+              <view
+                  class="groupBuyItem1"
+                  v-for="(aitem,index) in selectedSku.collageOrders"
+                  :key="index"
+              >
+                <view
+                    class="leftAvatar"
+                    v-if="aitem.time > 0"
+                >
+                  <img
+                      :src="aitem.headImage"
+                      alt=""
+                  >
+                  <view class="groupBuyTime">
+                    <view class="needPeople"><span>{{ aitem.name }}</span>还差<b>{{ aitem.person }}人</b>
+                    </view>
+                    <view class="endDate">剩余{{ handleGetDownTime(aitem.time) }}</view>
+                  </view>
+                </view>
+                <view
+                    class="rightInfo"
+                    v-if="aitem.time > 0"
+                >
+                  <view
+                      class="groupBuyBtn"
+                      @click="handleGoGroupBooking(aitem.collageId)"
+                  >和Ta拼
+                  </view>
+                </view>
+              </view>
+            </scroll-view>
+          </view>
+        </view>
+      </u-popup>
+      <!-- 骨架屏 -->
+      <!--    <Skeleton
+              el-color="#efefef"
+              bg-color="#fff"
+              :loading="isFirstComeIn&&loading"
+              :animation="true"
+          ></Skeleton>-->
+    </view>
+  </template>
+  <template v-else>
+    <global-loading />
+    <ProductSkeleton />
+  </template>
 </template>
 
 <script setup>
@@ -401,10 +408,11 @@ import GoodSkuSelect from "./components/GoodSkuSelect";
 import { TimeFormatting } from "@/utils/timeUtil";
 import { request } from "@/utils/request";
 import API from "@/config/api";
-import { inject, nextTick, ref } from "vue";
+import { inject, nextTick, onBeforeUnmount, ref } from "vue";
 import { onLoad, onPageScroll, onShareTimeline, onUnload } from '@dcloudio/uni-app';
 import { useLoading } from "@/hooks/useLoading";
 import { VUE_APP_STATIC_URL } from "@/config/api";
+import ProductSkeleton from "./components/ProductSkeleton.vue";
 // import GlobalLoading from "@/components/diyLoading/index.vue";
 
 const $store = inject('$store')
@@ -797,6 +805,10 @@ onUnload(() => {
     clearInterval(shopGroupWorkTicker.value)
     shopGroupWorkTicker.value = null
   }
+})
+
+onBeforeUnmount(()=>{
+  hideLoading()
 })
 
 onPageScroll(e => {
