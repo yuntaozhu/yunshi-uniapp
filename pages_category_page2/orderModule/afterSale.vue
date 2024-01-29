@@ -246,7 +246,7 @@ const Delete = async (item) => {
  * 撤销退货
  */
 const cancelRefundTaphuo = (item) => {
-	Deletehuo.value(item)
+	Deletehuo(item)
 }
 /**
  * 退货
