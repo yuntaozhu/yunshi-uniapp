@@ -21,8 +21,9 @@ export function Services(shopId) {
         const shopIds = uni.getStorageSync('service_shopids') || []
         const corpIds = uni.getStorageSync('service_corpIds') || []
         const urls = uni.getStorageSync('service_urls') || []
+        let params = shopId?{id:shopId}:{}
         try {
-            const res = await request(API.CustomerService, {}, 'get')
+            const res = await request(API.CustomerService, params, 'get')
             if (res.code === '' && res.data.corpId && res.data.url) {
                 shopIds.push(shopId)
                 corpIds.push(res.data.corpId)

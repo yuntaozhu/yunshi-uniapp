@@ -121,8 +121,8 @@ const timer = ref(null)
 const isLate = ref(false)
 
 onMounted(() => {
-  liveStatus.value = liveData.value.liveStatus
-  subscribeLive.value = liveData.value.subscribeStatus === 0 ? '立即预约' : '已预约'
+  liveStatus.value = props.liveData.liveStatus
+  subscribeLive.value = props.liveData.subscribeStatus === 0 ? '立即预约' : '已预约'
   getStatus()
   countTime()
 })
@@ -132,10 +132,10 @@ onBeforeUnmount(() => {
 })
 
 const getStatus = () => {
-  if (!liveData.value.roomId) { return }
+  if (!props.liveData.roomId) { return }
   // let _this = this
   // #ifdef MP-WEIXIN
-  livePlayer.getLiveStatus({ room_id: liveData.value.roomId })
+  livePlayer.getLiveStatus({ room_id: props.liveData.roomId })
     .then(res => {
       // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
       // _this.liveData.liveStatus = res.liveStatus
@@ -145,7 +145,7 @@ const getStatus = () => {
       console.log('get live status', err)
     })
   timer.value = setInterval(() => {
-    livePlayer.getLiveStatus({ room_id: liveData.value.roomId })
+    livePlayer.getLiveStatus({ room_id: props.liveData.roomId })
       .then(res => {
         // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
         liveStatus.value = res.liveStatus
@@ -174,7 +174,7 @@ const durationChange = (e) => {
 
 const countTime = () => {
   const nowtime = new Date().getTime()  //获取当前时间
-  const starttime = new Date(liveData.value.startTime).getTime()
+  const starttime = new Date(props.liveData.startTime).getTime()
   if(liveStatus.value === 102){
     if(starttime > nowtime){
       var lefttime = starttime - nowtime  //距离结束时间的毫秒数
@@ -195,12 +195,12 @@ const countTime = () => {
 }
 
 const toLive = () => {
-  if (!liveAppid || !liveData.value) { return }
+  if (!liveAppid || !props.liveData) { return }
   // 跳转直播间携带路由参数
   // let customParams = encodeURIComponent(JSON.stringify({ path: 'livePage/index', pid: 1 }))
   // #ifdef MP-WEIXIN
   wx.navigateTo({
-    url: `plugin-private://${liveAppid}/pages/live-player-plugin?room_id=${liveData.value.roomId}`
+    url: `plugin-private://${liveAppid}/pages/live-player-plugin?room_id=${props.liveData.roomId}`
     // url: `plugin-private://${liveAppid}/pages/live-player-plugin?room_id=${this.liveData.roomId}&custom_params=${customParams}`
   })
   // #endif
@@ -213,7 +213,7 @@ const onSubscribe = () => {
       tmplIds: [startLiveTemplate],
       success (res) {
         if (res[startLiveTemplate] === "accept") {
-          request(API.SubScribeLive, {id: liveData.value.id }, 'post')
+          request(API.SubScribeLive, {id: props.liveData.id }, 'post')
             .then(res => {
               if (res.data) {
                 subscribeLive.value = '已预约'

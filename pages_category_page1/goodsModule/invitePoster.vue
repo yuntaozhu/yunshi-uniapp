@@ -23,10 +23,7 @@
           </view>
         </view>
         <view class="flex-column-plus flex-items-plus">
-          <image
-              style="width: 180upx;height: 180upx;"
-              :src="qrcode"
-          ></image>
+          <image class="qrcodeImage" :src="qrcode" mode="widthFix"></image>
           <label class="font-color-666">扫描二维码</label>
         </view>
       </view>
@@ -473,7 +470,10 @@ page {
       width: 142rpx;
       height: 142rpx;
     }
-
+	.qrcodeImage{
+		width: 160upx;
+		height: 160upx;
+	}
     .saveposter-but {
       border-radius: 5rpx;
       background-color: #C5AA7B;

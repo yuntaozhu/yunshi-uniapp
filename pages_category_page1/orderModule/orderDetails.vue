@@ -153,7 +153,7 @@
                 </view>
                 <view
                     class="toService"
-                    @click="openService"
+                    @click="openService(dataList.shopId)"
                 >
                   <image
                       :src="`${VUE_APP_STATIC_URL}static/images/serviceImg-order-detail.png`"

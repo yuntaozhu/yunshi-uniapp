@@ -158,7 +158,7 @@ const wxAddFn = () => {
       addData.value['username'] = res.userName
       addData.value['phone'] = res.telNumber
       addData.value['ssqText'] = `${res.provinceName}-${res.cityName}-${res.countyName}`
-      addData.value['defaultRegion'] = self.addData.ssqText.split("-")
+      addData.value['defaultRegion'] = addData.value['ssqText'].split("-")
       addData.value['address'] = res.detailInfo
       addData.value['province'] = res.provinceName
       addData.value['city'] = res.cityName

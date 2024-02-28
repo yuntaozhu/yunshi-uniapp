@@ -208,10 +208,10 @@
 
 <script setup>
 // 是否展示SKU弹窗
-import { inject, ref, toRefs } from "vue";
+import {inject, onMounted, ref, toRefs} from "vue";
 import { request } from "@/utils/request";
 import API from "@/config/api";
-const emit = defineEmits(['getCurrentSku','postSelectSku'])
+const emit = defineEmits(['getCurrentSku','postSelectSku', 'getInitSku'])
 const $store = inject('$store')
 
 const goodsDetailShowFlag=ref( false)
@@ -247,7 +247,10 @@ const props = defineProps({
   }
 })
 const {productData,isIphone,collageId} = toRefs(props)
-
+// 获取默认sku
+onMounted(() => {
+  emit('getInitSku')
+})
 
 /**
  * 当前SKU数量减少

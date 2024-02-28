@@ -323,6 +323,7 @@
           @postSelectSku="selectSkuPostProcessor"
           @getCurrentSku="handleSelectSku"
           @changeCartNum="(num)=>allCartNum = num"
+          @getInitSku="getInitSku"
       />
       <!-- 优惠券选择器 -->
       <coupon-popup
@@ -686,27 +687,30 @@ async function handleGetProductDetail() {
         '<img style="max-width:100%;height:auto" ')
 
     //渲染商详之后，如果参数传了skuId，则选中该skuId，否则选中第一个规格
-    await nextTick(async () => {
-      if (paramSkuId.value) {
-        skuSelect.value.handleSelectBySkuId(paramSkuId.value)
-      } else {
-        // 默认选中第0个
-        for (const skuRowItem of productData.value.names) {
-          skuSelect.value.handleClickSkuItem(skuRowItem.nameCode, skuRowItem.values[0].valueCode)
-        }
-      }
-      //如果是拼团，设置拼团id
-      if (productData.value.activityType === 1) {
-        shopGroupWorkId.value = productData.value.shopGroupWorkId
-        await handleGetGroupBookingRollList()
-        handleSetDownTime();
-      }
-      await goodEvaluateAndQuestion.value.handleGetProblemList()
-    })
+    // await nextTick(async () => {
+    //
+    // })
   } finally {
     loading.value = false
     hideLoading()
   }
+}
+async function getInitSku() {
+  if (paramSkuId.value) {
+    skuSelect.value.handleSelectBySkuId(paramSkuId.value)
+  } else {
+    // 默认选中第0个
+    for (const skuRowItem of productData.value.names) {
+      skuSelect.value.handleClickSkuItem(skuRowItem.nameCode, skuRowItem.values[0].valueCode)
+    }
+  }
+  //如果是拼团，设置拼团id
+  if (productData.value.activityType === 1) {
+    shopGroupWorkId.value = productData.value.shopGroupWorkId
+    await handleGetGroupBookingRollList()
+    handleSetDownTime();
+  }
+  await goodEvaluateAndQuestion.value.handleGetProblemList()
 }
 
 /**

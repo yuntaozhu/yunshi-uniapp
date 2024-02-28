@@ -604,7 +604,6 @@ input {
             color: #333333;
             line-height: 40upx;
             margin-bottom: 30upx;
-            text-overflow: -o-ellipsis-lastline;
             overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
