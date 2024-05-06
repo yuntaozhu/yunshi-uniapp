@@ -16,6 +16,27 @@
 				</view>
 			</view>
 			<view class="flex-row-plus mar-top-20">
+			  <view class="code-box">
+			    <view style="margin-right: 30rpx">
+			      <image
+			          class="loginIcon"
+			          :src="`${VUE_APP_STATIC_URL}static/images/code.png`"
+			      ></image>
+			    </view>
+			    <view>
+			      <input
+			          v-model="VerifyQuery.code"
+			          :maxlength="4"
+			          placeholder-class="codeNum-input"
+			          placeholder="请输入图片验证码"
+			      />
+			    </view>
+			  </view>
+			  <view class="getcode">
+				<image v-if="captcha" :src="captcha" mode="" @click="loadImage"></image>
+			  </view>
+			</view>
+			<view class="flex-row-plus mar-top-20">
 				<view class="code-box">
 					<view>
 						<image class="loginIcon" :src="`${VUE_APP_STATIC_URL}static/images/code.png`"></image>
@@ -50,6 +71,7 @@ import { ref, reactive } from 'vue';
 import { request } from "../../utils/request";
 import API from "../../config/api";
 import { VUE_APP_STATIC_URL } from "@/config/api";
+import { onLoad } from '@dcloudio/uni-app';
 
 const getCodeisWaiting = ref(false);
 const phone = ref('');
@@ -60,10 +82,18 @@ const RegisterQuery = reactive({
 const VerifyQuery = reactive({
 	phone: '',
 	type: '',
+	code: ''
 });
 const agreement = ref(false);
 const disabled = ref(false)
 const text = ref('获取验证码')
+let captcha = ref('')
+onLoad(() => {
+  captcha.value = API.GetCaptcha
+})
+const loadImage = () =>{
+	captcha.value = API.GetCaptcha + '?' + Math.random()
+}
 /**
  * 注册账号
  */
@@ -140,9 +170,15 @@ const getVerify = async () => {
 			icon: 'none'
 		});
 	} else {
+		if(!VerifyQuery.code) return uni.showToast({
+				  title: '请输入图片验证码！',
+				  duration: 2000,
+				  icon: 'none'
+				});
 		VerifyQuery.phone = phone.value
 		try {
 			const res = request(API.Verify, {
+				code: VerifyQuery.code,
 				phone: VerifyQuery.phone,
 			}, 'GET')
 			sendCode()
@@ -301,6 +337,10 @@ const sendCode = () => {
 			align-items: center;
 			margin-left: 20rpx;
 			color: #FFFFFF;
+			image{
+				width: 100%;
+				height: 100%;
+			}
 		}
 
 		.getcodeActive {

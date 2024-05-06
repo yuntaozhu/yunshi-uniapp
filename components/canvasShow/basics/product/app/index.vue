@@ -29,7 +29,8 @@
           :circular="true"
           :indicator-dots="false"
           :autoplay="true"
-          :display-multiple-items="2"
+          :disable-touch="productData.length < 2"
+          :display-multiple-items="productData.length >= 2?2:productData.length"
           @change="swiperChange"
       >
         <swiper-item

@@ -76,12 +76,12 @@
                 </view>
                 <view
                         class="notice"
-                        @click="handleJump('../../../pages_category_page2/userModule/messageCenter')"
+                        @click="handleJump('../../../pages_category_page2/notice/index')"
                 >
                     <view
                             class="messNum"
-                            v-if="userItem.notRead>0"
-                    >{{ userItem.notRead > 99 ? '99+' : userItem.notRead }}
+                            v-if="userItem.notRead+userItem.unreadReply>0"
+                    >{{ userItem.notRead + userItem.unreadReply > 99 ? '99+' : userItem.notRead + userItem.unreadReply }}
                     </view>
                 </view>
             </view>

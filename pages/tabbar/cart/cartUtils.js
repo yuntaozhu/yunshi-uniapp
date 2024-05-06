@@ -79,7 +79,7 @@ export async function getCartNumberBySelect(dataList) {
     // 设置导航条
     if (allNumber > 0) {
         uni.setTabBarBadge({
-            index: 2,
+            index: 3,
             text: (allNumber).toString()
         })
     } else {

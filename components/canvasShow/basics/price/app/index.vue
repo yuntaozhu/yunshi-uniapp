@@ -20,7 +20,7 @@
         <a v-show="componentContent.showMore" class="btn-all a-link" @click="jumpCombination(productData)">更多<i class="iconfont icon-arrow-right"></i></a>
       </div>
       <div>
-      <swiper class="swiper pro-box" :indicator-dots="false" :autoplay="true" :display-multiple-items="2" @change="swiperChange">
+      <swiper class="swiper pro-box" :indicator-dots="false" :autoplay="true" :disable-touch="productData.composeProducts.length < 2" :display-multiple-items="productData.composeProducts.length >= 2?2:productData.composeProducts.length" @change="swiperChange">
         <swiper-item class="pro-item-warp" v-for="(item,index) in productData.composeProducts" :key="index" @click="jumpProductDetail(item)">
           <div class="pro-item-inner">
           <div class="pro-item">

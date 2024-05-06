@@ -30,6 +30,7 @@ const API = {
 	shareLink: 'https://ceres.zkthink.com/h5', // 分享地址
 
 	//登录注册
+	GetCaptcha: WX_API_BASE + '/code/captcha', //获取图片验证码
 	Verify: WX_API_BASE + '/app/getCode', //  获取短信验证码
 	Login: WX_API_BASE + '/app/login', //  手机号验证码登录、注册
 	WxLogin: WX_API_BASE + '/app/wxLogin', //  微信登录
@@ -47,6 +48,20 @@ const API = {
 	SubScribeLive: WX_API_BASE + '/live/subscribeLive',
 	// 小程序客服查询
 	CustomerService: WX_API_BASE + '/kf/getAppletKf',
+	
+	// 逛一逛、分享圈子
+	CircleCategory: WX_API_BASE + '/recommend/type/getAll',
+	CirclePage: WX_API_BASE + '/recommend/trend/page',
+	CircleInfo: WX_API_BASE + '/recommend/trend/get',
+	CircleCommentAdd: WX_API_BASE + '/recommend/comment/add',
+	CircleCommentDel: WX_API_BASE + '/recommend/comment/delete',
+	CircleCommentPage: WX_API_BASE + '/recommend/comment/page',
+	CircleLike: WX_API_BASE + '/recommend/likes/like', //点赞
+	CollectShop: WX_API_BASE + '/collect/collect', //关注店铺
+	CancelCollect: WX_API_BASE + '/collect//new-cancel', //关注店铺
+	CircleNotice: WX_API_BASE + '/recommend/comment/get-unread-count', //圈子未读消息
+	CircleMyNotice: WX_API_BASE + '/recommend/comment//my-message', //圈子我的消息
+	ReplyStatus: WX_API_BASE + '/recommend/comment/status', // 回复帖子状态
 
 
 	//分类

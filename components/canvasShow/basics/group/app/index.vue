@@ -13,7 +13,7 @@
          <a v-show="componentContent.showMore" class="btn-all a-link" @click="jumpGroupWorks(productData)">更多<i class="iconfont icon-arrow-right"></i></a>
        </div>
        <div>
-       <swiper class="swiper pro-box" :circular="true" :indicator-dots="false" :autoplay="true" :display-multiple-items="3" @change="swiperChange">
+       <swiper class="swiper pro-box" :disable-touch="productData.products.length < 3" :circular="true" :indicator-dots="false" :autoplay="true" :display-multiple-items="productData.products.length >= 3?3:productData.products.length" @change="swiperChange">
          <swiper-item class="swiper-slide pro-item-warp" v-for="(item,index) in productData.products" :key="index" @click="jumpProductDetail(item)">
           <div class="pro-item-inner">
             <div class="pro-item">

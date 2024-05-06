@@ -25,6 +25,27 @@
         />
       </view>
     </view>
+	<view class="flex-row-plus mar-top-20">
+	  <view class="code-box">
+	    <view style="margin-right: 30rpx">
+	      <image
+	          class="loginIcon"
+	          :src="`${VUE_APP_STATIC_URL}static/images/code.png`"
+	      ></image>
+	    </view>
+	    <view>
+	      <input
+	          v-model="VerifyQuery.code"
+	          :maxlength="4"
+	          placeholder-class="codeNum-input"
+	          placeholder="请输入图片验证码"
+	      />
+	    </view>
+	  </view>
+	  <view class="getcode">
+		<image v-if="captcha" :src="captcha" mode="" @click="loadImage"></image>
+	  </view>
+	</view>
     <view class="flex-row-plus mar-top-20">
       <view class="code-box">
         <view style="margin-right: 30rpx">
@@ -73,6 +94,7 @@ const loginQuery = ref({
 
 const VerifyQuery = ref({
   phone: '',
+  code: ''
 });
 
 const inviteSpell = ref({});
@@ -81,6 +103,7 @@ const beforePage = ref(undefined);
 const doubleBeforePage = ref(undefined);
 const disabled = ref(false)
 const text = ref('获取验证码')
+let captcha = ref('')
 onLoad((options) => {
   if (options.inviteSpell == 1) {
     inviteSpelltype.value = true;
@@ -94,7 +117,11 @@ onLoad((options) => {
   if (pages.length >= 3) {
     doubleBeforePage.value = pages[pages.length - 3];
   }
+  captcha.value = API.GetCaptcha
 })
+const loadImage = () =>{
+	captcha.value = API.GetCaptcha + '?' + Math.random()
+}
 const login = async () => {
   let phoneCodeVerification = /^[1][3-9][0-9]{9}$/;
   if (loginQuery.value.account == '') {
@@ -136,7 +163,7 @@ const login = async () => {
         })
         if (cartNum > 0) {
           uni.setTabBarBadge({
-            index: 2,
+            index: 3,
             text: cartNum.toString()
           })
         }
@@ -186,6 +213,7 @@ const login = async () => {
     }
   }
 }
+
 // 获取验证码
 const codede = () => {
   if(disabled.value)return
@@ -206,9 +234,15 @@ const getVerify = async () => {
       icon: 'none'
     });
   } else {
+	  if(!VerifyQuery.value.code) return uni.showToast({
+		  title: '请输入图片验证码！',
+		  duration: 2000,
+		  icon: 'none'
+		});
     VerifyQuery.value.phone = loginQuery.value.account
     try {
       const res = await request(API.Verify, {
+		code: VerifyQuery.value.code,
         phone: VerifyQuery.value.phone,
       }, 'GET');
       sendCode();
@@ -340,6 +374,10 @@ const sendCode = () => {
     align-items: center;
     margin-left: 20rpx;
     color: #FFFFFF;
+	image{
+		width: 100%;
+		height: 100%;
+	}
   }
 
   .registerBut {

@@ -53,7 +53,7 @@ export default {
 			  uni.setStorageSync('allCartNum', cartNum)
 			  if (cartNum > 0) {
 			    uni.setTabBarBadge({
-			      index: 2,
+			      index: 3,
 			      text: cartNum.toString()
 			    })
 			  }
