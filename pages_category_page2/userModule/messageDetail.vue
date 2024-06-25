@@ -12,7 +12,7 @@
 
 <script setup>
 import {ref} from "vue";
-import parse from 'mini-html-parser2';
+// import parse from 'mini-html-parser2';
 import {request} from "../../utils/request";
 import API from "../../config/api";
 import {onLoad, onShow} from "@dcloudio/uni-app";
@@ -62,9 +62,10 @@ const getMessageDetails = async () => {
     }, 'GET')
     messageDetails.value = res.data
     messageDetails.value.noticeContent = formatRichText(messageDetails.value.noticeContent)
-    parse(messageDetails.value.noticeContent, (err, data) => {
+    /* parse(messageDetails.value.noticeContent, (err, data) => {
       htmlData.value = data
-    })
+    }) */
+    htmlData.value = messageDetails.value.noticeContent
     uni.hideLoading()
   } catch (err) {
     uni.hideLoading()

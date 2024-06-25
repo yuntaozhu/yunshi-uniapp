@@ -50,7 +50,7 @@
 
 <script setup>
 import { ref, onBeforeMount } from "vue";
-import parse from 'mini-html-parser2';
+// import parse from 'mini-html-parser2';
 import {request} from "@/utils/request";
 import API from "@/config/api";
 import { onReachBottom } from "@dcloudio/uni-app";
@@ -100,11 +100,11 @@ const GetUser = async () => {
  * 格式化文本
  * @param html
  */
-const parseText = (html) => {
+/* const parseText = (html) => {
   parse(html, (err, htmlData) => {
     return htmlData
   })
-}
+} */
 /**
  * 格式化富文本方法
  * @param html
@@ -163,9 +163,10 @@ const getAllMessage = async () => {
             '<img style="max-width:100%;height:auto;display:block;margin-top:0;margin-bottom:0;"'
         );
         // return newContent;
-        parse(newContent, (err, htmlData) => {
+        /* parse(newContent, (err, htmlData) => {
           item.htmlData = htmlData
-        })
+        }) */
+        // item.htmlData = newContent
         return item
       })
       if (messageList.value.length === 0) {
@@ -251,7 +252,7 @@ const goToMesDetail = async (item,noticeId, only, jump) => {
         })
       } else {
         uni.navigateTo({
-          url: 'messageDetail?noticeId=' + noticeId
+          url: '../../pages_category_page2/userModule/messageDetail?noticeId=' + noticeId
         })
       }
     } else {

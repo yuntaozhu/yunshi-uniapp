@@ -9,6 +9,7 @@
 *.njsproj
 *.sln
 *.hbuilderx
+/unpackage/dist/cache
 /unpackage/dist/dev
 /unpackage/dist/static
 /unpackage/dist/build/mp-alipay/

@@ -10,7 +10,6 @@
     "image-tools": "^1.4.0",
     "jweixin-module": "^1.6.0",
     "lodash": "^4.17.21",
-    "mini-html-parser2": "^0.3.0",
     "swiper": "7",
     "vue": "^3.3.2",
     "vue-awesome-swiper": "^5.0.1"
